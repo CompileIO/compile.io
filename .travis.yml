@@ -1,1 +1,5 @@
-language: java
+{
+  language: node_js,
+  node_js: v8.9.0
+}
+  
