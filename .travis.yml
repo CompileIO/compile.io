@@ -2,6 +2,6 @@ language: node_js
 node_js: v8.9.0
 notifications:
   slack: compileio:uAKGKPc1MCWywPZsmgrWGFrb
-    on_success: change # default: always
-    on_failure: always # default: always
+    on_success: change
+    on_failure: always
   
