@@ -26,23 +26,23 @@ export class UploadComponent implements OnInit {
       const formData: FormData = new FormData();
       formData.append('file', this.file, this.file.name);
       //http://localhost:4000/post_request
-        const req = new HttpRequest('POST', "http://example.com/post_request", formData, {
-        reportProgress: true
+      const req = new HttpRequest('POST', "http://localhost:4000/post_request", formData, {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json",
+          "Accept": "*/*"
+        }),
+        reportProgress: true,
+        withCredentials: true
       });
-      //const httpOptions = {
-      //  headers: new HttpHeaders({
-      //      "Origin": "http://localhost:4200"
-      //  })
-      //};
-      //this.http.options(httpOptions);
+      
       this.http.request(req).subscribe(event => {
         if (event instanceof HttpResponse) {
           return;
         }
       });
     } else {
-      console.log("BAD!")
-    };
+      console.log("BAD!");
+    }
   }
 
   ngOnInit() {

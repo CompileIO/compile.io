@@ -1,6 +1,6 @@
 //Initiallising node modules
 var express = require("express");
-var bodyParser = require("body-parser");
+//var bodyParser = require("body-parser");
 var app = express(); 
 
 
@@ -9,61 +9,39 @@ var hostname = 'localhost';
 var port = 4000;
 
 // Body Parser Middleware
-app.use(bodyParser.urlencoded({ extended: false })); 
-app.use(bodyParser.json()); 
+//app.use(bodyParser.urlencoded({ extended: false })); 
+//app.use(bodyParser.json()); 
 
 const cors = require('cors')
 const IncomingForm = require('formidable').IncomingForm;
-//const upload = require('./upload');
 
-var corsOptions = {
-  origin: 'http://localhost:4200/',
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+const corsOptions = {
+    origin: "http://localhost:4200",
+    credentials: true
 }
 
-//Setting up server
- var server = app.listen(process.env.PORT || port, hostname, function () {
-    // var port = server.address().port;
-    console.log("App now running on port", port);
-    console.log(`Server running at http://${hostname}:${port}/`);
- });
-
-app.use(cors());
-
-//CORS Middleware
-app.use(function (req, res, next) {
-    //Enabling CORS 
-    console.log("HELLO!");
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
-    next();
-});
+app.use(cors(corsOptions));
 
 
-app.options('*', function (req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
-});
 
  //GET API
-app.get("/get_request", function(req , res){
+app.get("/get_request", function (req, res) {
+    console.log("GET");
   });
 
   //POST API
 app.post("/post_request", function (req, res) {
-    //req.header("Access-Control-Allow-Origin", '*');
-    var form = new IncomingForm();
     console.log("WOW!");
-    form.on('file', (field, file) => {
-        //do stuff with the file
-        //file.path to access
-    });
-    form.on('end', () => {
-        res.json();
-    });
-    form.parse(req);
+    var form = new IncomingForm();
+    //form.on('file', (field, file) => {
+    //    //do stuff with the file
+    //    //file.path to access
+    //    console.log("HERE TOO!");
+    //});
+    //form.on('end', () => {
+    //    res.json();
+    //});
+    //form.parse(req);
   });
 
   //PUT API
@@ -75,3 +53,33 @@ app.put("put_request", function(req , res){
 app.delete("delete_request", function(req , res){
     
 });
+
+
+//Setting up server
+var server = app.listen(process.env.PORT || port, hostname, function () {
+    // var port = server.address().port;
+    console.log("App now running on port", port);
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+
+
+
+
+//CORS Middleware
+//app.use(function (req, res, next) {
+//    //Enabling CORS 
+//    console.log("HELLO!");
+//    res.header("Access-Control-Allow-Origin", "*");
+//    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+//    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
+//    next();
+//});
+
+
+//app.options('*', function (req, res) {
+//    res.header("Access-Control-Allow-Origin", "*");
+//    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+//    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
+//});
+
