@@ -6,7 +6,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
+    "formidable": "^1.2.1",
     "mocha": "^5.2.0"
   },
   "scripts": {
