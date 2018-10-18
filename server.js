@@ -21,8 +21,6 @@ var corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
-
-
 //Setting up server
  var server = app.listen(process.env.PORT || port, hostname, function () {
     // var port = server.address().port;
@@ -30,27 +28,31 @@ var corsOptions = {
     console.log(`Server running at http://${hostname}:${port}/`);
  });
 
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 //CORS Middleware
 app.use(function (req, res, next) {
     //Enabling CORS 
-    cors(corsOptions);
     console.log("HELLO!");
-    req.header("Access-Control-Allow-Origin", "*");
-    req.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
     next();
 });
 
+
+app.options('*', function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
+});
 
  //GET API
 app.get("/get_request", function(req , res){
   });
 
   //POST API
-app.post("/", function (req, res, next) {
+app.post("/post_request", function (req, res) {
     //req.header("Access-Control-Allow-Origin", '*');
     var form = new IncomingForm();
     console.log("WOW!");
