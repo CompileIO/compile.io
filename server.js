@@ -26,22 +26,23 @@ app.use(cors(corsOptions));
 
  //GET API
 app.get("/get_request", function (req, res) {
-    console.log("GET");
+    //console.log("GET");
+    res.send([{ className: "CSSE132" }, {className: "CSSE120" }, {className: "CSSE220"}]);
   });
 
   //POST API
 app.post("/post_request", function (req, res) {
-    console.log("WOW!");
+    //console.log("WOW!");
     var form = new IncomingForm();
-    //form.on('file', (field, file) => {
-    //    //do stuff with the file
-    //    //file.path to access
-    //    console.log("HERE TOO!");
-    //});
-    //form.on('end', () => {
-    //    res.json();
-    //});
-    //form.parse(req);
+    form.on('file', (field, file) => {
+        //do stuff with the file
+        //file.path to access
+        console.log("HERE TOO!");
+    });
+    form.on('end', () => {
+        res.json();
+    });
+    form.parse(req);
   });
 
   //PUT API

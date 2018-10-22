@@ -1,4 +1,4 @@
-
-
-<input [(ngModel)] ="file" type="file" id="file" name="file" />
-<button (click)="uploadFile()">Add</button>
+<div>
+  <input [(ngModel)]="file" accept=".zip" type="file" id="file" name="file" />
+  <button (click)="uploadFile()">Add</button>
+</div>
