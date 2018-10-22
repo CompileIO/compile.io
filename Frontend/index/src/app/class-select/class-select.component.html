@@ -1,0 +1,15 @@
+
+<ul class="classes" *ngIf="ifNoSelectedClass()">
+  <li *ngFor="let cl of classButtons">
+    <button class="button" (click) ="selectClass(cl.className)">{{cl.className}}</button>
+  </li>
+</ul>
+<div *ngIf="ifSelectedClass()">
+  <h1>{{selectedClass}}</h1>
+  <app-upload></app-upload>
+  <span>
+    <button (click)="unSelect()">Back</button>
+  </span>
+</div>
+
+
