@@ -32,17 +32,17 @@ app.get("/get_request", function (req, res) {
 
   //POST API
 app.post("/post_request", function (req, res) {
-    //console.log("WOW!");
-    var form = new IncomingForm();
-    form.on('file', (field, file) => {
-        //do stuff with the file
-        //file.path to access
-        console.log("HERE TOO!");
-    });
-    form.on('end', () => {
-        res.json();
-    });
-    form.parse(req);
+    console.log("WOW!");
+    //var form = new IncomingForm();
+    //form.on('file', (field, file) => {
+    //    //do stuff with the file
+    //    //file.path to access
+    //    console.log("HERE TOO!");
+    //});
+    //form.on('end', () => {
+    //    res.json();
+    //});
+    //form.parse(req);
   });
 
   //PUT API
