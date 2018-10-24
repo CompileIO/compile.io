@@ -1,7 +1,12 @@
 //Initiallising node modules
 var express = require("express");
-//var bodyParser = require("body-parser");
+var bodyParser = require("body-parser");
 var app = express(); 
+var http = require('http');
+var path = require('path')
+var formidable = require('formidable');
+var fs = require('fs');
+var multer = require("multer");
 
 
 //var hostname = '0.0.0.0';
@@ -9,6 +14,8 @@ var hostname = 'localhost';
 var port = 4000;
 
 // Body Parser Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(bodyParser.urlencoded({ extended: false })); 
 //app.use(bodyParser.json()); 
 
@@ -26,24 +33,44 @@ app.use(cors(corsOptions));
 
  //GET API
 app.get("/get_request", function (req, res) {
-    //console.log("GET");
+    console.log("GET");
     res.send([{ className: "CSSE132" }, {className: "CSSE120" }, {className: "CSSE220"}]);
   });
 
   //POST API
-app.post("/post_request", function (req, res) {
-    console.log("WOW!");
-    //var form = new IncomingForm();
-    //form.on('file', (field, file) => {
-    //    //do stuff with the file
-    //    //file.path to access
-    //    console.log("HERE TOO!");
-    //});
-    //form.on('end', () => {
-    //    res.json();
-    //});
-    //form.parse(req);
-  });
+  app.post("/upload", multer({dest: "./uploads/"}).array("uploads[]",12), function(req, res) {
+    res.send(req.files);
+    console.log(req.files);
+});
+
+// app.post("/upload", function (req, res) {
+//     console.log("in post request!");
+//     console.log(req.body);
+//     // var formData = new FormData();
+//     var form = new formidable.IncomingForm();
+//     console.log(form);
+//     // form.parse(req, function (err, fields, files) {
+//     //   var oldpath = files.filetoupload.path;
+//     //   var newpath = 'C:/Users/palamujg/' + files.filetoupload.name;
+//     //   fs.rename(oldpath, newpath, function (err) {
+//     //     if (err) throw err;
+//     //     res.write('File uploaded and moved!');
+//     //     res.end();
+//     //   });
+//  });
+//     //var form = new IncomingForm();
+//     //form.on('file', (field, file) => {
+//     //    //do stuff with the file
+//     //    //file.path to access
+//     //    console.log("HERE TOO!");
+//     //});
+//     //form.on('end', () => {
+//     //    res.json();
+//     //});
+//     //form.parse(req);
+// //   });
+
+    
 
   //PUT API
 app.put("put_request", function(req , res){
