@@ -1,0 +1,9 @@
+@startuml
+skinparam linetype ortho
+class server.js {
+  void app.get()
+  void app.post()
+  void app.put()
+  void app.delete()
+}
+@enduml
