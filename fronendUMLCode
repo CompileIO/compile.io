@@ -1,0 +1,53 @@
+@startuml
+skinparam linetype ortho
+class app.component {
+
+}
+class app.html {
+
+}
+class app.module {
+
+}
+class upload.component {
+  Array<File> filesToUpload
+  upload()
+  void upload()
+  void fileChangeEvent()
+  void makeFileRequest()
+
+}
+
+class class_select.component {
+  String selectedClass
+  ClassButtonComponent[] classButtons
+  class-select()
+  boolean ifNoSelectedClass()
+  boolean ifSelectedClass()
+  void selectClass()
+  void unSelect()
+}
+
+class class_button.component {
+  String className
+  class-button()
+}
+
+class upload.html {
+
+}
+
+class class_select.html{
+
+}
+
+class_select.component "1"..>"*" class_button.component
+class_select.component --> upload.component
+app.component --> class_select.component
+app.html -->class_select.html
+class_select.html --> upload.html
+class_select.html --> class_select.component
+upload.html --> upload.component
+app.html --> app.component
+app.component --> app.module
+@enduml
