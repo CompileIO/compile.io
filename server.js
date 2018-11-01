@@ -8,9 +8,13 @@ var formidable = require('formidable');
 var fs = require('fs');
 var multer = require("multer");
 
+//VM
+// var hostname = 'http://137.112.104.112:4200/'
+
 
 //var hostname = '0.0.0.0';
-var hostname = 'localhost';
+// var hostname = 'localhost';
+var hostname = '137.112.104.112'
 var port = 4000;
 
 // Body Parser Middleware

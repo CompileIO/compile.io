@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { HttpClient, HttpRequest, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
+var hostname = "http://137.112.104.112:4000"
+// var hostname = "http://localhost:4000"
+
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -17,7 +21,7 @@ export class UploadComponent implements OnInit {
   }
 
   upload() {
-      this.makeFileRequest("http://localhost:4000/upload", [], this.filesToUpload).then((result) => {
+      this.makeFileRequest( hostname + "/upload", [], this.filesToUpload).then((result) => {
           console.log(result);
       }, (error) => {
           console.error(error);
