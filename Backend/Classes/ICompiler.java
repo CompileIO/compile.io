@@ -5,4 +5,6 @@ public interface ICompiler {
 
     public void compile();
 
+    public void buildContainer();
+
 }

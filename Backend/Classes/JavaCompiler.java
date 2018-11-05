@@ -1,6 +1,3 @@
-/**
- * Compiler for java code
- */
 import docker;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +6,9 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+/**
+ * This class builds a docker image, then runs that docker image
+ */
 public class JavaCompiler implements ICompiler {
 
     private String imageName;
@@ -30,7 +30,7 @@ public class JavaCompiler implements ICompiler {
     }
 
     /**
-     * Runs the container with the image name given to the constructor
+     * Runs the container with the image name given to the constructor and prints the output to the console
      * @return void
      * @exception e
      */
@@ -74,5 +74,15 @@ public class JavaCompiler implements ICompiler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    /**
+     * Creates the Dockerfile used for creating the docker container
+     * @param 
+     * @return void
+     */
+    public void createDockerfile(String jarName) {
+        // FROM openjdk
+        // ADD Main.class Main.class
+        // ENTRYPOINT ["java", "Main"]
     }
 }
