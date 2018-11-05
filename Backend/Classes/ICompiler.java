@@ -3,8 +3,30 @@
  */
 public interface ICompiler {
 
-    public void compile();
+    /**
+     * Runs the container with the image name given to the constructor and prints the output to the console
+     * @return void
+     * @exception e
+     */
+    public void run();
 
+    /**
+     * Builds a docker image with the image name given to the constructor
+     * @return void
+     * @exception e
+     */
     public void buildContainer();
+
+    /**
+     * Creates the Dockerfile used for creating the docker container
+     * @return void
+     */
+    public void createDockerfile();
+
+    /**
+     * Creates the runnable used for running the submitted student code
+     * @return void
+     */
+    public void createRunnable();
 
 }

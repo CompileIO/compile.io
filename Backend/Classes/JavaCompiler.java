@@ -3,29 +3,34 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * This class builds a docker image, then runs that docker image
  */
 public class JavaCompiler implements ICompiler {
 
-    private String imageName;
+    private byte[] executableFileBytes;
 
     /**
-     * Default Constructor, no image name given
+     * Default Constructor, no bytes given, for testing purposes at the moment
      */
     public JavaCompiler() {
-        this.imageName = null;
+        this.executableFileBytes = null;
     }
 
     /**
      * Constructor that builds a docker image with the given name
-     * @param String imageName The desired name of the docker image
+     * @param byte[] executableFileBytes The bytecode of the student-submitted executable
      */
-    public JavaCompiler(String imageName) {
-        this.imageName = imageName;
+    public JavaCompiler(byte[] executableFileBytes) {
+        this.executableFileBytes = executableFileBytes;
+        this.createRunnable();
+        this.createDockerfile();
         this.buildContainer();
     }
 
@@ -34,10 +39,9 @@ public class JavaCompiler implements ICompiler {
      * @return void
      * @exception e
      */
-    public void compile(){
-        // now need to figure out how to build docker image
+    public void run(){
         try {
-            // String[] command = {"docker", "run", this.imageName};
+            // String[] command = {"docker", "run", "java-image"};
             String[] command = {"docker", "run", "hello-world"};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
@@ -66,7 +70,7 @@ public class JavaCompiler implements ICompiler {
      */
     public void buildContainer() {
         try {
-            String[] command = {"docker", "build", "-t", this.imageName, "."};
+            String[] command = {"docker", "build", "-t", "java-image", "."};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
@@ -77,12 +81,25 @@ public class JavaCompiler implements ICompiler {
     }
     /**
      * Creates the Dockerfile used for creating the docker container
-     * @param 
      * @return void
      */
-    public void createDockerfile(String jarName) {
-        // FROM openjdk
-        // ADD Main.class Main.class
-        // ENTRYPOINT ["java", "Main"]
+    public void createDockerfile() {
+        String dockerfileData = "FROM openjdk\nWORKDIR /\nADD runnable.jar runnable.jar\nEXPOSE 8000\nCMD java -jar runnable.jar\n";
+        FileOutputStream dockerfileFos = new FileOutputStream("Dockerfile");
+        dockerfileFos.write(dockerfileData.getBytes());
+        dockerfileFos.flush();
+        dockerfileFos.close();
     }
+
+    /**
+     * Creates the runnable used for running the submitted student code
+     * @return void
+     */
+    public void createRunnable() {
+        FileOutputStream executableFos = new FileOutputStream("runnable.jar");
+        executableFos.write(this.executableFileBytes);
+        executableFos.flush();
+        executableFos.close();
+    }
+
 }

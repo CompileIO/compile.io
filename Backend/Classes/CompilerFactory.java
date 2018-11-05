@@ -11,6 +11,7 @@ public class CompilerFactory {
      */
     public ICompiler getCompiler(Object type){
         if (type == "java") { // something along these lines
+            //return new JavaCompiler(executableFileBytes);
             return new JavaCompiler();
         } else {
             return null;
