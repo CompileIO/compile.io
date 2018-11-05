@@ -27,7 +27,7 @@ const cors = require('cors')
 const IncomingForm = require('formidable').IncomingForm;
 
 const corsOptions = {
-    origin: "http://localhost:4200",
+    origin: "http://137.112.104.112:4200",
     credentials: true
 }
 

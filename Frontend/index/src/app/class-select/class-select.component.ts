@@ -4,6 +4,8 @@ import { isUndefined } from 'util';
 
 import { ClassButtonComponent } from './class-button/class-button.component';
 
+var hostname = "http://137.112.104.112:4000"
+// var hostname = "http://localhost:4000"
 
 @Component({
   selector: 'app-class-select',
@@ -15,7 +17,7 @@ export class ClassSelectComponent implements OnInit {
   classButtons: ClassButtonComponent[] = [];
 
   constructor(private http: HttpClient) {
-    const req = new HttpRequest('GET', "http://localhost:4000/get_request", {
+    const req = new HttpRequest('GET',  hostname + "/get_request", {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       }),
