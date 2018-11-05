@@ -11,13 +11,33 @@ import java.io.OutputStreamWriter;
 
 public class JavaCompiler implements ICompiler {
 
+    private String imageName;
+
+    /**
+     * Default Constructor, no image name given
+     */
     public JavaCompiler() {
-        
+        this.imageName = null;
     }
 
-    public void compile(String imageName){
-        // now need to figure out how to build a container
+    /**
+     * Constructor that builds a docker image with the given name
+     * @param String imageName The desired name of the docker image
+     */
+    public JavaCompiler(String imageName) {
+        this.imageName = imageName;
+        this.buildContainer();
+    }
+
+    /**
+     * Runs the container with the image name given to the constructor
+     * @return void
+     * @exception e
+     */
+    public void compile(){
+        // now need to figure out how to build docker image
         try {
+            // String[] command = {"docker", "run", this.imageName};
             String[] command = {"docker", "run", "hello-world"};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
@@ -33,6 +53,23 @@ public class JavaCompiler implements ICompiler {
                 System.out.print(line + "\n");
             }
     
+            proc.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Builds a docker image with the image name given to the constructor
+     * @return void
+     * @exception e
+     */
+    public void buildContainer() {
+        try {
+            String[] command = {"docker", "build", "-t", this.imageName, "."};
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
             proc.waitFor();
         } catch (Exception e) {
             e.printStackTrace();
