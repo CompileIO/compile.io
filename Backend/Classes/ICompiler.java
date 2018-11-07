@@ -23,10 +23,4 @@ public interface ICompiler {
      */
     public void createDockerfile();
 
-    /**
-     * Creates the runnable used for running the submitted student code
-     * @return void
-     */
-    public void createRunnable();
-
 }
