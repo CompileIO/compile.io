@@ -55,8 +55,10 @@ public class JavaCompiler implements ICompiler {
             }
     
             proc.waitFor();
-            this.teardownDockerImage();
-            this.removeDockerfile();
+            // The following lines teardown everything needed to be torn down BUT
+            // The teardown occurs before the process finishes, so the docker building process errors out
+            // this.teardownDockerImage();
+            // this.removeDockerfile();
         } catch (Exception e) {
             e.printStackTrace();
         }
