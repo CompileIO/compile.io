@@ -10,13 +10,12 @@ public class JavaCompiler implements ICompiler {
 
     private File file;
     private String fileName;
+    private String fileDirectory;
 
     /**
      * Default Constructor, no bytes given, for testing purposes at the moment
      */
-    public JavaCompiler() {
-        this.file = null;
-    }
+    public JavaCompiler() {}
 
     /**
      * Constructor that builds a docker image with the given name
@@ -25,7 +24,11 @@ public class JavaCompiler implements ICompiler {
     public JavaCompiler(File file) {
         this.file = file;
         this.fileName  = file.getName();
-        System.out.println("Found file: " + this.fileName);
+        this.fileDirectory = file.getParent(); 
+        if (this.fileDirectory == null) {
+            this.fileDirectory = "/";
+        }
+        System.out.println("Found file: " + this.fileName + " in directory: " + this.fileDirectory);
         this.createDockerfile();
         this.buildContainer();
     }
@@ -88,7 +91,7 @@ public class JavaCompiler implements ICompiler {
      */
     public void createDockerfile() {
         System.out.println("Making Dockerfile...");
-        String dockerfileData = "FROM openjdk\nWORKDIR /\nADD " + this.fileName + " " + this.fileName + "\nEXPOSE 8000\nCMD java -jar " + this.fileName + "\n";
+        String dockerfileData = "FROM openjdk\nWORKDIR " + this.fileDirectory + "\nADD " + this.fileName + " " + this.fileName + "\nEXPOSE 8000\nCMD java -jar " + this.fileName + "\n";
         try {
             FileOutputStream dockerfileFos = new FileOutputStream("Dockerfile");
             dockerfileFos.write(dockerfileData.getBytes());
