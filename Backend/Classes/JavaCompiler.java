@@ -55,6 +55,7 @@ public class JavaCompiler implements ICompiler {
             }
     
             proc.waitFor();
+            this.teardownDockerImage();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,6 +81,7 @@ public class JavaCompiler implements ICompiler {
             e.printStackTrace();
         }
     }
+
     /**
      * Creates the Dockerfile used for creating the docker container
      * @return void
@@ -101,4 +103,23 @@ public class JavaCompiler implements ICompiler {
         }
     }
 
+    /**
+     * Tears down the created image
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void teardownDockerImage() {
+        try {
+            String[] command = {"docker", "rm", "--force", "java-image"};
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+            proc.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
