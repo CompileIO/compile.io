@@ -1,7 +1,4 @@
-import docker;
 import java.io.*;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * This class builds a docker image, then runs that docker image
