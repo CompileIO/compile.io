@@ -1,44 +1,45 @@
-import docker;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 /**
  * This class builds a docker image, then runs that docker image
  */
 public class JavaCompiler implements ICompiler {
 
-    private String imageName;
+    private File file;
+    private String fileName;
+    private String fileDirectory;
 
     /**
-     * Default Constructor, no image name given
+     * Default Constructor, no bytes given, for testing purposes at the moment
      */
-    public JavaCompiler() {
-        this.imageName = null;
-    }
+    public JavaCompiler() {}
 
     /**
      * Constructor that builds a docker image with the given name
-     * @param String imageName The desired name of the docker image
+     * @param byte[] executableFileBytes The bytecode of the student-submitted executable
      */
-    public JavaCompiler(String imageName) {
-        this.imageName = imageName;
+    public JavaCompiler(File file) {
+        this.file = file;
+        this.fileName  = file.getName();
+        this.fileDirectory = file.getParent(); 
+        if (this.fileDirectory == null) {
+            this.fileDirectory = "/";
+        }
+        System.out.println("Found file: " + this.fileName + " in directory: " + this.fileDirectory);
+        this.createDockerfile();
         this.buildContainer();
     }
 
     /**
      * Runs the container with the image name given to the constructor and prints the output to the console
      * @return void
-     * @exception e
+     * @throws Exception e
      */
-    public void compile(){
-        // now need to figure out how to build docker image
+    public void run(){
         try {
-            // String[] command = {"docker", "run", this.imageName};
-            String[] command = {"docker", "run", "hello-world"};
+            System.out.println("Attempting to run docker container...");
+            String[] command = {"docker", "run", "java-image"};
+            //String[] command = {"docker", "run", "hello-world"};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
@@ -54,6 +55,10 @@ public class JavaCompiler implements ICompiler {
             }
     
             proc.waitFor();
+            // The following lines teardown everything needed to be torn down BUT
+            // The teardown occurs before the process finishes, so the docker building process errors out
+            // this.teardownDockerImage();
+            // this.removeDockerfile();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,27 +67,82 @@ public class JavaCompiler implements ICompiler {
     /**
      * Builds a docker image with the image name given to the constructor
      * @return void
-     * @exception e
+     * @throws IOException e 
+     * @throws InterruptedException e
      */
     public void buildContainer() {
         try {
-            String[] command = {"docker", "build", "-t", this.imageName, "."};
+            System.out.println("Attempting to build docker container...");
+            String[] command = {"docker", "build", "-t", "java-image", "."};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
             proc.waitFor();
-        } catch (Exception e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Creates the Dockerfile used for creating the docker container
-     * @param 
      * @return void
+     * @throws FileNotFoundException e If the the given file does not exist or cannot be found
+     * @throws IOException e If the java IO encounters an error
      */
-    public void createDockerfile(String jarName) {
-        // FROM openjdk
-        // ADD Main.class Main.class
-        // ENTRYPOINT ["java", "Main"]
+    public void createDockerfile() {
+        System.out.println("Making Dockerfile...");
+        String dockerfileData = "FROM openjdk\nWORKDIR " + this.fileDirectory + "\nADD " + this.fileName + " " + this.fileName + "\nEXPOSE 8000\nCMD java -jar " + this.fileName + "\n";
+        try {
+            FileOutputStream dockerfileFos = new FileOutputStream("Dockerfile");
+            dockerfileFos.write(dockerfileData.getBytes());
+            dockerfileFos.flush();
+            dockerfileFos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Tears down the created image
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void teardownDockerImage() {
+        try {
+            String[] command = {"docker", "rm", "--force", "java-image"};
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+            proc.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Removes the Dockerfile used to create the image
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void removeDockerfile() {
+        try {
+            String[] command = {"rm", "Dockerfile"};
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+            proc.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
