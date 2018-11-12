@@ -5,12 +5,12 @@
    // const apiUrl = "https://college-cookbook-api.herokuapp.com";
 
    /*Change this for VM */
-    // const apiUrl = "http://137.112.104.112:4000";
-	// const Url = "http://137.112.104.112"
+    const apiUrl = "http://137.112.104.112:4000";
+    const Url = "http://137.112.104.112"
 
     /*Change this for running on local machine */
-    const apiUrl = "http://localhost:4000";
-    const URL = "http://localhost"
+    // const apiUrl = "http://localhost:4000";
+    // const URL = "http://localhost"
     function setup() {
         document.getElementById("button_check").onclick = function getUser(){
             console.log("clicked button");

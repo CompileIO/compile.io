@@ -79,4 +79,6 @@ typings/
 # upload directory
 uploads/
 
+/.gradle/
 # End of https://www.gitignore.io/api/node
+
