@@ -1,57 +1,64 @@
 import { Component, OnInit } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { HttpClient, HttpRequest, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-
-var hostname = "http://137.112.104.112:4000"
+import { UploadService } from './upload.service';
+//const hostname = 'http://137.112.104.112:4000';
 // var hostname = "http://localhost:4000"
 
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.css']
+  styleUrls: ['./upload.component.css'],
+  providers: [UploadService],
 })
 export class UploadComponent implements OnInit {
   // file: File;
 
   filesToUpload: Array<File>;
 
-  constructor() {
+  constructor(private uploadService: UploadService) {
       this.filesToUpload = [];
   }
 
   upload() {
-      this.makeFileRequest( hostname + "/upload", [], this.filesToUpload).then((result) => {
-          console.log(result);
-      }, (error) => {
-          console.error(error);
-      });
+    this.uploadService.upload(this.filesToUpload)
+    .then(result => {
+        console.log(result);
+    }, error => {
+        console.log(error);
+    });
+    //   this.makeFileRequest( hostname + '/upload', [], this.filesToUpload).then((result) => {
+    //       console.log(result);
+    //   }, (error) => {
+    //       console.error(error);
+    //   });
   }
 
-  fileChangeEvent(fileInput: any){
+  fileChangeEvent(fileInput: any) {
       this.filesToUpload = <Array<File>> fileInput.target.files;
   }
 
-  makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
-      return new Promise((resolve, reject) => {
-          var formData: any = new FormData();
-          var xhr = new XMLHttpRequest();
-          for(var i = 0; i < files.length; i++) {
-              formData.append("uploads[]", files[i], files[i].name);
-          }
-          xhr.onreadystatechange = function () {
-              if (xhr.readyState == 4) {
-                  if (xhr.status == 200) {
-                      resolve(JSON.parse(xhr.response));
-                  } else {
-                      reject(xhr.response);
-                  }
-              }
-          }
-          xhr.open("POST", url, true);
-          xhr.send(formData);
-      });
-  }
+//   makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
+//       return new Promise((resolve, reject) => {
+//           const formData: any = new FormData();
+//           const xhr = new XMLHttpRequest();
+//           for (let i = 0; i < files.length; i++) {
+//               formData.append('uploads[]', files[i], files[i].name);
+//           }
+//           xhr.onreadystatechange = function () {
+//               if (xhr.readyState === 4) {
+//                   if (xhr.status === 200) {
+//                       resolve(JSON.parse(xhr.response));
+//                   } else {
+//                       reject(xhr.response);
+//                   }
+//               }
+//           };
+//           xhr.open('POST', url, true);
+//           xhr.send(formData);
+//       });
+//   }
 
   // constructor(private http: HttpClient) { }
 
