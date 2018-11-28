@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isUndefined } from 'util';
 import { UploadService } from '../upload/upload.service';
-
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { ClassButtonComponent } from './class-button/class-button.component';
 
 //const hostname = 'http://137.112.104.112:4000';

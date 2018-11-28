@@ -36,26 +36,13 @@ public class FileUploadController {
         this.storageService = storageService;
     }
     @CrossOrigin(origins = "http://localhost:4200",  allowCredentials = "true")
-    @RequestMapping(method = RequestMethod.POST)
-    public MultipartFile[] upload(MultipartFile[] files ) {
-    	for (int i = 0; i < files.length; i++) {
-    		handleFileUpload(files[i]);
-    	}
-    	return files;
-    }
-    private String handleFileUpload(MultipartFile file) {
-            storageService.store(file);
-//            redirectAttributes.addFlashAttribute("message",
-//                    "You successfully uploaded " + file.getOriginalFilename() + "!");
-            return "redirect:/";
-    }
-    @CrossOrigin(origins = "http://localhost:4200",  allowCredentials = "true")
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping("/")
+    //@RequestMapping(method = RequestMethod.GET)
     public String[] getClasses() {
-    	String[] temp = {"CSSE120", "CSSE220", "CSSE230"};
+    	String[] temp = {"CSSE120", "CSSE220", "CSSE230", "CSSE241"};
     	return temp;
     }
-    @GetMapping("/")
+    //@GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
         model.addAttribute("files", storageService.loadAll().map(
@@ -74,11 +61,12 @@ public class FileUploadController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
-
+    
+    @CrossOrigin(origins = "http://localhost:4200",  allowCredentials = "true")
+//    @RequestMapping(method = RequestMethod.POST)
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-            RedirectAttributes redirectAttributes) {
-
+    		RedirectAttributes redirectAttributes) {
         storageService.store(file);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
