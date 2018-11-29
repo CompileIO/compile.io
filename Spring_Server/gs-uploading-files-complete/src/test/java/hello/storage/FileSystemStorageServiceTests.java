@@ -23,6 +23,10 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
+import compile_io.storage.FileSystemStorageService;
+import compile_io.storage.StorageException;
+import compile_io.storage.StorageProperties;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

@@ -4,7 +4,7 @@
   <form method="POST" enctype="multipart/form-data" action="/">
     <table>
       <!-- <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr> -->
-      <tr><td></td><td><input  ng-model="file_upload" name="file" type="file" (change)="fileChangeEvent($event)" placeholder="Upload file..." />
+      <tr><td></td><td><input  ng-model="file_upload" name="file" type="file" accept = ".jar" (change)="fileChangeEvent($event)" placeholder="Upload file..." />
         <button type="button" (click)="upload()">Upload</button></td></tr>
     </table>
   </form>
