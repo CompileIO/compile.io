@@ -1,5 +1,7 @@
 package compile_io.docker;
 import java.io.*;
+import java.lang.StringBuilder;
+import java.lang.ProcessBuilder;
 
 /**
  * This class builds a docker image, then runs that docker image
@@ -94,9 +96,23 @@ public class JavaCompiler implements ICompiler {
      */
     public void createDockerfile() {
         System.out.println("Making Dockerfile...");
-        String dockerfileData = "FROM openjdk\nWORKDIR " + this.fileDirectory + "\nADD " + this.fileName + " " + this.fileName + "\nEXPOSE 8000\nCMD java -jar " + this.fileName + "\n";
+        String temp = this.fileDirectory + "\\";
+        StringBuilder builder = new StringBuilder();
+        builder.append("FROM openjdk\nWORKDIR ");
+        //builder.append(this.fileDirectory);
+        builder.append(this.fileDirectory);
+        builder.append("\nADD ");
+        builder.append(this.fileName);
+        builder.append(" ");
+        builder.append(this.fileName);
+        builder.append("\nEXPOSE 8000\nCMD java -jar ");
+        builder.append(this.fileName);
+        builder.append("\n");
+        String dockerfileData = builder.toString();
+        //String dockerfileData = "FROM openjdk\nWORKDIR " + temp +  "\nADD " + this.fileName + " " + this.fileName + "\nEXPOSE 8000\nCMD java -jar " + this.fileName + "\n";
         try {
             FileOutputStream dockerfileFos = new FileOutputStream("Dockerfile");
+            System.out.println(dockerfileData);
             dockerfileFos.write(dockerfileData.getBytes());
             dockerfileFos.flush();
             dockerfileFos.close();

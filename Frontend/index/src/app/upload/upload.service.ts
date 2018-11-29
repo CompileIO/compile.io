@@ -23,5 +23,12 @@ getClasses(): Promise<String[]> {
   .then(response => response as String[])
   .catch();
 }
+runDocker(): Promise<String[]> {
+  const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  return this.http.get(this.apiUrl + "/run" , { headers: empHeaders, withCredentials: true})
+  .toPromise()
+  .then(response => response as String[])
+  .catch();
+}
 }
 

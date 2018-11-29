@@ -18,22 +18,9 @@ export class UploadComponent implements OnInit {
 
   form: FormGroup;
   file: File;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private uploadService: UploadService) {
   }
 
-  // upload() {
-  //   this.uploadService.upload(this.file)
-  //   .then(result => {
-  //       console.log(result);
-  //   }, error => {
-  //       console.log(error);
-  //   });
-  //   //   this.makeFileRequest( hostname + '/upload', [], this.filesToUpload).then((result) => {
-  //   //       console.log(result);
-  //   //   }, (error) => {
-  //   //       console.error(error);
-  //   //   });
-  // }
 
   fileChangeEvent(event: any) {
       // this.file = fileInput.target.files;
@@ -49,54 +36,6 @@ export class UploadComponent implements OnInit {
     }
   }
 
-//   makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
-//       return new Promise((resolve, reject) => {
-//           const formData: any = new FormData();
-//           const xhr = new XMLHttpRequest();
-//           for (let i = 0; i < files.length; i++) {
-//               formData.append('uploads[]', files[i], files[i].name);
-//           }
-//           xhr.onreadystatechange = function () {
-//               if (xhr.readyState === 4) {
-//                   if (xhr.status === 200) {
-//                       resolve(JSON.parse(xhr.response));
-//                   } else {
-//                       reject(xhr.response);
-//                   }
-//               }
-//           };
-//           xhr.open('POST', url, true);
-//           xhr.send(formData);
-//       });
-//   }
-
-  // constructor(private http: HttpClient) { }
-
-  // uploadFile() {
-  //   if (!isNullOrUndefined(this.file)) {
-  //     console.log(this.file.size);
-  //     console.log(this.file.type);
-  //     console.log(this.file);
-  //     const formData: FormData = new FormData();
-  //     formData.append('file', this.file);
-  //     const req = new HttpRequest('POST', "http://localhost:4000/post_request", formData, {
-  //       headers: new HttpHeaders({
-  //         "Content-Type": "application/json"
-  //       }),
-  //       reportProgress: true,
-  //       withCredentials: true
-  //     });
-
-  //     this.http.request(req).subscribe(event => {
-  //       if (event instanceof HttpResponse) {
-  //         return;
-  //       }
-  //     });
-  //   } else {
-  //     console.log("BAD!");
-  //   }
-  // }
-  // Instantiate an AbstractControl from a user specified configuration
   createForm() {
     
     this.form = new FormBuilder().group({
@@ -104,17 +43,7 @@ export class UploadComponent implements OnInit {
     });
   }
 
-  // Check for changes in files inputs via a DOMString reprsenting the name of an event
-  // fileChange(event: any) {
-  //   // Instantiate an object to read the file content
-  //   let reader = new FileReader();
-  //   // when the load event is fired and the file not empty
-  //   if(event.target.files && event.target.files.length > 0) {
-  //     // Fill file variable with the file content
-  //     this.file = event.target.files[0];
-  //   }
-  // }
-
+  
   // Upload the file to the API
   upload() {
     // Instantiate a FormData to store form fields and encode the file
@@ -134,6 +63,13 @@ export class UploadComponent implements OnInit {
     );
   }
 
+  run() {
+    this.uploadService.runDocker().then(result => {
+    }, error => {
+      console.log(error);
+    });
+  }
+  
   ngOnInit() {
     this.file = null;
     this.createForm;

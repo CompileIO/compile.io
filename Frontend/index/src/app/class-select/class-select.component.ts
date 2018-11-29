@@ -18,8 +18,7 @@ export class ClassSelectComponent implements OnInit {
   classButtons: ClassButtonComponent[] = [];
   classes: String[];
 
-  constructor(private http: HttpClient,
-    private uploadService: UploadService) {
+  constructor(private uploadService: UploadService) {
     uploadService.getClasses().then(result => {
       result.forEach(element => {
         this.classButtons.push(new ClassButtonComponent(element));

@@ -29,64 +29,95 @@ import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+
 @RestController
 //@RequestMapping(value = "/api/upload")
 public class FileUploadController {
 
-    private final StorageService storageService;
+	private final StorageService storageService;
+	private String fileName;
 
-    @Autowired
-    public FileUploadController(StorageService storageService) {
-        this.storageService = storageService;
-    }
-    @CrossOrigin(origins = "http://localhost:4200",  allowCredentials = "true")
-    @GetMapping("/")
-    //@RequestMapping(method = RequestMethod.GET)
-    public String[] getClasses() {
-    	String[] temp = {"CSSE120", "CSSE220", "CSSE230", "CSSE241"};
-    	return temp;
-    }
-    //@GetMapping("/")
-    public String listUploadedFiles(Model model) throws IOException {
+	@Autowired
+	public FileUploadController(StorageService storageService) {
+		this.storageService = storageService;
+	}
 
-        model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
+	
+	
+	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@GetMapping("/run")
+	// @RequestMapping(method = RequestMethod.GET)
+	public String[] runDocker() {
+		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\" + fileName;
+		System.out.println("Working Directory = " + workingDir);
 
-        return "uploadForm";
-    }
+    	// Docker stuff
+		File fileToUpload = new File(workingDir);
+		runCompiler(fileToUpload, "java");
+		String[] temp = {"done!"};
+		return temp;
+	}
+	
+	
+	
+	
+	
+	
+	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@GetMapping("/")
+	// @RequestMapping(method = RequestMethod.GET)
+	public String[] getClasses() {
+		String[] temp = { "CSSE120", "CSSE220", "CSSE230", "CSSE241" };
+		return temp;
+	}
 
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+	// @GetMapping("/")
+	public String listUploadedFiles(Model model) throws IOException {
 
-        Resource file = storageService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
-    
-    @CrossOrigin(origins = "http://localhost:4200",  allowCredentials = "true")
+		model.addAttribute("files",
+				storageService.loadAll()
+						.map(path -> MvcUriComponentsBuilder
+								.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString())
+								.build().toString())
+						.collect(Collectors.toList()));
+
+		return "uploadForm";
+	}
+
+	@GetMapping("/files/{filename:.+}")
+	@ResponseBody
+	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+		Resource file = storageService.loadAsResource(filename);
+		
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+				.body(file);
+	}
+
+	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 //    @RequestMapping(method = RequestMethod.POST)
-    @PostMapping("/")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-    		RedirectAttributes redirectAttributes) {
-        storageService.store(file);
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
-        System.out.println(file.getOriginalFilename());
-        //Docker stuff
-        File fileToUpload = new File("../../../../../upload-dir/" + ((MultipartFile) file).getOriginalFilename());
-        CompilerFactory compilerFactory = new CompilerFactory();
-        ICompiler compiler = compilerFactory.getCompiler("java", fileToUpload);
-        compiler.run();
+	@PostMapping("/")
+	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+		storageService.store(file);
+		fileName = file.getOriginalFilename();
+		redirectAttributes.addFlashAttribute("message",
+				"You successfully uploaded " + file.getOriginalFilename() + "!");
+		
 
-        return "redirect:/";
-    }
+		return "redirect:/";
+	}
+	
+	public void runCompiler(File fileToUpload, String language) {
+		
+		CompilerFactory compilerFactory = new CompilerFactory();
+		ICompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
+		compiler.run();
+	}
 
-    @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
-        return ResponseEntity.notFound().build();
-    }
+	@ExceptionHandler(StorageFileNotFoundException.class)
+	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+		return ResponseEntity.notFound().build();
+	}
 
 }
