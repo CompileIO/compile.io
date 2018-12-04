@@ -16,6 +16,8 @@ We would prefer to work in an agile environment in order to provide a minimum vi
 
 After this project, students will have been exposed to several new concepts such as full-stack web application development, scalable software architecture, and possibly AWS/cloud configuration.
 
+Any documentation (save for this README file) relevant to this project can be found in the *Documentation* folder in the repository.
+
 Required Programming Language(s), Operating System, Hardware Platform (if known):
 
 One of Java/C#/NodeJS for the backend, Javascript for the frontend, any OS is acceptable
