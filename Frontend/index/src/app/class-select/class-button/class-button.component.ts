@@ -6,9 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./class-button.component.css']
 })
 export class ClassButtonComponent implements OnInit {
-  className = "";
+  className: String = '';
 
-  constructor(name: string) {
+  constructor(name: String) {
     this.className = name;
   }
 

@@ -76,6 +76,10 @@ typings/
 # Serverless directories
 .serverless
 
+# upload directory
+uploads/
 
-# End of https://www.gitignore.io/api/node
 /.gradle/
+# End of https://www.gitignore.io/api/node
+
+/.metadata/

@@ -34,6 +34,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
+// All endpoints to be used in this application
+
+// var company = require("./routes/company.js")(server);
+// var user = require("./routes/user.js")(server);
+// var project = require("./routes/project.js")(server);
+// var task = require("./routes/task.js")(server);
+// var cdn = require("./routes/cdn.js")(server);
+
 
  //GET API
 app.get("/get_request", function (req, res) {

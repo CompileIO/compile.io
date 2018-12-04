@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { UploadComponent } from './upload/upload.component';
+import { UploadModule } from './upload/upload.module';
 import { ClassSelectComponent } from './class-select/class-select.component';
 import { ClassButtonComponent } from './class-select/class-button/class-button.component';
 
@@ -17,6 +18,7 @@ import { ClassButtonComponent } from './class-select/class-button/class-button.c
     ClassButtonComponent,
   ],
   imports: [
+  	UploadModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
