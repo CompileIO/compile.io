@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UploadService {
-private apiUrl = 'http://localhost:8080';
+private apiUrl = '0.0.0.0:8080';
 constructor(private http: HttpClient) { }
 
   upload(file: File): Promise<String[]> {

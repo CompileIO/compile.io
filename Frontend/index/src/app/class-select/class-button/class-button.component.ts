@@ -9,7 +9,7 @@ export class ClassButtonComponent implements OnInit {
   className: String = '';
 
   constructor() {
-    this.className = 'fuck you';
+    this.className = 'CLASS!';
   }
 
   ngOnInit() {
