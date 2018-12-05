@@ -71,7 +71,7 @@ public class FileUploadController {
 		return temp;
 	}
 
-	// @GetMapping("/")
+	/*@GetMapping("/")
 	public String listUploadedFiles(Model model) throws IOException {
 
 		model.addAttribute("files",
@@ -82,7 +82,7 @@ public class FileUploadController {
 						.collect(Collectors.toList()));
 
 		return "uploadForm";
-	}
+	}*/
 
 	@GetMapping("/files/{filename:.+}")
 	@ResponseBody
@@ -98,14 +98,13 @@ public class FileUploadController {
 	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 //    @RequestMapping(method = RequestMethod.POST)
 	@PostMapping("/")
-	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+	public String[] handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 		storageService.store(file);
 		fileName = file.getOriginalFilename();
 		redirectAttributes.addFlashAttribute("message",
 				"You successfully uploaded " + file.getOriginalFilename() + "!");
-		
-
-		return "redirect:/";
+    String[] temp = {"You successfully uploaded " + file.getOriginalFilename() + "!"};
+		return temp;
 	}
 	
 	public void runCompiler(File fileToUpload, String language) {

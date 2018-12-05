@@ -8,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class ClassButtonComponent implements OnInit {
   className: String = '';
 
-  constructor(name: String) {
-    this.className = name;
+  constructor() {
+    this.className = 'fuck you';
   }
 
   ngOnInit() {
