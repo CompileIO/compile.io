@@ -44,7 +44,7 @@ public class FileUploadController {
 
 	
 	
-	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@CrossOrigin(origins = "http://137.112.104.111:4200", allowCredentials = "true")
 	@GetMapping("/run")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] runDocker() {
@@ -63,7 +63,7 @@ public class FileUploadController {
 	
 	
 	
-	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@CrossOrigin(origins = "http://137.112.104.111:4200", allowCredentials = "true")
 	@GetMapping("/")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] getClasses() {
@@ -95,7 +95,7 @@ public class FileUploadController {
 				.body(file);
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@CrossOrigin(origins = "http://137.112.104.111:4200", allowCredentials = "true")
 //    @RequestMapping(method = RequestMethod.POST)
 	@PostMapping("/")
 	public String[] handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {

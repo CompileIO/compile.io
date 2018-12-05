@@ -21,7 +21,7 @@ export class ClassSelectComponent implements OnInit {
   constructor(private uploadService: UploadService) {
     uploadService.getClasses().then(result => {
       result.forEach(element => {
-        this.classButtons.push(new ClassButtonComponent());
+        this.classButtons.push(new ClassButtonComponent(element));
       });
     }, error => {
       console.log(error);
