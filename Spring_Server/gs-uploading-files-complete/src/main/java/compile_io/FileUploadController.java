@@ -49,7 +49,7 @@ public class FileUploadController {
 	@GetMapping("/run")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] runDocker() {
-		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\" + fileName;
+		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
 		System.out.println("Working Directory = " + workingDir);
 
     	// Docker stuff
