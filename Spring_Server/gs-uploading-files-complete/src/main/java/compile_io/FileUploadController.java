@@ -23,8 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import compile_io.docker.AbstractCompiler;
 import compile_io.docker.CompilerFactory;
-import compile_io.docker.ICompiler;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
@@ -36,6 +36,7 @@ public class FileUploadController {
 
 	private final StorageService storageService;
 	private String fileName;
+	private final static String frontendVm = "http://137.112.104.111:4200";
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -44,11 +45,11 @@ public class FileUploadController {
 
 	
 	
-	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
 	@GetMapping("/run")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] runDocker() {
-		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\" + fileName;
+		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
 		System.out.println("Working Directory = " + workingDir);
 
     	// Docker stuff
@@ -63,7 +64,7 @@ public class FileUploadController {
 	
 	
 	
-	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
 	@GetMapping("/")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] getClasses() {
@@ -71,7 +72,7 @@ public class FileUploadController {
 		return temp;
 	}
 
-	// @GetMapping("/")
+	/*@GetMapping("/")
 	public String listUploadedFiles(Model model) throws IOException {
 
 		model.addAttribute("files",
@@ -82,7 +83,7 @@ public class FileUploadController {
 						.collect(Collectors.toList()));
 
 		return "uploadForm";
-	}
+	}*/
 
 	@GetMapping("/files/{filename:.+}")
 	@ResponseBody
@@ -95,24 +96,23 @@ public class FileUploadController {
 				.body(file);
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
 //    @RequestMapping(method = RequestMethod.POST)
 	@PostMapping("/")
-	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+	public String[] handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 		storageService.store(file);
 		fileName = file.getOriginalFilename();
 		redirectAttributes.addFlashAttribute("message",
 				"You successfully uploaded " + file.getOriginalFilename() + "!");
-		
-
-		return "redirect:/";
+    String[] temp = {"You successfully uploaded " + file.getOriginalFilename() + "!"};
+		return temp;
 	}
 	
 	public void runCompiler(File fileToUpload, String language) {
-		
 		CompilerFactory compilerFactory = new CompilerFactory();
-		ICompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
+		AbstractCompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
 		compiler.run();
+		//
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
