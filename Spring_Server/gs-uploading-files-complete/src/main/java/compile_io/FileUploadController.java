@@ -23,8 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import compile_io.docker.AbstractCompiler;
 import compile_io.docker.CompilerFactory;
-import compile_io.docker.ICompiler;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
@@ -36,6 +36,7 @@ public class FileUploadController {
 
 	private final StorageService storageService;
 	private String fileName;
+	private final static String frontendVm = "http://137.112.104.111:4200";
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -44,7 +45,7 @@ public class FileUploadController {
 
 	
 	
-	@CrossOrigin(origins = "http://137.112.104.111:4200", allowCredentials = "true")
+	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
 	@GetMapping("/run")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] runDocker() {
@@ -63,7 +64,7 @@ public class FileUploadController {
 	
 	
 	
-	@CrossOrigin(origins = "http://137.112.104.111:4200", allowCredentials = "true")
+	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
 	@GetMapping("/")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] getClasses() {
@@ -95,7 +96,7 @@ public class FileUploadController {
 				.body(file);
 	}
 
-	@CrossOrigin(origins = "http://137.112.104.111:4200", allowCredentials = "true")
+	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
 //    @RequestMapping(method = RequestMethod.POST)
 	@PostMapping("/")
 	public String[] handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
@@ -110,7 +111,7 @@ public class FileUploadController {
 	public void runCompiler(File fileToUpload, String language) {
 		
 		CompilerFactory compilerFactory = new CompilerFactory();
-		ICompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
+		AbstractCompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
 		compiler.run();
 	}
 
