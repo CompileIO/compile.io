@@ -1,4 +1,13 @@
 <div>
-  <input [(ngModel)]="file" accept=".zip" type="file" id="file" name="file" />
-  <button (click)="uploadFile()">Add</button>
+  <!-- <input [(ngModel)]="file" accept=".zip" type="file" id="file" name="file" />
+  <button (click)="uploadFile()">Add</button> -->
+  <form method="POST" enctype="multipart/form-data" action="/">
+    <table>
+      <!-- <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr> -->
+      <tr><td></td><td><input  ng-model="file_upload" name="file" type="file" accept = ".jar" (change)="fileChangeEvent($event)" placeholder="Upload file..." />
+        <button type="button" (click)="upload()">Upload</button></td></tr>
+    </table>
+  </form>
+  <button type="button" (click)="run()">Run!</button>
+  
 </div>

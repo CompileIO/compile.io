@@ -1,43 +1,63 @@
 import { Component, OnInit } from '@angular/core';
-import { isNullOrUndefined } from 'util';
-import { HttpClient, HttpRequest, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { HttpClient, } from '@angular/common/http';
+import { UploadService } from './upload.service';
+
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.css']
+  styleUrls: ['./upload.component.css'],
+  providers: [UploadService],
 })
 export class UploadComponent implements OnInit {
+  // file: File;
+
+  form: FormGroup;
   file: File;
+  constructor(private http: HttpClient, private uploadService: UploadService) {
+  }
 
-  constructor(private http: HttpClient) { }
 
-  uploadFile() {
-    if (!isNullOrUndefined(this.file)) {
-      console.log(this.file.size);
-      console.log(this.file.type);
-      console.log(this.file);
-      const formData: FormData = new FormData();
-      formData.append('file', this.file, this.file.name);
-      const req = new HttpRequest('POST', "http://localhost:4000/post_request", formData, {
-        headers: new HttpHeaders({
-          "Content-Type": "application/json"
-        }),
-        reportProgress: true,
-        withCredentials: true
-      });
-      
-      this.http.request(req).subscribe(event => {
-        if (event instanceof HttpResponse) {
-          return;
-        }
-      });
-    } else {
-      console.log("BAD!");
+  fileChangeEvent(event: any) {
+      //Instantiate an object to read the file content
+    let reader = new FileReader();
+    // when the load event is fired and the file not empty
+    if(event.target.files && event.target.files.length > 0) {
+      // Fill file variable with the file content
+      this.file = event.target.files[0];
+      console.log("This is the file: "+ this.file.name);
     }
   }
 
+  createForm() {
+    
+    this.form = new FormBuilder().group({
+      file_upload: null
+    });
+  }
+
+  
+  // Upload the file to the API
+  upload() {
+    this.uploadService.upload(this.file)
+      .then(result => {
+      console.log(result);
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  run() {
+    this.uploadService.runDocker().then(result => {
+    }, error => {
+      console.log(error);
+    });
+  }
+  
   ngOnInit() {
+    this.file = null;
+    this.createForm;
   }
 
 }
