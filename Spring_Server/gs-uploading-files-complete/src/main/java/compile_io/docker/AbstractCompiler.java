@@ -26,7 +26,8 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Runs the container with the image name given to the constructor and prints the output to the console
+     * Runs the container with the image name given to the constructor and prints the output to the console.
+     * Removes the created docker image after the execution of said image.
      * @return void
      * @throws Exception e
      */
