@@ -1,10 +1,10 @@
 package compile_io.docker;
 
-/**
- * Abstract class for the compilers that compile.io will utilize
- */
 import java.io.*;
 
+/**
+ * Abstract class for the compilers that compile.io will utilize.
+ */
 public abstract class AbstractCompiler {
 
     private String fileName;
@@ -33,7 +33,7 @@ public abstract class AbstractCompiler {
     public void run(){
         try {
             System.out.println("Attempting to run docker container...");
-            String[] command = {"docker", "run", "compile-io-image"};
+            String[] command = {"docker", "run", "--rm", "compile-io-image"};
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
@@ -82,32 +82,12 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Tears down the created image
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void teardownDockerImage() {
-        try {
-            String[] command = {"docker", "rm", "--force", "compile-io-image"};
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
-            Process proc = pb.start();
-            proc.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Removes the Dockerfile used to create the image
      * @return void
      * @throws IOException e
      * @throws InterruptedException e 
      */
-    public void removeDockerfile() {
+    public void teardownDockerfile() {
         try {
             String[] command = {"rm", this.fileDirectory + "Dockerfile"};
             ProcessBuilder pb = new ProcessBuilder(command);
