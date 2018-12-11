@@ -3,7 +3,7 @@ package compile_io.docker;
 import java.io.*;
 
 /**
- * Abstract class for the compilers that compile.io will utilize.
+ * Abstract class for the compilers that builds and runs docker images.
  */
 public abstract class AbstractCompiler {
 
@@ -32,9 +32,85 @@ public abstract class AbstractCompiler {
      * @throws Exception e
      */
     public void run(){
+        System.out.println("Attempting to run docker container...");
+        String[] command = {"docker", "run", "--rm", "compile-io-image"};
+        executeAndDisplayOutput(command);
+        System.out.println("Container has finished execution.");
+        this.teardownDockerImage();
+        this.teardownDockerfile();
+    }
+
+    /**
+     * Builds a docker image with the image name given to the constructor
+     * @return void
+     * @throws IOException e 
+     * @throws InterruptedException e
+     */
+    public void buildContainer() {
+        System.out.println("Attempting to build docker container...");
+        String[] command = {"docker", "build", "-t", "compile-io-image", this.fileDirectory};
+        executeCommand(command);
+    }
+
+    /**
+     * Tears down the created image
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void teardownDockerImage() {
+        System.out.println("Beginning teardown of Docker image...");
+        String[] command = {"docker", "rmi", "--force", "compile-io-image"};
+        executeCommand(command);
+        System.out.println("Successfully removed the Docker image from the working directory.");
+    }
+
+    /**
+     * Removes the Dockerfile used to create the image
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void teardownDockerfile() {
+        System.out.println("Beginning teardown of Dockerfile...");
+        String[] command = {"rm", this.fileDirectory + "\\Dockerfile"};
+        executeCommand(command);
+        System.out.println("Successfully removed the Dockerfile from the working directory.");
+    }
+
+    /**
+     * Executes the given command line argument. Displays no output to the console.
+     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
+     * @param String[] command An array of strings representing a command line instruction
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void executeCommand(String[] command) {
         try {
-            System.out.println("Attempting to run docker container...");
-            String[] command = {"docker", "run", "--rm", "compile-io-image"};
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+            proc.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Executes the given command line argument and prints the output of the process to the console.
+     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
+     * @param String[] command An array of strings representing a command line instruction
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void executeAndDisplayOutput(String[] command) {
+        try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
@@ -53,66 +129,6 @@ public abstract class AbstractCompiler {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ERROR: Failed to run the Docker container!\n");
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Builds a docker image with the image name given to the constructor
-     * @return void
-     * @throws IOException e 
-     * @throws InterruptedException e
-     */
-    public void buildContainer() {
-        System.out.println("Attempting to build docker container...");
-        String[] command = {"docker", "build", "-t", "compile-io-image", this.fileDirectory};
-        executeCommand(command);
-    }
-
-
-
-    /**
-     * Tears down the created image
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void teardownDockerImage() {
-        System.out.println("Beginning teardown of Docker image...");
-        String[] command = {"docker", "rm", "--force", "compile-io-image"};
-        executeCommand(command);
-    }
-
-    /**
-     * Removes the Dockerfile used to create the image
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void teardownDockerfile() {
-        System.out.println("Beginning teardown of Dockerfile...");
-        String[] command = {"rm", this.fileDirectory + "/Dockerfile"};
-        executeCommand(command);
-    }
-
-    /**
-     * Executes the given command line argument.
-     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void executeCommand(String[] command) {
-        try {
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
-            Process proc = pb.start();
-            proc.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
             System.exit(1);
         }
     }

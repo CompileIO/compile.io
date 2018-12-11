@@ -3,7 +3,7 @@ package compile_io.docker;
 import java.io.*;
 
 /**
- * This class builds a docker image, then runs that docker image
+ * This class builds a Dockerfile that the superclass uses to create a Docker image.
  */
 public class JavaCompiler extends AbstractCompiler {
 
