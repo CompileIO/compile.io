@@ -20,9 +20,7 @@ public abstract class AbstractCompiler {
         if (this.fileDirectory == null) {
             this.fileDirectory = "/";
         }
-        System.out.println("Given file: " + this.fileName + ". Attempted target directory: " + this.fileDirectory);
-        this.createDockerfile();
-        this.buildContainer();
+        System.out.println("Given file: " + this.fileName + ". Target directory: " + this.fileDirectory);
     }
 
     /**

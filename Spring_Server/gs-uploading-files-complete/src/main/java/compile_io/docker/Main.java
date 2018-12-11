@@ -11,6 +11,8 @@ public class Main {
         CompilerFactory compilerFactory = new CompilerFactory();
         File file = new File("C:\\SCHOOL\\DockerTest\\RevEngDrunnable.jar");
         AbstractCompiler compiler = compilerFactory.getCompiler("java", file);
+        compiler.createDockerfile();
+        compiler.buildContainer();
         compiler.run();
     }
 }
