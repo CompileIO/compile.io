@@ -14,6 +14,7 @@ public class CompilerFactory {
      * @return null If the given type does not correspond to a supported compiler type
      */
     public AbstractCompiler getCompiler(String type, File file) {
+        // change this from a nested if statement to...?
         if (type == "java") {
             return new JavaCompiler(file);
         } else {

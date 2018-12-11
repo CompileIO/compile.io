@@ -35,6 +35,7 @@ public abstract class AbstractCompiler {
         System.out.println("Attempting to run docker container...");
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
         executeAndDisplayOutput(command);
+        System.out.println();
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
         this.teardownDockerfile();
@@ -60,9 +61,11 @@ public abstract class AbstractCompiler {
      */
     public void teardownDockerImage() {
         System.out.println("Beginning teardown of Docker image...");
+        System.out.println();
         String[] command = {"docker", "rmi", "--force", "compile-io-image"};
         executeCommand(command);
-        System.out.println("Successfully removed the Docker image from the working directory.");
+        System.out.println();
+        System.out.println("Successfully removed the Docker image.");
     }
 
     /**
@@ -73,9 +76,12 @@ public abstract class AbstractCompiler {
      */
     public void teardownDockerfile() {
         System.out.println("Beginning teardown of Dockerfile...");
+        System.out.println();
+        System.out.println(this.fileDirectory + "\\Dockerfile");
         String[] command = {"rm", this.fileDirectory + "\\Dockerfile"};
         executeCommand(command);
-        System.out.println("Successfully removed the Dockerfile from the working directory.");
+        System.out.println();
+        System.out.println("Successfully removed the Dockerfile from " + this.fileDirectory);
     }
 
     /**
@@ -116,9 +122,7 @@ public abstract class AbstractCompiler {
             Process proc = pb.start();
     
             InputStream is = proc.getInputStream();
-    
-            BufferedReader reader
-                    = new BufferedReader(new InputStreamReader(is));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
             String line = "";
             while ((line = reader.readLine()) != null) {
