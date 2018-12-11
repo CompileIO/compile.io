@@ -33,6 +33,7 @@ public abstract class AbstractCompiler {
      */
     public void run(){
         System.out.println("Attempting to run docker container...");
+        System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
         executeAndDisplayOutput(command);
         System.out.println();
