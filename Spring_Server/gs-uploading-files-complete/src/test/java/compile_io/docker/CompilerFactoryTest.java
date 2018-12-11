@@ -32,8 +32,6 @@ public class CompilerFactoryTest {
     assertEquals(compilerFactory.getCompiler("unsupported/invalid language", file), null);
     assertEquals(compilerFactory.getCompiler("", file), null);
   }
-  @Test
-  public void testTests() {
-    assertEquals(true,true);
-  }
+
+
 }
