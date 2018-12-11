@@ -29,7 +29,6 @@ public class JavaCompiler extends AbstractCompiler {
         dockerfileData.append("ADD " + super.getFileName() + " " + super.getFileName() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("CMD java -jar " + super.getFileName() + "\n");
-        System.out.println(dockerfileData.toString());
         FileOutputStream fos = null;
         File file;
 
