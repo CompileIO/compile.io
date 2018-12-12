@@ -21,8 +21,6 @@ public abstract class AbstractCompiler {
             this.fileDirectory = "/";
         }
         System.out.println("Given file: " + this.fileName + ". Attempted target directory: " + this.fileDirectory);
-        this.createDockerfile();
-        this.buildContainer();
     }
 
     /**

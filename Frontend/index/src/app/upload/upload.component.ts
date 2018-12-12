@@ -15,7 +15,10 @@ export class UploadComponent implements OnInit {
 
   form: FormGroup;
   file: File;
+  MAX_FILE_SIZE: number;
+
   constructor(private http: HttpClient, private uploadService: UploadService) {
+    this.MAX_FILE_SIZE = 250000000;
   }
 
 
@@ -31,7 +34,6 @@ export class UploadComponent implements OnInit {
   }
 
   createForm() {
-    
     this.form = new FormBuilder().group({
       file_upload: null
     });
@@ -40,12 +42,18 @@ export class UploadComponent implements OnInit {
   
   // Upload the file to the API
   upload() {
-    this.uploadService.upload(this.file)
-      .then(result => {
-      console.log(result);
-    }, error => {
-      console.log(error);
-    });
+    console.log(this.file.size);
+    if (this.file.size > this.MAX_FILE_SIZE) {
+      console.log("File is too large!");
+    } else {
+      this.uploadService.upload(this.file)
+        .then(result => {
+          console.log(result);
+        }, error => {
+          console.log(error);
+        });
+    }
+    
   }
 
   run() {
