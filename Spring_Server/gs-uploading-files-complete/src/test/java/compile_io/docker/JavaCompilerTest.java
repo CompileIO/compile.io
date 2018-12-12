@@ -17,13 +17,17 @@ public class JavaCompilerTest {
 
   @Test
   public void testSuperConstructor() {
-    File testFile = new File("C:\\Test\\TestyMcTestfile");
+    File testFile = mock(File.class);
+    when(testFile.getName()).thenReturn("TestyMcTestface");
+    when(testFile.getParent()).thenReturn("C:\\Test");
     AbstractCompiler tc1 = new JavaCompiler(testFile);
     assertEquals("C:\\Test", tc1.getFileDirectory());
-    assertEquals("TestyMcTestfile", tc1.getFileName());
+    assertEquals("TestyMcTestface", tc1.getFileName());
     
-    testFile = new File("FileTest");
-    AbstractCompiler tc2 = new JavaCompiler(testFile);
+    File testFileNull = mock(File.class);
+    when(testFileNull.getName()).thenReturn("FileTest");
+    when(testFileNull.getParent()).thenReturn(null);
+    AbstractCompiler tc2 = new JavaCompiler(testFileNull);
     assertEquals("/", tc2.getFileDirectory());
     assertEquals("FileTest", tc2.getFileName());
   }

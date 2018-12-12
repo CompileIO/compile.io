@@ -17,7 +17,9 @@ public class AbstractCompilerTest {
 
     @Test
     public void testExecuteCommandOutput() {
-        File testFile = new File("C:\\Test\\TestyMcTestface");
+        File testFile = mock(File.class);
+        when(testFile.getName()).thenReturn("TestyMcTestface");
+        when(testFile.getParent()).thenReturn("C:\\Test");
         AbstractCompiler testCompiler = new JavaCompiler(testFile);
         String[] command = {"echo", "ExecuteCommandOutput"};
         testCompiler.executeAndDisplayOutput(command);
@@ -27,21 +29,27 @@ public class AbstractCompilerTest {
 
     @Test
     public void testGetFileName() {
-        File testFile = new File("C:\\Test\\TestyMcTestface");
+        File testFile = mock(File.class);
+        when(testFile.getName()).thenReturn("TestyMcTestface");
+        when(testFile.getParent()).thenReturn("C:\\Test");
         AbstractCompiler testCompiler = new JavaCompiler(testFile);
         assertEquals("TestyMcTestface", testCompiler.getFileName());
     }
 
     @Test
     public void testGetFileDirectory() {
-        File testFile = new File("C:\\Test\\TestyMcTestface");
+        File testFile = mock(File.class);
+        when(testFile.getName()).thenReturn("TestyMcTestface");
+        when(testFile.getParent()).thenReturn("C:\\Test");
         AbstractCompiler testCompiler = new JavaCompiler(testFile);
         assertEquals("C:\\Test", testCompiler.getFileDirectory());
     }
 
     @Test
     public void testSetFileName() {
-        File testFile = new File("C:\\Test\\TestyMcTestface");
+        File testFile = mock(File.class);
+        when(testFile.getName()).thenReturn("TestyMcTestface");
+        when(testFile.getParent()).thenReturn("C:\\Test");
         AbstractCompiler testCompiler = new JavaCompiler(testFile);
         assertEquals("TestyMcTestface", testCompiler.getFileName());
         testCompiler.setFileName("NewTest");
@@ -50,7 +58,9 @@ public class AbstractCompilerTest {
 
     @Test
     public void testSetFileDirectory() {
-        File testFile = new File("C:\\Test\\TestyMcTestface");
+        File testFile = mock(File.class);
+        when(testFile.getName()).thenReturn("TestyMcTestface");
+        when(testFile.getParent()).thenReturn("C:\\Test");
         AbstractCompiler testCompiler = new JavaCompiler(testFile);
         assertEquals("C:\\Test", testCompiler.getFileDirectory());
         testCompiler.setFileDirectory("C:\\NewTest");
