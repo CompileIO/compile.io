@@ -1,4 +1,5 @@
-package test;
+package compile_io.docker;
+
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -12,13 +13,10 @@ import java.io.File;
 import compile_io.Application;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={Application.class})
+@SpringBootTest(classes = { Application.class })
 public class CompilerFactoryTest {
 
   CompilerFactory compilerFactory = new CompilerFactory();
-
-//  @mock
- // JavaCompiler javaCompiler
 
   @Test
   public void testGetCompilerJava() {
@@ -32,6 +30,5 @@ public class CompilerFactoryTest {
     assertEquals(compilerFactory.getCompiler("unsupported/invalid language", file), null);
     assertEquals(compilerFactory.getCompiler("", file), null);
   }
-
 
 }
