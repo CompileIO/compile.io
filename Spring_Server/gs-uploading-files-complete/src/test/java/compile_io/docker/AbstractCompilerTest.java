@@ -19,6 +19,7 @@ public class AbstractCompilerTest {
 
     @Test(expected = IOException.class)
     public void testExecuteCommandIOException() {
+        File testFile = new File("C:\\Test\\TestyMcTestface");
         AbstractCompiler testCompiler = new JavaCompiler(null);
         String[] command = {"definitelynotacommandlinething"};
         testCompiler.executeAndDisplayOutput(command);
@@ -26,7 +27,8 @@ public class AbstractCompilerTest {
 
     @Test
     public void testExecuteCommandOutput() {
-        AbstractCompiler testCompiler = new JavaCompiler(null);
+        File testFile = new File("C:\\Test\\TestyMcTestface");
+        AbstractCompiler testCompiler = new JavaCompiler(testFile);
         String[] command = {"echo", "ExecuteCommandOutput"};
         testCompiler.executeAndDisplayOutput(command);
         testCompiler.executeCommand(command);
