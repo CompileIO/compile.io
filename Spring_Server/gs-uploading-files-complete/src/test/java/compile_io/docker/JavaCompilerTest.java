@@ -16,12 +16,16 @@ import compile_io.Application;
 public class JavaCompilerTest {
 
   @Test
-  public void testTest() {
-    assertEquals(true, true);
+  public void testSuperConstructor() {
+    File testFile = new File("C:\\Test\\TestyMcTestfile");
+    AbstractCompiler tc1 = new JavaCompiler(testFile);
+    assertEquals("C:\\Test", tc1.getFileDirectory());
+    assertEquals("TestyMcTestfile", tc1.getFileName());
+    
+    testFile = new File("FileTest");
+    AbstractCompiler tc2 = new JavaCompiler(testFile);
+    assertEquals("/", tc2.getFileDirectory());
+    assertEquals("FileTest", tc2.getFileName());
   }
 
-  @Test
-  public void testCreateDockerfile() {
-    
-  }
 }

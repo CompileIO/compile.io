@@ -17,9 +17,6 @@ public class CompilerFactoryTest {
 
   CompilerFactory compilerFactory = new CompilerFactory();
 
-  // @mock
-  // JavaCompiler javaCompiler
-
   @Test
   public void testGetCompilerJava() {
     File file = mock(File.class);
