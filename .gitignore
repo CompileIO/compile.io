@@ -82,7 +82,7 @@ upload-dir/
 # visual studio folders
 /.vs/
 /.vscode/
-build/
+
 
 /.gradle/
 # End of https://www.gitignore.io/api/node
