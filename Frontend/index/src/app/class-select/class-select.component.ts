@@ -5,9 +5,6 @@ import { UploadService } from '../upload/upload.service';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ClassButtonComponent } from './class-button/class-button.component';
 
-//const hostname = 'http://137.112.104.112:4000';
-// var hostname = "http://localhost:4000"
-
 @Component({
   selector: 'app-class-select',
   templateUrl: './class-select.component.html',

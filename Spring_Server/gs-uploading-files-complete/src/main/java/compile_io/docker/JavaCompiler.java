@@ -3,7 +3,7 @@ package compile_io.docker;
 import java.io.*;
 
 /**
- * This class builds a docker image, then runs that docker image
+ * This class builds a Dockerfile that the superclass uses to create a Docker image.
  */
 public class JavaCompiler extends AbstractCompiler {
 
@@ -29,7 +29,6 @@ public class JavaCompiler extends AbstractCompiler {
         dockerfileData.append("ADD " + super.getFileName() + " " + super.getFileName() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("CMD java -jar " + super.getFileName() + "\n");
-        System.out.println(dockerfileData.toString());
         FileOutputStream fos = null;
         File file;
 

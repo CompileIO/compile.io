@@ -1,5 +1,5 @@
 FROM openjdk
-WORKDIR C:\SCHOOL\Senior Design\compile.io\Spring_Server\gs-uploading-files-complete\upload-dir
-ADD RevEngDrunnable.jar RevEngDrunnable.jar
+WORKDIR /
+ADD null null
 EXPOSE 8000
-CMD java -jar RevEngDrunnable.jar
+CMD java -jar null

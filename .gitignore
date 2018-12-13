@@ -82,9 +82,11 @@ upload-dir/
 # visual studio folders
 /.vs/
 /.vscode/
+build/
 
 
 /.gradle/
+build/
 # End of https://www.gitignore.io/api/node
 
 /.metadata/
