@@ -1,4 +1,5 @@
-package test;
+package compile_io.storage;
+
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -10,12 +11,12 @@ import java.io.File;
 import compile_io.Application;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={Application.class})
+@SpringBootTest(classes = { Application.class })
 public class FileUploadControllerTest {
 
-@Test
-public void testTest() {
-  assertEquals(true,true);
-}
+  @Test
+  public void testTest() {
+    assertEquals(true, true);
+  }
 
 }

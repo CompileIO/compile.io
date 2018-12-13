@@ -1,4 +1,4 @@
-package test;
+package compile_io.docker;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -12,12 +12,24 @@ import java.io.File;
 import compile_io.Application;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={Application.class})
+@SpringBootTest(classes = { Application.class })
 public class JavaCompilerTest {
 
-@Test
-public void testTest() {
-  assertEquals(true,true);
-}
+  @Test
+  public void testSuperConstructor() {
+    File testFile = mock(File.class);
+    when(testFile.getName()).thenReturn("TestyMcTestface");
+    when(testFile.getParent()).thenReturn("C:\\Test");
+    AbstractCompiler tc1 = new JavaCompiler(testFile);
+    assertEquals("C:\\Test", tc1.getFileDirectory());
+    assertEquals("TestyMcTestface", tc1.getFileName());
+    
+    File testFileNull = mock(File.class);
+    when(testFileNull.getName()).thenReturn("FileTest");
+    when(testFileNull.getParent()).thenReturn(null);
+    AbstractCompiler tc2 = new JavaCompiler(testFileNull);
+    assertEquals("/", tc2.getFileDirectory());
+    assertEquals("FileTest", tc2.getFileName());
+  }
 
 }

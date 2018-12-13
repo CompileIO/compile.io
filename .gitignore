@@ -82,6 +82,7 @@ upload-dir/
 # visual studio folders
 /.vs/
 /.vscode/
+build/
 
 
 /.gradle/
