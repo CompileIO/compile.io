@@ -37,6 +37,8 @@ public class FileUploadController {
 	private final StorageService storageService;
 	private String fileName;
 	private final static String frontendVm = "http://137.112.104.111:4200";
+  //private final static String frontendVm = "http://localhost:4200";
+  private final int MAX_FILE_SIZE = 250000000;
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -100,12 +102,18 @@ public class FileUploadController {
 //    @RequestMapping(method = RequestMethod.POST)
 	@PostMapping("/")
 	public String[] handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-		storageService.store(file);
-		fileName = file.getOriginalFilename();
-		redirectAttributes.addFlashAttribute("message",
-				"You successfully uploaded " + file.getOriginalFilename() + "!");
-    String[] temp = {"You successfully uploaded " + file.getOriginalFilename() + "!"};
-		return temp;
+    
+    if (file.getSize() > MAX_FILE_SIZE) {
+      String[] temp = {"File: " + file.getOriginalFilename() + " is too large!"};
+      return temp;
+    } else {
+		  storageService.store(file);
+		  fileName = file.getOriginalFilename();
+		  redirectAttributes.addFlashAttribute("message",
+				  "You successfully uploaded " + file.getOriginalFilename() + "!");
+      String[] temp = {"You successfully uploaded " + file.getOriginalFilename() + "!"};
+      return temp;
+    }
 	}
 	
 	public void runCompiler(File fileToUpload, String language) {
