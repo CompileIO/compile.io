@@ -111,8 +111,9 @@ public class FileUploadController {
 	public void runCompiler(File fileToUpload, String language) {
 		CompilerFactory compilerFactory = new CompilerFactory();
 		AbstractCompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
+		compiler.createDockerfile();
+        compiler.buildContainer();
 		compiler.run();
-		//
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
