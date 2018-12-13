@@ -24,9 +24,9 @@ java -jar build/libs/gs-spring-boot-0.1.0.jar     (runs the server)
 Have those terminals open, and go to http://localhost:4200 to run everything locally 
 
 To run back-end tests locally:
-* Navigate to the compile.io directory
-* Navigate to Spring_Server/gs-uploading-files-complete within the compile.io directory
-* Run ./gradlew test
+* Navigate to the `compile.io` directory
+* Navigate to `Spring_Server/gs-uploading-files-complete` within the `compile.io` directory
+* Run `./gradlew test`
 This will start the gradle building process, which runs the back-end tests.
 If the build was successful, then the tests have passed. 
 If the build fails, the offending test case will be displayed, along with the corresponding stack trace of the error/failure.
