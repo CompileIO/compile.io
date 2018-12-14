@@ -34,7 +34,7 @@ public class JavaCompiler extends AbstractCompiler {
 
         try {
             System.out.println("Making Dockerfile in directory: " + super.getFileDirectory());
-            file = new File(super.getFileDirectory() + "/Dockerfile");
+            file = new File(super.getFileDirectory() + "\\Dockerfile");
             fos = new FileOutputStream(file);
       
             /* This logic will check whether the file
