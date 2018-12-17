@@ -35,7 +35,7 @@ public abstract class AbstractCompiler {
         System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
         // ^ need to somehow edit this so that there is a timeout so loops don't run forever
-        executeAndDisplayOutput(command);
+        executeAndDisplayOutputWithTimeout(command, 60);
         System.out.println();
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
@@ -121,7 +121,11 @@ public abstract class AbstractCompiler {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
-            proc.waitFor(timeout, TimeUnit.SECONDS);
+            boolean procFinished = proc.waitFor(timeout, TimeUnit.SECONDS);
+            if (!procFinished) {
+                System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
+                System.exit(0);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -184,7 +188,11 @@ public abstract class AbstractCompiler {
                 System.out.print(line + "\n");
             }
     
-            proc.waitFor(timeout, TimeUnit.SECONDS);
+            boolean procFinished = proc.waitFor(timeout, TimeUnit.SECONDS);
+            if (!procFinished) {
+                System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
+                System.exit(0);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ERROR: Failed to run the Docker container!\n");
