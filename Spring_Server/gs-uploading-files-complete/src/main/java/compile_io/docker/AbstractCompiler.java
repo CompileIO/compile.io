@@ -1,6 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
@@ -106,6 +107,31 @@ public abstract class AbstractCompiler {
     }
 
     /**
+     * Executes the given command line argument. Displays no output to the console.
+     * Times out the process after surpassing the given time.
+     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
+     * @param String[] command An array of strings representing a command line instruction
+     * @param long timeout 
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void executeCommandWithTimeout(String[] command, long timeout) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+            proc.waitFor(timeout, TimeUnit.SECONDS);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
      * Executes the given command line argument and prints the output of the process to the console.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
@@ -128,6 +154,37 @@ public abstract class AbstractCompiler {
             }
     
             proc.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR: Failed to run the Docker container!\n");
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Executes the given command line argument and prints the output of the process to the console.
+     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
+     * @param String[] command An array of strings representing a command line instruction
+     * @param long timeout
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void executeAndDisplayOutputWithTimeout(String[] command, long timeout) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+    
+            InputStream is = proc.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                System.out.print(line + "\n");
+            }
+    
+            proc.waitFor(timeout, TimeUnit.SECONDS);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ERROR: Failed to run the Docker container!\n");
