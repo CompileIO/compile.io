@@ -23,6 +23,7 @@ public class PythonCompiler extends AbstractCompiler {
      * @throws IOException e If the java IO encounters an error
      */
     public void createDockerfile() { 
+        // this can be abstracted further
         StringBuilder dockerfileData = new StringBuilder();
         dockerfileData.append("FROM python:latest\n");
         dockerfileData.append("WORKDIR " + super.getFileDirectory() + "\n");
@@ -32,6 +33,7 @@ public class PythonCompiler extends AbstractCompiler {
         FileOutputStream fos = null;
         File file;
 
+        // this try catch block is repeated in every compiler, abstract out to superclass
         try {
             System.out.println("Making Dockerfile in directory: " + super.getFileDirectory());
             file = new File(super.getFileDirectory() + "/Dockerfile");
