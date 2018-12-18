@@ -238,12 +238,49 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Creates the Dockerfile used for creating the docker container
-     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
+     * Creates the Dockerfile in the file directory specified
      * @return void
      * @throws FileNotFoundException e If the the given file does not exist or cannot be found
      * @throws IOException e If the java IO encounters an error
      */
-    public abstract void createDockerfile();
+    public void createDockerfile(String dockerfileData) {
+        FileOutputStream fos = null;
+        File file;
+
+        try {
+            System.out.println("Making Dockerfile in directory: " + this.getFileDirectory());
+            file = new File(this.getFileDirectory() + "/Dockerfile");
+            fos = new FileOutputStream(file);
+      
+            /* This logic will check whether the file
+             * exists or not. If the file is not found
+             * at the specified location it would create
+             * a new file*/
+            if (!file.exists()) {
+               file.createNewFile();
+            }
+
+            fos.write(dockerfileData.getBytes());
+            fos.flush();
+            System.out.println("Dockerfile successfully written: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException ioe) {
+                System.out.println("Error in closing the Stream");
+            }
+        }
+    }
+
+    /**
+     * Creates a string that contains the contents needed for a Dockerfile
+     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
+     * @return String The text corresponding to the contents of the Dockerfile
+     */
+    public abstract String getDockerfileData();
 
 }
