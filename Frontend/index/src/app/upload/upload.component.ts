@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { HttpClient, } from '@angular/common/http';
 import { UploadService } from './upload.service';
 
 
@@ -18,7 +16,7 @@ export class UploadComponent implements OnInit {
   ready: boolean;
   MAX_FILE_SIZE: number;
 
-  constructor(private http: HttpClient, private uploadService: UploadService) {
+  constructor(private uploadService: UploadService) {
     this.MAX_FILE_SIZE = 250000000;
     this.ready = true;
   }

@@ -9,6 +9,7 @@ import { UploadComponent } from './upload/upload.component';
 import { UploadModule } from './upload/upload.module';
 import { ClassSelectComponent } from './class-select/class-select.component';
 import { ClassButtonComponent } from './class-select/class-button/class-button.component';
+import { ResultsComponent } from './results/results.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ClassButtonComponent } from './class-select/class-button/class-button.c
     UploadComponent,
     ClassSelectComponent,
     ClassButtonComponent,
+    ResultsComponent,
   ],
   imports: [
   	UploadModule,

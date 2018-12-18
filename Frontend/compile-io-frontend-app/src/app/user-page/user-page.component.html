@@ -1,0 +1,29 @@
+<div>
+  <h1>
+    {{username}}
+  </h1>
+  <table>
+    <!-- <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr> -->
+    <tr *ngFor="let cl of classes">
+      <td>
+        <div>
+          <span>
+            <app-class-info [className]="cl" (click)="selectClass(cl)">
+            </app-class-info>
+          </span>
+        </div>
+        <table *ngIf="selectedClass == cl">
+          <tr *ngFor="let hwk of homeworks">
+            <td>
+              <div>
+                <span (click)="selectHomwork(hwk)">
+                  {{hwk}}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { isUndefined } from 'util';
-import { UploadService } from '../upload/upload.service';
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { ClassButtonComponent } from './class-button/class-button.component';
 
 @Component({
@@ -13,20 +9,16 @@ import { ClassButtonComponent } from './class-button/class-button.component';
 export class ClassSelectComponent implements OnInit {
   selectedClass: String = '';
   classButtons: ClassButtonComponent[] = [];
-  classes: String[];
 
-  constructor(private uploadService: UploadService) {
-    uploadService.getClasses().then(result => {
-      result.forEach(element => {
-        this.classButtons.push(new ClassButtonComponent(element));
-      });
-    }, error => {
-      console.log(error);
-    });
-    
-    }
+  constructor() {
+  }
+
+  addClasses(classStuff: ClassButtonComponent[]) {
+    this.classButtons = classStuff
+  }
 
   ifNoSelectedClass(): boolean {
+    console.log(this.classButtons);
     if (this.selectedClass === '') {
       return true;
     }
