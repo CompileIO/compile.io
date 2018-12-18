@@ -27,15 +27,16 @@ public abstract class AbstractCompiler {
     /**
      * Creates and runs the container with the image name given to the constructor and prints the output to the console.
      * Removes the container created from the image after execution.
+     * @param long timeLimit A time limit for the process. Process terminates if runtime exceeds given timeLimit.
      * @return void
      * @throws Exception e
      */
-    public void run(){
+    public void run(long timeLimit){
         System.out.println("Attempting to run docker container...");
         System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
         // ^ need to somehow edit this so that there is a timeout so loops don't run forever
-        executeAndDisplayOutputWithTimeout(command, 60);
+        executeAndDisplayOutputWithTimeout(command, timeLimit);
         System.out.println();
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
@@ -111,19 +112,20 @@ public abstract class AbstractCompiler {
      * Times out the process after surpassing the given time.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
-     * @param long timeout 
+     * @param long timeLimit 
      * @return void
      * @throws IOException e
      * @throws InterruptedException e 
      */
-    public void executeCommandWithTimeout(String[] command, long timeout) {
+    public void executeCommandWithTimeout(String[] command, long timeLimit) {
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
-            boolean procFinished = proc.waitFor(timeout, TimeUnit.SECONDS);
+            boolean procFinished = proc.waitFor(timeLimit, TimeUnit.SECONDS);
             if (!procFinished) {
                 System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
+                System.out.println("Terminating process and exiting...");
                 System.exit(0);
             }
         } catch (IOException e) {
@@ -191,6 +193,7 @@ public abstract class AbstractCompiler {
             boolean procFinished = proc.waitFor(timeout, TimeUnit.SECONDS);
             if (!procFinished) {
                 System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
+                System.out.println("Terminating process and exiting...");
                 System.exit(0);
             }
         } catch (Exception e) {
