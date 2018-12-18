@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args){
         CompilerFactory compilerFactory = new CompilerFactory();
         File file = new File("C:\\SCHOOL\\DockerTest\\RevEngDrunnable.jar");
-        AbstractCompiler compiler = compilerFactory.getCompiler("java", file);
+        AbstractCompiler compiler = compilerFactory.getCompiler("python", file);
         compiler.createDockerfile(compiler.getDockerfileData());
         compiler.buildContainer();
         compiler.run(60);
