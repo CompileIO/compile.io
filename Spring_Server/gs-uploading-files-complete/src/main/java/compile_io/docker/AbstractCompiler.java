@@ -78,7 +78,7 @@ public abstract class AbstractCompiler {
      */
     public void teardownDockerfile() {
         System.out.println("Beginning teardown of Dockerfile...");
-        File dockerfile = new File(this.fileDirectory + "\\Dockerfile");
+        File dockerfile = new File(this.fileDirectory + "/Dockerfile");
         dockerfile.delete();
         System.out.println();
         System.out.println("Successfully removed the Dockerfile from " + this.fileDirectory);
