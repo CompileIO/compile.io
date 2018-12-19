@@ -35,7 +35,6 @@ public abstract class AbstractCompiler {
         System.out.println("Attempting to run docker container...");
         System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
-        // ^ need to somehow edit this so that there is a timeout so loops don't run forever
         executeAndDisplayOutputWithTimeout(command, timeLimit);
         System.out.println();
         System.out.println("Container has finished execution.");
