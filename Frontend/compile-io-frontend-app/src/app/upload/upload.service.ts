@@ -39,5 +39,12 @@ export class UploadService {
       .then(response => response as String[])
       .catch();
   }
+  getResults(givenClass: string, givenHomework: string): Promise<string[]> {
+    const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get(this.apiUrl + "/" + givenClass + "/" + givenHomework, { headers: empHeaders, withCredentials: true })
+      .toPromise()
+      .then(response => response as string[])
+      .catch();
+  }
 }
 

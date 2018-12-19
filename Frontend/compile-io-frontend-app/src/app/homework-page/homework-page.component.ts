@@ -15,6 +15,7 @@ export class HomeworkPageComponent implements OnInit {
   fileReady: boolean;
   uploading: boolean;
   error: string;
+  results: string[] = [];
 
   constructor(private uploadService: UploadService) {
     this.MAX_FILE_SIZE = 50000000;
@@ -56,6 +57,18 @@ export class HomeworkPageComponent implements OnInit {
   run() {
     this.uploadService.runDocker().then(result => {
       console.log(result);
+    }, error => {
+      this.error = error;
+      console.log(error);
+      });
+    setInterval(this.getResults(), 1);
+  }
+
+  getResults() {
+    this.uploadService.getResults(this.givenClass, this.homework).then(result => {
+      console.log(result);
+      this.results = [];
+      this.results = result;
     }, error => {
       this.error = error;
       console.log(error);
