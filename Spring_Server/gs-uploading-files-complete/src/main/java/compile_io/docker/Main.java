@@ -9,7 +9,9 @@ import java.io.*;
 public class Main {
     public static void main(String[] args){
         CompilerFactory compilerFactory = new CompilerFactory();
-        File file = new File("C:\\SCHOOL\\DockerTest\\PythonStuff\\Main.py");
+        // File file = new File("/SCHOOL/DockerTest/RevEngDrunnable.jar");
+        // AbstractCompiler compiler = compilerFactory.getCompiler("java", file);
+        File file = new File("/SCHOOL/DockerTest/PythonStuff/Main.py");
         AbstractCompiler compiler = compilerFactory.getCompiler("python", file);
         compiler.createDockerfile(compiler.getDockerfileData());
         compiler.buildContainer();
