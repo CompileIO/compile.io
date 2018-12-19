@@ -62,12 +62,39 @@ public class FileUploadController {
 	}
 	
 	
-	
+
+
+
+
+
+
+
+
+
+  @CrossOrigin(origins = frontendVm, allowCredentials = "true")
+	@GetMapping("/{className}")
+	// @RequestMapping(method = RequestMethod.GET)
+	public String[] getHomeworks(@PathVariable String className) {
+		String[] temp = { "Hwk1", "Hwk2", "Hwk3", "Hwk4" };
+		return temp;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	
 	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
-	@GetMapping("/")
+	@GetMapping("/classes")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] getClasses() {
 		String[] temp = { "CSSE120", "CSSE220", "CSSE230", "CSSE241" };

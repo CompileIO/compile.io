@@ -6,14 +6,16 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { UserPageComponent } from './user-page/user-page.component';
-import { ClassInfoComponent } from './class-info/class-info.component'
+import { ClassInfoComponent } from './class-info/class-info.component';
+import { HomeworkPageComponent } from './homework-page/homework-page.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     UserPageComponent,
-    ClassInfoComponent
+    ClassInfoComponent,
+    HomeworkPageComponent
   ],
   imports: [
     BrowserModule,

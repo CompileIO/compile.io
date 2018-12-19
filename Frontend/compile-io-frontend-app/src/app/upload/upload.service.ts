@@ -18,10 +18,9 @@ export class UploadService {
       .then(response => response as String[])
       .catch();
   }
-
   getClasses(): Promise<String[]> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get(this.apiUrl, { headers: empHeaders, withCredentials: true })
+    return this.http.get(this.apiUrl + "/classes", { headers: empHeaders, withCredentials: true })
       .toPromise()
       .then(response => response as String[])
       .catch();
@@ -29,6 +28,13 @@ export class UploadService {
   runDocker(): Promise<String[]> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get(this.apiUrl + "/run", { headers: empHeaders, withCredentials: true })
+      .toPromise()
+      .then(response => response as String[])
+      .catch();
+  }
+  getHomeworks(givenClass: string): Promise<String[]> {
+    const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get(this.apiUrl +"/"+givenClass, { headers: empHeaders, withCredentials: true })
       .toPromise()
       .then(response => response as String[])
       .catch();

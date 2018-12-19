@@ -1,0 +1,22 @@
+<div>
+  <h1>
+    {{homework}}
+  </h1>
+</div>
+<div>
+  <input type="file" accept=".jar" (change)="fileUpload($event)" placeholder="Upload file..."/>
+</div>
+<div *ngIf="uploading">
+  <span>
+    Uploading ...
+  </span>
+</div>
+<div *ngIf="fileReady">
+  <button type="button" (click)="run()">Run!</button>
+</div>
+<div *ngIf="error !== ''">
+  <span>
+    {{error.message}}
+  </span>
+</div>
+

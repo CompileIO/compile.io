@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UploadService } from '../upload/upload.service';
-//import { ClassInfoComponent } from '../class-info/class-info.component';
 
 @Component({
   selector: 'app-user-page',
@@ -12,21 +11,20 @@ export class UserPageComponent implements OnInit {
   classes: string[] = [];
   selectedClass: string = null;
   homeworks: string[] = [];
+  selectedHomework: string = null;
 
   constructor(private uploadService: UploadService) {
     this.getClasses();
   }
 
   getClasses() {
-    //this.uploadService.getClasses().then(result => {
-    //  result.forEach(element => {
-    //    this.classes.push(element.toString());
-    //  });
-    //}, error => {
-    //  console.log(error);
-    //});
-    this.classes.push("csse120");
-    this.classes.push("csse220");
+    this.uploadService.getClasses().then(result => {
+      result.forEach(element => {
+        this.classes.push(element.toString());
+      });
+    }, error => {
+      console.log(error);
+    });
   }
 
   selectClass(givenClass: string) {
@@ -35,10 +33,24 @@ export class UserPageComponent implements OnInit {
       this.homeworks = [];
     } else {
       this.selectedClass = givenClass;
-      this.homeworks.push("Hwk1");
-      this.homeworks.push("Hwk2");
+      this.homeworks = [];
+      this.uploadService.getHomeworks(this.selectedClass).then(result => {
+      result.forEach(element => {
+        this.homeworks.push(element.toString());
+      });
+    }, error => {
+      console.log(error);
+    });
     }
     
+  }
+
+  selectHomework(givenHwk: string) {
+    this.selectedHomework = givenHwk;
+  }
+
+  return() {
+    this.selectedHomework = null;
   }
 
   ngOnInit() {
