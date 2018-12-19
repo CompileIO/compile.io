@@ -61,7 +61,7 @@ export class HomeworkPageComponent implements OnInit {
       this.error = error;
       console.log(error);
       });
-    setInterval(this.getResults(), 1);
+    this.getResults();
   }
 
   getResults() {
@@ -74,6 +74,7 @@ export class HomeworkPageComponent implements OnInit {
       console.log(error);
     });
   }
+
 
   ngOnInit() {
   }
