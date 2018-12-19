@@ -68,7 +68,9 @@ export class HomeworkPageComponent implements OnInit {
     this.uploadService.getResults(this.givenClass, this.homework).then(result => {
       console.log(result);
       this.results = [];
-      this.results = result;
+      result.forEach(element => {
+        this.results.push(element.toString());
+      });
     }, error => {
       this.error = error;
       console.log(error);

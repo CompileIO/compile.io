@@ -1,6 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.lang.StringBuilder;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
@@ -114,6 +115,7 @@ public abstract class AbstractCompiler {
      * @throws InterruptedException e 
      */
     public String executeAndDisplayOutput(String[] command) {
+	    StringBuilder result = new StringBuilder();
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
@@ -121,21 +123,22 @@ public abstract class AbstractCompiler {
     
             InputStream is = proc.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String result = "";
-            String line = "";
+	    String line = "";
+	    result.append("Results: ");
             while ((line = reader.readLine()) != null) {
-                System.out.print(line + "\n");
-                result += line;
+		result.append("Part: ");
+                result.append(line + "\n");
+		System.out.print(line + "\n");
             }
-    
             proc.waitFor();
-            return result;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ERROR: Failed to run the Docker container!\n");
             System.exit(1);
-            return e.toString();
-        }
+            result.append(e.toString());
+        } finally {
+            return result.toString();
+	}
     }
 
     /**
