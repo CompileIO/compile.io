@@ -42,7 +42,6 @@ export class UserPageComponent implements OnInit {
       console.log(error);
     });
     }
-    
   }
 
   selectHomework(givenHwk: string) {
@@ -51,6 +50,15 @@ export class UserPageComponent implements OnInit {
 
   return() {
     this.selectedHomework = null;
+  }
+
+  logout() {
+    this.username = null;
+    this.selectedClass = null;
+    this.classes = [];
+    this.homeworks = [];
+    this.selectedHomework = null;
+    window.location.reload();
   }
 
   ngOnInit() {

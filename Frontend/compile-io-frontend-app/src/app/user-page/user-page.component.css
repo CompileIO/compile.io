@@ -51,14 +51,25 @@ table {
 }
 h1 {
   margin-left: 2.5%;
+  margin-right: 2.5%;
+  text-align: left;
+  float: left;
   color: white;
+  font-family: 'Segoe UI','Roboto',sans-serif;
 }
+
 .h1div {
   width: 100%;
   background-color: rgb(36,41,46);
   display: inline-block;
 }
-#logout {
+
+.back {
   margin-right: 5%;
   text-align: right;
+  float: right;
 }
+.back:hover {
+  color: #CCCCCC;
+}
+

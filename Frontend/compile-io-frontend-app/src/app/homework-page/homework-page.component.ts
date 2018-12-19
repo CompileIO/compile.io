@@ -55,7 +55,9 @@ export class HomeworkPageComponent implements OnInit {
 
   run() {
     this.uploadService.runDocker().then(result => {
+      console.log(result);
     }, error => {
+      this.error = error;
       console.log(error);
     });
   }

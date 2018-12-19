@@ -56,9 +56,9 @@ public class FileUploadController {
 
     	// Docker stuff
 		File fileToUpload = new File(workingDir);
-		runCompiler(fileToUpload, "java");
-		String[] temp = {"done!"};
-		return temp;
+		String temp = runCompiler(fileToUpload, "java");
+		String[] temp2 = {"running"};
+		return temp2;
 	}
 	
 	
@@ -143,12 +143,12 @@ public class FileUploadController {
     }
 	}
 	
-	public void runCompiler(File fileToUpload, String language) {
+	public String runCompiler(File fileToUpload, String language) {
 		CompilerFactory compilerFactory = new CompilerFactory();
 		AbstractCompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
 		compiler.createDockerfile();
         compiler.buildContainer();
-		compiler.run();
+		return compiler.run();
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)

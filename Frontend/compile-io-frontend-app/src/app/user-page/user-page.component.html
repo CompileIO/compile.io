@@ -1,13 +1,12 @@
 <div *ngIf="selectedHomework == null">
   <div class="h1div">
     <h1>
-      {{username}}
+      {{username | uppercase}}
     </h1>
-    <h1 id="logout">
+    <h1 class="back noselect" (click)="logout()">
       Logout
     </h1>
   </div>
-  
   <table>
     <!-- <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr> -->
     <tr *ngFor="let cl of classes">
@@ -34,11 +33,16 @@
   </table>
 </div>
 <div *ngIf="selectedHomework != null">
+  <div class="h1div">
+    <h1>
+      {{username | uppercase}}
+    </h1>
+    <h1 class="back noselect" (click)="return()" >
+      Return
+    </h1>
+  </div>
   <app-homework-page [username]="username"
                      [givenClass]="selectedClass"
                      [homework]="selectedHomework">
   </app-homework-page>
-  <div>
-    <button type="button" (click)="return()">Return</button>
-  </div>
 </div>

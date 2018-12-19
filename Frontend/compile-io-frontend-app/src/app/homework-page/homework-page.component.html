@@ -1,22 +1,38 @@
 <div>
-  <h1>
-    {{homework}}
-  </h1>
+  <table>
+    <tr>
+      <td>
+        <h2>
+          Submition:
+        </h2>
+      </td>
+      <td>
+        <input type="file" accept=".jar" (change)="fileUpload($event)" placeholder="Upload file..." />
+      </td>
+      <td>
+        <div *ngIf="uploading">
+          <span>
+            Uploading ...
+          </span>
+        </div>
+      </td>
+      <td>
+        <div *ngIf="fileReady">
+          <button type="button" (click)="run()">Run!</button>
+        </div>
+      </td>
+      <td>
+        <div *ngIf="error !== ''">
+          <span>
+            {{error.message}}
+          </span>
+        </div>
+      </td>
+    </tr>
+  </table>
+  
 </div>
-<div>
-  <input type="file" accept=".jar" (change)="fileUpload($event)" placeholder="Upload file..."/>
-</div>
-<div *ngIf="uploading">
-  <span>
-    Uploading ...
-  </span>
-</div>
-<div *ngIf="fileReady">
-  <button type="button" (click)="run()">Run!</button>
-</div>
-<div *ngIf="error !== ''">
-  <span>
-    {{error.message}}
-  </span>
-</div>
+
+
+
 
