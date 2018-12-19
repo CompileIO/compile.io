@@ -28,8 +28,6 @@ public class PythonCompiler extends AbstractCompiler {
         dockerfileData.append("ADD " + super.getFileName() + " " + super.getFileName() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("CMD python " + super.getFileName() + "\n");
-
-        System.out.println(dockerfileData.toString());
         
         return dockerfileData.toString();
     }

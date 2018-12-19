@@ -22,7 +22,7 @@ public class AbstractCompilerTest {
         when(testFile.getParent()).thenReturn("C:\\Test");
         AbstractCompiler testCompiler = new JavaCompiler(testFile);
         String[] command = {"echo", "ExecuteCommandOutput"};
-        testCompiler.executeAndDisplayOutput(command);
+        testCompiler.executeCommandWithTimeout(command, 60);
         testCompiler.executeCommand(command);
         assertTrue(true); // if no exceptions occurred, then it "passes"
     }

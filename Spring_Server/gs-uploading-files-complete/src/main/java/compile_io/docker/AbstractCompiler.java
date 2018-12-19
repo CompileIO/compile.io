@@ -35,7 +35,7 @@ public abstract class AbstractCompiler {
         System.out.println("Attempting to run docker container...");
         System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
-        executeAndDisplayOutputWithTimeout(command, timeLimit);
+        executeCommandWithTimeout(command, timeLimit);
         System.out.println();
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
@@ -84,7 +84,7 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Executes the given command line argument. Displays no output to the console.
+     * Executes the given command line argument. Output is displayed on the console.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
      * @return void
@@ -107,7 +107,7 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Executes the given command line argument. Displays no output to the console.
+     * Executes the given command line argument. Output is displayed on the console.
      * Times out the process after surpassing the given time.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
@@ -124,7 +124,7 @@ public abstract class AbstractCompiler {
             boolean procFinished = proc.waitFor(timeLimit, TimeUnit.SECONDS);
             if (!procFinished) {
                 System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
-                System.out.println("Terminating process and exiting...");
+                System.out.println("Terminating process and exiting gracefully...");
                 System.exit(0);
             }
         } catch (IOException e) {
@@ -132,72 +132,6 @@ public abstract class AbstractCompiler {
             System.exit(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Executes the given command line argument and prints the output of the process to the console.
-     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
-     * @param String[] command An array of strings representing a command line instruction
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void executeAndDisplayOutput(String[] command) {
-        try {
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
-            Process proc = pb.start();
-    
-            InputStream is = proc.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                System.out.print(line + "\n");
-            }
-    
-            proc.waitFor();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("ERROR: Failed to run the Docker container!\n");
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Executes the given command line argument and prints the output of the process to the console.
-     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
-     * @param String[] command An array of strings representing a command line instruction
-     * @param long timeout
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void executeAndDisplayOutputWithTimeout(String[] command, long timeout) {
-        try {
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
-            Process proc = pb.start();
-    
-            InputStream is = proc.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                System.out.print(line + "\n");
-            }
-    
-            boolean procFinished = proc.waitFor(timeout, TimeUnit.SECONDS);
-            if (!procFinished) {
-                System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
-                System.out.println("Terminating process and exiting...");
-                System.exit(0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("ERROR: Failed to run the Docker container!\n");
             System.exit(1);
         }
     }
@@ -251,10 +185,6 @@ public abstract class AbstractCompiler {
             file = new File(this.getFileDirectory() + "/Dockerfile");
             fos = new FileOutputStream(file);
       
-            /* This logic will check whether the file
-             * exists or not. If the file is not found
-             * at the specified location it would create
-             * a new file*/
             if (!file.exists()) {
                file.createNewFile();
             }

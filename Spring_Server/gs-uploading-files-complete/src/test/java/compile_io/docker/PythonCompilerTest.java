@@ -19,9 +19,9 @@ public class PythonCompilerTest {
   public void testSuperConstructor() {
     File testFile = mock(File.class);
     when(testFile.getName()).thenReturn("TestyMcTestface");
-    when(testFile.getParent()).thenReturn("C:\\Test");
+    when(testFile.getParent()).thenReturn("/Test");
     AbstractCompiler tc1 = new PythonCompiler(testFile);
-    assertEquals("C:\\Test", tc1.getFileDirectory());
+    assertEquals("/Test", tc1.getFileDirectory());
     assertEquals("TestyMcTestface", tc1.getFileName());
     
     File testFileNull = mock(File.class);
@@ -30,6 +30,23 @@ public class PythonCompilerTest {
     AbstractCompiler tc2 = new PythonCompiler(testFileNull);
     assertEquals("/", tc2.getFileDirectory());
     assertEquals("FileTest", tc2.getFileName());
+  }
+
+  @Test
+  public void testGetDockerfileData() {
+    File testFile = mock(File.class);
+    when(testFile.getName()).thenReturn("TestyMcTestface");
+    when(testFile.getParent()).thenReturn("/Test");
+    AbstractCompiler compiler = new PythonCompiler(testFile);
+
+    StringBuilder dockerfileData = new StringBuilder();
+    dockerfileData.append("FROM python:latest\n");
+    dockerfileData.append("WORKDIR /Test\n");
+    dockerfileData.append("ADD TestyMcTestface TestyMcTestface\n");
+    dockerfileData.append("EXPOSE 8000\n");
+    dockerfileData.append("CMD python TestyMcTestface\n");
+
+    assertEquals(dockerfileData.toString(), compiler.getDockerfileData());
   }
 
 }

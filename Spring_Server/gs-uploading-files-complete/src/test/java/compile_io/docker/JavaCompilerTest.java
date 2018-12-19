@@ -33,21 +33,20 @@ public class JavaCompilerTest {
   }
 
   @Test
-  public void testGetDockerfileJava() {
+  public void testGetDockerfileData() {
     File testFile = mock(File.class);
     when(testFile.getName()).thenReturn("TestyMcTestface");
-    when(testFile.getParent()).thenReturn("C:\\Test");
-    AbstractCompiler javaCompiler = new JavaCompiler(testFile);
+    when(testFile.getParent()).thenReturn("/Test");
+    AbstractCompiler compiler = new JavaCompiler(testFile);
 
     StringBuilder dockerfileData = new StringBuilder();
-        
     dockerfileData.append("FROM openjdk\n");
-    dockerfileData.append("WORKDIR C:\\Test\n");
+    dockerfileData.append("WORKDIR /Test\n");
     dockerfileData.append("ADD TestyMcTestface TestyMcTestface\n");
     dockerfileData.append("EXPOSE 8000\n");
     dockerfileData.append("CMD java -jar TestyMcTestface\n");
 
-    assertEquals(dockerfileData.toString(), javaCompiler.getDockerfileData());
+    assertEquals(dockerfileData.toString(), compiler.getDockerfileData());
   }
 
 }
