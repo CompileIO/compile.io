@@ -125,7 +125,9 @@ public abstract class AbstractCompiler {
             boolean procFinished = proc.waitFor(timeLimit, TimeUnit.SECONDS);
             if (!procFinished) {
                 System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
-                System.out.println("Terminating process and exiting gracefully...");
+                System.out.println("Terminating process gracefully and beginning teardown...");
+                this.teardownDockerImage();
+                this.teardownDockerfile();
                 System.exit(0);
             }
         } catch (IOException e) {
