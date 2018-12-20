@@ -41,7 +41,6 @@ public abstract class AbstractCompiler {
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
         this.teardownDockerfile();
-        return result;
     }
 
     /**
