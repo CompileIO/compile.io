@@ -56,7 +56,27 @@ public class FileUploadController {
 		System.out.println("Working Directory = " + workingDir);
 
     	// Docker stuff
-		File fileToUpload = new File(workingDir);
+			File fileToUpload = new File(workingDir);
+		String temp = runCompiler(fileToUpload, "java");
+    resultTry = temp;
+		String[] temp2 = {"running"};
+		return temp2;
+	}
+
+
+  @CrossOrigin(origins = frontendVm, allowCredentials = "true")
+	@GetMapping("/{className}")
+	// @RequestMapping(method = RequestMethod.GET)
+	public String[] getHomeworks(@PathVariable String className) {
+		String[] temp = { "Hwk1", "Hwk2", "Hwk3", "Hwk4" };
+		return temp;
+	}
+
+  @CrossOrigin(origins = frontendVm, allowCredentials = "true")
+	@GetMapping("/{className}/{homework}")
+	// @RequestMapping(method = RequestMethod.GET)
+	public String[] getResults(@PathVariable String className, @PathVariable String homework) {
+		String[] temp = { resultTry };
 		runCompiler(fileToUpload, "java", 60);
 		String[] temp = {"done!"};
 		return temp;
