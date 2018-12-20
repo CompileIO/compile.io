@@ -17,8 +17,10 @@ public class CompilerFactory {
         // change this from a nested if statement to...?
         if (type == "java") {
             return new JavaCompiler(file);
+        } else if (type == "python") {
+            return new PythonCompiler(file);
         } else {
-            return null; // make this an exception in the future
+            return null;
         }
     }
 

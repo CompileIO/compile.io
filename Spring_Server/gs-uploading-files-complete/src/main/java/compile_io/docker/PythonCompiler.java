@@ -5,13 +5,13 @@ import java.io.*;
 /**
  * This class builds a Dockerfile that the superclass uses to create a Docker image.
  */
-public class JavaCompiler extends AbstractCompiler {
+public class PythonCompiler extends AbstractCompiler {
 
     /**
      * Constructor that builds a docker image with the given name
      * @param File file File uploaded by the student
      */
-    public JavaCompiler(File file) {
+    public PythonCompiler(File file) {
         super(file);
     }
 
@@ -20,15 +20,16 @@ public class JavaCompiler extends AbstractCompiler {
      * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
      * @return String The text corresponding to the contents of the Dockerfile
      */
-    public String getDockerfileData() {  
+    public String getDockerfileData() { 
         StringBuilder dockerfileData = new StringBuilder();
-        
-        dockerfileData.append("FROM openjdk\n");
+
+        dockerfileData.append("FROM python:latest\n");
         dockerfileData.append("WORKDIR " + super.getFileDirectory() + "\n");
         dockerfileData.append("ADD " + super.getFileName() + " " + super.getFileName() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
-        dockerfileData.append("CMD java -jar " + super.getFileName() + "\n");
-
+        dockerfileData.append("CMD python " + super.getFileName() + "\n");
+        
         return dockerfileData.toString();
     }
+
 }

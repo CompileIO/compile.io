@@ -1,6 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
@@ -26,14 +27,16 @@ public abstract class AbstractCompiler {
     /**
      * Creates and runs the container with the image name given to the constructor and prints the output to the console.
      * Removes the container created from the image after execution.
+     * @param long timeLimit A time limit for the process. Process terminates if runtime exceeds given timeLimit.
      * @return void
      * @throws Exception e
      */
-    public void run(){
+
+    public void run(long timeLimit){
         System.out.println("Attempting to run docker container...");
         System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
-        executeAndDisplayOutput(command);
+        executeCommandWithTimeout(command, timeLimit);
         System.out.println();
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
@@ -82,7 +85,7 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Executes the given command line argument. Displays no output to the console.
+     * Executes the given command line argument. Output is displayed on the console.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
      * @return void
@@ -105,31 +108,33 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Executes the given command line argument and prints the output of the process to the console.
+     * Executes the given command line argument. Output is displayed on the console.
+     * Times out the process after surpassing the given time.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
+     * @param long timeLimit 
      * @return void
      * @throws IOException e
      * @throws InterruptedException e 
      */
-    public void executeAndDisplayOutput(String[] command) {
+    public void executeCommandWithTimeout(String[] command, long timeLimit) {
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
             Process proc = pb.start();
-    
-            InputStream is = proc.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                System.out.print(line + "\n");
+            boolean procFinished = proc.waitFor(timeLimit, TimeUnit.SECONDS);
+            if (!procFinished) {
+                System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
+                System.out.println("Terminating process gracefully and beginning teardown...");
+                this.teardownDockerImage();
+                this.teardownDockerfile();
+                System.exit(0);
             }
-    
-            proc.waitFor();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("ERROR: Failed to run the Docker container!\n");
+            System.exit(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
             System.exit(1);
         }
     }
@@ -169,12 +174,45 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Creates the Dockerfile used for creating the docker container
-     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
+     * Creates the Dockerfile in the file directory specified
      * @return void
      * @throws FileNotFoundException e If the the given file does not exist or cannot be found
      * @throws IOException e If the java IO encounters an error
      */
-    public abstract void createDockerfile();
+    public void createDockerfile(String dockerfileData) {
+        FileOutputStream fos = null;
+        File file;
+
+        try {
+            System.out.println("Making Dockerfile in directory: " + this.getFileDirectory());
+            file = new File(this.getFileDirectory() + "/Dockerfile");
+            fos = new FileOutputStream(file);
+      
+            if (!file.exists()) {
+               file.createNewFile();
+            }
+
+            fos.write(dockerfileData.getBytes());
+            fos.flush();
+            System.out.println("Dockerfile successfully written: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException ioe) {
+                System.out.println("Error in closing the Stream");
+            }
+        }
+    }
+
+    /**
+     * Creates a string that contains the contents needed for a Dockerfile
+     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
+     * @return String The text corresponding to the contents of the Dockerfile
+     */
+    public abstract String getDockerfileData();
 
 }

@@ -38,7 +38,7 @@ public class FileUploadController {
 	private String fileName;
 	private final static String frontendVm = "http://137.112.104.111:4200";
   //private final static String frontendVm = "http://localhost:4200";
-  private final int MAX_FILE_SIZE = 250000000;
+  private final int MAX_FILE_SIZE = 50000000;
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -55,19 +55,32 @@ public class FileUploadController {
 		System.out.println("Working Directory = " + workingDir);
 
     	// Docker stuff
-		File fileToUpload = new File(workingDir);
-		runCompiler(fileToUpload, "java");
+			File fileToUpload = new File(workingDir);
+		runCompiler(fileToUpload, "python", 60);
+		String[] temp2 = {"running"};
+		return temp2;
+	}
+
+
+  @CrossOrigin(origins = frontendVm, allowCredentials = "true")
+	@GetMapping("/{className}")
+	// @RequestMapping(method = RequestMethod.GET)
+	public String[] getHomeworks(@PathVariable String className) {
+		String[] temp = { "Hwk1", "Hwk2", "Hwk3", "Hwk4" };
+		return temp;
+	}
+
+  @CrossOrigin(origins = frontendVm, allowCredentials = "true")
+	@GetMapping("/{className}/{homework}")
+	// @RequestMapping(method = RequestMethod.GET)
+	public String[] getResults(@PathVariable String className, @PathVariable String homework) {
 		String[] temp = {"done!"};
 		return temp;
 	}
 	
 	
-	
-	
-	
-	
 	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
-	@GetMapping("/")
+	@GetMapping("/classes")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] getClasses() {
 		String[] temp = { "CSSE120", "CSSE220", "CSSE230", "CSSE241" };
@@ -116,12 +129,12 @@ public class FileUploadController {
     }
 	}
 	
-	public void runCompiler(File fileToUpload, String language) {
+	public void runCompiler(File fileToUpload, String language, int timeLimit) {
 		CompilerFactory compilerFactory = new CompilerFactory();
 		AbstractCompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
-		compiler.createDockerfile();
-        compiler.buildContainer();
-		compiler.run();
+		compiler.createDockerfile(compiler.getDockerfileData());
+    compiler.buildContainer();
+		compiler.run(timeLimit);
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
