@@ -1,0 +1,13 @@
+input {
+  padding: 3em;
+  display: inline-block;
+}
+h2 {
+  display: inline-block;
+  font-family: 'Segoe UI','Roboto',sans-serif;
+  color: rgb(36,41,46);
+  padding: 3em;
+}
+div {
+  display: inline-block;
+}

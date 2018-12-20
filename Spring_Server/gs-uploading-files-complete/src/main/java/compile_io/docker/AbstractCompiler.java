@@ -31,6 +31,7 @@ public abstract class AbstractCompiler {
      * @return void
      * @throws Exception e
      */
+
     public void run(long timeLimit){
         System.out.println("Attempting to run docker container...");
         System.out.println();
@@ -40,6 +41,7 @@ public abstract class AbstractCompiler {
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
         this.teardownDockerfile();
+        return result;
     }
 
     /**

@@ -1,0 +1,48 @@
+<div *ngIf="selectedHomework == null">
+  <div class="h1div">
+    <h1>
+      {{username | uppercase}}
+    </h1>
+    <h1 class="back noselect" (click)="logout()">
+      Logout
+    </h1>
+  </div>
+  <table>
+    <!-- <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr> -->
+    <tr *ngFor="let cl of classes">
+      <td>
+        <div class="buttondiv outerdiv noselect" (click)="selectClass(cl)">
+          <span>
+            <app-class-info [className]="cl">
+            </app-class-info>
+          </span>
+        </div>
+        <table *ngIf="selectedClass == cl" class="innertable">
+          <tr  *ngFor="let hwk of homeworks">
+            <td>
+              <div (click)="selectHomework(hwk)" class="buttondiv innerdiv noselect">
+                <span>
+                  {{hwk}}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+<div *ngIf="selectedHomework != null">
+  <div class="h1div">
+    <h1>
+      {{selectedHomework | uppercase}}
+    </h1>
+    <h1 class="back noselect" (click)="return()" >
+      Return
+    </h1>
+  </div>
+  <app-homework-page [username]="username"
+                     [givenClass]="selectedClass"
+                     [homework]="selectedHomework">
+  </app-homework-page>
+</div>

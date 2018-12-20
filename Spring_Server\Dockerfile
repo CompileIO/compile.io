@@ -1,0 +1,5 @@
+FROM openjdk
+WORKDIR /home/csse/compile.io/Spring_Server
+ADD gs-uploading-files-complete\upload-dir\Revengd.jar gs-uploading-files-complete\upload-dir\Revengd.jar
+EXPOSE 8000
+CMD java -jar gs-uploading-files-complete\upload-dir\Revengd.jar

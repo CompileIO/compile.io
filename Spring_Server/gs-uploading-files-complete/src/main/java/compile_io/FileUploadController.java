@@ -38,7 +38,8 @@ public class FileUploadController {
 	private String fileName;
 	private final static String frontendVm = "http://137.112.104.111:4200";
   //private final static String frontendVm = "http://localhost:4200";
-  private final int MAX_FILE_SIZE = 250000000;
+  private final int MAX_FILE_SIZE = 50000000;
+  private String resultTry = "";
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -62,12 +63,8 @@ public class FileUploadController {
 	}
 	
 	
-	
-	
-	
-	
 	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
-	@GetMapping("/")
+	@GetMapping("/classes")
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] getClasses() {
 		String[] temp = { "CSSE120", "CSSE220", "CSSE230", "CSSE241" };
@@ -120,7 +117,7 @@ public class FileUploadController {
 		CompilerFactory compilerFactory = new CompilerFactory();
 		AbstractCompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
 		compiler.createDockerfile(compiler.getDockerfileData());
-        compiler.buildContainer();
+    compiler.buildContainer();
 		compiler.run(timeLimit);
 	}
 
