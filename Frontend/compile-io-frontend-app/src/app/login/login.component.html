@@ -1,0 +1,8 @@
+<div *ngIf="!loggedIn">
+  <input [(ngModel)]="username" name="login" type="text" placeholder="Username" />
+  <button type="button" (click)="submit()">Login</button>
+</div>
+<div *ngIf="loggedIn">
+  <app-user-page [username]="finalUsername">
+  </app-user-page>
+</div>

@@ -31,6 +31,7 @@ public abstract class AbstractCompiler {
      * @return void
      * @throws Exception e
      */
+
     public void run(long timeLimit){
         System.out.println("Attempting to run docker container...");
         System.out.println();
@@ -41,6 +42,7 @@ public abstract class AbstractCompiler {
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
         this.teardownDockerfile();
+        return result;
     }
 
     /**
@@ -145,7 +147,8 @@ public abstract class AbstractCompiler {
      * @throws IOException e
      * @throws InterruptedException e 
      */
-    public void executeAndDisplayOutput(String[] command) {
+    public String executeAndDisplayOutput(String[] command) {
+	    StringBuilder result = new StringBuilder();
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.inheritIO();
@@ -153,18 +156,22 @@ public abstract class AbstractCompiler {
     
             InputStream is = proc.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = "";
+	    String line = "";
+	    result.append("Results: ");
             while ((line = reader.readLine()) != null) {
-                System.out.print(line + "\n");
+		result.append("Part: ");
+                result.append(line + "\n");
+		System.out.print(line + "\n");
             }
-    
             proc.waitFor();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("ERROR: Failed to run the Docker container!\n");
             System.exit(1);
-        }
+            result.append(e.toString());
+        } finally {
+            return result.toString();
+	}
     }
 
     /**
