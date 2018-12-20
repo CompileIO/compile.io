@@ -1,7 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
-import java.lang.StringBuilder;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
@@ -27,14 +27,17 @@ public abstract class AbstractCompiler {
     /**
      * Creates and runs the container with the image name given to the constructor and prints the output to the console.
      * Removes the container created from the image after execution.
+     * @param long timeLimit A time limit for the process. Process terminates if runtime exceeds given timeLimit.
      * @return void
      * @throws Exception e
      */
-    public String run(){
+
+    public void run(long timeLimit){
         System.out.println("Attempting to run docker container...");
         System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
-        String result = executeAndDisplayOutput(command);
+        // ^ need to somehow edit this so that there is a timeout so loops don't run forever
+        executeAndDisplayOutputWithTimeout(command, timeLimit);
         System.out.println();
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
@@ -107,6 +110,36 @@ public abstract class AbstractCompiler {
     }
 
     /**
+     * Executes the given command line argument. Displays no output to the console.
+     * Times out the process after surpassing the given time.
+     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
+     * @param String[] command An array of strings representing a command line instruction
+     * @param long timeLimit 
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void executeCommandWithTimeout(String[] command, long timeLimit) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+            boolean procFinished = proc.waitFor(timeLimit, TimeUnit.SECONDS);
+            if (!procFinished) {
+                System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
+                System.out.println("Terminating process and exiting...");
+                System.exit(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
      * Executes the given command line argument and prints the output of the process to the console.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
@@ -139,6 +172,42 @@ public abstract class AbstractCompiler {
         } finally {
             return result.toString();
 	}
+    }
+
+    /**
+     * Executes the given command line argument and prints the output of the process to the console.
+     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
+     * @param String[] command An array of strings representing a command line instruction
+     * @param long timeout
+     * @return void
+     * @throws IOException e
+     * @throws InterruptedException e 
+     */
+    public void executeAndDisplayOutputWithTimeout(String[] command, long timeout) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.inheritIO();
+            Process proc = pb.start();
+    
+            InputStream is = proc.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                System.out.print(line + "\n");
+            }
+    
+            boolean procFinished = proc.waitFor(timeout, TimeUnit.SECONDS);
+            if (!procFinished) {
+                System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
+                System.out.println("Terminating process and exiting...");
+                System.exit(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR: Failed to run the Docker container!\n");
+            System.exit(1);
+        }
     }
 
     /**
