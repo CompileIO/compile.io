@@ -15,6 +15,7 @@ public class Main {
         AbstractCompiler compiler = compilerFactory.getCompiler("python", file);
         compiler.createDockerfile(compiler.getDockerfileData());
         compiler.buildContainer();
-        compiler.run(60);
+        String result = compiler.run(60);
+        System.out.println(result);
     }
 }
