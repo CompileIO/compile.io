@@ -1,0 +1,52 @@
+
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
+
+@Injectable()
+export class AuthenticationService {
+  isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
+
+  constructor(
+    private router: Router
+  ) {
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.isLoginSubject.asObservable();
+  }
+
+  hasToken(): boolean {
+    return !!sessionStorage.getItem('token');
+  }
+
+  login(): void {
+    Rosefire.signIn(environment.registryToken, (error, rfUser: RosefireUser) => {
+      if (error) {
+        console.error(error);
+        sessionStorage.clear();
+        this.isLoginSubject.next(false);
+        return;
+      } else {
+        if (rfUser) {
+          sessionStorage.setItem('user', rfUser.username);
+          sessionStorage.setItem('group', rfUser.group);
+          sessionStorage.setItem('token', rfUser.token);
+          this.router.navigate([`/${rfUser.group.toLowerCase()}/${rfUser.username}`]);
+          this.isLoginSubject.next(true);
+        }
+      }
+      });
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('group');
+    this.router.navigate(['/login']);
+
+    this.isLoginSubject.next(false);
+  }
+}

@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import 'rosefire';
+import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
+import { TermService } from '../services/term.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -6,17 +11,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  username: string = null;
-  finalUsername: string = null;
-  loggedIn: boolean = false;
-
-  constructor() { }
-  submit() {
-    this.finalUsername = this.username;
-    this.loggedIn = true;
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {
   }
 
   ngOnInit() {
+    if (this.authenticationService.hasToken()) {
+      const group = sessionStorage.getItem('group');
+      const username = sessionStorage.getItem('user');
+      this.router.navigate([`/${group.toLowerCase()}/${username}`]);
+    }
+  }
+
+  login() {
+    this.authenticationService.login();
+  }
+
+  logout() {
+    this.authenticationService.logout();
   }
 
 }
