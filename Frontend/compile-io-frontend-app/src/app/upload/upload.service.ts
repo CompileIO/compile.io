@@ -5,8 +5,6 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class UploadService {
-  // private apiUrl = 'http://137.112.104.111:8080';
-  //private apiUrl = 'http://localhost:8080';
   private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) { }
 
