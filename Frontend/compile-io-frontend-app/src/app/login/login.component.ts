@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import 'rosefire';
-// import { environment } from '../../environments/environment';
-import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -10,20 +9,34 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  loggedIn: boolean;
+  finalUsername: string;
+  finalGroup: string;
+  
   constructor(
-   
-    private authenticationService: AuthenticationService,
-    private router: Router
+    private authenticationService: AuthenticationService
   ) {
+
+  }
+  
+  ngOnInit() {
+    this.checkLogin();
+    interval(1000).subscribe(x => {
+      if (!this.loggedIn) {
+        this.checkLogin();
+      }
+    });
   }
 
-  ngOnInit() {
+  checkLogin() {
     if (this.authenticationService.hasToken()) {
       const group = sessionStorage.getItem('group');
       const username = sessionStorage.getItem('user');
       console.log(group);
       console.log(username);
-      this.router.navigate([`/${group.toLowerCase()}/${username}`]);
+      this.finalGroup = group;
+      this.finalUsername = username;
+      this.loggedIn = true;
     }
   }
 

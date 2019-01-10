@@ -56,24 +56,24 @@ export class HomeworkPageComponent implements OnInit {
 
   run() {
     this.uploadService.runDocker().then(result => {
-      console.log(result);
+      console.log("RESULT:"+result);
     }, error => {
       this.error = error;
-      console.log(error);
+      console.log("ERROR:"+error);
       });
     this.getResults();
   }
 
   getResults() {
     this.uploadService.getResults(this.givenClass, this.homework).then(result => {
-      console.log(result);
+      console.log("RESULT:"+result);
       this.results = [];
       result.forEach(element => {
         this.results.push(element.toString());
       });
     }, error => {
       this.error = error;
-      console.log(error);
+      console.log("ERROR:"+error);
     });
   }
 
