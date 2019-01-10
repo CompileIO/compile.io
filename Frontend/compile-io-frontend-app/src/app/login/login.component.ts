@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import 'rosefire';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
-import { TermService } from '../services/term.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({

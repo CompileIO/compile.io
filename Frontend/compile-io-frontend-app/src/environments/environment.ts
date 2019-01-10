@@ -3,8 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  registryToken: '3abd5946-410c-4b94-8955-547c7437321d',
+  apiUrl: 'http://localhost:3000'
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file
