@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
-  private apiUrl = 'http://137.112.104.111:8080';
+  // private apiUrl = 'http://137.112.104.111:8080';
   //private apiUrl = 'http://localhost:8080';
+  private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) { }
 
   upload(file: File): Promise<String[]> {

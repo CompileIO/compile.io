@@ -1,7 +1,8 @@
 h1, p{
 
     color: #751F1C;
-
+    display: inline-block;
+    position: relative;
 }
 
 h1 {
@@ -13,11 +14,16 @@ button{
     background-color: #751F1C;
 
     text-align: center;
-
+    
     padding: 10px;
+    display: inline-block;
+    position: relative;
 
 }
-
+div {
+    width: 100%;
+    text-align: center;
+}
 .mainInfo {
     margin: 10%;
     box-shadow: 0px 6px 10px 0px rgba(0,0,0,.2), 0px 1px 18px 0 rgba(0,0,0,.14), 0px 3px 5px -1px rgba(0,0,0,.12)!important

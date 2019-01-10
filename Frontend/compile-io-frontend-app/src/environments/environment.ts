@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   registryToken: '3abd5946-410c-4b94-8955-547c7437321d',
-  apiUrl: 'http://localhost:3000'
+  BackendapiUrl: 'http://137.112.104.111:8080',
+  FrontendapiUrl: 'http://137.112.104.111:4200'
 };
 
 

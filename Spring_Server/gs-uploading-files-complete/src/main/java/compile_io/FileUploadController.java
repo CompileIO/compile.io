@@ -38,6 +38,7 @@ public class FileUploadController {
 	private String fileName;
 	private final static String frontendVm = "http://137.112.104.111:4200";
   //private final static String frontendVm = "http://localhost:4200";
+//   private final static String frontendVm = FRONTENDAPIURL;
   private final int MAX_FILE_SIZE = 50000000;
 
 	@Autowired
