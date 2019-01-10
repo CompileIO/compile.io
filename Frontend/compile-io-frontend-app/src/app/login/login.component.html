@@ -1,8 +1,9 @@
 <div *ngIf="!loggedIn">
-  <input [(ngModel)]="username" name="login" type="text" placeholder="Username" />
+  <!-- <input [(ngModel)]="username" name="login" type="text" placeholder="Username" /> -->
   <!-- <button type="button" (click)="submit()">Login</button> -->
   <button type="submit" (click)="login()">Sign In</button>
 </div>
+<script src="node_modules/rosefire/dist/js/rosefire-angular.min.js"></script>
 <div *ngIf="loggedIn">
   <app-user-page [username]="finalUsername">
   </app-user-page>

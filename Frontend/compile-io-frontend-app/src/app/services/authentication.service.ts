@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
@@ -44,7 +44,6 @@ export class AuthenticationService {
   logout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
-    sessionStorage.removeItem('group');
     this.router.navigate(['/login']);
 
     this.isLoginSubject.next(false);
