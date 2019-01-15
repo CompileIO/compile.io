@@ -41,37 +41,47 @@ export class HomeworkPageComponent implements OnInit {
   upload() {
     this.uploading = true;
     if (this.file !== null) {
-      this.uploadService.upload(this.file)
-        .then(result => {
-          console.log(result);
-          this.uploading = false;
-          this.fileReady = true;
-        }, error => {
-          console.log(error);
-          this.uploading = false;
-          this.error = error;
-        });
+      this.uploadService.upload(this.file).subscribe({
+        next: x => {
+          console.log(x),
+          this.uploading = false,
+          this.fileReady = true
+        },
+        error: err => {
+          console.log("UPLOADING FILE ERROR: " + err),
+          this.uploading = false,
+          this.error = err
+        },
+        complete: () => console.log("Uploaded file")
+      });
     }
   }
 
   run() {
-    this.uploadService.runDocker().then(result => {
-      console.log(result);
-    }, error => {
-      this.error = error;
-      console.log(error);
-      });
-    this.getResults();
+    this.uploadService.runDocker().subscribe({
+      next: x => console.log(x),
+      error: err => {
+        console.log("RUNNING DOCKER ERROR: " + err),
+        this.error = err
+      },
+      complete: () => {
+        console.log("Ran docker"),
+        this.getResults();
+      }
+    });
   }
 
   getResults() {
-    this.uploadService.getResults(this.givenClass, this.homework).then(result => {
-      console.log(result);
-      this.results = [];
-      this.results = result.map(element => element.toString());
-    }, error => {
-      this.error = error;
-      console.log(error);
+    this.uploadService.getResults(this.givenClass, this.homework).subscribe({
+      next: x => {
+        console.log(x),
+        this.results = x.map(element => element.toString());
+        },
+      error: err => {
+        console.log("GET RESULTS ERROR: " + err),
+          this.error = err
+      },
+      complete: () => console.log("got results")
     });
   }
 
