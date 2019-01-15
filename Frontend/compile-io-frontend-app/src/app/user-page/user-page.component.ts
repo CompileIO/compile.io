@@ -19,9 +19,7 @@ export class UserPageComponent implements OnInit {
 
   getClasses() {
     this.uploadService.getClasses().then(result => {
-      result.forEach(element => {
-        this.classes.push(element.toString());
-      });
+      this.classes = result.map(element => element.toString());
     }, error => {
       console.log(error);
     });
@@ -35,9 +33,7 @@ export class UserPageComponent implements OnInit {
       this.selectedClass = givenClass;
       this.homeworks = [];
       this.uploadService.getHomeworks(this.selectedClass).then(result => {
-      result.forEach(element => {
-        this.homeworks.push(element.toString());
-      });
+        this.homeworks = result.map(element => element.toString());
     }, error => {
       console.log(error);
     });
