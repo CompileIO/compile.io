@@ -23,8 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import compile_io.docker.AbstractCompiler;
-import compile_io.docker.CompilerFactory;
+import compile_io.docker.*;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
@@ -55,8 +54,8 @@ public class FileUploadController {
 		System.out.println("Working Directory = " + workingDir);
 
     	// Docker stuff
-			File fileToUpload = new File(workingDir);
-		runCompiler(fileToUpload, "python", 60);
+		File fileToUpload = new File(workingDir);
+		String result = runCompiler(fileToUpload, "python", 60);
 		String[] temp2 = {"running"};
 		return temp2;
 	}
@@ -129,12 +128,18 @@ public class FileUploadController {
     }
 	}
 	
-	public void runCompiler(File fileToUpload, String language, int timeLimit) {
-		CompilerFactory compilerFactory = new CompilerFactory();
-		AbstractCompiler compiler = compilerFactory.getCompiler(language, fileToUpload);
-		compiler.createDockerfile(compiler.getDockerfileData());
-    compiler.buildContainer();
-		compiler.run(timeLimit);
+	public String runCompiler(File fileToUpload, String language, int timeLimit) {
+		try {
+			BuilderFactory builderFactory = new BuilderFactory();
+			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
+			IDockerRunner runner = new DockerRunner(builder);
+			builder.createDockerfile(builder.getDockerfileData());
+			builder.buildContainer();
+			return runner.run(timeLimit);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
