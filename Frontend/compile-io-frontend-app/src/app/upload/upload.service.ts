@@ -15,6 +15,13 @@ export class UploadService {
     const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
     return this.http.post(this.apiUrl, body);
   }
+  uploadTest(file: File, type: string): Observable<any> {
+    let body = new FormData();
+    body.append("file", file);
+    body.append("type", type);
+    const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
+    return this.http.post(this.apiUrl + "/test", body);
+  }
   getClasses(): Observable<any> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get(this.apiUrl + "/classes", { headers: empHeaders, withCredentials: true });
@@ -30,6 +37,10 @@ export class UploadService {
   getResults(givenClass: string, givenHomework: string): Observable<any> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get(this.apiUrl + "/" + givenClass + "/" + givenHomework, { headers: empHeaders, withCredentials: true });
+  }
+  getTests(givenClass: string, givenHomework: string): Observable<any> {
+    const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get(this.apiUrl + "/" + givenClass + "/" + givenHomework + "/tests", { headers: empHeaders, withCredentials: true });
   }
 }
 

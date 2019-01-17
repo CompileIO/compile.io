@@ -18,11 +18,18 @@
           </span>
         </div>
         <table *ngIf="selectedClass == cl" class="innertable">
-          <tr  *ngFor="let hwk of homeworks">
+          <tr *ngFor="let hwk of homeworks">
             <td>
-              <div (click)="selectHomework(hwk)" class="buttondiv innerdiv noselect">
+              <div (click)="selectHomeworkToChange(hwk)" class="buttondiv innerdiv noselect">
                 <span>
-                  {{hwk}}
+                  {{hwk}} (Change)
+                </span>
+              </div>
+            </td>
+            <td>
+              <div (click)="selectHomeworkToRun(hwk)" class="buttondiv innerdiv noselect">
+                <span>
+                  {{hwk}} (Run)
                 </span>
               </div>
             </td>
@@ -33,16 +40,32 @@
   </table>
 </div>
 <div *ngIf="selectedHomework != null">
-  <div class="h1div">
-    <h1>
-      {{selectedHomework | uppercase}}
-    </h1>
-    <h1 class="back noselect" (click)="return()" >
-      Return
-    </h1>
+  <div *ngIf="editing">
+    <div class="h1div">
+      <h1>
+        {{selectedHomework | uppercase}}
+      </h1>
+      <h1 class="back noselect" (click)="return()">
+        Return
+      </h1>
+    </div>
+    <app-professor-homework-page [username]="username"
+                                 [givenClass]="selectedClass"
+                                 [homework]="selectedHomework">
+    </app-professor-homework-page>
   </div>
-  <app-professor-homework-page [username]="username"
-                     [givenClass]="selectedClass"
-                     [homework]="selectedHomework">
-  </app-professor-homework-page>
+  <div *ngIf="running">
+    <div class="h1div">
+      <h1>
+        {{selectedHomework | uppercase}}
+      </h1>
+      <h1 class="back noselect" (click)="return()">
+        Return
+      </h1>
+    </div>
+    <app-homework-page [username]="username"
+                                 [givenClass]="selectedClass"
+                                 [homework]="selectedHomework">
+    </app-homework-page>
+  </div>
 </div>

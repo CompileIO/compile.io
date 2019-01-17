@@ -13,6 +13,8 @@ export class ProfessorPageComponent implements OnInit {
   selectedClass: string = null;
   homeworks: string[] = [];
   selectedHomework: string = null;
+  editing: boolean = false;
+  running: boolean = false;
 
   constructor(private uploadService: UploadService,
     private authenticationService: AuthenticationService) {
@@ -41,12 +43,21 @@ export class ProfessorPageComponent implements OnInit {
     }
   }
 
-  selectHomework(givenHwk: string) {
+  selectHomeworkToChange(givenHwk: string) {
     this.selectedHomework = givenHwk;
+    this.editing = true;
+    this.running = false;
+  }
+  selectHomeworkToRun(givenHwk: string) {
+    this.selectedHomework = givenHwk;
+    this.editing = false;
+    this.running = true;
   }
 
   return() {
     this.selectedHomework = null;
+    this.editing = false;
+    this.running = false;
   }
 
   logout() {

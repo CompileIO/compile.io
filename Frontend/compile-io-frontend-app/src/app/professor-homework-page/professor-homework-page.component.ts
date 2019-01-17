@@ -16,6 +16,7 @@ export class ProfessorHomeworkPageComponent implements OnInit {
   uploading: boolean;
   error: string;
   results: string[] = [];
+  type: string = null;
 
   constructor(private uploadService: UploadService) {
     this.MAX_FILE_SIZE = 50000000;
@@ -38,10 +39,14 @@ export class ProfessorHomeworkPageComponent implements OnInit {
     }
   }
 
+  changeType(t: string) {
+    this.type = t;
+  }
+
   upload() {
-    this.uploading = true;
-    if (this.file !== null) {
-      this.uploadService.upload(this.file).subscribe({
+    if (this.file !== null && this.type !== null) {
+      this.uploading = true;
+      this.uploadService.uploadTest(this.file, this.type).subscribe({
         next: x => {
           console.log(x),
           this.uploading = false,
@@ -57,22 +62,8 @@ export class ProfessorHomeworkPageComponent implements OnInit {
     }
   }
 
-  run() {
-    this.uploadService.runDocker().subscribe({
-      next: x => console.log(x),
-      error: err => {
-        console.log("RUNNING DOCKER ERROR: " + err),
-        this.error = err
-      },
-      complete: () => {
-        console.log("Ran docker"),
-        this.getResults();
-      }
-    });
-  }
-
-  getResults() {
-    this.uploadService.getResults(this.givenClass, this.homework).subscribe({
+  getTests() {
+    this.uploadService.getTests(this.givenClass, this.homework).subscribe({
       next: x => {
         console.log(x),
         this.results = x.map(element => element.toString());

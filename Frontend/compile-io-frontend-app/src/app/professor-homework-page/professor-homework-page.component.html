@@ -8,8 +8,8 @@
       </td>
       <td>
           <form>
-              <input type="radio" name="language" value="Java">Java<br>
-              <input type="radio" name="language" value="Python">Python<br>
+              <input type="radio" name="language" (change)="changeType('Java')" value="Java">Java<br>
+              <input type="radio" name="language" (change)="changeType('Python')" value="Python">Python<br>
               runtime (between 1 minute to 5 minutes):<input type="number" name="run_time" min="1" max="5"><br>
               <input type="file" accept=".jar" (change)="fileUpload($event)" placeholder="Upload file..." />
             </form>
@@ -23,7 +23,7 @@
       </td>
       <td>
         <div *ngIf="fileReady">
-          <button type="button" (click)="run()">Run!</button>
+          <span>Done Uploading!</span>
         </div>
       </td>
       <td>
@@ -35,7 +35,7 @@
       </td>
     </tr>
   </table>
-  <button type="button" (click)="getResults()">REFRESH RESULTS</button>
+  <button type="button" (click)="getTests()">REFRESH RESULTS</button>
   <div *ngFor="let res of results">
     <span>
       {{res}}
