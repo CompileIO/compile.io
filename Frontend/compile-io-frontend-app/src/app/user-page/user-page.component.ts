@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UploadService } from '../upload/upload.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-user-page',
@@ -13,7 +14,8 @@ export class UserPageComponent implements OnInit {
   homeworks: string[] = [];
   selectedHomework: string = null;
 
-  constructor(private uploadService: UploadService) {
+  constructor(private uploadService: UploadService,
+    private authenticationService: AuthenticationService) {
     this.getClasses();
   }
 
@@ -53,6 +55,7 @@ export class UserPageComponent implements OnInit {
     this.classes = [];
     this.homeworks = [];
     this.selectedHomework = null;
+    this.authenticationService.logout();
     window.location.reload();
   }
 
