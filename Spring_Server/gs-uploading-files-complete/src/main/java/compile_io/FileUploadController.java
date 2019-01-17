@@ -33,8 +33,8 @@ public class FileUploadController {
 
 	private final StorageService storageService;
 	private String fileName;
-	private final static String frontendVm = "http://137.112.104.111:4200";
-  //private final static String frontendVm = "http://localhost:4200";
+	//private final static String frontendVm = "http://137.112.104.111:4200";
+    private final static String frontendVm = "http://localhost:4200";
   private final int MAX_FILE_SIZE = 50000000;
 
 	@Autowired
@@ -49,12 +49,13 @@ public class FileUploadController {
 	// @RequestMapping(method = RequestMethod.GET)
 	public String[] runDocker() {
 		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
+		workingDir = workingDir.substring(2);
 		System.out.println("Working Directory = " + workingDir);
 
     	// Docker stuff
 		File fileToUpload = new File(workingDir);
 		String result = runCompiler(fileToUpload, "python", 60);
-		String[] temp2 = {"running"};
+		String[] temp2 = {result};
 		return temp2;
 	}
 
