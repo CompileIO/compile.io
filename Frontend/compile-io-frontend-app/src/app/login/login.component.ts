@@ -32,8 +32,6 @@ export class LoginComponent implements OnInit {
     if (this.authenticationService.hasToken()) {
       const group = sessionStorage.getItem('group');
       const username = sessionStorage.getItem('user');
-      console.log(group);
-      console.log(username);
       this.finalGroup = group;
       this.finalUsername = username;
       this.loggedIn = true;
