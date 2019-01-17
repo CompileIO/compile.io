@@ -2,6 +2,8 @@ package compile_io.docker;
 
 import java.io.*;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
@@ -28,19 +30,20 @@ public abstract class AbstractCompiler {
      * Creates and runs the container with the image name given to the constructor and prints the output to the console.
      * Removes the container created from the image after execution.
      * @param long timeLimit A time limit for the process. Process terminates if runtime exceeds given timeLimit.
-     * @return void
+     * @return String 
      * @throws Exception e
      */
 
-    public void run(long timeLimit){
+    public String run(long timeLimit){
         System.out.println("Attempting to run docker container...");
         System.out.println();
         String[] command = {"docker", "run", "--rm", "compile-io-image"};
-        executeCommandWithTimeout(command, timeLimit);
+        String result = executeCommandWithTimeout(command, timeLimit);
         System.out.println();
         System.out.println("Container has finished execution.");
         this.teardownDockerImage();
         this.teardownDockerfile();
+        return result;
     }
 
     /**
@@ -88,16 +91,26 @@ public abstract class AbstractCompiler {
      * Executes the given command line argument. Output is displayed on the console.
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
-     * @return void
+     * @return String 
      * @throws IOException e
      * @throws InterruptedException e 
      */
-    public void executeCommand(String[] command) {
+    public String executeCommand(String[] command) {
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
+            pb.redirectErrorStream(true);
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
             Process proc = pb.start();
+        
             proc.waitFor();
+            List<String> result = new ArrayList<>();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String line = reader.readLine();
+            while (line != null) {
+                result.add(line);
+                line = reader.readLine();
+            }
+            return result.toString();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -105,6 +118,7 @@ public abstract class AbstractCompiler {
             e.printStackTrace();
             System.exit(1);
         }
+        return null;
     }
 
     /**
@@ -113,14 +127,15 @@ public abstract class AbstractCompiler {
      * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
      * @param String[] command An array of strings representing a command line instruction
      * @param long timeLimit 
-     * @return void
+     * @return String  
      * @throws IOException e
      * @throws InterruptedException e 
      */
-    public void executeCommandWithTimeout(String[] command, long timeLimit) {
+    public String executeCommandWithTimeout(String[] command, long timeLimit) {
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
+            pb.redirectErrorStream(true);
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
             Process proc = pb.start();
             boolean procFinished = proc.waitFor(timeLimit, TimeUnit.SECONDS);
             if (!procFinished) {
@@ -130,6 +145,14 @@ public abstract class AbstractCompiler {
                 this.teardownDockerfile();
                 System.exit(0);
             }
+            List<String> result = new ArrayList<>();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String line = reader.readLine();
+            while (line != null) {
+                result.add(line);
+                line = reader.readLine();
+            }
+            return result.toString();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -137,6 +160,7 @@ public abstract class AbstractCompiler {
             e.printStackTrace();
             System.exit(1);
         }
+        return null;
     }
 
     /**
