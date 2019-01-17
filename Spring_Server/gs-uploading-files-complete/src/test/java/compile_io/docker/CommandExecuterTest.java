@@ -27,7 +27,7 @@ public class CommandExecuterTest {
     public void testExecuteCommandOutput() {
         ICommandExecuter testExecuter = new CommandExecuter();
         String[] command = {"echo", "foo"};
-        assertEquals("foo", testExecuter.executeCommand(command));
+        assertEquals("[foo]", testExecuter.executeCommand(command));
     }
 
     @Test

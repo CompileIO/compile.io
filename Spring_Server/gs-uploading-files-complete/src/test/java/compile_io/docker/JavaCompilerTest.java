@@ -5,8 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import compile_io.docker.CompilerFactory;
-import compile_io.docker.JavaCompiler;
+import compile_io.docker.JavaBuilder;
 import static org.mockito.Mockito.*;
 import java.io.File;
 import compile_io.Application;
@@ -20,14 +19,14 @@ public class JavaCompilerTest {
     File testFile = mock(File.class);
     when(testFile.getName()).thenReturn("TestyMcTestface");
     when(testFile.getParent()).thenReturn("C:\\Test");
-    AbstractCompiler tc1 = new JavaCompiler(testFile);
+    AbstractBuilder tc1 = new JavaBuilder(testFile);
     assertEquals("C:\\Test", tc1.getFileDirectory());
     assertEquals("TestyMcTestface", tc1.getFileName());
     
     File testFileNull = mock(File.class);
     when(testFileNull.getName()).thenReturn("FileTest");
     when(testFileNull.getParent()).thenReturn(null);
-    AbstractCompiler tc2 = new JavaCompiler(testFileNull);
+    AbstractBuilder tc2 = new JavaBuilder(testFileNull);
     assertEquals("/", tc2.getFileDirectory());
     assertEquals("FileTest", tc2.getFileName());
   }
@@ -37,7 +36,7 @@ public class JavaCompilerTest {
     File testFile = mock(File.class);
     when(testFile.getName()).thenReturn("TestyMcTestface");
     when(testFile.getParent()).thenReturn("/Test");
-    AbstractCompiler compiler = new JavaCompiler(testFile);
+    AbstractBuilder compiler = new JavaBuilder(testFile);
 
     StringBuilder dockerfileData = new StringBuilder();
     dockerfileData.append("FROM openjdk\n");

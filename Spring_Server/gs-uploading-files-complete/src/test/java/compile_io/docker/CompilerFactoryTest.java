@@ -22,20 +22,32 @@ public class CompilerFactoryTest {
   @Test
   public void testGetBuilderJava() {
     File file = mock(File.class);
-    assertTrue(builderFactory.getBuilder("java", file) instanceof JavaBuilder);
+    try {
+      assertTrue(builderFactory.getBuilder("java", file) instanceof JavaBuilder);
+    } catch (Exception e) {
+      fail("Builder Factory returned the wrong Builder type");
+    }
   }
 
   @Test
   public void testGetBuilderPython() {
     File file = mock(File.class);
-    assertTrue(builderFactory.getBuilder("python", file) instanceof PythonBuilder);
+    try {
+      assertTrue(builderFactory.getBuilder("python", file) instanceof PythonBuilder);
+    } catch (Exception e) {
+      fail("Builder Factory returned the wrong Builder type");
+    }
   }
 
   @Test
-  public void testGetCompilerNull() {
+  public void testGetCompilerException() {
     File file = mock(File.class);
-    assertEquals(builderFactory.getCompiler("unsupported/invalid language", file), null);
-    assertEquals(builderFactory.getCompiler("", file), null);
+    try {
+      builderFactory.getBuilder("unsupported/invalid language", file);
+    } catch (Exception e) {
+      assertTrue(e instanceof UnsupportedBuilderException);
+    }
+
   }
 
 }

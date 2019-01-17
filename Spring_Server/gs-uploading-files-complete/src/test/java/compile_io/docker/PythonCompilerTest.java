@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import compile_io.docker.CompilerFactory;
-import compile_io.docker.JavaCompiler;
+import compile_io.docker.AbstractBuilder;
+import compile_io.docker.PythonBuilder;
 import static org.mockito.Mockito.*;
 import java.io.File;
 import compile_io.Application;
@@ -20,14 +20,14 @@ public class PythonCompilerTest {
     File testFile = mock(File.class);
     when(testFile.getName()).thenReturn("TestyMcTestface");
     when(testFile.getParent()).thenReturn("/Test");
-    AbstractCompiler tc1 = new PythonCompiler(testFile);
+    AbstractBuilder tc1 = new PythonBuilder(testFile);
     assertEquals("/Test", tc1.getFileDirectory());
     assertEquals("TestyMcTestface", tc1.getFileName());
     
     File testFileNull = mock(File.class);
     when(testFileNull.getName()).thenReturn("FileTest");
     when(testFileNull.getParent()).thenReturn(null);
-    AbstractCompiler tc2 = new PythonCompiler(testFileNull);
+    AbstractBuilder tc2 = new PythonBuilder(testFileNull);
     assertEquals("/", tc2.getFileDirectory());
     assertEquals("FileTest", tc2.getFileName());
   }
@@ -37,7 +37,7 @@ public class PythonCompilerTest {
     File testFile = mock(File.class);
     when(testFile.getName()).thenReturn("TestyMcTestface");
     when(testFile.getParent()).thenReturn("/Test");
-    AbstractCompiler compiler = new PythonCompiler(testFile);
+    AbstractBuilder compiler = new PythonBuilder(testFile);
 
     StringBuilder dockerfileData = new StringBuilder();
     dockerfileData.append("FROM python:latest\n");
