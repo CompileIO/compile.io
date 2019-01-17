@@ -10,7 +10,6 @@ public interface IDockerRunner {
      * Removes the container created from the image after execution.
      * @param long timeLimit A time limit for the process. Process terminates if runtime exceeds given timeLimit.
      * @return String 
-     * @throws Exception e If the image has not been built
      */
     public String run (long timeLimit);
 

@@ -7,10 +7,10 @@ public class DockerRunner implements IDockerRunner {
 
     /**
      * Constructor for the DockerRunner class
-     * @param AbstractBuilder builder Builder object which is used for teardown in this class
+     * @param AbstractBuilder builder Builder object which is used for teardown
      */
-    public DockerRunner(AbstractBuilder builder) {
-        this.executer = new CommandExecuter();
+    public DockerRunner(AbstractBuilder builder, ICommandExecuter executer) {
+        this.executer = executer;
         this.builder = builder;
     }
 
@@ -19,7 +19,6 @@ public class DockerRunner implements IDockerRunner {
      * Removes the container created from the image after execution.
      * @param long timeLimit A time limit for the process. Process terminates if runtime exceeds given timeLimit.
      * @return String 
-     * @throws Exception e If the image has not been built
      */
     public String run(long timeLimit) {
         System.out.println("Attempting to run docker container...");

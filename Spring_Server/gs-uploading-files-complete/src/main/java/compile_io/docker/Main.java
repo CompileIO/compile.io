@@ -15,7 +15,7 @@ public class Main {
         try {
             AbstractBuilder builder = builderFactory.getBuilder("python", file);
             // AbstractBuilder builder = compilerFactory.getCompiler("java", file);
-            IDockerRunner runner = new DockerRunner(builder);
+            IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();
             String result = runner.run(60);

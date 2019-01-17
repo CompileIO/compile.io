@@ -130,7 +130,7 @@ public class FileUploadController {
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
 			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
-			IDockerRunner runner = new DockerRunner(builder);
+			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
 			builder.createDockerfile(builder.getDockerfileData());
 			builder.buildContainer();
 			return runner.run(timeLimit);
