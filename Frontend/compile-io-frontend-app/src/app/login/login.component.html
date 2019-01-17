@@ -17,7 +17,11 @@
     </app-user-page>
   </div>
   <div *ngIf="finalGroup == 'PROFESSOR'">
-    <span>PUT IN PROF STUFF HERE</span>
+    <app-professor-page [username]="finalUsername">
+    </app-professor-page>
+  </div>
+  <div *ngIf="finalGroup == 'ADMIN'">
+    <app-professor-page [username]="finalUsername">
+    </app-professor-page>
   </div>
 </div>
-
