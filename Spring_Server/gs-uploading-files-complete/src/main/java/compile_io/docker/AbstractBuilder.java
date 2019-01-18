@@ -158,4 +158,6 @@ public abstract class AbstractBuilder {
      */
     public abstract String getDockerfileData();
 
+    public abstract String getDockerfileDataFiles();
+
 }

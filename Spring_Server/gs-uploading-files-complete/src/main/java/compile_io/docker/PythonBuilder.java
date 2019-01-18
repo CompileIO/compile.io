@@ -32,4 +32,8 @@ public class PythonBuilder extends AbstractBuilder {
         return dockerfileData.toString();
     }
 
+    public String getDockerfileDataFiles() {
+        return null;
+    }
+
 }
