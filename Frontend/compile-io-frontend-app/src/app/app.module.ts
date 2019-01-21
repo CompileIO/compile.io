@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { UserPageComponent } from './user-page/user-page.component';
-import { ClassInfoComponent } from './class-info/class-info.component';
 import { HomeworkPageComponent } from './homework-page/homework-page.component'
 import { ROUTING } from './app-routing/app-routing.module';
 
@@ -22,7 +21,6 @@ import { ProfessorHomeworkPageComponent } from './professor-homework-page/profes
     AppComponent,
     LoginComponent,
     UserPageComponent,
-    ClassInfoComponent,
     HomeworkPageComponent,
     ProfessorPageComponent,
     ProfessorHomeworkPageComponent

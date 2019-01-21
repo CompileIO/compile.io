@@ -1,48 +1,55 @@
-<div *ngIf="selectedHomework == null">
-  <div class="h1div">
-    <h1>
-      {{username | uppercase}}
-    </h1>
-    <h1 class="back noselect" (click)="logout()">
-      Logout
-    </h1>
-  </div>
-  <table>
-    <!-- <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr> -->
-    <tr *ngFor="let cl of classes">
-      <td>
-        <div class="buttondiv outerdiv noselect" (click)="selectClass(cl)">
-          <span>
-            <app-class-info [className]="cl">
-            </app-class-info>
-          </span>
+<div class="mw-100 bg-danger text-light noselect p-3">
+  <h1>
+    Compile.IO
+  </h1>
+</div>
+
+
+<div class="container-fluid ">
+  <div class="row">
+
+    <div class="sidebar vh-100 w-25 text-light bg-danger col-2">
+      <div class="container noselect">
+        <div class="row">
+          <h3 class="noselect sidebarTop">
+            <span>
+              {{username | uppercase}}
+            </span>
+            <span (click)="logout()">
+              LO
+            </span>
+          </h3>
         </div>
-        <table *ngIf="selectedClass == cl" class="innertable">
-          <tr  *ngFor="let hwk of homeworks">
-            <td>
-              <div (click)="selectHomework(hwk)" class="buttondiv innerdiv noselect">
+        <div *ngFor="let cl of classes" class="row" (click)="selectClass(cl)">
+          <div>
+            <span>
+              {{cl}}
+            </span>
+            <div class="container" *ngIf="selectedClass == cl">
+              <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
                 <span>
                   {{hwk}}
                 </span>
               </div>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</div>
-<div *ngIf="selectedHomework != null">
-  <div class="h1div">
-    <h1>
-      {{selectedHomework | uppercase}}
-    </h1>
-    <h1 class="back noselect" (click)="return()" >
-      Return
-    </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedHomework != null" class="col bg-dark">
+      <div class="h1div">
+        <h1>
+          {{selectedHomework | uppercase}}
+        </h1>
+        <h1 class="back noselect" (click)="return()">
+          Return
+        </h1>
+      </div>
+      <app-homework-page [username]="username"
+                         [givenClass]="selectedClass"
+                         [homework]="selectedHomework">
+      </app-homework-page>
+    </div>
   </div>
-  <app-homework-page [username]="username"
-                     [givenClass]="selectedClass"
-                     [homework]="selectedHomework">
-  </app-homework-page>
 </div>

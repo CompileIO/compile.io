@@ -13,8 +13,7 @@
       <td>
         <div class="buttondiv outerdiv noselect" (click)="selectClass(cl)">
           <span>
-            <app-class-info [className]="cl">
-            </app-class-info>
+            {{cl}}
           </span>
         </div>
         <table *ngIf="selectedClass == cl" class="innertable">

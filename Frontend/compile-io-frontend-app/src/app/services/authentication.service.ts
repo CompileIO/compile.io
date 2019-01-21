@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthenticationService {
   isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
-  admins = ["palamujg", "footezo", "thelenzr", "rileyma"];
+  admins = ["palamujg", "thelenzr", "rileyma"];
   constructor(
     private router: Router,
     
