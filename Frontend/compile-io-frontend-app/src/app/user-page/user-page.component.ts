@@ -31,8 +31,10 @@ export class UserPageComponent implements OnInit {
     if (this.selectedClass == givenClass) {
       this.selectedClass = '';
       this.homeworks = [];
+      this.selectedHomework = null;
     } else {
       this.selectedClass = givenClass;
+      this.selectedHomework = null;
       this.uploadService.getHomeworks(this.selectedClass).subscribe({
         next: x => this.homeworks = x.map(element => element.toString()),
         error: err => console.log("GET HOMEWORKS ERROR: " + err),

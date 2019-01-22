@@ -12,3 +12,19 @@
 .red {
   background-color: rgb(136,0,0);
 }
+.gray {
+  background-color: rgb(173, 171, 172);
+}
+
+.hwkDiv {
+  background-color: rgb(173, 171, 172);
+}
+.icon {
+  width: 30px;
+  height: 30px;
+}
+.redBorder {
+  border-width: 20px;
+  border-color: rgb(136,0,0);
+  border-style: solid;
+}

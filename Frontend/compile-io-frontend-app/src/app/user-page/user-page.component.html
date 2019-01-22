@@ -8,38 +8,46 @@
 <div class="container-fluid ">
   <div class="row">
 
-    <div class="sidebar vh-100 w-25 text-light red col-2">
+    <div class="sidebar vh-100 w-25 text-light gray redBorder col-2">
       <div class="container noselect">
         <div class="row">
-          <h3 class="noselect sidebarTop">
-            <span>
-              {{username | uppercase}}
-            </span>
-            <span (click)="logout()">
-              LO
-            </span>
-          </h3>
+          <div class="col  w-100 p-3">
+            <h3 class="noselect">
+              <span>
+                {{username | uppercase}}
+              </span>
+              <img src="./assets/open-iconic/svg/account-logout.svg" alt="logout" (click)="logout()" class="icon" />
+            </h3>
+          </div>
         </div>
         <div *ngFor="let cl of classes" class="row">
           <div class="w-100">
-            <div class="w-100 sidebarHover" (click)="selectClass(cl)">
+            <div class="w-100 sidebarHover p-3" (click)="selectClass(cl)">
               <span>
                 {{cl}}
               </span>
             </div>
             <div class="container" *ngIf="selectedClass == cl">
               <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
-                <span>
-                  {{hwk}}
-                </span>
+                <div *ngIf="selectedHomework == hwk" class="col p-2 sidebarHover w-50 hwkDiv">
+                  <span>
+                    {{hwk}}
+                  </span>
+                </div>
+                <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 ">
+                  <span>
+                    {{hwk}}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div *ngIf="selectedHomework != null" class="col bg-dark">
+    <div *ngIf="selectedHomework == null" class="col  redBorder">
+    </div>
+    <div *ngIf="selectedHomework != null" class="col  redBorder">
       <div class="h1div">
         <h1>
           {{selectedHomework | uppercase}}
