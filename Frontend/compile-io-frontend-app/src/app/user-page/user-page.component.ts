@@ -45,10 +45,6 @@ export class UserPageComponent implements OnInit {
     this.selectedHomework = givenHwk;
   }
 
-  return() {
-    this.selectedHomework = null;
-  }
-
   logout() {
     this.username = null;
     this.selectedClass = null;

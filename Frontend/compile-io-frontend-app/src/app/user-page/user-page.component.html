@@ -1,4 +1,4 @@
-<div class="mw-100 bg-danger text-light noselect p-3">
+<div class="mw-100 red text-light noselect p-3">
   <h1>
     Compile.IO
   </h1>
@@ -8,7 +8,7 @@
 <div class="container-fluid ">
   <div class="row">
 
-    <div class="sidebar vh-100 w-25 text-light bg-danger col-2">
+    <div class="sidebar vh-100 w-25 text-light red col-2">
       <div class="container noselect">
         <div class="row">
           <h3 class="noselect sidebarTop">
@@ -20,11 +20,13 @@
             </span>
           </h3>
         </div>
-        <div *ngFor="let cl of classes" class="row" (click)="selectClass(cl)">
-          <div>
-            <span>
-              {{cl}}
-            </span>
+        <div *ngFor="let cl of classes" class="row">
+          <div class="w-100">
+            <div class="w-100 sidebarHover" (click)="selectClass(cl)">
+              <span>
+                {{cl}}
+              </span>
+            </div>
             <div class="container" *ngIf="selectedClass == cl">
               <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
                 <span>
@@ -41,9 +43,6 @@
       <div class="h1div">
         <h1>
           {{selectedHomework | uppercase}}
-        </h1>
-        <h1 class="back noselect" (click)="return()">
-          Return
         </h1>
       </div>
       <app-homework-page [username]="username"

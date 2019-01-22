@@ -6,3 +6,9 @@
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+.sidebarHover:hover {
+  background-color: black;
+}
+.red {
+  background-color: rgb(136,0,0);
+}
