@@ -16,7 +16,7 @@
               <span>
                 {{username | uppercase}}
               </span>
-              <img src="./assets/open-iconic/svg/account-logout.svg" alt="logout" (click)="logout()" class="icon" />
+              <img src="./assets/open-iconic/svg/account-logout.svg" alt="logout" (click)="logout()" class="icon btn" data-toggle="tooltip" data-placement="bottom" title="Logout"/>
             </h3>
           </div>
         </div>
@@ -26,13 +26,15 @@
               <span>
                 {{cl}}
               </span>
+              <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedClass == cl && selectedHomework == hwk" alt="left" class="smicon" />
             </div>
             <div class="container" *ngIf="selectedClass == cl">
               <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
-                <div *ngIf="selectedHomework == hwk" class="col p-2 sidebarHover w-50 hwkDiv">
+                <div *ngIf="selectedHomework == hwk" class="col p-2 sidebarHover w-50">
                   <span>
                     {{hwk}}
                   </span>
+                  <img src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon"/>
                 </div>
                 <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 ">
                   <span>
@@ -45,12 +47,28 @@
         </div>
       </div>
     </div>
-    <div *ngIf="selectedHomework == null" class="col  redBorder">
+    <div *ngIf="selectedHomework == null && selectedClass == null" class="col  redBorder">
+    </div>
+    <div *ngIf="selectedHomework == null && selectedClass != null" class="col  redBorder">
+      <div class="p-3 w-100">
+        <h1 class="float-left">
+          {{selectedClass | uppercase}}
+        </h1>
+      </div>
+      <div class="container">
+        <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
+          <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 ">
+            <span>
+              {{hwk}}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
     <div *ngIf="selectedHomework != null" class="col  redBorder">
-      <div class="h1div">
-        <h1>
-          {{selectedHomework | uppercase}}
+      <div class="p-3 w-100">
+        <h1 class="float-left">
+          {{selectedClass | uppercase}} - {{selectedHomework | uppercase}}
         </h1>
       </div>
       <app-homework-page [username]="username"

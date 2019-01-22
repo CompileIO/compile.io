@@ -7,7 +7,10 @@
                                   supported by Chrome and Opera */
 }
 .sidebarHover:hover {
-  background-color: black;
+  background-color: rgb(100,100,100);
+}
+.middleHover:hover {
+  background-color: rgb(173, 171, 172);
 }
 .red {
   background-color: rgb(136,0,0);
@@ -20,11 +23,18 @@
   background-color: rgb(173, 171, 172);
 }
 .icon {
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
+}
+.smicon {
+  width: 20px;
+  height: 20px;
 }
 .redBorder {
   border-width: 20px;
   border-color: rgb(136,0,0);
   border-style: solid;
+}
+.sidebar {
+  min-width: 300px;
 }
