@@ -9,6 +9,7 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class UserPageComponent implements OnInit {
   @Input() username: string;
+  @Input() group: string;
   classes: string[] = [];
   selectedClass: string = null;
   homeworks: string[] = [];

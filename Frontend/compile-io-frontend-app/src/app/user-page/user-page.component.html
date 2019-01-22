@@ -8,7 +8,7 @@
 <div class="container-fluid ">
   <div class="row">
 
-    <div class="sidebar vh-100 w-25 text-light gray redBorder col-2">
+    <div class="sidebar vh-100 w-25 blackText gray redBorder col-2">
       <div class="container noselect">
         <div class="row">
           <div class="col  w-100 p-3">
@@ -42,6 +42,11 @@
                   </span>
                 </div>
               </div>
+              <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+                <div class="col p-2 sidebarHover w-50">
+                  <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -61,6 +66,11 @@
             <span>
               {{hwk}}
             </span>
+          </div>
+        </div>
+        <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+          <div class="col p-2 sidebarHover w-50">
+            <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
           </div>
         </div>
       </div>
