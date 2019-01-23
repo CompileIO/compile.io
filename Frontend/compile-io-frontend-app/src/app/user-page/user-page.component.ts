@@ -30,7 +30,7 @@ export class UserPageComponent implements OnInit {
 
   selectClass(givenClass: string) {
     if (this.selectedClass == givenClass) {
-      this.selectedClass = '';
+      this.selectedClass = null;
       this.homeworks = [];
       this.selectedHomework = null;
     } else {
