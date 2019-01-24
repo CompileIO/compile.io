@@ -1,6 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Factory class that chooses the correct builder to use
@@ -19,6 +20,14 @@ public class BuilderFactory {
             return new JavaBuilder(file);
         } else if (type == "python") {
             return new PythonBuilder(file);
+        } else {
+            throw new UnsupportedBuilderException();
+        }
+    }
+
+    public AbstractBuilder getBuilderManyFiles(String type, List<File> studentFiles, List<File> professorFiles) throws UnsupportedBuilderException {
+        if (type == "java") {
+            return new JavaBuilder(studentFiles, professorFiles);
         } else {
             throw new UnsupportedBuilderException();
         }

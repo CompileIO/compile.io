@@ -1,8 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * This class builds a Dockerfile that the superclass uses to create a Docker image.
@@ -15,6 +14,10 @@ public class JavaBuilder extends AbstractBuilder {
      */
     public JavaBuilder(File file) {
         super(file);
+    }
+
+    public JavaBuilder(List<File> studentFiles, List<File> professorFiles) {
+        super(studentFiles, professorFiles);
     }
 
     /**
@@ -34,26 +37,38 @@ public class JavaBuilder extends AbstractBuilder {
         return dockerfileData.toString();
     }
 
-    // Hard coded manual test function to test different ways to run professor test code against student code
+    // potential replacement for above method
     public String getDockerfileDataFiles() {
-        List<File> files = new ArrayList<File>();
-        File studentCode = new File("/EclipseWorkspaces/csse230/PreorderBuildTree/src/buildtree/BinaryTree.java");
-        File professorTestCode = new File("/EclipseWorkspaces/csse230/PreorderBuildTree/src/buildtree/Testing.java");
-        files.add(studentCode);
-        files.add(professorTestCode);
+        /**
+         * RUN curl -L https://services.gradle.org/distributions/gradle-2.4-bin.zip -o gradle-2.4-bin.zip
+            RUN apt-get install -y unzip
+            RUN unzip gradle-2.4-bin.zip
+         */
+        System.out.println("DOING GRADLE STUFF");
         StringBuilder dockerfileData = new StringBuilder();
-        
+        List<File> studentFiles = super.getStudentFiles();
+        List<File> professorFiles = super.getProfessorFiles();
+
         dockerfileData.append("FROM openjdk\n");
-        dockerfileData.append("WORKDIR /SCHOOL/DockerTest/MultipleFilesTest\n");
-        String toAdd;
-        for (int i = 0; i < files.size(); i++) {
-            toAdd = files.get(i).getName();
-            dockerfileData.append("ADD " + toAdd + " " + toAdd + "\n");
-        }
+        dockerfileData.append("WORKDIR /SCHOOL/DockerTest/mock-upload-dir\n");
         dockerfileData.append("EXPOSE 8000\n");
-        // dockerfileData.append("CMD java -jar " + super.getFileName() + "\n");
-        dockerfileData.append("CMD java -cp .:/usr/share/java/junit.jar org.junit.runner.JUnitCore Testing.java\n");
+        dockerfileData.append("RUN mkdir -p src/main/java\n");
+        dockerfileData.append("RUN mkdir -p src/test/java\n");
+        dockerfileData.append("COPY build.gradle build.gradle\n");
+        for (int i = 0; i < super.getNumStudentFiles(); i++) {
+            dockerfileData.append("COPY " + studentFiles.get(i).getName() + " " + studentFiles.get(i).getName() +  "\n");
+            dockerfileData.append("RUN mv " + studentFiles.get(i).getName() + " " + "src/main/java/\n");
+        }
+        for (int i = 0; i < super.getNumProfessorFiles(); i++) {
+            dockerfileData.append("COPY " + professorFiles.get(i).getName() + " " + professorFiles.get(i).getName() +  "\n");
+            dockerfileData.append("RUN mv " + professorFiles.get(i).getName() + " " + "src/test/java/\n");
+        }
+        dockerfileData.append("CMD gradle test\n");
+        //dockerfileData.append("RUN gradle clean test\n");
+
+        System.out.println(dockerfileData.toString());
 
         return dockerfileData.toString();
     }
+
 }

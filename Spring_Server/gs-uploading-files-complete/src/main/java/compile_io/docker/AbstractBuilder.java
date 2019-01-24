@@ -1,6 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
@@ -9,7 +10,11 @@ public abstract class AbstractBuilder {
 
     private String fileName;
     private String fileDirectory;
+    private List<File> studentFiles;
+    private List<File> professorFiles;
     private ICommandExecuter executer;
+    private int numStudentFiles;
+    private int numProfessorFiles;
 
     /**
      * Constructor that builds a docker image with the given name
@@ -23,6 +28,15 @@ public abstract class AbstractBuilder {
         }
         this.executer = new CommandExecuter();
         System.out.println("Given file: " + this.fileName + ". Target directory: " + this.fileDirectory);
+    }
+
+    public AbstractBuilder(List<File> studentFiles, List<File> professorFiles) {
+        this.studentFiles = studentFiles;
+        this.professorFiles = professorFiles;
+        this.numStudentFiles = this.studentFiles.size();
+        this.numProfessorFiles = this.professorFiles.size();
+        this.executer = new CommandExecuter();
+        this.fileDirectory = "/SCHOOL/DockerTest/mock-upload-dir";
     }
 
     /**
@@ -118,6 +132,7 @@ public abstract class AbstractBuilder {
 
     /**
      * Creates the Dockerfile in the file directory specified
+     * @param String dockerfileData A String representing the contents of the Dockerfile
      * @return void
      * @throws FileNotFoundException e If the the given file does not exist or cannot be found
      * @throws IOException e If the java IO encounters an error
@@ -149,6 +164,23 @@ public abstract class AbstractBuilder {
                 System.out.println("Error in closing the Stream");
             }
         }
+    }
+
+    
+    public List<File> getStudentFiles() {
+        return this.studentFiles;
+    }
+
+    public List<File> getProfessorFiles() {
+        return this.professorFiles;
+    }
+
+    public int getNumStudentFiles() {
+        return this.numStudentFiles;
+    }
+
+    public int getNumProfessorFiles() {
+        return this.numProfessorFiles;
     }
 
     /**
