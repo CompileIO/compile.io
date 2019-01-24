@@ -15,10 +15,12 @@ export class UploadService {
     const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
     return this.http.post(this.apiUrl, body);
   }
-  uploadTest(file: File, type: string): Observable<any> {
+  uploadTest(userName: string, file: File, type: string, runTime: string): Observable<any> {
     let body = new FormData();
+    body.append("username", userName)
     body.append("file", file);
     body.append("type", type);
+    body.append("runTime", runTime);
     const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
     return this.http.post(this.apiUrl + "/test", body);
   }

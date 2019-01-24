@@ -17,6 +17,7 @@ export class ProfessorHomeworkPageComponent implements OnInit {
   error: string;
   results: string[] = [];
   type: string = null;
+  runTime: string;
 
   constructor(private uploadService: UploadService) {
     this.MAX_FILE_SIZE = 50000000;
@@ -34,6 +35,7 @@ export class ProfessorHomeworkPageComponent implements OnInit {
         this.file = null;
       } else {
         this.file = event.target.files[0];
+        this.runTime = (<HTMLInputElement>document.getElementById("runTimeValue")).value;
         this.upload();
       }
     }
@@ -44,9 +46,9 @@ export class ProfessorHomeworkPageComponent implements OnInit {
   }
 
   upload() {
-    if (this.file !== null && this.type !== null) {
+    if (this.file !== null && this.type !== null && this.type != null) {
       this.uploading = true;
-      this.uploadService.uploadTest(this.file, this.type).subscribe({
+      this.uploadService.uploadTest(this.file, this.type, this.runTime).subscribe({
         next: x => {
           console.log(x),
           this.uploading = false,

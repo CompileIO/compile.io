@@ -1,8 +1,6 @@
-package compile_io;
+package compile_io.controllers;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -12,13 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import compile_io.docker.*;
@@ -28,13 +23,10 @@ import compile_io.storage.StorageService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
-//@RequestMapping(value = "/api/upload")
-public class FileUploadController {
+public class FileUploadController implements Controller {
 
 	private final StorageService storageService;
 	private String fileName;
-	//private final static String frontendVm = "http://137.112.104.111:4200";
-    private final static String frontendVm = "http://localhost:4200";
   private final int MAX_FILE_SIZE = 50000000;
 
 	@Autowired
@@ -58,7 +50,6 @@ public class FileUploadController {
 		String[] temp2 = {result};
 		return temp2;
 	}
-
 
   @CrossOrigin(origins = frontendVm, allowCredentials = "true")
 	@GetMapping("/{className}")
@@ -126,7 +117,11 @@ public class FileUploadController {
       return temp;
     }
 	}
+
 	
+	
+//	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
+//	@GetMapping("/test")
 	public String runCompiler(File fileToUpload, String language, int timeLimit) {
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
