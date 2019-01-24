@@ -9,6 +9,7 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class UserPageComponent implements OnInit {
   @Input() username: string;
+  @Input() group: string;
   classes: string[] = [];
   selectedClass: string = null;
   homeworks: string[] = [];
@@ -29,10 +30,12 @@ export class UserPageComponent implements OnInit {
 
   selectClass(givenClass: string) {
     if (this.selectedClass == givenClass) {
-      this.selectedClass = '';
+      this.selectedClass = null;
       this.homeworks = [];
+      this.selectedHomework = null;
     } else {
       this.selectedClass = givenClass;
+      this.selectedHomework = null;
       this.uploadService.getHomeworks(this.selectedClass).subscribe({
         next: x => this.homeworks = x.map(element => element.toString()),
         error: err => console.log("GET HOMEWORKS ERROR: " + err),
@@ -43,10 +46,6 @@ export class UserPageComponent implements OnInit {
 
   selectHomework(givenHwk: string) {
     this.selectedHomework = givenHwk;
-  }
-
-  return() {
-    this.selectedHomework = null;
   }
 
   logout() {
