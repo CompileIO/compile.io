@@ -56,13 +56,19 @@
     <div *ngIf="selectedHomework == null && selectedClass == null" class="col  redBorder">
 
     </div>
+
+
     <div *ngIf="selectedHomework == null && selectedClass != null" class="col  redBorder">
-      <div class="p-3 w-100">
-        <h1 class="float-left">
-          {{selectedClass | uppercase}}
-        </h1>
-      </div>
       <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="p-3 w-100">
+              <h1 class="float-left">
+                {{selectedClass | uppercase}}
+              </h1>
+            </div>
+          </div>
+        </div>
         <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
           <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 ">
             <span>
@@ -78,20 +84,67 @@
       </div>
     </div>
 
+
     <div *ngIf="selectedHomework == 'new'" class="col  redBorder">
       <app-add-homework [class] ="selectedClass"></app-add-homework>
     </div>
 
+
     <div *ngIf="selectedHomework != null && selectedHomework != 'new'" class="col  redBorder">
-      <div class="p-3 w-100">
-        <h1 class="float-left">
-          {{selectedClass | uppercase}} - {{selectedHomework | uppercase}}
-        </h1>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="p-3 w-100">
+              <h1 class="float-left">
+                {{selectedClass | uppercase}} - {{selectedHomework | uppercase}}
+              </h1>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+          <div class="col">
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+              </li>
+            </ul>
+            <!--<ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" (click)="changeChange(false)">Run</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" (click)="changeChange(true)">Change</a>
+              </li>
+            </ul>-->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <!--<app-change-homework *ngIf="change"
+                               [givenClass]="selectedClass"
+                               [homework]="selectedHomework">
+            </app-change-homework>-->
+            
+            <div class="tab-content show active" id="myTabContent">
+
+              <app-homework-page id="runPage"
+                                 *ngIf="!change"
+                                 [username]="username"
+                                 [givenClass]="selectedClass"
+                                 [homework]="selectedHomework">
+              </app-homework-page>
+              <app-change-homework id="changePage" *ngIf="change"
+                                 [givenClass]="selectedClass"
+                                 [homework]="selectedHomework">
+              </app-change-homework>
+            </div>
+          </div>
+        </div>
       </div>
-      <app-homework-page [username]="username"
-                         [givenClass]="selectedClass"
-                         [homework]="selectedHomework">
-      </app-homework-page>
     </div>
 
 
