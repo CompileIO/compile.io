@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-change-homework',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./change-homework.component.css']
 })
 export class ChangeHomeworkComponent implements OnInit {
+
+  @Input() givenClass: string;
+  @Input() homework: string;
 
   constructor() { }
 

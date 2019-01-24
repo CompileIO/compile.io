@@ -14,6 +14,7 @@ export class UserPageComponent implements OnInit {
   selectedClass: string = null;
   homeworks: string[] = [];
   selectedHomework: string = null;
+  change: boolean = false;
 
   constructor(private uploadService: UploadService,
     private authenticationService: AuthenticationService) {
@@ -46,6 +47,10 @@ export class UserPageComponent implements OnInit {
 
   selectHomework(givenHwk: string) {
     this.selectedHomework = givenHwk;
+  }
+
+  changeChange(bool: boolean) {
+    this.change = bool;
   }
 
   logout() {
