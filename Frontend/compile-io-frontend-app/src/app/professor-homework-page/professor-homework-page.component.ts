@@ -48,7 +48,7 @@ export class ProfessorHomeworkPageComponent implements OnInit {
   upload() {
     if (this.file !== null && this.type !== null && this.type != null) {
       this.uploading = true;
-      this.uploadService.uploadTest(this.file, this.type, this.runTime).subscribe({
+      this.uploadService.uploadTest(this.username, this.file, this.type, this.runTime).subscribe({
         next: x => {
           console.log(x),
           this.uploading = false,

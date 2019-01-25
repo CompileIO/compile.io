@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { backendInterface, backendInterfaceService } from './backendInterface.service';
+
 @Injectable({
   providedIn: 'root'
 })
-export class UploadService {
-  private apiUrl = environment.BackendapiUrl;
-  constructor(private http: HttpClient) { }
+export class UploadService extends backendInterfaceService{
+  // private apiUrl = environment.BackendapiUrl;
+  // constructor(private http: HttpClient) { }
+  super() {}
 
   upload(file: File): Observable<any> {
     let body = new FormData();
@@ -22,12 +25,9 @@ export class UploadService {
     body.append("type", type);
     body.append("runTime", runTime);
     const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
-    return this.http.post(this.apiUrl + "/test", body);
+    // return this.http.post(this.apiUrl + "/" + givenClass + "/" + givenHomework +"/test", body);
   }
-  getClasses(): Observable<any> {
-    const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get(this.apiUrl + "/classes", { headers: empHeaders, withCredentials: true });
-  }
+  
   runDocker(): Observable<any> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get(this.apiUrl + "/run", { headers: empHeaders, withCredentials: true });
