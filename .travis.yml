@@ -15,10 +15,9 @@ cache:
 before_install:
   - npm i -g npm@latest
 script:
-  - cd Spring_Server/gs-uploading-files-complete && ./gradlew test
-  - ./gradlew bootRun -Dspring.profiles.active=prod`
-  # - ./gradlew build
-  - java -jar build/libs/gs-spring-boot-0.1.0.jar
+  - cd Spring_Server/gs-uploading-files-complete
+  # - ./gradlew test
+  - ./gradlew bootRun -D spring.profiles.active=prod
   - cd ../../Frontend/compile-io-frontend-app
   - ng build --prod
   - ng serve --prod
