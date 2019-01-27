@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 })
 export class UploadService {
   private apiUrl = environment.BackendapiUrl;
+  
   constructor(private http: HttpClient) { }
 
   upload(file: File): Promise<String[]> {
@@ -18,6 +19,7 @@ export class UploadService {
       .catch();
   }
   getClasses(): Promise<String[]> {
+    
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get(this.apiUrl + "/classes", { headers: empHeaders, withCredentials: true })
       .toPromise()
