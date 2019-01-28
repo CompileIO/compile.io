@@ -20,6 +20,11 @@ echo "Initializing a new git repo in _site, and pushing it to our server"
     git config user.name "Travis CI"
     git config user.email "joshpal97@gmail.com"
 
+    echo "Making sure the repo has everything it needs"
+    git add .
+    git commit -m "Deploy"
+    git push --force deploy master
+
     echo "Starting Frontend"
     cd Frontend/compile-io-frontend-app
     ng build --prod
