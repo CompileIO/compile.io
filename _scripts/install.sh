@@ -10,3 +10,12 @@ mv deploy-key ~/.ssh/id_rsa
 echo "Installing npm dependencies"
 npm i -g npm@latest #npm install all the dependencies needed
 npm install
+
+
+echo "Initializing a new git repo in _site, and pushing it to our server"
+    mkdir _site
+    cd _site
+    git init
+    git remote add deploy "git@compile-io.csse.rose-hulman.edu:~/srv/git/project.git"
+    git config user.name "Travis CI"
+    git config user.email "joshpal97@gmail.com"

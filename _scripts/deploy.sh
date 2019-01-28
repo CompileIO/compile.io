@@ -1,13 +1,13 @@
 #!/bin/bash
 set -x
 if [ $TRAVIS_BRANCH == 'master' ] ; then
-    echo "Initializing a new git repo in _site, and pushing it to our server"
-    mkdir _site
-    cd _site
-    git init
-    git remote add deploy "git@compile-io.csse.rose-hulman.edu:~/srv/git/project.git"
-    git config user.name "Travis CI"
-    git config user.email "joshpal97@gmail.com"
+    # echo "Initializing a new git repo in _site, and pushing it to our server"
+    # mkdir _site
+    # cd _site
+    # git init
+    # git remote add deploy "git@compile-io.csse.rose-hulman.edu:~/srv/git/project.git"
+    # git config user.name "Travis CI"
+    # git config user.email "joshpal97@gmail.com"
     
     echo "Making sure the repo has everything it needs"
     git add .
