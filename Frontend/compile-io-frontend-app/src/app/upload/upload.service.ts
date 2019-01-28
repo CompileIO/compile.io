@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class UploadService {
   private apiUrl = environment.BackendapiUrl;
+  
   constructor(private http: HttpClient) { }
 
   upload(file: File): Observable<any> {
