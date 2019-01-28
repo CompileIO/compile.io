@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UploadService } from '../upload/upload.service';
+import { UploadService } from '../services/upload.service';
 
 @Component({
   selector: 'app-homework-page',

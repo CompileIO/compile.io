@@ -18,14 +18,14 @@ export class UploadService extends backendInterfaceService{
     const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
     return this.http.post(this.apiUrl, body);
   }
-  uploadTest(userName: string, file: File, type: string, runTime: string): Observable<any> {
-    let body = new FormData();
+  uploadTest(userName: string, file: File, type: string, runTime: string, givenClass: string, givenHomework: string): Observable<any> {
+    let body = new FormData();              // MIGHT NEED TO CHANGE THE givenClass and givenHomework variables
     body.append("username", userName)
     body.append("file", file);
     body.append("type", type);
     body.append("runTime", runTime);
     const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
-    // return this.http.post(this.apiUrl + "/" + givenClass + "/" + givenHomework +"/test", body);
+    return this.http.post(this.apiUrl + "/" + givenClass + "/" + givenHomework +"/test", body);
   }
   
   runDocker(): Observable<any> {

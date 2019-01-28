@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UploadService } from '../upload/upload.service';
+import { UploadService } from '../services/upload.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
