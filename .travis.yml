@@ -1,31 +1,30 @@
-# language: node_js
-# node_js: v8.9.0
-# notifications:
-#   slack: 
-#     rooms:
-#       - compileio:uAKGKPc1MCWywPZsmgrWGFrb
-#     on_success: change
-#     on_failure: always
-
-deploy:
-language: java
-cache:
-  directories:
-    - Frontend/compile-io-frontend-app/node_modules
-before_install:
-  - npm i -g npm@latest
-script:
-  - cd Spring_Server/gs-uploading-files-complete
-  # - ./gradlew test
-  - ./gradlew bootRun -D spring.profiles.active=prod
-  - cd ../../Frontend/compile-io-frontend-app
-  - ng build --prod
-  - ng serve --prod
-
+language: node_js
+node_js: v8.9.0
 notifications:
   slack: 
     rooms:
       - compileio:uAKGKPc1MCWywPZsmgrWGFrb
     on_success: change
     on_failure: always
+
+# deploy:
+# language: java
+# cache:
+#   directories:
+#     - Frontend/compile-io-frontend-app/node_modules
+# before_install:
+#   - npm i -g npm@latest
+# script:
+#   - cd Spring_Server/gs-uploading-files-complete
+#   - ./gradlew bootRun -D spring.profiles.active=prod
+#   - cd ../../Frontend/compile-io-frontend-app
+#   - ng build --prod
+#   - ng serve --prod
+
+# notifications:
+#   slack: 
+#     rooms:
+#       - compileio:uAKGKPc1MCWywPZsmgrWGFrb
+#     on_success: change
+#     on_failure: always
   
