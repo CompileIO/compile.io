@@ -8,12 +8,21 @@ public class User {
 	
     public String firstName;
     public String lastName;
+    public String userName;
+    public String type;
+    public int runTime;
 
     public User() {}
 
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public void inputTest (String username, String type, int runtime  ) {
+        this.userName = username;
+        this.type = type;
+        this.runTime = runtime;
     }
 
     @Override
