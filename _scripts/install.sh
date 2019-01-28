@@ -19,3 +19,9 @@ echo "Initializing a new git repo in _site, and pushing it to our server"
     git remote add deploy "git@compile-io.csse.rose-hulman.edu:~/srv/git/project.git"
     git config user.name "Travis CI"
     git config user.email "joshpal97@gmail.com"
+
+    echo "Starting Frontend"
+    cd ../../Frontend/compile-io-frontend-app
+    ng build --prod
+    ng serve --prod --host 0.0.0.0
+    echo "The site should be up and running at compile-io.csse.rose-hulman.edu"
