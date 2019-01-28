@@ -8,7 +8,7 @@
 ## Description of Project
 As former students of Rose Hulman Institute of Technology, we found that the infrastructure for grading and giving feedback on user-submitted code was insufficient. We propose a senior project to develop a scalable web application to benefit both students and professors of the CSSE department.
 
-## Minimum Viable Product
+## Minimum Viable Product Features
 
 ●      Students can submit code in several languages (e.g. Java, Python, Scheme, C, C#, C++) to a server and receive feedback.
 
