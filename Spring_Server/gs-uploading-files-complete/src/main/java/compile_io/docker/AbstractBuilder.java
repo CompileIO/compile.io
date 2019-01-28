@@ -1,46 +1,28 @@
 package compile_io.docker;
 
 import java.io.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
  */
-public abstract class AbstractCompiler {
+public abstract class AbstractBuilder {
 
     private String fileName;
     private String fileDirectory;
+    private ICommandExecuter executer;
 
     /**
      * Constructor that builds a docker image with the given name
      * @param File file File uploaded by the student
      */
-    public AbstractCompiler(File file) {
+    public AbstractBuilder(File file) {
         this.fileName  = file.getName();
         this.fileDirectory = file.getParent(); 
         if (this.fileDirectory == null) {
             this.fileDirectory = "/";
         }
+        this.executer = new CommandExecuter();
         System.out.println("Given file: " + this.fileName + ". Target directory: " + this.fileDirectory);
-    }
-
-    /**
-     * Creates and runs the container with the image name given to the constructor and prints the output to the console.
-     * Removes the container created from the image after execution.
-     * @param long timeLimit A time limit for the process. Process terminates if runtime exceeds given timeLimit.
-     * @return void
-     * @throws Exception e
-     */
-
-    public void run(long timeLimit){
-        System.out.println("Attempting to run docker container...");
-        System.out.println();
-        String[] command = {"docker", "run", "--rm", "compile-io-image"};
-        executeCommandWithTimeout(command, timeLimit);
-        System.out.println();
-        System.out.println("Container has finished execution.");
-        this.teardownDockerImage();
-        this.teardownDockerfile();
     }
 
     /**
@@ -52,7 +34,7 @@ public abstract class AbstractCompiler {
     public void buildContainer() {
         System.out.println("Attempting to build docker container...");
         String[] command = {"docker", "build", "-t", "compile-io-image", this.fileDirectory};
-        executeCommand(command);
+        System.out.println(this.executer.executeCommand(command));
     }
 
     /**
@@ -65,7 +47,7 @@ public abstract class AbstractCompiler {
         System.out.println("Beginning teardown of Docker image...");
         System.out.println();
         String[] command = {"docker", "rmi", "--force", "compile-io-image"};
-        executeCommand(command);
+        this.executer.executeCommand(command);
         System.out.println();
         System.out.println("Successfully removed the Docker image.");
     }
@@ -85,61 +67,6 @@ public abstract class AbstractCompiler {
     }
 
     /**
-     * Executes the given command line argument. Output is displayed on the console.
-     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
-     * @param String[] command An array of strings representing a command line instruction
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void executeCommand(String[] command) {
-        try {
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
-            Process proc = pb.start();
-            proc.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Executes the given command line argument. Output is displayed on the console.
-     * Times out the process after surpassing the given time.
-     * For details on the format of the parameter, see Java Docs on the ProcessBuilder object.
-     * @param String[] command An array of strings representing a command line instruction
-     * @param long timeLimit 
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
-    public void executeCommandWithTimeout(String[] command, long timeLimit) {
-        try {
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.inheritIO();
-            Process proc = pb.start();
-            boolean procFinished = proc.waitFor(timeLimit, TimeUnit.SECONDS);
-            if (!procFinished) {
-                System.out.println("ERROR: Alotted execution time has elapsed. Process timed out.\n");
-                System.out.println("Terminating process gracefully and beginning teardown...");
-                this.teardownDockerImage();
-                this.teardownDockerfile();
-                System.exit(0);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    /**
      * Getter method for the field fileName
      * @return String the value of the field fileName
      */
@@ -153,6 +80,22 @@ public abstract class AbstractCompiler {
      */
     public String getFileDirectory() {
         return this.fileDirectory;
+    }
+
+    /**
+     * Getter method for the field executer
+     * @return CommandExecuter the object in the executer field
+     */
+    public ICommandExecuter getExecuter() {
+        return this.executer;
+    }
+
+    /**
+     * Setter method for the field executer
+     * @param CommandExecuter
+     */
+    public void setExecuter(ICommandExecuter executer) {
+        this.executer = executer;
     }
 
     /**

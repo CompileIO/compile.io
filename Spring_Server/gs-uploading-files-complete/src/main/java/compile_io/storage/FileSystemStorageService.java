@@ -18,7 +18,6 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import compile_io.docker.CompilerFactory;
 
 @Service
 public class FileSystemStorageService implements StorageService {

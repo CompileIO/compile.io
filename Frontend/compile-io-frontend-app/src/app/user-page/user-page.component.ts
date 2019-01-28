@@ -20,12 +20,10 @@ export class UserPageComponent implements OnInit {
   }
 
   getClasses() {
-    this.uploadService.getClasses().then(result => {
-      result.forEach(element => {
-        this.classes.push(element.toString());
-      });
-    }, error => {
-      console.log(error);
+    this.uploadService.getClasses().subscribe({
+      next: x => this.classes = x.map(element => element.toString()),
+      error: err => console.log("GET CLASSES ERROR: " + err),
+      complete: () => console.log("got classes")
     });
   }
 
@@ -35,14 +33,11 @@ export class UserPageComponent implements OnInit {
       this.homeworks = [];
     } else {
       this.selectedClass = givenClass;
-      this.homeworks = [];
-      this.uploadService.getHomeworks(this.selectedClass).then(result => {
-      result.forEach(element => {
-        this.homeworks.push(element.toString());
+      this.uploadService.getHomeworks(this.selectedClass).subscribe({
+        next: x => this.homeworks = x.map(element => element.toString()),
+        error: err => console.log("GET HOMEWORKS ERROR: " + err),
+        complete: () => console.log("got homeworks")
       });
-    }, error => {
-      console.log(error);
-    });
     }
   }
 

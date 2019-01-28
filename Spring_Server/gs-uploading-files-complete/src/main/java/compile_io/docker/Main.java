@@ -8,13 +8,21 @@ import java.io.*;
  */
 public class Main {
     public static void main(String[] args){
-        CompilerFactory compilerFactory = new CompilerFactory();
+        BuilderFactory builderFactory = new BuilderFactory();
         // File file = new File("/SCHOOL/DockerTest/RevEngDrunnable.jar");
-        // AbstractCompiler compiler = compilerFactory.getCompiler("java", file);
         File file = new File("/SCHOOL/DockerTest/PythonStuff/Main.py");
-        AbstractCompiler compiler = compilerFactory.getCompiler("python", file);
-        compiler.createDockerfile(compiler.getDockerfileData());
-        compiler.buildContainer();
-        compiler.run(60);
+
+        try {
+            AbstractBuilder builder = builderFactory.getBuilder("python", file);
+            // AbstractBuilder builder = compilerFactory.getCompiler("java", file);
+            IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
+            builder.createDockerfile(builder.getDockerfileData());
+            builder.buildContainer();
+            String result = runner.run(60);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
