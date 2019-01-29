@@ -12,6 +12,9 @@ export class AddHomeworkComponent implements OnInit {
 
   constructor() { }
 
+  submit(name: string, time: number, visible: boolean, file: File) {
+    console.log(name + ", " + time + ", " + visible + ", " + file);
+  }
   ngOnInit() {
   }
 

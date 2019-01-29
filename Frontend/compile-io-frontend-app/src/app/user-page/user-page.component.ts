@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UploadService } from '../services/upload.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { AssignmentService } from '../services/assignment.service';
+import { CourseService } from '../services/course.service';
 
 @Component({
   selector: 'app-user-page',
@@ -16,13 +17,14 @@ export class UserPageComponent implements OnInit {
   selectedHomework: string = null;
   change: boolean = false;
 
-  constructor(private uploadService: UploadService,
-    private authenticationService: AuthenticationService) {
-    this.getClasses();
+  constructor(private authenticationService: AuthenticationService,
+              private courseService:CourseService,
+              private assignmentService:AssignmentService) {
+    this.getCourses();
   }
 
-  getClasses() {
-    this.uploadService.getClasses().subscribe({
+  getCourses() {
+    this.courseService.getCourses().subscribe({
       next: x => this.classes = x.map(element => element.toString()),
       error: err => console.log("GET CLASSES ERROR: " + err),
       complete: () => console.log("got classes")
@@ -37,7 +39,7 @@ export class UserPageComponent implements OnInit {
     } else {
       this.selectedClass = givenClass;
       this.selectedHomework = null;
-      this.uploadService.getHomeworks(this.selectedClass).subscribe({
+      this.assignmentService.getAssignments(this.selectedClass).subscribe({
         next: x => this.homeworks = x.map(element => element.toString()),
         error: err => console.log("GET HOMEWORKS ERROR: " + err),
         complete: () => console.log("got homeworks")
