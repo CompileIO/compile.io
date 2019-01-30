@@ -39,26 +39,22 @@ public class JavaBuilder extends AbstractBuilder {
 
     // potential replacement for above method
     public String getDockerfileDataFiles() {
-        /**
-         * RUN curl -L https://services.gradle.org/distributions/gradle-2.4-bin.zip -o gradle-2.4-bin.zip
-            RUN apt-get install -y unzip
-            RUN unzip gradle-2.4-bin.zip
-         */
-        System.out.println("DOING GRADLE STUFF");
         StringBuilder dockerfileData = new StringBuilder();
         List<File> studentFiles = super.getStudentFiles();
         List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM openjdk\n");
+        dockerfileData.append("FROM maven:3.5.3-jdk-8-alpine\n");
         //dockerfileData.append("FROM keeganwitt/docker-gradle-root\n");
-        dockerfileData.append("FROM gradle:alpine\n");
         dockerfileData.append("WORKDIR /SCHOOL/DockerTest/mock-upload-dir\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("RUN mkdir -p home/src/main/java\n");
         dockerfileData.append("RUN mkdir -p home/src/main/java\n");
         dockerfileData.append("RUN mkdir -p home/src/test/java\n");
-        dockerfileData.append("COPY build.gradle build.gradle\n");
-        dockerfileData.append("RUN mv build.gradle home/\n");
+        dockerfileData.append("COPY pom.xml pom.xml\n");
+        dockerfileData.append("RUN mv pom.xml home/\n");
+        // dockerfileData.append("COPY build.gradle build.gradle\n");
+        // dockerfileData.append("RUN mv build.gradle home/\n");
         for (int i = 0; i < super.getNumStudentFiles(); i++) {
             dockerfileData.append("COPY " + studentFiles.get(i).getName() + " " + studentFiles.get(i).getName() +  "\n");
             dockerfileData.append("RUN mv " + studentFiles.get(i).getName() + " " + "home/src/main/java/\n");
@@ -67,8 +63,8 @@ public class JavaBuilder extends AbstractBuilder {
             dockerfileData.append("COPY " + professorFiles.get(i).getName() + " " + professorFiles.get(i).getName() +  "\n");
             dockerfileData.append("RUN mv " + professorFiles.get(i).getName() + " " + "home/src/test/java/\n");
         }
-       dockerfileData.append("CMD cd home && gradle clean test\n");
-       //dockerfileData.append("RUN apt-get add --no-cache libstdc++\n");
+        dockerfileData.append("CMD cd home && mvn test\n");
+       //dockerfileData.append("CMD cd home && gradle clean test\n");
 
         System.out.println(dockerfileData.toString());
 

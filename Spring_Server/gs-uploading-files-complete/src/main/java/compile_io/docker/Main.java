@@ -10,14 +10,14 @@ import java.util.*;
 public class Main {
     public static void main(String[] args){
         BuilderFactory builderFactory = new BuilderFactory();
-        File file1 = new File("/SCHOOL/DockerTest/mock-upload-dir/BinaryTree.java");
-        File file2 = new File("/SCHOOL/DockerTest/mock-upload-dir/Testing.java");
+        //File file1 = new File("/SCHOOL/DockerTest/mock-upload-dir/BinaryTree.java");
+        //File file2 = new File("/SCHOOL/DockerTest/mock-upload-dir/Testing.java");
         File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/Simple.java");
         File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/SimpleTest.java");
 
         List<File> studentFiles = new ArrayList<>();
-        studentFiles.add(file1);
-        studentFiles.add(file2);
+        // studentFiles.add(file1);
+        // studentFiles.add(file2);
         List<File> professorFiles = new ArrayList<>();
         professorFiles.add(file3);
         professorFiles.add(file4);
@@ -30,7 +30,7 @@ public class Main {
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileDataFiles());
             builder.buildContainer();
-            String result = runner.run(60);
+            String result = runner.run(60000);
             System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
