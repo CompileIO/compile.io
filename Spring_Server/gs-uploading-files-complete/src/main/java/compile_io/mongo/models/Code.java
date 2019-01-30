@@ -19,10 +19,63 @@ public class Code {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date submissionTime;
     private String grade;
+    
+    public Code() {}
+    
+	public Code(String language, int runTime, Date submissionTime) {
+		super();
+		this.language = language;
+		this.runTime = runTime;
+		this.submissionTime = submissionTime;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	public int getRunTime() {
+		return runTime;
+	}
+	public void setRunTime(int runTime) {
+		this.runTime = runTime;
+	}
+	public String getTestResponse() {
+		return testResponse;
+	}
+	public void setTestResponse(String testResponse) {
+		this.testResponse = testResponse;
+	}
+	public Date getSubmissionTime() {
+		return submissionTime;
+	}
+	public void setSubmissionTime(Date submissionTime) {
+		this.submissionTime = submissionTime;
+	}
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+	
+	
+	
+	
+	public String getCodePath() {
+		return codePath;
+	}
+
+	public void setCodePath(String codePath) {
+		this.codePath = codePath;
+	}
+
+	@Override
+	public String toString() {
+		return "Code [language=" + language + ", runTime=" + runTime + ", testResponse=" + testResponse
+				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
+	}
+    
+    
 }
 
-
-//const gradeSchema = new mongoose.Schema({
-//    student: { type: String, required: true },
-//    course: { type: String, required: true },
-//    grade: String

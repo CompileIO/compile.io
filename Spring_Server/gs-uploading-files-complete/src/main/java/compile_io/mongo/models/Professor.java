@@ -22,18 +22,45 @@ public class Professor {
         this.userName = userName;
     }
 
-    public void inputTest (String username, String type, int runtime  ) {
-        this.userName = username;
-        this.type = type;
-        this.runTime = runtime;
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public String toString() {
-        return String.format(
-                "User[id=%s, firstName='%s', lastName='%s']",
-                id, firstName, lastName);
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	
+
+	public List<String> getAssignmentIds() {
+		return assignmentIds;
+	}
+
+	public void setAssignmentIds(List<String> assignmentIds) {
+		this.assignmentIds = assignmentIds;
+	}
+
+	public List<String> getTestIds() {
+		return testIds;
+	}
+
+	public void setTestIds(List<String> testIds) {
+		this.testIds = testIds;
+	}
+
+	@Override
+	public String toString() {
+		return "Professor [name=" + name + ", userName=" + userName + "]";
+	}
+
 }
 
 

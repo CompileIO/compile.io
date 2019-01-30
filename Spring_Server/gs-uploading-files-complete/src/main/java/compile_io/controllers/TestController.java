@@ -13,13 +13,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import compile_io.docker.*;
+import compile_io.mongo.repositories.ProfessorRepository;
 import compile_io.mongo.repositories.TestRepository;
 
 @RestController
 public class TestController {
 	
 	@Autowired 
-	public TestRepository repository;
+	public TestRepository testRepository;
+	
+	@Autowired 
+	public ProfessorRepository professorRepository;
 	
 	private String fileName;
 	

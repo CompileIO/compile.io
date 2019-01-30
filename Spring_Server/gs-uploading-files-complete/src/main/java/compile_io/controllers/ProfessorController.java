@@ -29,16 +29,22 @@ public class ProfessorController{
 			builder.buildContainer();
 			
 			
-			Professor newProfessor = new Professor();
-			
-			newProfessor.inputTest(username, language, timeLimit);
-			repository.save(newProfessor);
-			
+//			Professor newProfessor = new Professor();
+//			
+//			newProfessor.inputTest(username, language, timeLimit);
+//			repository.save(newProfessor);
+//			
 			return runner.run(timeLimit);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@GetMapping("/asdfasdfasdf")
+	public String inputTest () {
+		return null;
+		
 	}
 	
 

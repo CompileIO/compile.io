@@ -31,9 +31,9 @@ public class StudentController{
 			
 			Student newStudent = new Student();
 			
-			newStudent.inputTest(username, language, timeLimit);
-			repository.save(newStudent);
-			
+//			newStudent.inputTest(username, language, timeLimit);
+//			repository.save(newStudent);
+//			
 			return runner.run(timeLimit);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -16,4 +16,36 @@ public class Assignment {
 	private List<String> testIds;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date dueDate;
+	
+	public Assignment(Date dueDate) {
+		super();
+		this.dueDate = dueDate;
+	}
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+	
+	
+	
+	public List<String> getTestIds() {
+		return testIds;
+	}
+
+	public void setTestIds(List<String> testIds) {
+		this.testIds = testIds;
+	}
+
+	@Override
+	public String toString() {
+		return "Assignment [dueDate=" + dueDate + "]";
+	}
+	
+	
+	
+	
 }

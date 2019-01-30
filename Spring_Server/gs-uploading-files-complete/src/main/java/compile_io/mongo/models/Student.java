@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Student {
 
 	@Id
-	public String id;
+	private String id;
 	
 	private List<String> codeIds;
 	private List<String> courseIds;
@@ -18,36 +18,50 @@ public class Student {
 
     public Student() {}
 
-    public Student(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+	public Student(String name, String userName) {
+		super();
+		this.name = name;
+		this.userName = userName;
+	}
 
-    public void inputTest (String username, String type, int runtime  ) {
-        this.userName = username;
-        this.type = type;
-        this.runTime = runtime;
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public String toString() {
-        return String.format(
-                "User[id=%s, firstName='%s', lastName='%s']",
-                id, firstName, lastName);
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	
+
+	public List<String> getCodeIds() {
+		return codeIds;
+	}
+
+	public void setCodeIds(List<String> codeIds) {
+		this.codeIds = codeIds;
+	}
+
+	public List<String> getCourseIds() {
+		return courseIds;
+	}
+
+	public void setCourseIds(List<String> courseIds) {
+		this.courseIds = courseIds;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [name=" + name + ", userName=" + userName + "]";
+	}
+   
 }
-
-//const studentSchema = new mongoose.Schema({
-//    username: { type: String, unique: true },
-//    name: { type: String },
-//    year: { type: String },
-//    majors: [ String ],
-//    minors: [ String ],
-//    graduationDate: String,
-//    termsEnrolled: [ String ] // TODO: term.name must exist (business rule?)
-//    //degreeId: Add degree id if we go down this route see ./degree for further discussion
-//}, { usePushEach: true });
-//
-//const Student = mongoose.model('Student', studentSchema);
-//module.exports = Student;
 
