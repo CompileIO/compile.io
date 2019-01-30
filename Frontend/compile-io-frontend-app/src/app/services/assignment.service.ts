@@ -16,10 +16,10 @@ export class AssignmentService {
     return this.http.get(this.apiUrl + "/" + givenClass, { headers: empHeaders, withCredentials: true });
   }
 
-  uploadAssignment(file: File): Observable<any> {
+  addAssignment(): Observable<any> {
     let body = new FormData();
-    body.append("file", file);
-    const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
-    return this.http.post(this.apiUrl, body);
+    // body.append("file", file);
+    const assignmentHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
+    return this.http.post(this.apiUrl, { headers: assignmentHeaders, withCredentials: true });
   }
 }

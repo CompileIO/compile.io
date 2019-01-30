@@ -17,58 +17,23 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import compile_io.docker.*;
+import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
-import compile_io.config.ServerProperties;
-
 @RestController
-public class FileUploadController implements Controller {
+public class CodeController{
+	
+	@Autowired 
+	public CodeRepository repository;
 
 	private final StorageService storageService;
 	private String fileName;
   private final int MAX_FILE_SIZE = 50000000;
 
 	@Autowired
-	public FileUploadController(StorageService storageService) {
+	public CodeController(StorageService storageService) {
 		this.storageService = storageService;
-	}
-
-	
-	
-	@GetMapping("/run")
-	// @RequestMapping(method = RequestMethod.GET)
-	public String[] runDocker() {
-		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
-		workingDir = workingDir.substring(2);
-		System.out.println("Working Directory = " + workingDir);
-
-    	// Docker stuff
-		File fileToUpload = new File(workingDir);
-		String result = runCompiler(fileToUpload, "python", 60);
-		String[] temp2 = {result};
-		return temp2;
-	}
-
-	@GetMapping("/{className}")
-	// @RequestMapping(method = RequestMethod.GET)
-	public String[] getHomeworks(@PathVariable String className) {
-		String[] temp = { "Hwk1", "Hwk2", "Hwk3", "Hwk4" };
-		return temp;
-	}
-
-
-	@GetMapping("/{className}/{homework}")
-	public String[] getResults(@PathVariable String className, @PathVariable String homework) {
-		String[] temp = {"done!"};
-		return temp;
-	}
-	
-	@GetMapping("/classes")
-	// @RequestMapping(method = RequestMethod.GET)
-	public String[] getClasses() {
-		String[] temp = { "CSSE120", "CSSE220", "CSSE230", "CSSE241" };
-		return temp;
 	}
 
 	/*@GetMapping("/")
@@ -110,25 +75,7 @@ public class FileUploadController implements Controller {
       return temp;
     }
 	}
-
 	
-	
-//	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
-//	@GetMapping("/test")
-	public String runCompiler(File fileToUpload, String language, int timeLimit) {
-		try {
-			BuilderFactory builderFactory = new BuilderFactory();
-			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
-			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
-			builder.createDockerfile(builder.getDockerfileData());
-			builder.buildContainer();
-			return runner.run(timeLimit);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	@ExceptionHandler(StorageFileNotFoundException.class)
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return ResponseEntity.notFound().build();

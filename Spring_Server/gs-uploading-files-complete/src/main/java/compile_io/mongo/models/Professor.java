@@ -1,7 +1,9 @@
-package compile_io.mongo;
+package compile_io.mongo.models;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class User {
+@Document
+public class Professor {
 
 	@Id
 	public String id;
@@ -12,9 +14,9 @@ public class User {
     public String type;
     public int runTime;
 
-    public User() {}
+    public Professor() {}
 
-    public User(String firstName, String lastName) {
+    public Professor(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -32,4 +34,9 @@ public class User {
                 id, firstName, lastName);
     }
 }
+
+//const facultySchema = new mongoose.Schema({
+//    username: { type: String, required: true },
+//    name: { type: String, required: true },
+//    department: { type: String },
 
