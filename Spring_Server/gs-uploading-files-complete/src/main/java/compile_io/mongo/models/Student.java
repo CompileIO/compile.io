@@ -1,18 +1,20 @@
 package compile_io.mongo.models;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document 
 public class Student {
 
 	@Id
 	public String id;
 	
-    public String firstName;
-    public String lastName;
-    public String userName;
-    public String type;
-    public int runTime;
+	private List<String> codeIds;
+	private List<String> courseIds;
+	private String name;
+	private String userName;
 
     public Student() {}
 

@@ -1,12 +1,20 @@
 package compile_io.mongo.models;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Course {
 	@Id
-	public String id;
+	private String id;
+	private String name; 
+	private String crn;
+	private List<Section> section;
+	
+	
+	
 }
 
 //const courseSchema = new mongoose.Schema({

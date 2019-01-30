@@ -1,4 +1,6 @@
 package compile_io.mongo.models;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -6,19 +8,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Professor {
 
 	@Id
-	public String id;
+	private String id;
 	
-    public String firstName;
-    public String lastName;
-    public String userName;
-    public String type;
-    public int runTime;
+	private String name;
+	private String userName;
+    private List<String> assignmentIds;
+    private List<String> testIds;
 
     public Professor() {}
 
-    public Professor(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Professor(String name, String userName) {
+        this.name = name;
+        this.userName = userName;
     }
 
     public void inputTest (String username, String type, int runtime  ) {
@@ -35,8 +36,4 @@ public class Professor {
     }
 }
 
-//const facultySchema = new mongoose.Schema({
-//    username: { type: String, required: true },
-//    name: { type: String, required: true },
-//    department: { type: String },
 
