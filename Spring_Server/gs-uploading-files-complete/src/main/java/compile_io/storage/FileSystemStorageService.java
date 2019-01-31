@@ -1,6 +1,8 @@
 package compile_io.storage;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -11,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -101,6 +104,35 @@ public class FileSystemStorageService implements StorageService {
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
+        }
+    }
+	
+	@Override
+    public void store(File file) {
+        String filename = StringUtils.cleanPath(file.getName());
+        
+        try {
+        	
+        	BufferedReader br = new BufferedReader(new FileReader(filename));     
+            if (br.readLine() == null) {
+            	throw new StorageException("Failed to store empty file " + filename);
+            }
+//            if (file.) {
+//                throw new StorageException("Failed to store empty file " + filename);
+//            }
+            if (filename.contains("..")) {
+                // This is a security check
+                throw new StorageException(
+                        "Cannot store file with relative path outside current directory "
+                                + filename);
+            }
+            try (InputStream inputStream = ((InputStreamSource) file).getInputStream()) {
+                Files.copy(inputStream, this.rootLocation.resolve(filename),
+                    StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        catch (IOException e) {
+            throw new StorageException("Failed to store file " + filename, e);
         }
     }
 }

@@ -7,8 +7,8 @@ import compile_io.mongo.models.Student;
 
 public interface StudentRepository extends MongoRepository<Student, String>{
 
-	 public Student findByFirstName(String firstName);
-	 public List<Student> findByLastName(String lastName);
+//	 public Student findByFirstName(String firstName);
+//	 public List<Student> findByLastName(String lastName);
 	
 	
 	

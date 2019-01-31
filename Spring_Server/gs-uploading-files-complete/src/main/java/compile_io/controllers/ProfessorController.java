@@ -29,7 +29,7 @@ public class ProfessorController{
 			builder.buildContainer();
 			
 			
-//			Professor newProfessor = new Professor();
+			Professor newProfessor = new Professor();
 //			
 //			newProfessor.inputTest(username, language, timeLimit);
 //			repository.save(newProfessor);
@@ -39,12 +39,6 @@ public class ProfessorController{
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	@GetMapping("/asdfasdfasdf")
-	public String inputTest () {
-		return null;
-		
 	}
 	
 

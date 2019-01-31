@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,29 +40,38 @@ public class CodeController{
 		this.storageService = storageService;
 	}
 	
-	@GetMapping("/{courseName}/{assignment}/test")
-	public String[] inputCodeforUser(@RequestParam("username") String userName,
-									  @RequestParam("file") MultipartFile file, 
-									  @RequestParam("type") String type,
-									  @RequestParam("runTime") String runTime,
-									  @RequestParam("givenCourse") String givenCourse,
-									  @RequestParam("givenAssignment") String givenAssignment,
+	public class Dto {
+		public MultipartFile file;
+	}
+	
+	
+	@PostMapping("/{courseName}/{homeworkName}/uploadTest")
+	@ResponseBody
+	public String[] inputCodeforUser(
+									  @RequestParam("username") String userName,
+									  @RequestParam("file") File file,
+									  @RequestParam(value = "type") String type,
+									  @RequestParam(value = "runTime") String runTime,
+									  @RequestParam(value = "class") String givenCourse,
 									  RedirectAttributes redirectAttributes) {
 		
-		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + file;
-		workingDir = workingDir.substring(2);
-		System.out.println("Working Directory = " + workingDir);
-		int runTimeNum = Integer.parseInt(runTime);
+//		storageService.store(file);                
+//		fileName = file.getName();
+//		
+//		
+//		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
+//		workingDir = workingDir.substring(2);
+//		System.out.println("Working Directory = " + workingDir);
 		
+		
+		int runTimeNum = Integer.parseInt(runTime);
 		Date submissionTime = new Date(0);
-		Code newCode = new Code(type, runTimeNum, workingDir, submissionTime);
+		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
 		codeRepository.save(newCode);
 		
-		
-		
     	// Docker stuff
-		File fileToUpload = new File(workingDir);
-		String result = runCompiler(fileToUpload, type, runTimeNum);
+//		File fileToUpload = new File(workingDir);
+		String result = runCompiler(file, type, runTimeNum);
 		String[] temp2 = {result};
 		return temp2;
 	}

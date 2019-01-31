@@ -19,27 +19,27 @@ public class StudentController{
 	@Autowired 
 	public StudentRepository repository;
 	
-	@GetMapping("/test")
-	public String runCompiler(String username, File fileToUpload, String language, int timeLimit) {
-		try {
-			BuilderFactory builderFactory = new BuilderFactory();
-			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
-			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
-			builder.createDockerfile(builder.getDockerfileData());
-			builder.buildContainer();
-			
-			
-			Student newStudent = new Student();
-			
-//			newStudent.inputTest(username, language, timeLimit);
-//			repository.save(newStudent);
+//	@GetMapping("/test")
+//	public String runCompiler(String username, File fileToUpload, String language, int timeLimit) {
+//		try {
+//			BuilderFactory builderFactory = new BuilderFactory();
+//			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
+//			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
+//			builder.createDockerfile(builder.getDockerfileData());
+//			builder.buildContainer();
 //			
-			return runner.run(timeLimit);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+//			
+//			Student newStudent = new Student();
+//			
+////			newStudent.inputTest(username, language, timeLimit);
+////			repository.save(newStudent);
+////			
+//			return runner.run(timeLimit);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 	
 
 //		repository.deleteAll();
