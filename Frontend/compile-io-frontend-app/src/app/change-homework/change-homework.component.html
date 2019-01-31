@@ -16,7 +16,7 @@
             <div class="col">
               <div class="form-group p-3">
                 <label class="float-left" for="nameText">Name</label>
-                <input type="text" class="form-control" #nameText id="nameText" value = {{homework}} aria-describedby="nameHelp" placeholder="Hmk1">
+                <input type="text" class="form-control" #nameText id="nameText" value = {{homework}} aria-describedby="nameHelp" placeholder="Hmk1" required>
                 <small id="nameHelp" class="form-text text-muted float-left">Try not to make the name so large as to overflow the sidebar.</small>
               </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="col">
               <div class="form-group p-3">
                 <label class="float-left" for="timeoutText">Timeout (s)</label>
-                <input type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" placeholder="5">
+                <input type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" value = {{timeout}} placeholder="5" required>
                 <small id="timeoutHelp" class="form-text text-muted float-left">How much time to spend running a test before timing out.</small>
               </div>
             </div>
@@ -39,7 +39,7 @@
                       <label class="form-check-label float-left" for="visibleCheck">Visible</label>
                     </div>
                     <div class="col-1">
-                      <input type="checkbox" class="form-check-input float-left" #visibleCheck id="visibleCheck" aria-describedby="visibleHelp">
+                      <input type="checkbox" class="form-check-input float-left" #visibleCheck id="visibleCheck" checked = {{visible}} aria-describedby="visibleHelp" required>
                     </div>
                   </div>
                   <div class="row">
@@ -55,9 +55,9 @@
             <div class="col">
               <div class="form-check p-3">
                 <label for="language">Language</label>
-                <select multiple class="form-control" #languageSelect id="language">
-                  <option>Java</option>
-                  <option>Python</option>
+                <select multiple class="form-control" #languageSelect id="language" required>
+                  <option selected = "{{langauge}} == 'java'">Java</option>
+                  <option selected = "{{langauge}} == 'python'">Python</option>
                 </select>
               </div>
             </div>
