@@ -185,7 +185,6 @@ public abstract class AbstractBuilder {
 
     /**
      * Creates a string that contains the contents needed for a Dockerfile
-     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
      * @return String The text corresponding to the contents of the Dockerfile
      */
     public abstract String getDockerfileData();

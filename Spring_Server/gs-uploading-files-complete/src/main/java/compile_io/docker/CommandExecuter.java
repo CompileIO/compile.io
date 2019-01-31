@@ -28,11 +28,11 @@ public class CommandExecuter implements ICommandExecuter {
             Process proc = pb.start();
         
             proc.waitFor();
-            List<String> result = new ArrayList<>();
+            StringBuilder result = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
             String line = reader.readLine();
             while (line != null) {
-                result.add(line);
+                result.append(line + '\n');
                 line = reader.readLine();
             }
             return result.toString();
@@ -68,11 +68,11 @@ public class CommandExecuter implements ICommandExecuter {
                 System.out.println("Terminating process gracefully and beginning teardown...");
                 return null;
             }
-            List<String> result = new ArrayList<>();
+            StringBuilder result = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
             String line = reader.readLine();
             while (line != null) {
-                result.add(line);
+                result.append(line + '\n');
                 line = reader.readLine();
             }
             return result.toString();

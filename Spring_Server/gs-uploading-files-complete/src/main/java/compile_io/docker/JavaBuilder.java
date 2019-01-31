@@ -21,8 +21,7 @@ public class JavaBuilder extends AbstractBuilder {
     }
 
     /**
-     * Creates a string that contains the contents needed for a Dockerfile
-     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
+     * Creates a string that contains the contents needed for a Dockerfile that runs a single jar file.
      * @return String The text corresponding to the contents of the Dockerfile
      */
     public String getDockerfileData() {  
@@ -37,21 +36,21 @@ public class JavaBuilder extends AbstractBuilder {
         return dockerfileData.toString();
     }
 
-    // potential replacement for above method
+    
+    /**
+     * Creates a string that contains the contents needed for a Dockerfile that can run multiple java files against JUnit tests using gradle
+     * @return String The text corresponding to the contents of the Dockerfile
+     */
     public String getDockerfileDataFiles() {
         StringBuilder dockerfileData = new StringBuilder();
         List<File> studentFiles = super.getStudentFiles();
         List<File> professorFiles = super.getProfessorFiles();
 
-        //dockerfileData.append("FROM openjdk\n");
-        //dockerfileData.append("FROM maven:3.5.3-jdk-8-alpine\n");
-        //dockerfileData.append("FROM keeganwitt/docker-gradle-root\n");
         dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
         dockerfileData.append("WORKDIR /SCHOOL/DockerTest/mock-upload-dir\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("RUN mkdir -p src/main/java\n");
         dockerfileData.append("RUN mkdir -p src/test/java\n");
-        //dockerfileData.append("COPY pom.xml pom.xml\n");
         dockerfileData.append("COPY build.gradle build.gradle\n");
         for (int i = 0; i < super.getNumStudentFiles(); i++) {
             dockerfileData.append("COPY " + studentFiles.get(i).getName() + " " + studentFiles.get(i).getName() +  "\n");
