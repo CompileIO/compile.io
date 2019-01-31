@@ -54,6 +54,7 @@ public class CodeController{
 									  @RequestParam(value = "type") String type,
 									  @RequestParam(value = "runTime") String runTime,
 									  @RequestParam(value = "class") String givenCourse,
+                    @RequestParam(value = "size") String size,
 									  RedirectAttributes redirectAttributes) {
 		
 //		storageService.store(file);                
@@ -66,6 +67,7 @@ public class CodeController{
 		
 		
 		int runTimeNum = Integer.parseInt(runTime);
+		int sizeNum = Integer.parseInt(size);
 //		Date submissionTime = new Date(0);
 		
 		

@@ -13,12 +13,12 @@ export class AddHomeworkComponent implements OnInit {
 
   constructor(private testService: TestService) {}
 
-  submit(name: string, time: number, visible: boolean, file: File, language: string) {
+  submit(name: string, time: number, visible: boolean, file: File, language: string, size: number) {
     
     // console.log(name + ", " + time + ", " + visible + ", " + file);
     // console.log(this.username + "  " + this.class);
     // console.log(dropDown)
-    this.testService.uploadTest(file, language.toLowerCase(), time, name, this.class, this.username).subscribe({
+    this.testService.uploadTest(file, language.toLowerCase(), time, name, this.class, this.username, size).subscribe({
       next: x => {
         console.log(x)
       },

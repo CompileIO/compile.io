@@ -8,6 +8,7 @@ import { CourseService } from '../services/course.service';
 })
 export class ChangeHomeworkComponent implements OnInit {
 
+  @Input() username: string;
   @Input() givenClass: string;
   @Input() homework: string;
   name: string;
@@ -16,7 +17,7 @@ export class ChangeHomeworkComponent implements OnInit {
   language: string;
   file: File;
   homeworkInfo: FormData;
-  constructor(private courseService: CourseService) {}
+  constructor(private courseService: CourseService, private testService: TestService) {}
 
   getHomework() {
     this.courseService.getHomeworkInfo(this.givenClass, this.homework).subscribe({
@@ -31,6 +32,17 @@ export class ChangeHomeworkComponent implements OnInit {
     //this.file = this.homeworkInfo.get("file");
   }
 
+  submit(name: string, time: number, visible: boolean, file: File, language: string, size: number) {
+    this.testService.uploadTest(file, language.toLowerCase(), time, name, this.givenClass, this.username, size).subscribe({
+      next: x => {
+        console.log(x)
+      },
+      error: err => {
+        console.log("UPLOADING FILE ERROR: " + err)
+      },
+      complete: () => console.log("Uploaded file")
+    });
+  }
 
   ngOnInit() {
     this.getHomework();

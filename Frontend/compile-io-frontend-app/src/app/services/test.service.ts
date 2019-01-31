@@ -11,7 +11,7 @@ export class TestService {
   private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) { }
 
-  uploadTest(file: File, type: string, runTime: number, givenHomework: string, givenCourse: string, userName: string): Observable<any> {
+  uploadTest(file: File, type: string, runTime: number, givenHomework: string, givenCourse: string, userName: string, size: number): Observable<any> {
     let body: FormData = new FormData();              // MIGHT NEED TO CHANGE THE givenClass and givenHomework variables
     // body.append("username", userName)
     console.log("THIS SHOULD BE FORM DATA: " + type + ", " + runTime + "," + file);    
@@ -20,6 +20,7 @@ export class TestService {
     body.append('type', type);
     body.append('runTime', runTime.toString());
     body.append('class', givenCourse);
+    body.append('size', size.toString());
     console.log(body);
     // const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' }); 
     // , {headers: fileHeaders, withCredentials: true}

@@ -8,7 +8,7 @@
       </div>
     </div>
   </div>
-  <div class="row justify-content-center">
+  <div class="row justify-content-center overflow">
     <div class="col">
       <form class="w-50 p-3 border">
         <div class="container">
@@ -27,6 +27,15 @@
                 <label class="float-left" for="timeoutText">Timeout (s)</label>
                 <input type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" placeholder="5" required>
                 <small id="timeoutHelp" class="form-text text-muted float-left">How much time to spend running a test before timing out.</small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="maxText">Max Size (Mbs)</label>
+                <input type="number" class="form-control" #maxText id="maxText" aria-describedby="maxHelp" placeholder="5" required>
+                <small id="maxHelp" class="form-text text-muted float-left">How large student uploads can be in MegaBites.</small>
               </div>
             </div>
           </div>
@@ -51,8 +60,8 @@
               </div>
             </div>
           </div>
-          <div class = "row">
-            <div class = "col">
+          <div class="row">
+            <div class="col">
               <div class="form-check p-3">
                 <label for="language">Language</label>
                 <select multiple class="form-control" #languageSelect id="language" required>
@@ -73,7 +82,7 @@
           </div>
           <div class="row">
             <div class="col p-3">
-              <button type="submit" class="btn btn-primary" (click)="submit(nameText.value, timeoutText.value, visibleCheck.checked, fileUpload.value, languageSelect.value)">Submit</button>
+              <button type="submit" class="btn btn-primary" (click)="submit(nameText.value, timeoutText.value, visibleCheck.checked, fileUpload.value, languageSelect.value, maxText.value)">Submit</button>
             </div>
           </div>
         </div>
