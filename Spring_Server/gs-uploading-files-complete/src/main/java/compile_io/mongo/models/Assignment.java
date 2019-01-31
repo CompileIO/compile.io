@@ -14,6 +14,8 @@ public class Assignment {
 	@Id
 	private String id;
 	
+	private String name;
+	
 	@DBRef
 	private Test test;
 	@DBRef

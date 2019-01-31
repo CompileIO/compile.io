@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CourseService } from '../services/course.service';
 
 @Component({
   selector: 'app-change-homework',
@@ -15,7 +16,7 @@ export class ChangeHomeworkComponent implements OnInit {
   language: string;
   file: File;
   homeworkInfo: FormData;
-  constructor() { }
+  constructor(private courseService: CourseService) {}
 
   getHomework() {
     this.courseService.getHomeworkInfo(this.givenClass, this.homework).subscribe({
