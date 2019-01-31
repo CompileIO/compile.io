@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { TestService } from '../services/test.service';
 
 @Component({
   selector: 'app-add-homework',
@@ -6,14 +7,24 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./add-homework.component.css']
 })
 export class AddHomeworkComponent implements OnInit {
-
+  @Input() username: string;
   @Input() class: string;
-  name: string;
 
-  constructor() { }
+  constructor(private testService: TestService) {}
 
   submit(name: string, time: number, visible: boolean, file: File) {
-    console.log(name + ", " + time + ", " + visible + ", " + file);
+    // console.log(name + ", " + time + ", " + visible + ", " + file);
+    // console.log(this.username + "  " + this.class);
+    // console.log(dropDown)
+    this.testService.uploadTest(file, "java", time, name, this.class, this.username).subscribe({
+      next: x => {
+        console.log(x)
+      },
+      error: err => {
+        console.log("UPLOADING FILE ERROR: " + err)
+      },
+      complete: () => console.log("Uploaded file")
+    });
   }
   ngOnInit() {
   }

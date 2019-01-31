@@ -42,7 +42,7 @@ export class HomeworkPageComponent implements OnInit {
   upload() {
     this.uploading = true;
     if (this.file !== null) {
-      this.assignmentService.uploadAssignment(this.file).subscribe({
+      this.assignmentService.addAssignment().subscribe({
         next: x => {
           console.log(x),
           this.uploading = false,

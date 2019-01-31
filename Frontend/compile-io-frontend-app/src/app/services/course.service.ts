@@ -14,6 +14,6 @@ export class CourseService {
   
   getCourses(): Observable<any> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get(this.apiUrl + "/classes", { headers: empHeaders, withCredentials: true });
+    return this.http.get(this.apiUrl + "/courses", { headers: empHeaders, withCredentials: true });
   }
 }

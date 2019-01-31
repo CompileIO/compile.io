@@ -86,7 +86,8 @@
 
 
     <div *ngIf="selectedHomework == 'new'" class="col  redBorder">
-      <app-add-homework [class] ="selectedClass"></app-add-homework>
+      <app-add-homework [class] ="selectedClass"
+                        [username] = "username"></app-add-homework>
     </div>
 
 

@@ -11,14 +11,19 @@ export class TestService {
   private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) { }
 
-  uploadTest(userName: string, file: File, type: string, runTime: string, givenCourse: string, givenAssignment: string): Observable<any> {
-    let body = new FormData();              // MIGHT NEED TO CHANGE THE givenClass and givenHomework variables
-    body.append("username", userName)
-    body.append("file", file);
-    body.append("type", type);
-    body.append("runTime", runTime);
-    const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
-    return this.http.post(this.apiUrl + "/" + givenCourse + "/" + givenAssignment +"/test", body);
+  uploadTest(file: File, type: string, runTime: number, givenHomework: string, givenCourse: string, userName: string): Observable<any> {
+    let body: FormData = new FormData();              // MIGHT NEED TO CHANGE THE givenClass and givenHomework variables
+    // body.append("username", userName)
+    console.log("THIS SHOULD BE FORM DATA: " + type + ", " + runTime + "," + file);    
+    body.append('username', userName);
+    body.append('file', file);
+    body.append('type', type);
+    body.append('runTime', runTime.toString());
+    body.append('class', givenCourse);
+    console.log(body);
+    // const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' }); 
+    // , {headers: fileHeaders, withCredentials: true}
+    return this.http.post(this.apiUrl + "/" + givenCourse + "/" + givenHomework + "/uploadTest", body);
   }
   
   runDocker(): Observable<any> {
