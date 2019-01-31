@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UploadService } from './upload.service';
+import { UntitTestService } from '../services/untit-test.service';
 
-describe('UploadService', () => {
+describe('UntitTestService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: UploadService = TestBed.get(UploadService);
+    const service: UntitTestService = TestBed.get(UntitTestService);
     expect(service).toBeTruthy();
   });
 });

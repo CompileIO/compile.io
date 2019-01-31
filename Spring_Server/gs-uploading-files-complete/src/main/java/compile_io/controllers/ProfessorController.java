@@ -3,7 +3,6 @@ package compile_io.controllers;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,16 +11,14 @@ import compile_io.docker.BuilderFactory;
 import compile_io.docker.CommandExecuter;
 import compile_io.docker.DockerRunner;
 import compile_io.docker.IDockerRunner;
-import compile_io.mongo.User;
-import compile_io.mongo.UserRepository;
+import compile_io.mongo.models.Professor;
+import compile_io.mongo.repositories.ProfessorRepository;
 
 @RestController
-public class UserController implements Controller {
+public class ProfessorController{
+	@Autowired 
+	public ProfessorRepository repository;
 	
-	@Autowired
-	private UserRepository repository;
-	
-	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
 	@GetMapping("/test")
 	public String runCompiler(String username, File fileToUpload, String language, int timeLimit) {
 		try {
@@ -32,16 +29,22 @@ public class UserController implements Controller {
 			builder.buildContainer();
 			
 			
-			User newUser = new User();
-			
-			newUser.inputTest(username, language, timeLimit);
-			repository.save(newUser);
-			
+//			Professor newProfessor = new Professor();
+//			
+//			newProfessor.inputTest(username, language, timeLimit);
+//			repository.save(newProfessor);
+//			
 			return runner.run(timeLimit);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@GetMapping("/asdfasdfasdf")
+	public String inputTest () {
+		return null;
+		
 	}
 	
 

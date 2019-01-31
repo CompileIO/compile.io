@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UploadService } from '../services/upload.service';
+import { AssignmentService } from '../services/assignment.service';
+import { TestService } from '../services/test.service';
 
 @Component({
   selector: 'app-homework-page',
@@ -17,7 +18,7 @@ export class HomeworkPageComponent implements OnInit {
   error: string;
   results: string[] = [];
 
-  constructor(private uploadService: UploadService) {
+  constructor(private assignmentService: AssignmentService, private testService: TestService) {
     this.MAX_FILE_SIZE = 50000000;
     this.fileReady = false;
     this.uploading = false;
@@ -41,7 +42,7 @@ export class HomeworkPageComponent implements OnInit {
   upload() {
     this.uploading = true;
     if (this.file !== null) {
-      this.uploadService.upload(this.file).subscribe({
+      this.assignmentService.uploadAssignment(this.file).subscribe({
         next: x => {
           console.log(x),
           this.uploading = false,
@@ -58,7 +59,7 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   run() {
-    this.uploadService.runDocker().subscribe({
+    this.testService.runDocker().subscribe({
       next: x => console.log(x),
       error: err => {
         console.log("RUNNING DOCKER ERROR: " + err),
@@ -72,7 +73,7 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   getResults() {
-    this.uploadService.getResults(this.givenClass, this.homework).subscribe({
+    this.testService.getResults(this.givenClass, this.homework).subscribe({
       next: x => {
         console.log(x),
         this.results = x.map(element => element.toString());

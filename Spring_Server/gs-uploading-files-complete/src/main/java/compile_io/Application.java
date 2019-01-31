@@ -9,9 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import compile_io.mongo.User;
-import compile_io.mongo.UserRepository;
-
 import compile_io.storage.StorageProperties;
 import compile_io.storage.StorageService;
 

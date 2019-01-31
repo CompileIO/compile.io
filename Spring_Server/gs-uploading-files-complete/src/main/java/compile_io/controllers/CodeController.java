@@ -1,7 +1,9 @@
 package compile_io.controllers;
 
 import java.io.File;
+import java.sql.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,58 +19,65 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import compile_io.docker.*;
+import compile_io.mongo.models.Code;
+import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
-import compile_io.config.ServerProperties;
-
 @RestController
-public class FileUploadController implements Controller {
+public class CodeController{
+	
+	@Autowired 
+	public CodeRepository codeRepository;
 
 	private final StorageService storageService;
 	private String fileName;
   private final int MAX_FILE_SIZE = 50000000;
 
 	@Autowired
-	public FileUploadController(StorageService storageService) {
+	public CodeController(StorageService storageService) {
 		this.storageService = storageService;
 	}
-
 	
-	
-	@GetMapping("/run")
-	// @RequestMapping(method = RequestMethod.GET)
-	public String[] runDocker() {
-		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
+	@GetMapping("/{courseName}/{assignment}/test")
+	public String[] inputCodeforUser(@RequestParam("username") String userName,
+									  @RequestParam("file") MultipartFile file, 
+									  @RequestParam("type") String type,
+									  @RequestParam("runTime") String runTime,
+									  @RequestParam("givenCourse") String givenCourse,
+									  @RequestParam("givenAssignment") String givenAssignment,
+									  RedirectAttributes redirectAttributes) {
+		
+		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + file;
 		workingDir = workingDir.substring(2);
 		System.out.println("Working Directory = " + workingDir);
-
+		int runTimeNum = Integer.parseInt(runTime);
+		
+		Date submissionTime = new Date(0);
+		Code newCode = new Code(type, runTimeNum, workingDir, submissionTime);
+		codeRepository.save(newCode);
+		
+		
+		
     	// Docker stuff
 		File fileToUpload = new File(workingDir);
-		String result = runCompiler(fileToUpload, "python", 60);
+		String result = runCompiler(fileToUpload, type, runTimeNum);
 		String[] temp2 = {result};
 		return temp2;
 	}
-
-	@GetMapping("/{className}")
-	// @RequestMapping(method = RequestMethod.GET)
-	public String[] getHomeworks(@PathVariable String className) {
-		String[] temp = { "Hwk1", "Hwk2", "Hwk3", "Hwk4" };
-		return temp;
-	}
-
-
-	@GetMapping("/{className}/{homework}")
-	public String[] getResults(@PathVariable String className, @PathVariable String homework) {
-		String[] temp = {"done!"};
-		return temp;
-	}
 	
-	@GetMapping("/classes")
-	// @RequestMapping(method = RequestMethod.GET)
-	public String[] getClasses() {
-		String[] temp = { "CSSE120", "CSSE220", "CSSE230", "CSSE241" };
-		return temp;
+	public String runCompiler(File fileToUpload, String language, int timeLimit) {
+		try {
+			BuilderFactory builderFactory = new BuilderFactory();
+			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
+			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
+			builder.createDockerfile(builder.getDockerfileData());
+			builder.buildContainer();
+			return runner.run(timeLimit);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/*@GetMapping("/")
@@ -110,25 +119,7 @@ public class FileUploadController implements Controller {
       return temp;
     }
 	}
-
 	
-	
-//	@CrossOrigin(origins = frontendVm, allowCredentials = "true")
-//	@GetMapping("/test")
-	public String runCompiler(File fileToUpload, String language, int timeLimit) {
-		try {
-			BuilderFactory builderFactory = new BuilderFactory();
-			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
-			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
-			builder.createDockerfile(builder.getDockerfileData());
-			builder.buildContainer();
-			return runner.run(timeLimit);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	@ExceptionHandler(StorageFileNotFoundException.class)
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return ResponseEntity.notFound().build();
