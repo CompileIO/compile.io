@@ -1,6 +1,7 @@
 package compile_io.mongo.models;
 
 import java.sql.Date;
+import java.time.LocalTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,12 +18,12 @@ public class Code {
     private String codePath;
     
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date submissionTime;
+    private LocalTime submissionTime;
     private String grade;
     
     public Code() {}
     
-    public Code(String language, int runTime, String codePath, Date submissionTime) {
+    public Code(String language, int runTime, String codePath, LocalTime submissionTime) {
 		this.language = language;
 		this.runTime = runTime;
 		this.codePath = codePath;
@@ -53,10 +54,10 @@ public class Code {
 	public void setTestResponse(String testResponse) {
 		this.testResponse = testResponse;
 	}
-	public Date getSubmissionTime() {
+	public LocalTime getSubmissionTime() {
 		return submissionTime;
 	}
-	public void setSubmissionTime(Date submissionTime) {
+	public void setSubmissionTime(LocalTime submissionTime) {
 		this.submissionTime = submissionTime;
 	}
 	public String getGrade() {

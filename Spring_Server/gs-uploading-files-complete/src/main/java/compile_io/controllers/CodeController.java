@@ -24,6 +24,7 @@ import compile_io.mongo.models.Code;
 import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
+import java.time.*;
 
 @RestController
 public class CodeController{
@@ -65,7 +66,10 @@ public class CodeController{
 		
 		
 		int runTimeNum = Integer.parseInt(runTime);
-		Date submissionTime = new Date(0);
+//		Date submissionTime = new Date(0);
+		
+		
+		LocalTime submissionTime = LocalTime.now();
 		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
 		codeRepository.save(newCode);
 		
