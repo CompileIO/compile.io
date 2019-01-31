@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TestService } from '../services/test.service';
 
+
 @Component({
   selector: 'app-add-homework',
   templateUrl: './add-homework.component.html',
@@ -12,11 +13,12 @@ export class AddHomeworkComponent implements OnInit {
 
   constructor(private testService: TestService) {}
 
-  submit(name: string, time: number, visible: boolean, file: File) {
+  submit(name: string, time: number, visible: boolean, file: File, language: string) {
+    
     // console.log(name + ", " + time + ", " + visible + ", " + file);
     // console.log(this.username + "  " + this.class);
     // console.log(dropDown)
-    this.testService.uploadTest(file, "java", time, name, this.class, this.username).subscribe({
+    this.testService.uploadTest(file, language.toLowerCase(), time, name, this.class, this.username).subscribe({
       next: x => {
         console.log(x)
       },
