@@ -1,7 +1,9 @@
 package compile_io.controllers;
 
 import java.io.File;
+import java.sql.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import compile_io.docker.*;
+import compile_io.mongo.models.Code;
 import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
@@ -25,7 +28,7 @@ import compile_io.storage.StorageService;
 public class CodeController{
 	
 	@Autowired 
-	public CodeRepository repository;
+	public CodeRepository codeRepository;
 
 	private final StorageService storageService;
 	private String fileName;
@@ -34,6 +37,47 @@ public class CodeController{
 	@Autowired
 	public CodeController(StorageService storageService) {
 		this.storageService = storageService;
+	}
+	
+	@GetMapping("/{courseName}/{assignment}/test")
+	public String[] inputCodeforUser(@RequestParam("username") String userName,
+									  @RequestParam("file") MultipartFile file, 
+									  @RequestParam("type") String type,
+									  @RequestParam("runTime") String runTime,
+									  @RequestParam("givenCourse") String givenCourse,
+									  @RequestParam("givenAssignment") String givenAssignment,
+									  RedirectAttributes redirectAttributes) {
+		
+		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + file;
+		workingDir = workingDir.substring(2);
+		System.out.println("Working Directory = " + workingDir);
+		int runTimeNum = Integer.parseInt(runTime);
+		
+		Date submissionTime = new Date(0);
+		Code newCode = new Code(type, runTimeNum, workingDir, submissionTime);
+		codeRepository.save(newCode);
+		
+		
+		
+    	// Docker stuff
+		File fileToUpload = new File(workingDir);
+		String result = runCompiler(fileToUpload, type, runTimeNum);
+		String[] temp2 = {result};
+		return temp2;
+	}
+	
+	public String runCompiler(File fileToUpload, String language, int timeLimit) {
+		try {
+			BuilderFactory builderFactory = new BuilderFactory();
+			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
+			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
+			builder.createDockerfile(builder.getDockerfileData());
+			builder.buildContainer();
+			return runner.run(timeLimit);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/*@GetMapping("/")

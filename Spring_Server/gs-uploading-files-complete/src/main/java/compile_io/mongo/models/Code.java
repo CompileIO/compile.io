@@ -22,12 +22,19 @@ public class Code {
     
     public Code() {}
     
-	public Code(String language, int runTime, Date submissionTime) {
-		super();
+    public Code(String language, int runTime, String codePath, Date submissionTime) {
 		this.language = language;
 		this.runTime = runTime;
+		this.codePath = codePath;
 		this.submissionTime = submissionTime;
 	}
+    
+//	public Code(String language, int runTime, Date submissionTime) {
+//		super();
+//		this.language = language;
+//		this.runTime = runTime;
+//		this.submissionTime = submissionTime;
+//	}
 	public String getLanguage() {
 		return language;
 	}
