@@ -1,0 +1,378 @@
+@startuml
+skinparam linetype ortho
+package Backend {
+class Application {
+- String description
++ {static} void main(String[] args);
+}
+
+package Controllers {
+
+class FileUploadController{
+  - final StorageService storageService;
+  - String fileName;
+  - final static String frontendVm;
+  - final int MAX_FILE_SIZE;
+  + FileUploadController(StorageService storageService)
+  + String[] runDocker()
+  + ResponseEntity<Resource> serveFile(String filename)
+  + String[] handleFileUpload(MultipartFile file, RedirectAttributes redirectAttributes)
+  + String runCompiler(File fileToUpload, String language, int timeLimit)
+  + ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc)
+}
+/'class GradeController{
+- addGrade()
+- dropGrade()
+- updateGrade()
+}'/
+class AssignmentController{
+- addAssignment()
+- dropAssignment()
+- updateAssignment()
+}
+
+class CourseController{
+- addCourse()
+- dropCourse()
+- updateCourse()
+}
+
+class TestController{
+- addTest()
+- dropTest()
+- updateTest()
+}
+
+class UserController{
+- addUser()
+- dropUser()
+- updateUser()
+  + String[] getHomeworks(String className)
+  + String[] getResults(String className, String homework) 
+  + String[] getClasses()
+}
+
+}
+
+
+package config {
+  class ServerProperties {
+  - List<String> paths;
+  + List<String> getPaths()
+  + List<String> setPath(List<String> paths)
+  + FilterRegistrationBean<CorsFilter> corsFilter()
+  }
+
+
+}
+
+package Storage {
+
+interface StorageService {
+     void init();
+
+    void store(MultipartFile file);
+
+    Stream<Path> loadAll();
+
+    Path load(String filename);
+
+    Resource loadAsResource(String filename);
+
+    void deleteAll();
+}
+
+class FileSystemStorageService implements StorageService {
+- final Path rootLocation
+}
+
+class StorageProperties {
+ - String location;
+ + getLocation()
+ + setLocation(String location)
+}
+
+class StorageException extends RuntimeException {
++ StorageException(String message)
++ StorageException(String message, Throwable cause)
+
+}
+
+class StorageFileNotFoundException extends StorageException {
++ StorageFileNotFoundException(String message)
++ StorageFileNotFoundException(String message, Throwable cause)
+
+}
+
+}
+
+
+package Docker {
+abstract class AbstractBuilder {
+  - File file;
+  - String fileDirectory;
+  - ICommandExecuter executer;
+  + AbstractBuilder(File file);
+  + void buildContainer();
+  + void teardownDockerImage();
+  + void teardownDockerfile();
+  + void createDockerfile(String dockerFileData);
+  + {abstract} String getDockerfileData();
+  + String getFileName();
+  + String getFileDirectory();
+  + ICommandExecuter getExecuter();
+  + void setExecuter(ICommandExecuter executer);
+  + void setFileName(String fileName);
+  + void setFileDirectory(String fileDirectory);
+  + void createDockerfile(String dockerfileData);
+  + {abstract} String getDockerfileData();
+  
+}
+
+class JavaBuilder extends AbstractBuilder {
+  + JavaBuilder(File file);
+  + void createDockerfile();
+}
+
+class PythonBuilder extends AbstractBuilder {
+  + PythonBuilder(File file);
+  + void createDockerfile();
+}
+
+class BuilderFactory {
+  + AbstractBuilder getCompiler(String type, File file) throws UnsupportedBuilderException;
+}
+BuilderFactory --> UnsupportedBuilderException
+
+class UnsupportedBuilderException extends Exception {
+}
+
+interface IDockerRunner {
+ + String run (long timeLimit);
+}
+
+interface ICommandExecuter {
++ String executeCommand(String[] command);
++ String executeCommandWithTimeout(String[] command, long timeLimit);
+}
+
+class CommandExecuter implements ICommandExecuter {
++ CommandExecuter()
++ String executeCommand(String[] command)
++ String executeCommandWithTimeout(String[] command, long timeLimit)
+}
+
+class DockerRunner implements IDockerRunner {
+  - ICommandExecuter executer;
+  -  AbstractBuilder builder;
+  + DockerRunner(AbstractBuilder builder, ICommandExecuter executer)
+  + String run(long timeLimit);
+}
+}
+
+FileUploadController --|> AbstractBuilder
+AbstractBuilder --> ICommandExecuter
+DockerRunner --> ICommandExecuter
+DockerRunner --> AbstractBuilder
+
+FileUploadController --> StorageService
+FileSystemStorageService --> StorageProperties
+FileSystemStorageService --> StorageException
+FileSystemStorageService --> StorageFileNotFoundException
+
+}
+FileUploadController --|> BuilderFactory
+FileUploadController --|> IDockerRunner
+BuilderFactory ..|> "<<instantiates>>" AbstractBuilder
+
+
+Application "@Bean"-->Docker
+Application "@Bean"-->ServerProperties
+Application "@Bean"-->Controllers
+
+
+
+package Frontend {
+class AppComponent {
+
+}
+
+class AppModule{
+}
+
+class ChangeHomeworkComponent { 
+  String givenClass;
+  String homework;
+}
+
+class HomeworkPageComponent {
+  String username; 
+  String givenClass;
+  String homework;
+  File file;
+  number MAX_FILE_SIZE;
+  boolean fileReady;
+  boolean uploading;
+  string error;
+  Array[] results;
+
+  fileUpload (event any);
+  upload();
+  run();
+  getResults();
+
+}
+
+
+class LoginComponent {
+  boolean loggedIn;
+  string finalUsername;
+  string finalGroup;
+
+  checkLogin();
+  login();
+  logout();
+}
+
+class ProfessorHomeworkPageComponent {
+  String username; 
+  String givenClass;
+  String homework;
+  File file;
+  number MAX_FILE_SIZE;
+  boolean fileReady;
+  boolean uploading;
+  string error;
+  Array[] results;
+  string type;
+
+  fileUpload (event any);
+  changeType(string t);
+  upload();
+  getTests();
+  /'run();'/
+  /'getResults();'/
+}
+
+
+class ProfessorPageComponent {
+ String username;
+ Array<String> classes;
+ String selectedClass;
+ Array<String> homeworks;
+ String selectedHomework;
+
+ getClasses();
+ selectClass(string givenClass);
+ selectHomeworkToChange (string givenHwk);
+ selectHomeworkToRun(string givenHwk);
+ return();
+ logout();
+}
+
+
+
+class UserPageComponent {
+ String username;
+ Array<String> classes;
+ String selectedClass;
+ Array<String> homeworks;
+ String selectedHomework;
+
+ getClasses();
+ selectClass(string givenClass);
+ selectHomework (string givenHwk);
+ return();
+ logout();
+}
+
+
+package Services {
+  class AuthenticationService {
+  BehaviorSubject<boolean> isLoginSubject;
+  Array admins;
+  Observable<boolean> isLoggedIn ();
+  boolean hasToken();
+  login();
+  logout();
+}
+
+
+class UploadService {
+- http HttpClient
+
+Observable <any> upload(File file);
+Observalbe<any> uploadtest (File file, String type)
+Observable <any> getClasses()
+Observable <any> runDocker()
+Observable <any> getHomeworks (String givenClass)
+Observable <any> getResults (String givenClass, String givenHomework)
+Observable <any> getTests (String givenClass, String givenHomework)
+}
+
+class UserService {
+  
+}
+
+class TestService {
+  
+}
+
+class AssignmentService {
+  
+}
+
+class CourseService {
+  
+}
+
+UploadService <-down-> FileUploadController
+UserService <-down-> UserController
+TestService <-down-> TestController
+AssignmentService <-down-> AssignmentController
+CourseService <-down-> CourseController
+
+}
+
+
+
+
+LoginComponent --> RosefireAPI
+LoginComponent--> AuthenticationService
+
+UserPageComponent --> UploadService
+UserPageComponent--> AuthenticationService
+
+ProfessorPageComponent --> UploadService
+ProfessorPageComponent--> AuthenticationService
+
+ProfessorHomeworkPageComponent --> UploadService
+
+HomeworkPageComponent --> UploadService
+
+
+AppComponent --> AppModule
+AppComponent --> LoginComponent
+AppComponent --> UserPageComponent
+AppComponent --> ProfessorPageComponent
+AppComponent --> ProfessorHomeworkPageComponent
+AppComponent --> HomeworkPageComponent
+AppComponent --> ChangeHomeworkComponent
+AppComponent --> AuthenticationService
+AppComponent --> UploadService
+
+}
+/'note "Our UML diagram was built to help programmers including us and any other team that may follow understand the underlying system of compile.io in how each piece of code interacts with one another" as UML_note
+Backend .. UML_note
+UML_note .. Frontend'/
+
+package MongoDB <<Database>> {
+  
+}
+note "this is modeled by our entity relationship diagram" as MongoNote
+
+Controllers ..> MongoDB
+MongoDB .right. MongoNote
+@enduml
+
+
