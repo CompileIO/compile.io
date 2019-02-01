@@ -13,7 +13,7 @@ export class TestService {
 
   uploadTest(file: File, type: string, runTime: number, givenHomework: string, givenCourse: string, userName: string): Observable<any> {
     let body: FormData = new FormData();              // MIGHT NEED TO CHANGE THE givenClass and givenHomework variables
-    console.log("THIS SHOULD BE FORM DATA: " + "file: " + file);   
+    // console.log("THIS SHOULD BE FORM DATA: " + "file: " + file);   
     body.append('file', file);
     body.append('type', type);
     body.append('username', userName);

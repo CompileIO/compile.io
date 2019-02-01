@@ -65,9 +65,9 @@
           <div class="row">
             <div class="col">
               <div class="custom-file float-left p-1">
-                <input type="file" (change) = "fileUpload($event)" class="custom-file-input" #fileUpload id="fileUpload">
-                <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
-                <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
+                <input type="file" (change) = "fileUpload($event)" #fileHash id = "fileInput">
+                <label *ngIf="fileHash.files.length == 0" class="custom-file-label" for="fileInput">Select File</label>
+                <label *ngIf="fileHash.files.length != 0" class="custom-file-label" for="fileInput">{{fileHash.files[0].name}}</label>
               </div>
             </div>
           </div>
