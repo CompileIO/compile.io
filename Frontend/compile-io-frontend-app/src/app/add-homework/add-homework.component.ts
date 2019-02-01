@@ -10,15 +10,19 @@ import { TestService } from '../services/test.service';
 export class AddHomeworkComponent implements OnInit {
   @Input() username: string;
   @Input() class: string;
+  file : File;
 
   constructor(private testService: TestService) {}
+  fileUpload (event: any){
+    this.file = event.target.files[0];
+  }
 
-  submit(name: string, time: number, visible: boolean, file: File, language: string) {
+  submit(name: string, time: number, visible: boolean, language: string) {
     
     // console.log(name + ", " + time + ", " + visible + ", " + file);
     // console.log(this.username + "  " + this.class);
     // console.log(dropDown)
-    this.testService.uploadTest(file, language.toLowerCase(), time, name, this.class, this.username).subscribe({
+    this.testService.uploadTest(this.file, language.toLowerCase(), time, name, this.class, this.username).subscribe({
       next: x => {
         console.log(x)
       },

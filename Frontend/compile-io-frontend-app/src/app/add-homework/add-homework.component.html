@@ -14,7 +14,7 @@
         <div class="container">
           <div class="row">
             <div class="col">
-              <div class="form-group p-3">
+              <div class="form-group p-1">
                 <label class="float-left" for="nameText">Name</label>
                 <input type="text" class="form-control" #nameText id="nameText" aria-describedby="nameHelp" placeholder="Hmk1" required>
                 <small id="nameHelp" class="form-text text-muted float-left">Try not to make the name so large as to overflow the sidebar.</small>
@@ -23,7 +23,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <div class="form-group p-3">
+              <div class="form-group p-1">
                 <label class="float-left" for="timeoutText">Timeout (s)</label>
                 <input type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" placeholder="5" required>
                 <small id="timeoutHelp" class="form-text text-muted float-left">How much time to spend running a test before timing out.</small>
@@ -32,7 +32,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <div class="form-check p-3">
+              <div class="form-check p-1">
                 <div class="container">
                   <div class="row">
                     <div class="col-2">
@@ -53,7 +53,7 @@
           </div>
           <div class = "row">
             <div class = "col">
-              <div class="form-check p-3">
+              <div class="form-check p-1">
                 <label for="language">Language</label>
                 <select multiple class="form-control" #languageSelect id="language" required>
                   <option>Java</option>
@@ -64,8 +64,8 @@
           </div>
           <div class="row">
             <div class="col">
-              <div class="custom-file float-left p-3">
-                <input type="file" class="custom-file-input" #fileUpload id="fileUpload">
+              <div class="custom-file float-left p-1">
+                <input type="file" (change) = "fileUpload($event)" class="custom-file-input" #fileUpload id="fileUpload">
                 <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
                 <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
               </div>
@@ -73,7 +73,7 @@
           </div>
           <div class="row">
             <div class="col p-3">
-              <button type="submit" class="btn btn-primary" (click)="submit(nameText.value, timeoutText.value, visibleCheck.checked, fileUpload.value, languageSelect.value)">Submit</button>
+              <button type="submit" class="btn btn-primary" (click)="submit(nameText.value, timeoutText.value, visibleCheck.checked, languageSelect.value)">Submit</button>
             </div>
           </div>
         </div>

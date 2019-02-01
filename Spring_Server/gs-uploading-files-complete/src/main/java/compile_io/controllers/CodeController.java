@@ -44,11 +44,41 @@ public class CodeController{
 		this.storageService = storageService;
 	}
 	
+//	@PostMapping("/{courseName}/{homeworkName}/uploadTest")
+//	public String[] inputCodeforUser(
+//			  @RequestParam("username") String userName,
+//			  @RequestParam("file") MultipartFile file,
+//			  @RequestParam(value = "type") String type,
+//			  @RequestParam(value = "runTime") String runTime,
+//			  @RequestParam(value = "class") String givenCourse,
+//			  RedirectAttributes redirectAttributes) {
+//
+//storageService.store(file);                
+////fileName = file.getName();
+////
+////
+////String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
+////workingDir = workingDir.substring(2);
+////System.out.println("Working Directory = " + workingDir);
+//
+//
+////int runTimeNum = Integer.parseInt(runTime);
+////Date submissionTime = new Date(0);
+////Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
+////codeRepository.save(newCode);
+//
+//// Docker stuff
+////File fileToUpload = new File(workingDir);
+////String result = runCompiler(file, type, runTimeNum);
+////String[] temp2 = {result};
+//String[] temp2 = {""};
+//return temp2;
+//}
+	
 	@PostMapping("/{courseName}/{homeworkName}/uploadTest")
 	public String[] inputCodeforUser(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
 		String fileString = request.getParameter("file");
-		Iterator<String> fileMap = request.getFileNames();
 		String userName = request.getParameter("username");
 		String type = request.getParameter("type");
 		String runTime = request.getParameter("runTime");
@@ -58,33 +88,31 @@ public class CodeController{
 		System.out.println("I got inside \n\n\n\n");
 		
 		System.out.println(fileString);
-		System.out.println(fileMap.next());
-//		System.out.println(file.getName());
+		System.out.println(file.getName());
 		System.out.println(file.getOriginalFilename());
 		
-		
 		storageService.store(file);                
-//		fileName = file.getName();
+		fileName = file.getName();
 		
 		
-//		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
-//		workingDir = workingDir.substring(2);
-//		System.out.println("Working Directory = " + workingDir);
+		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
+		workingDir = workingDir.substring(2);
+		System.out.println("Working Directory = " + workingDir);
 		
 		
-//		int runTimeNum = Integer.parseInt(runTime);
+		int runTimeNum = Integer.parseInt(runTime);
 //		Date submissionTime = new Date(0);
 		
 		
-//		LocalTime submissionTime = LocalTime.now();
-//		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
-//		codeRepository.save(newCode);
+		LocalTime submissionTime = LocalTime.now();
+		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
+		codeRepository.save(newCode);
 		
     	// Docker stuff
-//		File fileToUpload = new File(workingDir);
-//		String result = runCompiler(fileToUpload, type, runTimeNum);
-//		String[] temp2 = {result};
-		String[] temp2 = {""};
+		File fileToUpload = new File(workingDir);
+		String result = runCompiler(fileToUpload, type, runTimeNum);
+		String[] temp2 = {result};
+//		String[] temp2 = {""};
 		return temp2;
 	}
 	
