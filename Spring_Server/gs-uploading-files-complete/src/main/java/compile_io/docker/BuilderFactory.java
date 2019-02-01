@@ -15,7 +15,6 @@ public class BuilderFactory {
      */
     public AbstractBuilder getBuilder(String type, File file) throws UnsupportedBuilderException {
         // change this from a nested if statement to...?
-    	System.out.println("THIS IS THE MOTHERFUCKING TYPE"+ type);
         if (type.equals("java")) {
             return new JavaBuilder(file);
         } else if (type.equals("python")) {

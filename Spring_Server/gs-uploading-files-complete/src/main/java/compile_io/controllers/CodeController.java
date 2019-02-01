@@ -56,8 +56,8 @@ public class CodeController{
 									  @RequestParam(value = "class") String givenCourse,
 									  RedirectAttributes redirectAttributes) {
 		
-//		storageService.store(file);                
-//		fileName = file.getName();
+		storageService.store(file);                
+		fileName = file.getName();
 //		
 //		
 //		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
@@ -75,8 +75,8 @@ public class CodeController{
 		
     	// Docker stuff
 //		File fileToUpload = new File(workingDir);
-		String result = runCompiler(file, type, runTimeNum);
-		String[] temp2 = {result};
+//		String result = runCompiler(file, type, runTimeNum);
+		String[] temp2 = {""};
 		return temp2;
 	}
 	
@@ -118,21 +118,7 @@ public class CodeController{
 				.body(file);
 	}
 
-	@PostMapping("/")
-	public String[] handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-    
-    if (file.getSize() > MAX_FILE_SIZE) {
-      String[] temp = {"File: " + file.getOriginalFilename() + " is too large!"};
-      return temp;
-    } else {
-		  storageService.store(file);
-		  fileName = file.getOriginalFilename();
-		  redirectAttributes.addFlashAttribute("message",
-				  "You successfully uploaded " + file.getOriginalFilename() + "!");
-      String[] temp = {"You successfully uploaded " + file.getOriginalFilename() + "!"};
-      return temp;
-    }
-	}
+	
 	
 	@ExceptionHandler(StorageFileNotFoundException.class)
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
