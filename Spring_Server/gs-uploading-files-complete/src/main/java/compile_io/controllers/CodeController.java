@@ -1,6 +1,7 @@
 package compile_io.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import compile_io.docker.*;
@@ -25,6 +27,7 @@ import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 import java.time.*;
+import java.util.Iterator;
 
 @RestController
 public class CodeController{
@@ -41,41 +44,46 @@ public class CodeController{
 		this.storageService = storageService;
 	}
 	
-	public class Dto {
-		public MultipartFile file;
-	}
-	
-	
 	@PostMapping("/{courseName}/{homeworkName}/uploadTest")
-	@ResponseBody
-	public String[] inputCodeforUser(
-									  @RequestParam("username") String userName,
-									  @RequestParam("file") File file,
-									  @RequestParam(value = "type") String type,
-									  @RequestParam(value = "runTime") String runTime,
-									  @RequestParam(value = "class") String givenCourse,
-									  RedirectAttributes redirectAttributes) {
+	public String[] inputCodeforUser(MultipartHttpServletRequest request) {
+		MultipartFile file = request.getFile("file");
+		String fileString = request.getParameter("file");
+		Iterator<String> fileMap = request.getFileNames();
+		String userName = request.getParameter("username");
+		String type = request.getParameter("type");
+		String runTime = request.getParameter("runTime");
+		String givenCourse = request.getParameter("class");
+		
+		System.out.println(userName + "  " + type + "  " + runTime + "  " + givenCourse);
+		System.out.println("I got inside \n\n\n\n");
+		
+		System.out.println(fileString);
+		System.out.println(fileMap.next());
+//		System.out.println(file.getName());
+		System.out.println(file.getOriginalFilename());
+		
 		
 		storageService.store(file);                
-		fileName = file.getName();
-//		
-//		
+//		fileName = file.getName();
+		
+		
 //		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
 //		workingDir = workingDir.substring(2);
 //		System.out.println("Working Directory = " + workingDir);
 		
 		
-		int runTimeNum = Integer.parseInt(runTime);
+//		int runTimeNum = Integer.parseInt(runTime);
 //		Date submissionTime = new Date(0);
 		
 		
-		LocalTime submissionTime = LocalTime.now();
-		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
-		codeRepository.save(newCode);
+//		LocalTime submissionTime = LocalTime.now();
+//		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
+//		codeRepository.save(newCode);
 		
     	// Docker stuff
 //		File fileToUpload = new File(workingDir);
-//		String result = runCompiler(file, type, runTimeNum);
+//		String result = runCompiler(fileToUpload, type, runTimeNum);
+//		String[] temp2 = {result};
 		String[] temp2 = {""};
 		return temp2;
 	}
