@@ -8,40 +8,11 @@ import java.util.*;
  */
 public class JavaBuilder extends AbstractBuilder {
 
-    /**
-     * Constructor that builds a docker image with the given name
-     * @param File file File uploaded by the student
-     */
-    public JavaBuilder(File file) {
-        super(file);
-    }
-
     public JavaBuilder(List<File> studentFiles, List<File> professorFiles) {
         super(studentFiles, professorFiles);
     }
 
-    /**
-     * Creates a string that contains the contents needed for a Dockerfile that runs a single jar file.
-     * @return String The text corresponding to the contents of the Dockerfile
-     */
-    public String getDockerfileData() {  
-        StringBuilder dockerfileData = new StringBuilder();
-        
-        dockerfileData.append("FROM openjdk\n");
-        dockerfileData.append("WORKDIR " + super.getFileDirectory() + "\n");
-        dockerfileData.append("ADD " + super.getFileName() + " " + super.getFileName() + "\n");
-        dockerfileData.append("EXPOSE 8000\n");
-        dockerfileData.append("CMD java -jar " + super.getFileName() + "\n");
-
-        return dockerfileData.toString();
-    }
-
-    
-    /**
-     * Creates a string that contains the contents needed for a Dockerfile that can run multiple java files against JUnit tests using gradle
-     * @return String The text corresponding to the contents of the Dockerfile
-     */
-    public String getDockerfileDataFiles() {
+    public String getDockerfileData() {
         StringBuilder dockerfileData = new StringBuilder();
         List<File> studentFiles = super.getStudentFiles();
         List<File> professorFiles = super.getProfessorFiles();

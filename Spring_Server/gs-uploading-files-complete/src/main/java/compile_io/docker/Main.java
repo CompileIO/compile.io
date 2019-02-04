@@ -19,9 +19,9 @@ public class Main {
         professorFiles.add(file4);
 
         try {
-            AbstractBuilder builder = builderFactory.getBuilderManyFiles("java", studentFiles, professorFiles);
+            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles);
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
-            builder.createDockerfile(builder.getDockerfileDataFiles());
+            builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();
             String result = runner.run(60000);
             System.out.println(result);

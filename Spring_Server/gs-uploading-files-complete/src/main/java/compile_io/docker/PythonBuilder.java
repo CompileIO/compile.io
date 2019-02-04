@@ -1,39 +1,30 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * This class builds a Dockerfile that the superclass uses to create a Docker image.
  */
 public class PythonBuilder extends AbstractBuilder {
 
-    /**
-     * Constructor that builds a docker image with the given name
-     * @param File file File uploaded by the student
-     */
-    public PythonBuilder(File file) {
-        super(file);
+    public PythonBuilder(List<File> studentFiles, List<File> professorFiles) {
+        super(studentFiles, professorFiles);
     }
 
-    /**
-     * Creates a string that contains the contents needed for a Dockerfile
-     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
-     * @return String The text corresponding to the contents of the Dockerfile
-     */
+    // Still only works for a single file.
     public String getDockerfileData() { 
         StringBuilder dockerfileData = new StringBuilder();
+        List<File> studentFiles = super.getStudentFiles();
+        List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM python:latest\n");
-        dockerfileData.append("WORKDIR " + super.getFileDirectory() + "\n");
-        dockerfileData.append("ADD " + super.getFileName() + " " + super.getFileName() + "\n");
+        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
+        dockerfileData.append("ADD " + studentFiles.get(0) + " " + studentFiles.get(0) + "\n");
         dockerfileData.append("EXPOSE 8000\n");
-        dockerfileData.append("CMD python " + super.getFileName() + "\n");
+        dockerfileData.append("CMD python " + studentFiles.get(0) + "\n");
         
         return dockerfileData.toString();
-    }
-
-    public String getDockerfileDataFiles() {
-        return null;
     }
 
 }
