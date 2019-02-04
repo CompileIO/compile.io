@@ -8,6 +8,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import compile_io.docker.JavaBuilder;
 import static org.mockito.Mockito.*;
 import java.io.File;
+import java.util.List;
+import java.util.ArrayList;
 
 import compile_io.Application;
 
@@ -15,61 +17,56 @@ import compile_io.Application;
 @SpringBootTest(classes = { Application.class })
 public class AbstractBuilderTest {
 
-    @Test
-    public void testGetFileName() {
-        File testFile = mock(File.class);
-        when(testFile.getName()).thenReturn("TestyMcTestface");
-        when(testFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(testFile);
-        assertEquals("TestyMcTestface", testCompiler.getFileName());
+    private File mockStudentFile = mock(File.class);
+    private File mockProfessorFile = mock(File.class);
+    private List<File> studentFiles = new ArrayList<>();
+    private List<File> professorFiles = new ArrayList<>();
+    private boolean isInitialized = false;
+
+
+    private void initialize() {
+        if (!isInitialized) {
+            this.studentFiles.add(mockStudentFile);
+            this.professorFiles.add(mockProfessorFile);
+            this.isInitialized = true;
+        }
     }
 
     @Test
-    public void testGetFileDirectory() {
-        File testFile = mock(File.class);
-        when(testFile.getName()).thenReturn("TestyMcTestface");
-        when(testFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(testFile);
-        assertEquals("C:\\Test", testCompiler.getFileDirectory());
+    public void testGetWorkingDirectory() {
+        initialize();
+        when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
+        when(mockStudentFile.getParent()).thenReturn("C:\\Test");
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
+        assertEquals("C:\\Test", testCompiler.getWorkingDirectory());
     }
 
     @Test
-    public void testSetFileName() {
-        File testFile = mock(File.class);
-        when(testFile.getName()).thenReturn("TestyMcTestface");
-        when(testFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(testFile);
-        assertEquals("TestyMcTestface", testCompiler.getFileName());
-        testCompiler.setFileName("NewTest");
-        assertEquals("NewTest", testCompiler.getFileName());
-    }
-
-    @Test
-    public void testSetFileDirectory() {
-        File testFile = mock(File.class);
-        when(testFile.getName()).thenReturn("TestyMcTestface");
-        when(testFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(testFile);
-        assertEquals("C:\\Test", testCompiler.getFileDirectory());
-        testCompiler.setFileDirectory("C:\\NewTest");
-        assertEquals("C:\\NewTest", testCompiler.getFileDirectory());
+    public void testSetWorkingDirectory() {
+        initialize();
+        when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
+        when(mockStudentFile.getParent()).thenReturn("C:\\Test");
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
+        assertEquals("C:\\Test", testCompiler.getWorkingDirectory());
+        testCompiler.setWorkingDirectory("C:\\NewTest");
+        assertEquals("C:\\NewTest", testCompiler.getWorkingDirectory());
     }
 
     @Test 
     public void testGetExecuter() {
-        File testFile = mock(File.class);
-        when(testFile.getName()).thenReturn("TestyMcTestface");
-        when(testFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(testFile);
+        initialize();
+        when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
+        when(mockStudentFile.getParent()).thenReturn("C:\\Test");
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
         assertTrue(testCompiler.getExecuter() instanceof CommandExecuter);
     }
 
     @Test
     public void testSetExecuter() {
-        File testFile = mock(File.class);
-        when(testFile.getName()).thenReturn("TestyMcTestface");
-        when(testFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(testFile);
+        initialize();
+        when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
+        when(mockStudentFile.getParent()).thenReturn("C:\\Test");
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
         assertTrue(testCompiler.getExecuter() instanceof CommandExecuter);
         testCompiler.setExecuter(null);
         assertEquals(null, testCompiler.getExecuter());
