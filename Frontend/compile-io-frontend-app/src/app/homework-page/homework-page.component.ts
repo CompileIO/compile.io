@@ -24,34 +24,26 @@ export class HomeworkPageComponent implements OnInit {
     this.uploading = false;
     this.file = null;
     this.error = '';
+    this.getResults();
   }
 
   fileUpload(event: any) {
-    this.fileReady = false;
-    if (event.target.files && event.target.files.length > 0) {
-      if (event.target.files[0].size > this.MAX_FILE_SIZE) {
-        alert("File is too large!");
-        this.file = null;
-      } else {
-        this.file = event.target.files[0];
-        this.upload();
-      }
+    console.log("THIS IS THE FILE FROM file upload: " + event.target.files[0]);
+    if (event.target.files[0].size < this.MAX_FILE_SIZE) {
+      this.file = event.target.files[0];
+    } else {
+      alert("File is too large!");
     }
   }
 
   upload() {
-    this.uploading = true;
     if (this.file !== null) {
       this.assignmentService.addAssignment().subscribe({
         next: x => {
-          console.log(x),
-          this.uploading = false,
-          this.fileReady = true
+          console.log(x)
         },
         error: err => {
-          console.log("UPLOADING FILE ERROR: " + err),
-          this.uploading = false,
-          this.error = err
+          console.log("UPLOADING FILE ERROR: " + err)
         },
         complete: () => console.log("Uploaded file")
       });
