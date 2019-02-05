@@ -12,12 +12,10 @@
   <button type="submit" (click)="login()">Sign In</button>
 </div>
 <div *ngIf="loggedIn">
-  <div *ngIf="finalGroup == 'STUDENT'">
-    <app-user-page [username]="finalUsername">
+  <div>
+    <app-user-page [username]="finalUsername"
+                   [group]="finalGroup">
     </app-user-page>
   </div>
-  <div *ngIf="finalGroup == 'PROFESSOR'">
-    <span>PUT IN PROF STUFF HERE</span>
-  </div>
+  
 </div>
-

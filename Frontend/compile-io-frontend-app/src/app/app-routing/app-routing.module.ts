@@ -3,12 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { UserPageComponent } from '../user-page/user-page.component';
 
 import { LoginComponent } from '../login/login.component';
-import { AuthGuard } from '../authguard.service';
 
 export const ROUTES: Routes = [
-  { path: 'student/:username',  component: UserPageComponent , canActivate: [AuthGuard]},
-  { path: 'faculty/:username',  component: UserPageComponent , canActivate: [AuthGuard]},
-  { path: 'instructor/:username',  component: UserPageComponent , canActivate: [AuthGuard]},
+  // { path: 'student/:username',  component: UserPageComponent , canActivate: [AuthGuard]},
+  // { path: 'faculty/:username',  component: UserPageComponent , canActivate: [AuthGuard]},
+  // { path: 'instructor/:username',  component: UserPageComponent , canActivate: [AuthGuard]},
   // { path: 'course/:courseName',  component: CoursePageComponent , canActivate: [AuthGuard]},
   // { path: 'course/:courseName/:showStudents',  component: CoursePageComponent , canActivate: [AuthGuard]},
   // { path: '', redirectTo: 'login', pathMatch: 'full' },

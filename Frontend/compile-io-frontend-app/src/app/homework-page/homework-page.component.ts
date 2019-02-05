@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UploadService } from '../upload/upload.service';
+import { AssignmentService } from '../services/assignment.service';
+import { TestService } from '../services/test.service';
 
 @Component({
   selector: 'app-homework-page',
@@ -17,40 +18,32 @@ export class HomeworkPageComponent implements OnInit {
   error: string;
   results: string[] = [];
 
-  constructor(private uploadService: UploadService) {
+  constructor(private assignmentService: AssignmentService, private testService: TestService) {
     this.MAX_FILE_SIZE = 50000000;
     this.fileReady = false;
     this.uploading = false;
     this.file = null;
     this.error = '';
+    this.getResults();
   }
 
   fileUpload(event: any) {
-    this.fileReady = false;
-    if (event.target.files && event.target.files.length > 0) {
-      if (event.target.files[0].size > this.MAX_FILE_SIZE) {
-        alert("File is too large!");
-        this.file = null;
-      } else {
-        this.file = event.target.files[0];
-        this.upload();
-      }
+    console.log("THIS IS THE FILE FROM file upload: " + event.target.files[0]);
+    if (event.target.files[0].size < this.MAX_FILE_SIZE) {
+      this.file = event.target.files[0];
+    } else {
+      alert("File is too large!");
     }
   }
 
   upload() {
-    this.uploading = true;
     if (this.file !== null) {
-      this.uploadService.upload(this.file).subscribe({
+      this.assignmentService.addAssignment().subscribe({
         next: x => {
-          console.log(x),
-          this.uploading = false,
-          this.fileReady = true
+          console.log(x)
         },
         error: err => {
-          console.log("UPLOADING FILE ERROR: " + err),
-          this.uploading = false,
-          this.error = err
+          console.log("UPLOADING FILE ERROR: " + err)
         },
         complete: () => console.log("Uploaded file")
       });
@@ -58,7 +51,7 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   run() {
-    this.uploadService.runDocker().subscribe({
+    this.testService.runDocker().subscribe({
       next: x => console.log(x),
       error: err => {
         console.log("RUNNING DOCKER ERROR: " + err),
@@ -72,7 +65,7 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   getResults() {
-    this.uploadService.getResults(this.givenClass, this.homework).subscribe({
+    this.testService.getResults(this.givenClass, this.homework).subscribe({
       next: x => {
         console.log(x),
         this.results = x.map(element => element.toString());

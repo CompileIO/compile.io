@@ -1,9 +1,27 @@
 language: node_js
 node_js: v8.9.0
 notifications:
-  slack: 
+  slack:
     rooms:
-      - compileio:uAKGKPc1MCWywPZsmgrWGFrb
+    - compileio:uAKGKPc1MCWywPZsmgrWGFrb
     on_success: change
     on_failure: always
-  
+cache:
+  directories:
+    - Frontend/compile-io-frontend-app/node_modules
+before_install:
+  - bash _scripts/install.sh
+# script:
+#   - bash _scripts/build.sh
+#   - bash _scripts/test.sh
+after_success:
+  - bash _scripts/deploy.sh
+# script:
+#   - cd Spring_Server/gs-uploading-files-complete
+#   - ./gradlew bootRun -D spring.profiles.active=prod
+#   - cd ../../Frontend/compile-io-frontend-app
+#   - ng build --prod
+#   - ng serve --prod
+
+
+
