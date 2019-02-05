@@ -44,13 +44,13 @@ public class Assignment {
 		this.test = test;
 	}
 
-	public List<Code> getCodes() {
-		return codes;
-	}
-
-	public void setCodes(List<Code> codes) {
-		this.codes = codes;
-	}
+//	public List<Code> getCodes() {
+//		return codes;
+//	}
+//
+//	public void setCodes(List<Code> codes) {
+//		this.codes = codes;
+//	}
 
 	@Override
 	public String toString() {

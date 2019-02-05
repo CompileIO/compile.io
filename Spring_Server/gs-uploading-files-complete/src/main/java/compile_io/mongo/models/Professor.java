@@ -2,6 +2,7 @@ package compile_io.mongo.models;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -12,8 +13,10 @@ public class Professor {
 	
 	private String name;
 	private String userName;
-    private List<String> assignmentIds;
-    private List<String> testIds;
+	@DBRef
+    private List<Assignment> assignments;
+	@DBRef
+    private List<Test> tests;
 
     public Professor() {}
 
@@ -40,21 +43,21 @@ public class Professor {
 	
 	
 
-	public List<String> getAssignmentIds() {
-		return assignmentIds;
-	}
-
-	public void setAssignmentIds(List<String> assignmentIds) {
-		this.assignmentIds = assignmentIds;
-	}
-
-	public List<String> getTestIds() {
-		return testIds;
-	}
-
-	public void setTestIds(List<String> testIds) {
-		this.testIds = testIds;
-	}
+//	public List<Assignment> getAssignmentIds() {
+//		return assignmentIds;
+//	}
+//
+//	public void setAssignmentIds(List<String> assignmentIds) {
+//		this.assignmentIds = assignmentIds;
+//	}
+//
+//	public List<String> getTestIds() {
+//		return testIds;
+//	}
+//
+//	public void setTestIds(List<String> testIds) {
+//		this.testIds = testIds;
+//	}
 
 	@Override
 	public String toString() {

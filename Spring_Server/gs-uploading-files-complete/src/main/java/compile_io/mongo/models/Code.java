@@ -2,6 +2,7 @@ package compile_io.mongo.models;
 
 import java.sql.Date;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,8 +15,9 @@ public class Code {
 
 	private String language;
 	private int runTime;
-    private String testResponse;
+    private List<String> testResponses;
     private String codePath;
+    private Assignment assignment;
     
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalTime submissionTime;
@@ -48,11 +50,11 @@ public class Code {
 	public void setRunTime(int runTime) {
 		this.runTime = runTime;
 	}
-	public String getTestResponse() {
-		return testResponse;
+	public List<String> getTestResponse() {
+		return testResponses;
 	}
-	public void setTestResponse(String testResponse) {
-		this.testResponse = testResponse;
+	public void addTestResponse(String testResponse) {
+		this.testResponses.add(testResponse);
 	}
 	public LocalTime getSubmissionTime() {
 		return submissionTime;
@@ -80,9 +82,15 @@ public class Code {
 
 	@Override
 	public String toString() {
-		return "Code [language=" + language + ", runTime=" + runTime + ", testResponse=" + testResponse
-				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
+		return "Code [language=" + language + ", runTime=" + runTime + ", testResponses=" + testResponses
+				+ ", assignment=" + assignment + ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Code [language=" + language + ", runTime=" + runTime + ", testResponse=" + testResponses
+//				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
+//	}
     
     
 }
