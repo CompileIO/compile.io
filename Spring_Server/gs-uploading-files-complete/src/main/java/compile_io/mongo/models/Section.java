@@ -11,7 +11,8 @@ public class Section {
 	private int SectionNumber;
 	@DBRef
 	private Professor Instructor;
-	private List<String> assignmentIds;
+	@DBRef
+	private List<Assignment> assignments;
 	public Section(int sectionNumber, Professor instructor) {
 		super();
 		SectionNumber = sectionNumber;
@@ -31,12 +32,12 @@ public class Section {
 	}
 	
 	
-	public List<String> getAssignmentIds() {
-		return assignmentIds;
-	}
-	public void setAssignmentIds(List<String> assignmentIds) {
-		this.assignmentIds = assignmentIds;
-	}
+//	public List<String> getAssignmentIds() {
+//		return assignmentIds;
+//	}
+//	public void setAssignmentIds(List<String> assignmentIds) {
+//		this.assignmentIds = assignmentIds;
+//	}
 	@Override
 	public String toString() {
 		return "Section [SectionNumber=" + SectionNumber + ", Instructor=" + Instructor + "]";

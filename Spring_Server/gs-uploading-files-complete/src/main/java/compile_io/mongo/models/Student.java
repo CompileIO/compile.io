@@ -11,8 +11,10 @@ public class Student {
 	@Id
 	private String id;
 	
-	private List<String> codeIds;
-	private List<String> courseIds;
+	@DBRef
+	private List<Code> codes;
+	@DBRef
+	private List<Course> courses;
 	private String name;
 	private String userName;
 
@@ -42,21 +44,22 @@ public class Student {
 	
 	
 
-	public List<String> getCodeIds() {
-		return codeIds;
-	}
-
-	public void setCodeIds(List<String> codeIds) {
-		this.codeIds = codeIds;
-	}
-
-	public List<String> getCourseIds() {
-		return courseIds;
-	}
-
-	public void setCourseIds(List<String> courseIds) {
-		this.courseIds = courseIds;
-	}
+//	public List<String> getCodeIds() {
+//		return codeIds;
+//	}
+//
+//	public void setCodeIds(List<String> codeIds) {
+//		this.codeIds = codeIds;
+//	}
+//
+//	public List<String> getCourseIds() {
+//		return courseIds;
+//	}
+//
+//	public void setCourseIds(List<String> courseIds) {
+//		this.courseIds = courseIds;
+//	}
+	
 
 	@Override
 	public String toString() {

@@ -14,8 +14,7 @@ public class Course {
 	private String crn;
 	@DBRef
 	private List<Section> section;
-	@DBRef
-	private List<Assignment> assignments;
+	
 	
 	public Course(String name, String crn, List<Section> section) {
 		super();
