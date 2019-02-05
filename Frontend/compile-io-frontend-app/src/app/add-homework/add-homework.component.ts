@@ -20,9 +20,6 @@ export class AddHomeworkComponent implements OnInit {
 
   submit(name: string, time: number, visible: boolean, language: string) {
     console.log("THIS IS THE FILE FROM SUBMIT: " + this.file);
-    // console.log(name + ", " + time + ", " + visible + ", " + file);
-    // console.log(this.username + "  " + this.class);
-    // console.log(dropDown)
     this.testService.uploadTest(this.file, language.toLowerCase(), time, name, this.class, this.username).subscribe({
       next: x => {
         console.log(x)
