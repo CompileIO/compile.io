@@ -21,7 +21,7 @@ public abstract class AbstractBuilder {
         this.numStudentFiles = this.studentFiles.size();
         this.numProfessorFiles = this.professorFiles.size();
         this.executer = new CommandExecuter();
-        this.workingDirectory = this.studentFiles.get(0).getParent();
+        this.workingDirectory = studentFiles.get(0).getParent();
         if (this.workingDirectory == null) {
             this.workingDirectory = "/";
         }

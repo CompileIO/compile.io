@@ -15,7 +15,7 @@ public class Main {
 
         List<File> studentFiles = new ArrayList<>();
         List<File> professorFiles = new ArrayList<>();
-        professorFiles.add(file3);
+        studentFiles.add(file3);
         professorFiles.add(file4);
 
         try {

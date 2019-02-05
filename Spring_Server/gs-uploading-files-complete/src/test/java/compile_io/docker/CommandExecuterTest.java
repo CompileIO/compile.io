@@ -24,13 +24,6 @@ public class CommandExecuterTest {
     }
 
     @Test
-    public void testExecuteCommandOutput() {
-        ICommandExecuter testExecuter = new CommandExecuter();
-        String[] command = {"echo", "foo"};
-        assertEquals("[foo]", testExecuter.executeCommand(command));
-    }
-
-    @Test
     public void testExecuteCommandTimeout() {
         ICommandExecuter testExecuter = mock(CommandExecuter.class);
         String[] command = {"echo", "ExecuteCommandOutput"};

@@ -20,9 +20,9 @@ public class PythonBuilder extends AbstractBuilder {
 
         dockerfileData.append("FROM python:latest\n");
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
-        dockerfileData.append("ADD " + studentFiles.get(0) + " " + studentFiles.get(0) + "\n");
+        dockerfileData.append("ADD " + studentFiles.get(0).getName() + " " + studentFiles.get(0).getName() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
-        dockerfileData.append("CMD python " + studentFiles.get(0) + "\n");
+        dockerfileData.append("CMD python " + studentFiles.get(0).getName() + "\n");
         
         return dockerfileData.toString();
     }
