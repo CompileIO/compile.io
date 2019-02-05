@@ -18,7 +18,7 @@ public class JavaBuilder extends AbstractBuilder {
         List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
-        dockerfileData.append("WORKDIR /SCHOOL/DockerTest/mock-upload-dir\n");
+        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("RUN mkdir -p src/main/java\n");
         dockerfileData.append("RUN mkdir -p src/test/java\n");
@@ -31,7 +31,7 @@ public class JavaBuilder extends AbstractBuilder {
             dockerfileData.append("COPY " + professorFiles.get(i).getName() + " " + professorFiles.get(i).getName() +  "\n");
             dockerfileData.append("RUN mv " + professorFiles.get(i).getName() + " " + "src/test/java/\n");
         }
-        dockerfileData.append("CMD export GRADLE_USER_HOME=\"/SCHOOL/DockerTest/mock-upload-dir\" && gradle test\n");
+        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && gradle test\n");
 
         System.out.println(dockerfileData.toString());
 
