@@ -11,7 +11,6 @@ import { ROUTING } from './app-routing/app-routing.module';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthenticationService } from './services/authentication.service';
-import { AddHomeworkComponent } from './add-homework/add-homework.component';
 import { ChangeHomeworkComponent } from './change-homework/change-homework.component';
 
 @NgModule({
@@ -20,7 +19,6 @@ import { ChangeHomeworkComponent } from './change-homework/change-homework.compo
     LoginComponent,
     UserPageComponent,
     HomeworkPageComponent,
-    AddHomeworkComponent,
     ChangeHomeworkComponent
   ],
   imports: [

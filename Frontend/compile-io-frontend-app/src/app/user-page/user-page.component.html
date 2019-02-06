@@ -86,8 +86,9 @@
 
 
     <div *ngIf="selectedHomework == 'new'" class="col  redBorder">
-      <app-add-homework [class] ="selectedClass"
-                        [username] = "username"></app-add-homework>
+      <app-change-homework [className] ="selectedClass"
+                           [userName] = "username"
+                           [newHwk] = "trueBoolean"></app-change-homework>
     </div>
 
 
@@ -139,8 +140,10 @@
                                  [homework]="selectedHomework">
               </app-homework-page>
               <app-change-homework id="changePage" *ngIf="change"
-                                 [givenClass]="selectedClass"
-                                 [homework]="selectedHomework">
+                                 [className]="selectedClass"
+                                 [hwkName]="selectedHomework"
+                                 [userName]="username"
+                                 [newHwk]="falseBoolean">
               </app-change-homework>
             </div>
           </div>
