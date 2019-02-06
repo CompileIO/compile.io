@@ -39,9 +39,7 @@ export class ChangeHomeworkComponent implements OnInit {
         visible: boolean,
         language: string,
         size: number,
-        tries: number,
-        startDate: Date,
-        endDate: Date) {
+        tries: number) {
 
     console.log("THIS IS THE FILE FROM SUBMIT: " + this.file);
     this.hwkInfo = new FormData();
