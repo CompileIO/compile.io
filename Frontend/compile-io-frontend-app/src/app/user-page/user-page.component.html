@@ -7,7 +7,7 @@
 
 <div class="container-fluid ">
   <div class="row">
-    <div class="sidebar vh-100 w-25 mw-100 blackText gray redBorder col-2">
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray redBorder col-2">
       <div class="container noselect">
         <div class="row">
           <div class="col  w-100 p-3">
@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </nav>
 
 
     <div *ngIf="selectedHomework == null && selectedClass == null" class="col  redBorder">
@@ -86,8 +86,9 @@
 
 
     <div *ngIf="selectedHomework == 'new'" class="col  redBorder mw-100">
-      <app-add-homework [class] ="selectedClass"
-                        [username] = "username"></app-add-homework>
+      <app-change-homework [className] ="selectedClass"
+                           [userName] = "username"
+                           [newHwk] = "trueBoolean"></app-change-homework>
     </div>
 
 
@@ -139,9 +140,10 @@
                                  [homework]="selectedHomework">
               </app-homework-page>
               <app-change-homework id="changePage" *ngIf="change"
-                                 [username]="username"
-                                 [givenClass]="selectedClass"
-                                 [homework]="selectedHomework">
+                                 [userName]="username"
+                                 [className]="selectedClass"
+                                 [hwkName]="selectedHomework"
+                                 [newHwk] ="falseBoolean">
               </app-change-homework>
             </div>
           </div>

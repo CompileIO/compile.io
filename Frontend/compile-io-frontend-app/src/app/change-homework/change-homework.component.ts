@@ -48,27 +48,27 @@ export class ChangeHomeworkComponent implements OnInit {
     this.hwkInfo.append("language", language);
     this.hwkInfo.append("size", size.toString());
     this.hwkInfo.append("tries", tries.toString());
-    if (this.newHwk) {
-      this.testService.addHwk(this.className, name, this.hwkInfo, this.file, visible, startDate, endDate).subscribe({
-        next: x => {
-          console.log(x)
-        },
-        error: err => {
-          console.log("ADDING HWK ERROR: " + err)
-        },
-        complete: () => console.log("Added Hwk")
-      });
-    } else {
-      this.testService.updateHwk(this.className, this.hwkName, name, this.hwkInfo, this.file, visible, startDate, endDate).subscribe({
-        next: x => {
-          console.log(x)
-        },
-        error: err => {
-          console.log("UPDATING HWK ERROR: " + err)
-        },
-        complete: () => console.log("Updated Hwk")
-      });
-    }
+    //if (this.newHwk) {
+    //  this.testService.addHwk(this.className, name, this.hwkInfo, this.file, visible, startDate, endDate).subscribe({
+    //    next: x => {
+    //      console.log(x)
+    //    },
+    //    error: err => {
+    //      console.log("ADDING HWK ERROR: " + err)
+    //    },
+    //    complete: () => console.log("Added Hwk")
+    //  });
+    //} else {
+    //  this.testService.updateHwk(this.className, this.hwkName, name, this.hwkInfo, this.file, visible, startDate, endDate).subscribe({
+    //    next: x => {
+    //      console.log(x)
+    //    },
+    //    error: err => {
+    //      console.log("UPDATING HWK ERROR: " + err)
+    //    },
+    //    complete: () => console.log("Updated Hwk")
+    //  });
+    //}
     
   }
 
