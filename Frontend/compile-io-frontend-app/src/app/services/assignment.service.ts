@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import {Assignment} from '../../models/assignment';
-import 'rxjs/add/operator/toPromise';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +15,14 @@ export class AssignmentService {
     return this.http.get(this.apiUrl + "/Assignment/"  + assignmentData.id);
   }
   getAssignments() {
-    return this.http.get(this.apiUrl + '/Assignment/getAssignments')
+    return this.http.get(this.apiUrl + '/Assignment')
+    
   }
 
   createAssignment(assignmentData: Assignment) {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    return this.http.post(this.apiUrl + '/Assignmnet/addAssignment' , assignmentData, { headers: headers, withCredentials: true })
+    console.log(assignmentData);
+    return this.http.post(this.apiUrl + '/Assignmnet' , assignmentData, { headers: headers, withCredentials: true })
   }
 
   updateAssignment(assignmentData: Assignment) {

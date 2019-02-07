@@ -25,7 +25,7 @@ import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
 @RestController
-@RequestMapping("/Assignment")
+//@RequestMapping("/Assignment")
 public class AssignmentController {
 	
 	@Autowired
@@ -38,35 +38,31 @@ public class AssignmentController {
         return assignmentRepository.findAll(sortByCreatedAtDesc);
     }
     
-    @PostMapping("/Assignment")
-    public Assignment createassignment(@Valid @RequestBody Assignment assignment) {
-        return assignmentRepository.save(assignment);
-    }
-    
-    //check all mappings with front end
-    
     @GetMapping(value="/Assignment/{id}")
     public ResponseEntity<Assignment> getassignmentById(@PathVariable("id") String id) {
         return assignmentRepository.findById(id)
                 .map(assignment -> ResponseEntity.ok().body(assignment))
                 .orElse(ResponseEntity.notFound().build());
     }
+    
+    @PostMapping("/Assignment")
+    public Assignment createassignment(@Valid @RequestBody Assignment assignment) {
+        return assignmentRepository.save(assignment);
+    } 
+    
 
     @PutMapping(value="/Assignment/{id}")
     public ResponseEntity<Assignment> updateAssignment(@PathVariable("id") String id,
                                            @Valid @RequestBody Assignment assignment) {
-    	Assignment assignmentGot = assignmentRepository.findById(id).get();
-    	assignmentGot.setName(assignment.getName());
-    	
-    	return ResponseEntity.ok().body(assignmentGot);
-//                .flatMap(assignmentData -> {
-//                    assignmentData.setName(assignment.getName());
-////                    assignmentData.setDueDate(assignment.getDueDate());
-//                    assignmentData.setTest(assignment.getTest());
-////                    assignmentData.setTries(assignment.getTries());
-//                    Assignment updatedAssignment = assignmentRepository.save(assignmentData);
-//                    return ResponseEntity.ok().body(updatedAssignment);
-//                }).orElse(ResponseEntity.notFound().build());							
+    	return assignmentRepository.findById(id)
+                .map(assignmentData -> {
+                    assignmentData.setName(assignment.getName());
+//                    assignmentData.setDueDate(assignment.getDueDate());
+                    assignmentData.setTest(assignment.getTest());
+//                    assignmentData.setTries(assignment.getTries());
+                    Assignment updatedAssignment = assignmentRepository.save(assignmentData);
+                    return ResponseEntity.ok().body(updatedAssignment);
+                }).orElse(ResponseEntity.notFound().build());							
      
     }
 

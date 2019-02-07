@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AssignmentService } from '../services/assignment.service';
 import { TestService } from '../services/test.service';
+import {Assignment} from '../../models/assignment';
 
 @Component({
   selector: 'app-homework-page',
@@ -17,6 +18,7 @@ export class HomeworkPageComponent implements OnInit {
   uploading: boolean;
   error: string;
   results: string[] = [];
+  newAssignment: Assignment = new Assignment();
 
   constructor(private assignmentService: AssignmentService, private testService: TestService) {
     this.MAX_FILE_SIZE = 50000000;
@@ -36,9 +38,26 @@ export class HomeworkPageComponent implements OnInit {
     }
   }
 
-  upload() {
+  submit(name: string,
+    timeout: number,
+    language: string,
+    size: number,
+    tries: number,
+    startDate: Date,
+    endDate: Date) {
+    this.newAssignment.courseName = this.givenClass
+    this.newAssignment.oldAssignmentName = name
+    this.newAssignment.timeout = timeout
+    this.newAssignment.language = language
+    this.newAssignment.size = size
+    this.newAssignment.tries = tries
+    this.newAssignment.file = this.file
+    this.newAssignment.startDate = startDate
+    this.newAssignment.endDate = endDate
+
+  // upload() {
     if (this.file !== null) {
-      this.assignmentService.addAssignment().subscribe({
+      this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)
         },
@@ -48,7 +67,8 @@ export class HomeworkPageComponent implements OnInit {
         complete: () => console.log("Uploaded file")
       });
     }
-  }
+  // }
+}
 
   run() {
     this.testService.runDocker().subscribe({

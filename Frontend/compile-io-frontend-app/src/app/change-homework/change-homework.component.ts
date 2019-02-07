@@ -61,6 +61,14 @@ export class ChangeHomeworkComponent implements OnInit {
         this.newAssignment.file = this.file
         this.newAssignment.startDate = startDate
         this.newAssignment.endDate = endDate
+
+        console.log("These are the submitted values: \n name:" + name + "\n" + 
+        "Timeout: " +  timeout.toString() + "\n" + 
+        "language" +  language + "\n" +  
+        "Size" + size.toString() + "\n" + 
+        "tries" +  tries.toString() + "\n" + 
+        "startDate"+  startDate.toString() + "\n" + 
+        "endDate"+ endDate.toString());
     if (this.newHwk) {
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
