@@ -47,6 +47,7 @@ public class AssignmentController {
     
     @PostMapping("/Assignment")
     public Assignment createassignment(@Valid @RequestBody Assignment assignment) {
+    	System.out.println(assignment.toString());
         return assignmentRepository.save(assignment);
     } 
     

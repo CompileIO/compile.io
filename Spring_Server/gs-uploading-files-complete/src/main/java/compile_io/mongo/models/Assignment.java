@@ -16,7 +16,6 @@ public class Assignment {
 	@Id
 	private String id;
     private String assignmentName;
-//    private String oldAssignmentName;
     private int timeout;
     private String language;
     private int size;
@@ -27,8 +26,8 @@ public class Assignment {
     private Time startTime;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date endDate;
-    
-    private Time endTime;
+
+	private Time endTime;
     private MultipartFile File;
     private String courseName;
     
@@ -147,6 +146,14 @@ public class Assignment {
 
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
+	}
+	
+	@Override
+	public String toString() {
+		return "Assignment [id=" + id + ", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
+				+ language + ", size=" + size + ", tries=" + tries + ", startDate=" + startDate + ", startTime="
+				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", File=" + File + ", courseName="
+				+ courseName + "]";
 	}
 
 	

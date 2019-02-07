@@ -21,7 +21,7 @@ export class AssignmentService {
 
   createAssignment(assignmentData: Assignment) {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    console.log(assignmentData);
+    console.log("Inside the create Assignment Method" + assignmentData);
     return this.http.post(this.apiUrl + '/Assignmnet' , assignmentData, { headers: headers, withCredentials: true })
   }
 
