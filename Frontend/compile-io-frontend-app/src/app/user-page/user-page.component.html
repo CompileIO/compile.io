@@ -1,27 +1,21 @@
-<div class="mw-100 red text-light noselect p-3">
-  <h1>
-    Compile.IO
-  </h1>
-</div>
 
+<nav class="navbar navbar-dark red sticky-top noselect flex-md-nowrap p-0 shadow">
+  <h1 class="navbar-brand col-sm-3 col-md-2 mr-0">Compile.IO</h1>
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap text-light">
+      <a class="nav-link" (click)="logout()">Sign out</a>
+    </li>
+  </ul>
+</nav>
 
-<div class="container-fluid ">
+<div class="container-fluid">
   <div class="row">
-    <nav class="sidebar vh-100 w-25 mw-100 blackText gray redBorder col-2">
-      <div class="container noselect">
-        <div class="row">
-          <div class="col  w-100 p-3">
-            <h3 class="noselect">
-              <span>
-                {{username | uppercase}}
-              </span>
-              <img src="./assets/open-iconic/svg/account-logout.svg" alt="logout" (click)="logout()" class="icon btn" data-toggle="tooltip" data-placement="bottom" title="Logout" />
-            </h3>
-          </div>
-        </div>
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark">
+      <div class="container noselect mt-5">
+        
         <div *ngFor="let cl of classes" class="row">
           <div class="w-100">
-            <div class="w-100 sidebarHover p-3" (click)="selectClass(cl)">
+            <div class="w-100 sidebarHover p-3 btn blackText" (click)="selectClass(cl)">
               <span>
                 {{cl}}
               </span>
@@ -29,20 +23,20 @@
             </div>
             <div class="container" *ngIf="selectedClass == cl">
               <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
-                <div *ngIf="selectedHomework == hwk" class="col p-2 sidebarHover w-50">
+                <div *ngIf="selectedHomework == hwk" class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
                     {{hwk}}
                   </span>
                   <img src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
                 </div>
-                <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 ">
+                <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
                     {{hwk}}
                   </span>
                 </div>
               </div>
               <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="selectHomework('new')">
-                <div class="col p-2 sidebarHover w-50">
+                <div class="col p-2 sidebarHover w-50 btn blackText">
                   <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
                 </div>
               </div>
@@ -53,31 +47,42 @@
     </nav>
 
 
-    <div *ngIf="selectedHomework == null && selectedClass == null" class="col  redBorder">
-
+    <div *ngIf="selectedHomework == null && selectedClass == null" class="col">
+      <div class="container mt-5 shadow h-100">
+        <div class="row">
+          <div class="col">
+            <h1>Welcome</h1>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col">
+            <h5>Start navigating by using the sidebar to the left!</h5>
+          </div>
+        </div>
+      </div>
     </div>
 
 
-    <div *ngIf="selectedHomework == null && selectedClass != null" class="col  redBorder mw-100">
-      <div class="container">
+    <div *ngIf="selectedHomework == null && selectedClass != null" class="col mw-100 mt-5">
+      <div class="container shadow h-100">
         <div class="row">
           <div class="col">
             <div class="p-3 w-100">
-              <h1 class="float-left">
+              <h1>
                 {{selectedClass | uppercase}}
               </h1>
             </div>
           </div>
         </div>
         <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk)">
-          <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 ">
+          <div *ngIf="selectedHomework != hwk" class="col p-4 sidebarHover w-50 btn">
             <span>
               {{hwk}}
             </span>
           </div>
         </div>
         <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="selectHomework('new')">
-          <div class="col p-2 sidebarHover w-50">
+          <div class="col p-2 sidebarHover w-50 btn p-4">
             <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
           </div>
         </div>
@@ -85,19 +90,34 @@
     </div>
 
 
-    <div *ngIf="selectedHomework == 'new'" class="col  redBorder mw-100">
-      <app-change-homework [className] ="selectedClass"
-                           [userName] = "username"
-                           [newHwk] = "trueBoolean"></app-change-homework>
+    <div *ngIf="selectedHomework == 'new'" class="col mw-100 mt-5">
+      <div class="container shadow h-100">
+        <div class="row">
+          <div class="col">
+            <div class="p-3 w-100 d-block" style="height: 100px">
+              <h1>
+                {{selectedClass | uppercase}}
+              </h1>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <app-change-homework [className]="selectedClass"
+                                 [userName]="username"
+                                 [newHwk]="trueBoolean"></app-change-homework>
+          </div>
+        </div>
+      </div>
     </div>
 
 
-    <div *ngIf="selectedHomework != null && selectedHomework != 'new'" class="col  redBorder mw-100">
-      <div class="container">
+    <div *ngIf="selectedHomework != null && selectedHomework != 'new'" class="col mw-100 mt-5">
+      <div class="container shadow h-100">
         <div class="row">
           <div class="col">
             <div class="p-3 w-100">
-              <h1 class="float-left">
+              <h1>
                 {{selectedClass | uppercase}} - {{selectedHomework | uppercase}}
               </h1>
             </div>
@@ -107,21 +127,15 @@
           <div class="col">
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
+              <li class="nav-item noselect">
+                <a *ngIf="!this.change" class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
+                <a *ngIf="this.change" class="nav-link" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+              <li class="nav-item noselect">
+                <a *ngIf="!this.change" class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                <a *ngIf="this.change" class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
               </li>
             </ul>
-            <!--<ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a class="nav-link active" (click)="changeChange(false)">Run</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" (click)="changeChange(true)">Change</a>
-              </li>
-            </ul>-->
           </div>
         </div>
         <div class="row">
