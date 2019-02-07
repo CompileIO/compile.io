@@ -10,7 +10,7 @@
   </div>
   <div class="row justify-content-center">
     <div class="col">
-      <form class="w-50 p-3 border">
+      <form class="w-100 p-3 border">
         <div class="container">
           <div class="row">
             <div class="col">
@@ -19,7 +19,6 @@
                 <input *ngIf="newHwk" type="text" class="form-control" #nameText id="nameText" aria-describedby="nameHelp" placeholder="Hmk1" required>
 
                 <input *ngIf="!newHwk" type="text" class="form-control" #nameText id="nameText" value={{homework}} aria-describedby="nameHelp" placeholder="Hmk1" required>
-                <small id="nameHelp" class="form-text text-muted float-left">Try not to make the name so large as to overflow the sidebar.</small>
               </div>
             </div>
           </div>
@@ -29,39 +28,66 @@
                 <label class="float-left" for="timeoutText">Timeout (s)</label>
                 <input *ngIf="newHwk" type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" placeholder="5" required>
 
-                <input *ngIf="!newHwk" type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" value = {{timeout}} placeholder="5" required>
+                <input *ngIf="!newHwk" type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" value={{timeout}} placeholder="5" required>
                 <small id="timeoutHelp" class="form-text text-muted float-left">How much time to spend running a test before timing out.</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="maxText">Max Size (Mbs)</label>
+                <input type="number" class="form-control" #maxText id="maxText" aria-describedby="maxHelp" placeholder="5" required>
+                <small id="maxHelp" class="form-text text-muted float-left">How large student uploads can be in MegaBites.</small>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col">
               <div class="form-check p-3">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-2">
-                      <label class="form-check-label float-left" for="visibleCheck">Visible</label>
-                    </div>
-                    <div class="col-1">
-                      <input type="checkbox" class="form-check-input float-left" #visibleCheck id="visibleCheck" aria-describedby="visibleHelp" required>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <small id="visibleHelp" class="form-text text-muted float-left">If the homework is visible to students.</small>
-                    </div>
-                  </div>
-                </div>
+                <label class="float-left" for="startDate">Start Date</label>
+                <input type="date" class="form-control" #startDate id="startDate" aria-describedby="startDateHelp" required>
+                <small id="startDateHelp" class="form-text text-muted float-left">What Date Students can start submitting to this assignment.</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left" for="startTime">Start Time</label>
+                <input type="time" class="form-control" #startTime id="startTime" aria-describedby="startTimeHelp" required>
+                <small id="startTimeHelp" class="form-text text-muted float-left">What Time Students can start submitting to this assignment.</small>
               </div>
             </div>
           </div>
           <div class="row">
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left" for="endDate">End Date</label>
+                <input type="date" class="form-control" #endDate id="endDate" aria-describedby="endDateHelp" required>
+                <small id="endDateHelp" class="form-text text-muted float-left">What Date Students can no longer submit to this assignment.</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left" for="endTime">End Time</label>
+                <input type="time" class="form-control" #endTime id="endTime" aria-describedby="endTimeHelp" required>
+                <small id="endTimeHelp" class="form-text text-muted float-left">What Time Students can no longer submit to this assignment.</small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="triesText">Number of tries</label>
+                <input *ngIf="newHwk" type="number" min="0" class="form-control" #triesText id="triesText" aria-describedby="triesHelp" placeholder="5" required>
+
+                <input *ngIf="!newHwk" type="number" min="0" class="form-control" #triesText id="triesText" aria-describedby="triesHelp" placeholder="5" required>
+                <small id="triesHelp" class="form-text text-muted float-left">How many times a student can submit an assignment. 0 for infinite</small>
+              </div>
+            </div>
             <div class="col">
               <div class="form-check p-3">
                 <label for="language">Language</label>
                 <select multiple class="form-control" #languageSelect id="language" required>
-                  <option selected = "{{langauge}} == 'java'">Java</option>
-                  <option selected = "{{langauge}} == 'python'">Python</option>
+                  <option>Java</option>
+                  <option>Python</option>
                 </select>
               </div>
             </div>

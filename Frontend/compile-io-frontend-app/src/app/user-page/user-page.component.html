@@ -7,7 +7,7 @@
 
 <div class="container-fluid ">
   <div class="row">
-    <div class="sidebar vh-100 w-25 blackText gray redBorder col-2">
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray redBorder col-2">
       <div class="container noselect">
         <div class="row">
           <div class="col  w-100 p-3">
@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </nav>
 
 
     <div *ngIf="selectedHomework == null && selectedClass == null" class="col  redBorder">
@@ -58,7 +58,7 @@
     </div>
 
 
-    <div *ngIf="selectedHomework == null && selectedClass != null" class="col  redBorder">
+    <div *ngIf="selectedHomework == null && selectedClass != null" class="col  redBorder mw-100">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -85,14 +85,14 @@
     </div>
 
 
-    <div *ngIf="selectedHomework == 'new'" class="col  redBorder">
+    <div *ngIf="selectedHomework == 'new'" class="col  redBorder mw-100">
       <app-change-homework [className] ="selectedClass"
                            [userName] = "username"
                            [newHwk] = "trueBoolean"></app-change-homework>
     </div>
 
 
-    <div *ngIf="selectedHomework != null && selectedHomework != 'new'" class="col  redBorder">
+    <div *ngIf="selectedHomework != null && selectedHomework != 'new'" class="col  redBorder mw-100">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -140,10 +140,10 @@
                                  [homework]="selectedHomework">
               </app-homework-page>
               <app-change-homework id="changePage" *ngIf="change"
+                                 [userName]="username"
                                  [className]="selectedClass"
                                  [hwkName]="selectedHomework"
-                                 [userName]="username"
-                                 [newHwk]="falseBoolean">
+                                 [newHwk] ="falseBoolean">
               </app-change-homework>
             </div>
           </div>
