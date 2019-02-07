@@ -21,6 +21,7 @@ export class ChangeHomeworkComponent implements OnInit {
   assignmentInfo: FormData;
   Assignments: Assignment[];
   newAssignment: Assignment = new Assignment();
+  file: File;
   // editing: boolean = false;
   // editingTodo: Assignment = new Assignment();
 
@@ -29,8 +30,9 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   fileUploadFunction(event: any) {
-    this.newAssignment.file = event.target.files[0];
-    console.log("File was changed to this: " + this.newAssignment.file);
+    this.file = event.target.files[0];
+    //this.newAssignment.file = event.target.files[0];
+    console.log("File was changed to this: " + this.file);
   }
 
   getHomework() {

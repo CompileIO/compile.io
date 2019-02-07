@@ -20,9 +20,9 @@ export class AssignmentService {
   }
 
   createAssignment(assignmentData: Assignment) {
-    const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    console.log("Inside the create Assignment Method" + assignmentData);
-    return this.http.post(this.apiUrl + '/Assignmnet' , "here I am", { headers: headers, withCredentials: true })
+    const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
+    console.log("Inside the create Assignment Method" + assignmentData.startTime);
+    return this.http.post(this.apiUrl + '/Assignment' , assignmentData, { headers: headers, withCredentials: true })
   }
 
   updateAssignment(assignmentData: Assignment) {

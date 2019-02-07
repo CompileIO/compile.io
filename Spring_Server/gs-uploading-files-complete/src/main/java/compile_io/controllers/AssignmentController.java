@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,11 +47,15 @@ public class AssignmentController {
     }
     
     @PostMapping("/Assignment")
-    public String createassignment(String here) {//@Valid @RequestBody Assignment assignment) {
-    	System.out.println("HERE I AM \n\n\n\n");
-    	return "Got Here";
-//    	System.out.println(assignment.toString());
-//        return assignmentRepository.save(assignment);
+    public String createassignment(@Valid @RequestBody Assignment assignment) {
+    	/*System.out.println("HERE I AM \n\n\n\n");
+      System.out.println(here);
+    	return "Got Here";*/
+      //assignment.setFile(file);
+      //System.out.println("\n\n\n\n\n" + file + "\n\n\n\n\n");
+    	System.out.println("\n\n\n\n\n" + assignment.toString() + "\n\n\n\n\n");
+        //return assignmentRepository.save(assignment);
+        return "WOW!";
     } 
     
 

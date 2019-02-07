@@ -28,7 +28,7 @@ public class Assignment {
     private Date endDate;
 
 	private Time endTime;
-    private MultipartFile File;
+    private MultipartFile file;
     private String courseName;
     
 //    @DBRef
@@ -133,11 +133,11 @@ public class Assignment {
 	}
 
 	public MultipartFile getFile() {
-		return File;
+		return this.file;
 	}
 
 	public void setFile(MultipartFile file) {
-		File = file;
+		this.file = file;
 	}
 
 	public String getCourseName() {
@@ -152,7 +152,7 @@ public class Assignment {
 	public String toString() {
 		return "Assignment [id=" + id + ", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
 				+ language + ", size=" + size + ", tries=" + tries + ", startDate=" + startDate + ", startTime="
-				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", File=" + File + ", courseName="
+				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", File=" + this.file + ", courseName="
 				+ courseName + "]";
 	}
 
