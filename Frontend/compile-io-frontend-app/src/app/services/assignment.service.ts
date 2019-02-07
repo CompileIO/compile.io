@@ -16,10 +16,13 @@ export class AssignmentService {
     return this.http.get(this.apiUrl + "/" + givenClass, { headers: empHeaders, withCredentials: true });
   }
 
-  addAssignment(): Observable<any> {
-    let body = new FormData();
-    // body.append("file", file);
+  addAssignment(form: FormData, startDate: Date, endDate: Date): Observable<any> {
     const assignmentHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
-    return this.http.post(this.apiUrl, { headers: assignmentHeaders, withCredentials: true });
+    return this.http.post(this.apiUrl + "/Homework/updateHomework", form,{ headers: assignmentHeaders, withCredentials: true });
+  }
+
+  updateAssignment(form: FormData, startDate: Date, endDate: Date) {
+    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
+    return this.http.put(this.apiUrl + "/Homework/updateHomework",form, { headers: fileHeaders, withCredentials: true } );
   }
 }

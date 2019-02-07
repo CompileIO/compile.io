@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CourseService } from '../services/course.service';
-import { TestService } from '../services/test.service';
+import { AssignmentService } from '../services/assignment.service';
 
 @Component({
   selector: 'app-change-homework',
@@ -16,59 +16,64 @@ export class ChangeHomeworkComponent implements OnInit {
   timeout: string;
   language: string;
   file: File;
-  hwkInfo: FormData;
-  constructor(private courseService: CourseService, private testService: TestService) {
+  assignmentInfo: FormData;
+  constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
     
   }
 
   getHomework() {
     var stuff = [];
     this.courseService.getHomeworkInfo(this.className, this.hwkName).subscribe({
-      next: x => this.hwkInfo = x,
+      next: x => this.assignmentInfo = x,
       error: err => console.log("GET HWK INFO ERROR: " + err),
       complete: () => console.log("got Hwk Info")
     });
-    this.name = this.hwkInfo.get("name").toString();
-    this.timeout = this.hwkInfo.get("timeout").toString();
-    //this.visible = this.hwkInfo.get("visible");
-    this.language = this.hwkInfo.get("language").toString();
-    //this.file = this.hwkInfo.get("file");
+    this.name = this.assignmentInfo.get("name").toString();
+    this.timeout = this.assignmentInfo.get("timeout").toString();
+    //this.visible = this.assignmentInfo.get("visible");
+    this.language = this.assignmentInfo.get("language").toString();
+    //this.file = this.assignmentInfo.get("file");
   }
   submit(name: string,
         timeout: number,
         visible: boolean,
         language: string,
         size: number,
-        tries: number) {
+        tries: number,
+        startDate: Date,
+        endDate: Date) {
 
     console.log("THIS IS THE FILE FROM SUBMIT: " + this.file);
-    this.hwkInfo = new FormData();
-    this.hwkInfo.append("name", name);
-    this.hwkInfo.append("timeout", timeout.toString());
-    this.hwkInfo.append("language", language);
-    this.hwkInfo.append("size", size.toString());
-    this.hwkInfo.append("tries", tries.toString());
-    //if (this.newHwk) {
-    //  this.testService.addHwk(this.className, name, this.hwkInfo, this.file, visible, startDate, endDate).subscribe({
-    //    next: x => {
-    //      console.log(x)
-    //    },
-    //    error: err => {
-    //      console.log("ADDING HWK ERROR: " + err)
-    //    },
-    //    complete: () => console.log("Added Hwk")
-    //  });
-    //} else {
-    //  this.testService.updateHwk(this.className, this.hwkName, name, this.hwkInfo, this.file, visible, startDate, endDate).subscribe({
-    //    next: x => {
-    //      console.log(x)
-    //    },
-    //    error: err => {
-    //      console.log("UPDATING HWK ERROR: " + err)
-    //    },
-    //    complete: () => console.log("Updated Hwk")
-    //  });
-    //}
+    this.assignmentInfo = new FormData();
+    this.assignmentInfo.append("newAssignmentname", name);
+    this.assignmentInfo.append("timeout", timeout.toString());
+    this.assignmentInfo.append("language", language);
+    this.assignmentInfo.append("size", size.toString());
+    this.assignmentInfo.append("tries", tries.toString());
+    this.assignmentInfo.append("coursename", this.className);
+      this.assignmentInfo.append("file", this.file);
+    if (this.newHwk) {
+      this.assignmentService.addAssignment(this.assignmentInfo, startDate, endDate).subscribe({
+        next: x => {
+          console.log(x)
+        },
+        error: err => {
+          console.log("ADDING HWK ERROR: " + err)
+        },
+        complete: () => console.log("Added Hwk")
+      });
+    } else {
+      this.assignmentInfo.append("oldAssignmentName", this.hwkName);
+      this.assignmentService.updateAssignment(this.assignmentInfo, startDate, endDate).subscribe({
+        next: x => {
+          console.log(x)
+        },
+        error: err => {
+          console.log("UPDATING HWK ERROR: " + err)
+        },
+        complete: () => console.log("Updated Hwk")
+      });
+    }
     
   }
 
