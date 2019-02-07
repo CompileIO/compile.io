@@ -26,15 +26,15 @@ export class TestService {
   
   runDocker(): Observable<any> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get(this.apiUrl + "/run", { headers: empHeaders, withCredentials: true });
+    return this.http.get(this.apiUrl + "/Test/runDocker", { headers: empHeaders, withCredentials: true });
   }
   
   getResults(givenCourse: string, givenAssignment: string): Observable<any> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get(this.apiUrl + "/" + givenCourse + "/" + givenAssignment, { headers: empHeaders, withCredentials: true });
+    return this.http.get(this.apiUrl + "/Test/getResults" + givenCourse + "/" + givenAssignment, { headers: empHeaders, withCredentials: true });
   }
   getTests(givenCourse: string, givenAssignment: string): Observable<any> {
     const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get(this.apiUrl + "/" + givenCourse + "/" + givenAssignment + "/tests", { headers: empHeaders, withCredentials: true });
+    return this.http.get(this.apiUrl + "/Test/getTests" + givenCourse + "/" + givenAssignment + "/tests", { headers: empHeaders, withCredentials: true });
   }
 }
