@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Document
+@Document(collection="Assignment")
 public class Assignment {
 	
 	@Id
@@ -18,6 +18,7 @@ public class Assignment {
 	
 	@DBRef
 	private Test test;
+	
 	@DBRef
 	private List<Code> codes;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -26,6 +27,10 @@ public class Assignment {
 	public Assignment(Date dueDate) {
 		super();
 		this.dueDate = dueDate;
+	}
+	
+	public Assignment() {
+		super();
 	}
 
 	public Date getDueDate() {
@@ -43,6 +48,13 @@ public class Assignment {
 	public void setTest(Test test) {
 		this.test = test;
 	}
+	
+	public String getName() {
+		return this.name;
+	}
+	public void setName(String name) {
+		this.name=name;
+	}
 
 //	public List<Code> getCodes() {
 //		return codes;
@@ -56,7 +68,12 @@ public class Assignment {
 	public String toString() {
 		return "Assignment [dueDate=" + dueDate + "]";
 	}
-	
+
+//	public Integer getTries() {
+//		// TODO Auto-generated method stub
+//		return this.tries;
+//	}
+//	
 	
 	
 	
