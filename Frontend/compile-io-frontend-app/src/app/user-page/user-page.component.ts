@@ -16,6 +16,8 @@ export class UserPageComponent implements OnInit {
   homeworks: string[] = [];
   selectedHomework: string = null;
   change: boolean = false;
+  falseBoolean: boolean = false;
+  trueBoolean: boolean = true;
 
   constructor(private authenticationService: AuthenticationService,
               private courseService:CourseService,

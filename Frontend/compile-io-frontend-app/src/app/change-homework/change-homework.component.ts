@@ -1,5 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Component, OnInit, Input} from '@angular/core';
 import { CourseService } from '../services/course.service';
+import { AssignmentService } from '../services/assignment.service';
+import {Assignment} from '../../models/assignment';
 
 @Component({
   selector: 'app-change-homework',
@@ -7,33 +10,96 @@ import { CourseService } from '../services/course.service';
   styleUrls: ['./change-homework.component.css']
 })
 export class ChangeHomeworkComponent implements OnInit {
-
-  @Input() givenClass: string;
-  @Input() homework: string;
+  @Input() userName: string;
+  @Input() className: string;
+  @Input() hwkName: string;
+  @Input() newHwk: boolean;
   name: string;
   timeout: string;
-  visible: boolean;
   language: string;
   file: File;
-  homeworkInfo: FormData;
-  constructor(private courseService: CourseService) {}
+  assignmentInfo: FormData;
+  Assignments: Assignment[];
+  newAssignment: Assignment = new Assignment();
+  editing: boolean = false;
+  editingTodo: Assignment = new Assignment();
 
-  getHomework() {
-    this.courseService.getHomeworkInfo(this.givenClass, this.homework).subscribe({
-      next: x => this.homeworkInfo = x,
-      error: err => console.log("GET CLASSES ERROR: " + err),
-      complete: () => console.log("got classes")
-    });
-    this.name = this.homeworkInfo.get("name").toString();
-    this.timeout = this.homeworkInfo.get("timeout").toString();
-    //this.visible = this.homeworkInfo.get("visible");
-    this.language = this.homeworkInfo.get("language").toString();
-    //this.file = this.homeworkInfo.get("file");
+  constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
+    
   }
 
+  fileUpload(event: any) {
+    this.file = event.target.files[0];
+  }
+
+  getHomework() {
+    var stuff = [];
+    this.courseService.getHomeworkInfo(this.className, this.hwkName).subscribe({
+      next: x => this.assignmentInfo = x,
+      error: err => console.log("GET HWK INFO ERROR: " + err),
+      complete: () => console.log("got Hwk Info")
+    });
+    this.name = this.assignmentInfo.get("name").toString();
+    this.timeout = this.assignmentInfo.get("timeout").toString();
+    //this.visible = this.assignmentInfo.get("visible");
+    this.language = this.assignmentInfo.get("language").toString();
+  }
+
+  submit(name: string,
+        timeout: number,
+        language: string,
+        size: number,
+        tries: number,
+        startDate: Date,
+        endDate: Date) {
+        this.newAssignment.courseName = this.name
+        this.newAssignment.oldAssignmentName = this.className
+        this.newAssignment.timeout = timeout
+        this.newAssignment.language = language
+        this.newAssignment.size = size
+        this.newAssignment.tries = tries
+        this.newAssignment.file = this.file
+        this.newAssignment.startDate = startDate
+        this.newAssignment.endDate = endDate
+    if (this.newHwk) {
+      this.assignmentService.createAssignment(this.newAssignment).subscribe({
+        next: x => {
+          console.log(x)
+        },
+        error: err => {
+          console.log("ADDING HWK ERROR: " + err)
+        },
+        complete: () => console.log("Added Hwk")
+      });
+    } else {
+      this.newAssignment.newAssignmentName = name
+      this.assignmentService.updateAssignment(this.newAssignment).subscribe({
+        next: x => {
+          console.log(x)
+        },
+        error: err => {
+          console.log("UPDATING HWK ERROR: " + err)
+        },
+        complete: () => console.log("Updated Hwk")
+      });
+    }
+  }
+
+  getAssignments(): void {
+    this.assignmentService.getAssignments().subscribe({
+      complete: () => assignments => this.Assignments = assignments
+    });  
+  }
+  
 
   ngOnInit() {
-    this.getHomework();
+    this.getAssignments();
+    console.log("newHwk: " + this.newHwk);
+    if (this.newHwk !== undefined &&
+      this.newHwk !== null &&
+      this.newHwk != true) {
+      this.getHomework();
+    }
   }
 
 }

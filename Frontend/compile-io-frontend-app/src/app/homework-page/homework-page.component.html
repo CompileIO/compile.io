@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="selectedResult == null">
   <table>
     <tr>
       <td>
@@ -35,6 +35,29 @@
     <span>
       {{res}}
     </span>
+  </div>
+</div>
+
+<div *ngIf="selectedResult != null">
+  <div>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h1>HOW MANY TESTS PASSED</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h1>OUTPUT FROM TEST</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h1>RETURN BUTTON</h1>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
