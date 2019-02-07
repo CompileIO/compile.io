@@ -1,42 +1,26 @@
 <div *ngIf="selectedResult == null">
-  <table>
-    <tr>
-      <td>
-        <h2>
-          Submission:
-        </h2>
-      </td>
-      <td>
-        <input type="file" accept=".jar" (change)="fileUpload($event)" placeholder="Upload file..." />
-      </td>
-      <td>
-        <div *ngIf="uploading">
-          <span>
-            Uploading ...
-          </span>
-        </div>
-      </td>
-      <td>
-        <div *ngIf="fileReady">
-          <button type="button" (click)="run()">Run!</button>
-        </div>
-      </td>
-      <td>
-        <div *ngIf="error !== ''">
-          <span>
-            {{error.message}}
-          </span>
-        </div>
-      </td>
-    </tr>
-  </table>
-  <button type="button" (click)="getResults()">REFRESH RESULTS</button>
-  <div *ngFor="let res of results">
-    <span>
-      {{res}}
-    </span>
+  <div class="container">
+    <div class="row mt-5">
+      <div class="col">
+        <input type="file" class="custom-file-input" #fileUpload id="fileUpload">
+        <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
+        <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
+      </div>
+      <div class="col">
+        <button *ngIf="fileUpload.files.length == 0" type="button" disabled (click)="run()">Run!</button>
+        <button *ngIf="fileUpload.files.length != 0" type="button" (click)="run()">Run!</button>
+      </div>
+    </div>
+    <div *ngFor="let res of results" class="row">
+      <div class="col">
+        <span>
+          {{res}}
+        </span>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <div *ngIf="selectedResult != null">
   <div>

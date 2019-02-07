@@ -30,11 +30,6 @@
   width: 20px;
   height: 20px;
 }
-.redBorder {
-  border-width: 20px;
-  border-color: rgb(136,0,0);
-  border-style: solid;
-}
 .sidebar {
   min-width: 300px;
 }
