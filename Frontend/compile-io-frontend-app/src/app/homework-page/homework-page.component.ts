@@ -46,7 +46,7 @@ export class HomeworkPageComponent implements OnInit {
     startDate: Date,
     endDate: Date) {
     this.newAssignment.courseName = this.givenClass
-    this.newAssignment.oldAssignmentName = name
+    this.newAssignment.assignmentName = name
     this.newAssignment.timeout = timeout
     this.newAssignment.language = language
     this.newAssignment.size = size

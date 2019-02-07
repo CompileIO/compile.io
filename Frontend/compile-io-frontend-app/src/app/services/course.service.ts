@@ -24,6 +24,10 @@ export class CourseService {
     body.append("course",givenCourse);
     body.append("course",givenHomework);
     return this.http.put(this.apiUrl + "/Putcourses", body, { headers: empHeaders, withCredentials: true });
-
   }
+
+  // updateAssignment(assignmentData: Assignment) {
+  //   const headers = new HttpHeaders({'enctype': "multipart/form-data" });
+  //   return this.http.put(this.apiUrl + '/Assignment/' + assignmentData.id +"/updateAssignment", assignmentData, { headers: headers, withCredentials: true })
+  // }
 }

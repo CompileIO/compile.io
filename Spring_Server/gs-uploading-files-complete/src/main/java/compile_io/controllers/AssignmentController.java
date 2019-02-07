@@ -56,10 +56,17 @@ public class AssignmentController {
                                            @Valid @RequestBody Assignment assignment) {
     	return assignmentRepository.findById(id)
                 .map(assignmentData -> {
-                    assignmentData.setName(assignment.getName());
-//                    assignmentData.setDueDate(assignment.getDueDate());
-                    assignmentData.setTest(assignment.getTest());
-//                    assignmentData.setTries(assignment.getTries());
+                    assignmentData.setAssignmentName(assignment.getassignmentName());
+                    assignmentData.setTimeout(assignment.getTimeout());
+                    assignmentData.setLanguage(assignment.getLanguage());
+                    assignmentData.setSize(assignment.getSize());
+                    assignmentData.setTries(assignment.getTries());
+                    assignmentData.setStartDate(assignment.getStartDate());
+                    assignmentData.setStartTime(assignment.getStartTime());
+                    assignmentData.setEndDate(assignment.getEndDate());
+                    assignmentData.setEndTime(assignment.getEndTime());  
+                    assignmentData.setFile(assignment.getFile());
+                    assignmentData.setCourseName(assignment.getCourseName());
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
                     return ResponseEntity.ok().body(updatedAssignment);
                 }).orElse(ResponseEntity.notFound().build());							

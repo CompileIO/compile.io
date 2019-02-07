@@ -1,79 +1,154 @@
 package compile_io.mongo.models;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 @Document(collection="Assignment")
 public class Assignment {
 	
 	@Id
 	private String id;
+    private String assignmentName;
+//    private String oldAssignmentName;
+    private int timeout;
+    private String language;
+    private int size;
+    private int tries;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date startDate;
+    
+    private Time startTime;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date endDate;
+    
+    private Time endTime;
+    private MultipartFile File;
+    private String courseName;
+    
+//    @DBRef
+//	private List<UnitTest> unitTests;
 	
-	private String name;
-	
-	@DBRef
-	private Test test;
-	
-	@DBRef
-	private List<Code> codes;
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date dueDate;
-	
-	public Assignment(Date dueDate) {
-		super();
-		this.dueDate = dueDate;
-	}
+    
+    
+    
+    //NOT NECESSARY
+//	private String name;
+//	
+//	@DBRef
+//	private Test test;
+//	
+//	@DBRef
+//	private List<Code> codes;
+//	
+//    private Date dueDate;
 	
 	public Assignment() {
 		super();
 	}
 
-	public Date getDueDate() {
-		return dueDate;
+	public String getId() {
+		return id;
 	}
 
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public Test getTest() {
-		return test;
+	public String getassignmentName() {
+		return assignmentName;
 	}
 
-	public void setTest(Test test) {
-		this.test = test;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	public void setName(String name) {
-		this.name=name;
+	public void setAssignmentName(String newAssignmentName) {
+		this.assignmentName = newAssignmentName;
 	}
 
-//	public List<Code> getCodes() {
-//		return codes;
-//	}
-//
-//	public void setCodes(List<Code> codes) {
-//		this.codes = codes;
-//	}
-
-	@Override
-	public String toString() {
-		return "Assignment [dueDate=" + dueDate + "]";
+	public int getTimeout() {
+		return timeout;
 	}
 
-//	public Integer getTries() {
-//		// TODO Auto-generated method stub
-//		return this.tries;
-//	}
-//	
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public int getTries() {
+		return tries;
+	}
+
+	public void setTries(int tries) {
+		this.tries = tries;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Time getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Time startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public Time getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Time endTime) {
+		this.endTime = endTime;
+	}
+
+	public MultipartFile getFile() {
+		return File;
+	}
+
+	public void setFile(MultipartFile file) {
+		File = file;
+	}
+
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
+
 	
 	
 	

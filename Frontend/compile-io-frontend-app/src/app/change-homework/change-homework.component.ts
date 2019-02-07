@@ -3,6 +3,7 @@ import { Component, OnInit, Input} from '@angular/core';
 import { CourseService } from '../services/course.service';
 import { AssignmentService } from '../services/assignment.service';
 import {Assignment} from '../../models/assignment';
+import { Time } from '@angular/common';
 
 @Component({
   selector: 'app-change-homework',
@@ -17,25 +18,25 @@ export class ChangeHomeworkComponent implements OnInit {
   name: string;
   timeout: string;
   language: string;
-  file: File;
   assignmentInfo: FormData;
   Assignments: Assignment[];
   newAssignment: Assignment = new Assignment();
-  editing: boolean = false;
-  editingTodo: Assignment = new Assignment();
+  // editing: boolean = false;
+  // editingTodo: Assignment = new Assignment();
 
   constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
     
   }
 
-  fileUpload(event: any) {
-    this.file = event.target.files[0];
+  fileUploadFunction(event: any) {
+    this.newAssignment.file = event.target.files[0];
+    console.log("File was changed to this: " + this.newAssignment.file);
   }
 
   getHomework() {
     var stuff = [];
     this.courseService.getHomeworkInfo(this.className, this.hwkName).subscribe({
-      next: x => this.assignmentInfo = x,
+      next: x => this.newAssignment = x,
       error: err => console.log("GET HWK INFO ERROR: " + err),
       complete: () => console.log("got Hwk Info")
     });
@@ -45,30 +46,7 @@ export class ChangeHomeworkComponent implements OnInit {
     this.language = this.assignmentInfo.get("language").toString();
   }
 
-  submit(name: string,
-        timeout: number,
-        language: string,
-        size: number,
-        tries: number,
-        startDate: Date,
-        endDate: Date) {
-        this.newAssignment.courseName = this.name
-        this.newAssignment.oldAssignmentName = this.className
-        this.newAssignment.timeout = timeout
-        this.newAssignment.language = language
-        this.newAssignment.size = size
-        this.newAssignment.tries = tries
-        this.newAssignment.file = this.file
-        this.newAssignment.startDate = startDate
-        this.newAssignment.endDate = endDate
-
-        console.log("These are the submitted values: \n name:" + name + "\n" + 
-        "Timeout: " +  timeout.toString() + "\n" + 
-        "language" +  language + "\n" +  
-        "Size" + size.toString() + "\n" + 
-        "tries" +  tries.toString() + "\n" + 
-        "startDate"+  startDate.toString() + "\n" + 
-        "endDate"+ endDate.toString());
+  submit(){
     if (this.newHwk) {
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
@@ -80,7 +58,7 @@ export class ChangeHomeworkComponent implements OnInit {
         complete: () => console.log("Added Hwk")
       });
     } else {
-      this.newAssignment.newAssignmentName = name
+      // this.newAssignment.newAssignmentName = name
       this.assignmentService.updateAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)
@@ -98,7 +76,6 @@ export class ChangeHomeworkComponent implements OnInit {
       complete: () => assignments => this.Assignments = assignments
     });  
   }
-  
 
   ngOnInit() {
     this.getAssignments();
