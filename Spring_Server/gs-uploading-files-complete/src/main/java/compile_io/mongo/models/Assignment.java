@@ -1,14 +1,19 @@
 package compile_io.mongo.models;
 
+
+
 import java.sql.Date;
-import java.sql.Time;
-import java.util.List;
+import java.time.LocalTime;
+
+import javax.validation.Valid;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Document(collection="Assignment")
 public class Assignment {
@@ -22,13 +27,14 @@ public class Assignment {
     private int tries;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date startDate;
-    
-    private Time startTime;
+//    @DateTimeFormat(pattern = "HH:mm")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
+    private LocalTime startTime;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date endDate;
-
-	private Time endTime;
-    private MultipartFile file;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
+	private LocalTime endTime;
+    private String filepath;
     private String courseName;
     
 //    @DBRef
@@ -51,6 +57,22 @@ public class Assignment {
 	public Assignment() {
 		super();
 	}
+
+//	public Assignment(@Valid Assignment assignment) {
+//		super();
+//		this.id = assignment.id;
+//		this.assignmentName = assignment.assignmentName;
+//		this.timeout = assignment.timeout;
+//		this.language = assignment.language;
+//		this.size = assignment.size;
+//		this.tries = assignment.tries;
+//		this.startDate = assignment.startDate;
+//		this.startTime = assignment.startTime;
+//		this.endDate = assignment.endDate;
+//		this.endTime = assignment.endTime;
+//		this.filepath = assignment.filepath;
+//		this.courseName = assignment.courseName;
+//	}
 
 	public String getId() {
 		return id;
@@ -107,12 +129,14 @@ public class Assignment {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
-	public Time getStartTime() {
+	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
+	public LocalTime getStartTime() {
 		return startTime;
 	}
-
-	public void setStartTime(Time startTime) {
+	
+//	 @DateTimeFormat(pattern = "HH:mm")
+	public void setStartTime(LocalTime startTime) {
 		this.startTime = startTime;
 	}
 
@@ -123,21 +147,22 @@ public class Assignment {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
-	public Time getEndTime() {
+	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
+	public LocalTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Time endTime) {
+	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
 
-	public MultipartFile getFile() {
-		return this.file;
+	public String getFilePath() {
+		return this.filepath;
 	}
 
-	public void setFile(MultipartFile file) {
-		this.file = file;
+	public void setFilePath(String file) {
+		this.filepath = file;
 	}
 
 	public String getCourseName() {
@@ -150,9 +175,9 @@ public class Assignment {
 	
 	@Override
 	public String toString() {
-		return "Assignment [id=" + id + ", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
+		return "Assignment [Id= " +id +", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
 				+ language + ", size=" + size + ", tries=" + tries + ", startDate=" + startDate + ", startTime="
-				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", File=" + this.file + ", courseName="
+				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", File=" + filepath + ", courseName="
 				+ courseName + "]";
 	}
 

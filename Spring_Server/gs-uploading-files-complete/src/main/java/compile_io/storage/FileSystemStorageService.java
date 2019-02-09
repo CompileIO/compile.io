@@ -106,33 +106,4 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Could not initialize storage", e);
         }
     }
-	
-//	@Override
-//    public void store(File file) {
-//        String filename = StringUtils.cleanPath(file.getName());
-//        
-//        try {
-//        	
-//        	BufferedReader br = new BufferedReader(new FileReader(filename));     
-//            if (br.readLine() == null) {
-//            	throw new StorageException("Failed to store empty file " + filename);
-//            }
-////            if (file.) {
-////                throw new StorageException("Failed to store empty file " + filename);
-////            }
-//            if (filename.contains("..")) {
-//                // This is a security check
-//                throw new StorageException(
-//                        "Cannot store file with relative path outside current directory "
-//                                + filename);
-//            }
-//            try (InputStream inputStream = ((InputStreamSource) file).getInputStream()) {
-//                Files.copy(inputStream, this.rootLocation.resolve(filename),
-//                    StandardCopyOption.REPLACE_EXISTING);
-//            }
-//        }
-//        catch (IOException e) {
-//            throw new StorageException("Failed to store file " + filename, e);
-//        }
-//    }
 }

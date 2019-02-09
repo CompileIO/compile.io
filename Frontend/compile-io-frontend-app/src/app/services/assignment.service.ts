@@ -18,10 +18,27 @@ export class AssignmentService {
     return this.http.get(this.apiUrl + '/Assignment')
     
   }
+  uploadFile(file: File) {
+    let body: FormData = new FormData();  
+    body.append('file', file);
+    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
+    return this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});
+  }
 
   createAssignment(assignmentData: Assignment) {
     const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
-    console.log("Inside the create Assignment Method" + assignmentData.startTime);
+    console.log("Inside the create Assignment Method: " + "\n" + 
+    "ID: " + assignmentData.id + "\n" +
+    "Course Name: " + assignmentData.courseName + "\n" +
+    "Assignment Name: " + assignmentData.assignmentName + "\n" +
+    "Timeout: " + assignmentData.timeout + "\n" +
+    "language: " + assignmentData.language + "\n" +
+    "Size: " + assignmentData.size + "\n" +
+    "tries: " + assignmentData.tries + "\n" +
+    "start date: " + assignmentData.startDate + "\n" +
+    "start time: " + assignmentData.startTime + "\n" +
+    "end date: " + assignmentData.endDate + "\n" +
+    "end time: " + assignmentData.endTime);
     return this.http.post(this.apiUrl + '/Assignment' , assignmentData, { headers: headers, withCredentials: true })
   }
 

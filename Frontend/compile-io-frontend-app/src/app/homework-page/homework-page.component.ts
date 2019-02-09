@@ -51,7 +51,7 @@ export class HomeworkPageComponent implements OnInit {
     this.newAssignment.language = language
     this.newAssignment.size = size
     this.newAssignment.tries = tries
-    this.newAssignment.file = this.file
+    // this.newAssignment.file = this.file
     this.newAssignment.startDate = startDate
     this.newAssignment.endDate = endDate
 

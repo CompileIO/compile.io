@@ -1,5 +1,6 @@
 package compile_io.controllers;
 
+import java.io.File;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +32,17 @@ public class AssignmentController {
 	@Autowired
     AssignmentRepository assignmentRepository;
 	
+	protected MultipartFile file;
+	private final StorageService storageService;
+	private String filepath;
+	
+	private final int MAX_FILE_SIZE = 50000000;
+
+	@Autowired
+	public AssignmentController(StorageService storageService) {
+		this.storageService = storageService;
+	}
+	
 
     @GetMapping("/Assignment")
     public List<Assignment> getAllAssignments() {
@@ -46,16 +57,26 @@ public class AssignmentController {
                 .orElse(ResponseEntity.notFound().build());
     }
     
+    @PostMapping("/Assignmnet/uploadFile")
+	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
+		MultipartFile file = request.getFile("file");
+		this.file = file;
+		System.out.println("\n\n\n\n\n" + this.file.getOriginalFilename() + "\n\n\n\n\n");
+		storageService.store(this.file);
+		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\" + this.file.getOriginalFilename();
+		workingDir = workingDir.substring(2);
+		System.out.println("\n\n\n\n\nWorking Directory = " + workingDir + "\n\n\n\n\n");
+//		File fileToUpload = new File(workingDir);
+		this.filepath = workingDir;
+		return ResponseEntity.ok().body("uploaded " + this.file.getOriginalFilename() );
+    }
+    
     @PostMapping("/Assignment")
-    public String createassignment(@Valid @RequestBody Assignment assignment) {
-    	/*System.out.println("HERE I AM \n\n\n\n");
-      System.out.println(here);
-    	return "Got Here";*/
-      //assignment.setFile(file);
-      //System.out.println("\n\n\n\n\n" + file + "\n\n\n\n\n");
+    public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {    	
+    	assignment.setFilePath(this.filepath);
     	System.out.println("\n\n\n\n\n" + assignment.toString() + "\n\n\n\n\n");
-        //return assignmentRepository.save(assignment);
-        return "WOW!";
+    	assignmentRepository.save(assignment);
+        return ResponseEntity.ok().body("uploaded assignment: " + assignment.toString());
     } 
     
 
@@ -73,7 +94,7 @@ public class AssignmentController {
                     assignmentData.setStartTime(assignment.getStartTime());
                     assignmentData.setEndDate(assignment.getEndDate());
                     assignmentData.setEndTime(assignment.getEndTime());  
-                    assignmentData.setFile(assignment.getFile());
+                    assignmentData.setFilePath(this.filepath);
                     assignmentData.setCourseName(assignment.getCourseName());
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
                     return ResponseEntity.ok().body(updatedAssignment);

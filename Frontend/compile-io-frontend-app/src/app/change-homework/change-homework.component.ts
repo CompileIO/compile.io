@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CourseService } from '../services/course.service';
 import { AssignmentService } from '../services/assignment.service';
-import {Assignment} from '../../models/assignment';
+import { Assignment } from '../../models/assignment';
 import { Time } from '@angular/common';
 
 @Component({
@@ -26,17 +26,26 @@ export class ChangeHomeworkComponent implements OnInit {
   // editingTodo: Assignment = new Assignment();
 
   constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
-    
+
   }
 
   fileUploadFunction(event: any) {
     this.file = event.target.files[0];
-    //this.newAssignment.file = event.target.files[0];
+    // this.newAssignment.file = event.target.files[0];
     console.log("File was changed to this: " + this.file);
+    this.assignmentService.uploadFile(this.file).subscribe({
+      next: x => {
+        console.log(x)
+      },
+      error: err => {
+        console.log("ADDING FILE ERROR: " + err)
+      },
+      complete: () => console.log("Added File")
+    });
+
   }
 
   getHomework() {
-    var stuff = [];
     this.courseService.getHomeworkInfo(this.className, this.hwkName).subscribe({
       next: x => this.newAssignment = x,
       error: err => console.log("GET HWK INFO ERROR: " + err),
@@ -44,11 +53,11 @@ export class ChangeHomeworkComponent implements OnInit {
     });
     this.name = this.assignmentInfo.get("name").toString();
     this.timeout = this.assignmentInfo.get("timeout").toString();
-    //this.visible = this.assignmentInfo.get("visible");
     this.language = this.assignmentInfo.get("language").toString();
   }
 
-  submit(){
+  submit() {
+    this.newAssignment.courseName = this.className;
     if (this.newHwk) {
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
@@ -57,10 +66,13 @@ export class ChangeHomeworkComponent implements OnInit {
         error: err => {
           console.log("ADDING HWK ERROR: " + err)
         },
-        complete: () => console.log("Added Hwk")
+        complete: () => {
+          this.newAssignment = new Assignment()
+          console.log("Added Homework Complete")
+        }
       });
-    } else {
-      // this.newAssignment.newAssignmentName = name
+    }
+    else {
       this.assignmentService.updateAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)
@@ -68,7 +80,10 @@ export class ChangeHomeworkComponent implements OnInit {
         error: err => {
           console.log("UPDATING HWK ERROR: " + err)
         },
-        complete: () => console.log("Updated Hwk")
+        complete: () => {
+          this.newAssignment = new Assignment()
+          console.log("Updated Homework Complete")
+        }
       });
     }
   }
@@ -76,7 +91,7 @@ export class ChangeHomeworkComponent implements OnInit {
   getAssignments(): void {
     this.assignmentService.getAssignments().subscribe({
       complete: () => assignments => this.Assignments = assignments
-    });  
+    });
   }
 
   ngOnInit() {
