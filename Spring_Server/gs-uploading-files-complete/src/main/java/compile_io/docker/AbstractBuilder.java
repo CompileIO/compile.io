@@ -1,48 +1,39 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
  */
 public abstract class AbstractBuilder {
 
-    private String fileName;
-    private String fileDirectory;
+    private String workingDirectory;
+    private List<File> studentFiles;
+    private List<File> professorFiles;
     private ICommandExecuter executer;
+    private int numStudentFiles;
+    private int numProfessorFiles;
 
-    /**
-     * Constructor that builds a docker image with the given name
-     * @param File file File uploaded by the student
-     */
-    public AbstractBuilder(File file) {
-        this.fileName  = file.getName();
-        this.fileDirectory = file.getParent(); 
-        if (this.fileDirectory == null) {
-            this.fileDirectory = "/";
-        }
+    public AbstractBuilder(List<File> studentFiles, List<File> professorFiles) {
+        this.studentFiles = studentFiles;
+        this.professorFiles = professorFiles;
+        this.numStudentFiles = this.studentFiles.size();
+        this.numProfessorFiles = this.professorFiles.size();
         this.executer = new CommandExecuter();
-        System.out.println("Given file: " + this.fileName + ". Target directory: " + this.fileDirectory);
+        this.workingDirectory = studentFiles.get(0).getParent();
+        if (this.workingDirectory == null) {
+            this.workingDirectory = "/";
+        }
+        System.out.println("Files received. Target directory: " + this.workingDirectory);
     }
 
-    /**
-     * Builds a docker image with the image name given to the constructor
-     * @return void
-     * @throws IOException e 
-     * @throws InterruptedException e
-     */
     public void buildContainer() {
         System.out.println("Attempting to build docker container...");
-        String[] command = {"docker", "build", "-t", "compile-io-image", this.fileDirectory};
+        String[] command = {"docker", "build", "-t", "compile-io-image", this.workingDirectory};
         System.out.println(this.executer.executeCommand(command));
     }
 
-    /**
-     * Tears down the created image
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
     public void teardownDockerImage() {
         System.out.println("Beginning teardown of Docker image...");
         System.out.println();
@@ -52,83 +43,21 @@ public abstract class AbstractBuilder {
         System.out.println("Successfully removed the Docker image.");
     }
 
-    /**
-     * Removes the Dockerfile used to create the image
-     * @return void
-     * @throws IOException e
-     * @throws InterruptedException e 
-     */
     public void teardownDockerfile() {
         System.out.println("Beginning teardown of Dockerfile...");
-        File dockerfile = new File(this.fileDirectory + "/Dockerfile");
+        File dockerfile = new File(this.workingDirectory + "/Dockerfile");
         dockerfile.delete();
         System.out.println();
-        System.out.println("Successfully removed the Dockerfile from " + this.fileDirectory);
+        System.out.println("Successfully removed the Dockerfile from " + this.workingDirectory);
     }
 
-    /**
-     * Getter method for the field fileName
-     * @return String the value of the field fileName
-     */
-    public String getFileName() {
-        return this.fileName;
-    }
-
-    /**
-     * Getter method for the field fileDirectory
-     * @return String the value of the field fileDirectory
-     */
-    public String getFileDirectory() {
-        return this.fileDirectory;
-    }
-
-    /**
-     * Getter method for the field executer
-     * @return CommandExecuter the object in the executer field
-     */
-    public ICommandExecuter getExecuter() {
-        return this.executer;
-    }
-
-    /**
-     * Setter method for the field executer
-     * @param CommandExecuter
-     */
-    public void setExecuter(ICommandExecuter executer) {
-        this.executer = executer;
-    }
-
-    /**
-     * Setter method for the field fileName
-     * @param String fileName 
-     * @return void
-     */
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    /**
-     * Setter method for the field fileDirectory
-     * @param String fileDirectory 
-     * @return void
-     */
-    public void setFileDirectory(String fileDirectory) {
-        this.fileDirectory = fileDirectory;
-    }
-
-    /**
-     * Creates the Dockerfile in the file directory specified
-     * @return void
-     * @throws FileNotFoundException e If the the given file does not exist or cannot be found
-     * @throws IOException e If the java IO encounters an error
-     */
     public void createDockerfile(String dockerfileData) {
         FileOutputStream fos = null;
         File file;
 
         try {
-            System.out.println("Making Dockerfile in directory: " + this.getFileDirectory());
-            file = new File(this.getFileDirectory() + "/Dockerfile");
+            System.out.println("Making Dockerfile in directory: " + this.getWorkingDirectory());
+            file = new File(this.getWorkingDirectory() + "/Dockerfile");
             fos = new FileOutputStream(file);
       
             if (!file.exists()) {
@@ -151,11 +80,38 @@ public abstract class AbstractBuilder {
         }
     }
 
-    /**
-     * Creates a string that contains the contents needed for a Dockerfile
-     * IMPORTANT: Dockerfile MUST be in the directory of the source files it intends to run
-     * @return String The text corresponding to the contents of the Dockerfile
-     */
     public abstract String getDockerfileData();
+
+    public String getWorkingDirectory() {
+        return this.workingDirectory;
+    }
+
+    public ICommandExecuter getExecuter() {
+        return this.executer;
+    }
+
+    public void setExecuter(ICommandExecuter executer) {
+        this.executer = executer;
+    }
+
+    public void setWorkingDirectory(String workingDirectory) {
+        this.workingDirectory = workingDirectory;
+    }
+
+    public List<File> getStudentFiles() {
+        return this.studentFiles;
+    }
+
+    public List<File> getProfessorFiles() {
+        return this.professorFiles;
+    }
+
+    public int getNumStudentFiles() {
+        return this.numStudentFiles;
+    }
+
+    public int getNumProfessorFiles() {
+        return this.numProfessorFiles;
+    }
 
 }

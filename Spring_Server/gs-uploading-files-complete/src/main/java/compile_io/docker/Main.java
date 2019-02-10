@@ -1,6 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Used to run the backend independent of the server; eliminates the need to have website up and running
@@ -9,16 +10,20 @@ import java.io.*;
 public class Main {
     public static void main(String[] args){
         BuilderFactory builderFactory = new BuilderFactory();
-        // File file = new File("/SCHOOL/DockerTest/RevEngDrunnable.jar");
-        File file = new File("/SCHOOL/DockerTest/PythonStuff/Main.py");
+        File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/Simple.java");
+        File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/SimpleTest.java");
+
+        List<File> studentFiles = new ArrayList<>();
+        List<File> professorFiles = new ArrayList<>();
+        studentFiles.add(file3);
+        professorFiles.add(file4);
 
         try {
-            AbstractBuilder builder = builderFactory.getBuilder("python", file);
-            // AbstractBuilder builder = compilerFactory.getCompiler("java", file);
+            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles);
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();
-            String result = runner.run(60);
+            String result = runner.run(60000);
             System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
