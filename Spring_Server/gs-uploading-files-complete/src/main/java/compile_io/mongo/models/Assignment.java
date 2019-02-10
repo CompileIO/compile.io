@@ -2,7 +2,7 @@ package compile_io.mongo.models;
 
 
 
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalTime;
 
 import javax.validation.Valid;
@@ -11,7 +11,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -57,22 +56,6 @@ public class Assignment {
 	public Assignment() {
 		super();
 	}
-
-//	public Assignment(@Valid Assignment assignment) {
-//		super();
-//		this.id = assignment.id;
-//		this.assignmentName = assignment.assignmentName;
-//		this.timeout = assignment.timeout;
-//		this.language = assignment.language;
-//		this.size = assignment.size;
-//		this.tries = assignment.tries;
-//		this.startDate = assignment.startDate;
-//		this.startTime = assignment.startTime;
-//		this.endDate = assignment.endDate;
-//		this.endTime = assignment.endTime;
-//		this.filepath = assignment.filepath;
-//		this.courseName = assignment.courseName;
-//	}
 
 	public String getId() {
 		return id;
@@ -135,7 +118,7 @@ public class Assignment {
 		return startTime;
 	}
 	
-//	 @DateTimeFormat(pattern = "HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
 	public void setStartTime(LocalTime startTime) {
 		this.startTime = startTime;
 	}
@@ -152,7 +135,7 @@ public class Assignment {
 	public LocalTime getEndTime() {
 		return endTime;
 	}
-
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
 	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
