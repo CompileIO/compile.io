@@ -1,6 +1,8 @@
 package compile_io.controllers;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +23,13 @@ public class ProfessorController{
 	
 	@GetMapping("/test")
 	public String runCompiler(String username, File fileToUpload, String language, int timeLimit) {
+		List<File> studentFiles = new ArrayList<>();
+		List<File> ProfessorFiles = new ArrayList<>();
+		studentFiles.add(fileToUpload);
+		ProfessorFiles.add(fileToUpload);
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
-			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
+			AbstractBuilder builder = builderFactory.getBuilder(language, studentFiles, ProfessorFiles);
 			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
 			builder.createDockerfile(builder.getDockerfileData());
 			builder.buildContainer();

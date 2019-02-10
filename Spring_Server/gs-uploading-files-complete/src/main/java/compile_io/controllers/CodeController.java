@@ -27,7 +27,9 @@ import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 @RestController
 public class CodeController{
@@ -83,9 +85,13 @@ public class CodeController{
 	}
 	
 	public String runCompiler(File fileToUpload, String language, int timeLimit) {
+		List<File> studentFiles = new ArrayList<>();
+		List<File> ProfessorFiles = new ArrayList<>();
+		studentFiles.add(fileToUpload);
+		ProfessorFiles.add(fileToUpload);
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
-			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
+			AbstractBuilder builder = builderFactory.getBuilder(language, studentFiles, ProfessorFiles);
 			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
 			builder.createDockerfile(builder.getDockerfileData());
 			builder.buildContainer();
