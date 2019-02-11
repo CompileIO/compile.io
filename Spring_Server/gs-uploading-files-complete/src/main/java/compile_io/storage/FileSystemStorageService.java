@@ -28,6 +28,13 @@ public class FileSystemStorageService implements StorageService {
 
     private Path rootLocation;
     public StorageProperties properties;
+    
+  //Windows
+    private Path studentDir = Paths.get("upload-dir\\student-files");
+	private Path professorDir = Paths.get("upload-dir\\professor-files");
+	//Ubuntu
+//	private Path studentDir = Paths.get("upload-dir/student-files");
+//	private Path professorDir = Paths.get("upload-dir/professor-files");
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -80,8 +87,6 @@ public class FileSystemStorageService implements StorageService {
     	this.rootLocation = Paths.get(properties.getLocation());
     	
     	 String filename = StringUtils.cleanPath(file.getOriginalFilename());
-    	 System.out.println("INSIDE STOREADDPATH properties: " + this.properties.getLocation());
-    	 System.out.println("INSIDE STOREADDPATH: " + this.rootLocation.toString());
          try {
              if (file.isEmpty()) {
                  throw new StorageException("Failed to store empty file " + filename);
@@ -146,16 +151,8 @@ public class FileSystemStorageService implements StorageService {
     }
     
     public void cleanDirectory() {
-    	File dir = rootLocation.toFile();
-        for (File file: dir.listFiles()) {
-            if(file.getName().equals("build.gradle")) {
-                //do nothing
-            } else {
-                //delete file
-                file.delete();
-            }
-
-        }
+    	FileSystemUtils.deleteRecursively(this.studentDir.toFile());
+    	FileSystemUtils.deleteRecursively(this.professorDir.toFile());
     }
 
     @Override
@@ -163,8 +160,8 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.createDirectories(rootLocation);
             //Windows
-            Files.createDirectories(Paths.get(rootLocation + "\\student-files"));
-            Files.createDirectories(Paths.get(rootLocation + "\\professor-files"));
+            Files.createDirectories(studentDir);
+            Files.createDirectories(professorDir);
             
             //Ubuntu
 //            Files.createDirectories(Paths.get(rootLocation + "/student-files"));
