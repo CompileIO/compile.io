@@ -2,6 +2,7 @@ package compile_io.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,48 +48,38 @@ public class CodeController{
 	}
 		
 	@PostMapping("/{courseName}/{homeworkName}/uploadTest")
-	public String[] inputCodeforUser(MultipartHttpServletRequest request) {
+	public ResponseEntity<List<String>> inputCodeforUser(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
 		String fileString = request.getParameter("file");
 		String userName = request.getParameter("username");
 		String type = request.getParameter("type");
 		String runTime = request.getParameter("runTime");
 		String givenCourse = request.getParameter("class");
-		
-		System.out.println(userName + "  " + type + "  " + runTime + "  " + givenCourse);
-		System.out.println("I got inside \n\n\n\n");
-		System.out.println(file.getOriginalFilename());
-		
-		storageService.store(file);                
-		fileName = file.getName();
-		
-		
-		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
-		workingDir = workingDir.substring(2);
-		System.out.println("Working Directory = " + workingDir);
-		
-		
+		//Save file to correct path
+		storageService.storeAddPath(file, "student");                
+		fileName = file.getName();		
 		int runTimeNum = Integer.parseInt(runTime);
-//		Date submissionTime = new Date(0);
-		
-		
 		LocalTime submissionTime = LocalTime.now();
 		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
-		codeRepository.save(newCode);
-		
     	// Docker stuff
-		File fileToUpload = new File(workingDir);
-		String result = runCompiler(fileToUpload, type, runTimeNum);
+		String result = runCompiler(type, runTimeNum);
 		String[] temp2 = {result};
-//		String[] temp2 = {""};
-		return temp2;
+		newCode.addTestResponse(result);
+		codeRepository.save(newCode);
+		return ResponseEntity.ok().body(newCode.getTestResponse());
 	}
 	
-	public String runCompiler(File fileToUpload, String language, int timeLimit) {
+	public String runCompiler(String language, int timeLimit) {
 		List<File> studentFiles = new ArrayList<>();
 		List<File> ProfessorFiles = new ArrayList<>();
-		studentFiles.add(fileToUpload);
-		ProfessorFiles.add(fileToUpload);
+		File studentDirLocation = Paths.get("\\upload-dir\\student-files").toFile();
+		File professorDirLocation = Paths.get("\\upload-dir\\professor-files").toFile();
+		for (File file: studentDirLocation.listFiles()) {
+			studentFiles.add(file);
+		}
+		for (File file: professorDirLocation.listFiles()) {
+			ProfessorFiles.add(file);
+		}
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
 			AbstractBuilder builder = builderFactory.getBuilder(language, studentFiles, ProfessorFiles);

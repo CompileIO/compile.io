@@ -62,8 +62,12 @@ public class AssignmentController {
 		MultipartFile file = request.getFile("file");
 		this.file = file;
 		System.out.println("\n\n\n\n\n" + this.file.getOriginalFilename() + "\n\n\n\n\n");
-		storageService.store(this.file);
-		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\" + this.file.getOriginalFilename();
+		storageService.storeAddPath(file, "professor");
+		
+		//Windows
+		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\professor-files\\" + this.file.getOriginalFilename();
+		//Ubuntu
+//		String workingDir = System.getProperty("user.dir") + "/upload-dir/professor-files/" + this.file.getOriginalFilename();
 		workingDir = workingDir.substring(2);
 		System.out.println("\n\n\n\n\nWorking Directory = " + workingDir + "\n\n\n\n\n");
 //		File fileToUpload = new File(workingDir);

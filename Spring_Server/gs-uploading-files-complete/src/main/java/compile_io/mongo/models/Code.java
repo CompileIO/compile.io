@@ -26,18 +26,12 @@ public class Code {
     public Code() {}
     
     public Code(String language, int runTime, String codePath, LocalTime submissionTime) {
+    	super();
 		this.language = language;
 		this.runTime = runTime;
 		this.codePath = codePath;
 		this.submissionTime = submissionTime;
 	}
-    
-//	public Code(String language, int runTime, Date submissionTime) {
-//		super();
-//		this.language = language;
-//		this.runTime = runTime;
-//		this.submissionTime = submissionTime;
-//	}
 	public String getLanguage() {
 		return language;
 	}
@@ -85,12 +79,6 @@ public class Code {
 		return "Code [language=" + language + ", runTime=" + runTime + ", testResponses=" + testResponses
 				+ ", assignment=" + assignment + ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
 	}
-
-//	@Override
-//	public String toString() {
-//		return "Code [language=" + language + ", runTime=" + runTime + ", testResponse=" + testResponses
-//				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
-//	}
     
     
 }

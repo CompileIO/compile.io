@@ -26,14 +26,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
 
-    private final Path rootLocation;
+    private Path rootLocation;
+    public StorageProperties properties;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
+    	this.properties = properties;
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    @Override
+	@Override
     public void store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
@@ -55,6 +57,52 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Failed to store file " + filename, e);
         }
     }
+    
+    public void storeAddPath(MultipartFile file, String addedFolderPathName) {
+    	
+    	if(addedFolderPathName == "student") {
+    		//Windows
+    		this.properties.setLocation("upload-dir\\student-files");
+    		
+    		//Ubuntu
+//    		this.properties.setLocation("upload-dir/student-files");
+    	}
+    	else if(addedFolderPathName == "professor") {
+    		//Windows
+    		this.properties.setLocation("upload-dir\\professor-files");
+    		
+    		//Ubuntu
+//    		this.properties.setLocation("upload-dir/professor-files");
+    	}
+    	else {
+    		this.properties.setLocation("upload-dir");
+    	}
+    	this.rootLocation = Paths.get(properties.getLocation());
+    	
+    	 String filename = StringUtils.cleanPath(file.getOriginalFilename());
+    	 System.out.println("INSIDE STOREADDPATH properties: " + this.properties.getLocation());
+    	 System.out.println("INSIDE STOREADDPATH: " + this.rootLocation.toString());
+         try {
+             if (file.isEmpty()) {
+                 throw new StorageException("Failed to store empty file " + filename);
+             }
+             if (filename.contains("..")) {
+                 // This is a security check
+                 throw new StorageException(
+                         "Cannot store file with relative path outside current directory "
+                                 + filename);
+             }
+             try (InputStream inputStream = file.getInputStream()) {
+                 Files.copy(inputStream, this.rootLocation.resolve(filename),
+                     StandardCopyOption.REPLACE_EXISTING);
+             }
+         }
+         catch (IOException e) {
+             throw new StorageException("Failed to store file " + filename, e);
+         }
+         this.properties.setLocation("upload-dir");
+    }
+    
     @Override
     public Stream<Path> loadAll() {
         try {
@@ -96,11 +144,31 @@ public class FileSystemStorageService implements StorageService {
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
+    
+    public void cleanDirectory() {
+    	File dir = rootLocation.toFile();
+        for (File file: dir.listFiles()) {
+            if(file.getName().equals("build.gradle")) {
+                //do nothing
+            } else {
+                //delete file
+                file.delete();
+            }
+
+        }
+    }
 
     @Override
     public void init() {
         try {
             Files.createDirectories(rootLocation);
+            //Windows
+            Files.createDirectories(Paths.get(rootLocation + "\\student-files"));
+            Files.createDirectories(Paths.get(rootLocation + "\\professor-files"));
+            
+            //Ubuntu
+//            Files.createDirectories(Paths.get(rootLocation + "/student-files"));
+//            Files.createDirectories(Paths.get(rootLocation + "/professor-files"));
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
