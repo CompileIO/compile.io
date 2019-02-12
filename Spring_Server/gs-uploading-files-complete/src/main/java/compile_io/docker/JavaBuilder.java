@@ -33,6 +33,10 @@ public class JavaBuilder extends AbstractBuilder {
         }
         dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && gradle test\n");
 
+        System.out.println(super.getWorkingDirectory());
+        System.out.println(professorFiles.get(0).getParent());
+        System.out.println(studentFiles.get(0).getParent());
+
         return dockerfileData.toString();
     }
 
