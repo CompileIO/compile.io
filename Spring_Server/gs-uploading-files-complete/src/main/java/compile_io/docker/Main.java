@@ -2,6 +2,8 @@ package compile_io.docker;
 
 import java.io.*;
 import java.util.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Used to run the backend independent of the server; eliminates the need to have website up and running
@@ -10,13 +12,26 @@ import java.util.*;
 public class Main {
     public static void main(String[] args){
         BuilderFactory builderFactory = new BuilderFactory();
-        File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/Simple.java");
-        File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/SimpleTest.java");
+        File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/student-files/Simple.java");
+        File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/professor-files/SimpleTest.java");
 
+        File studentDir = Paths.get("mock-upload-dir/student-files").toFile();
         List<File> studentFiles = new ArrayList<>();
+        for (File file: studentDir.listFiles()) {
+            if(file.getName().equals("Simple.java")) {
+                System.out.println(file.getName());
+                studentFiles.add(file);
+            } 
+        }
+
+        File profDir = Paths.get("mock-upload-dir/professor-files").toFile();
         List<File> professorFiles = new ArrayList<>();
-        studentFiles.add(file3);
-        professorFiles.add(file4);
+        for (File file: profDir.listFiles()) {
+            if(file.getName().equals("SimpleTest.java")) {
+                System.out.println(file.getName());
+                professorFiles.add(file);
+            } 
+        }
 
         try {
             AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles);
