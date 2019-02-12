@@ -18,6 +18,8 @@ public class JavaBuilder extends AbstractBuilder {
         List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
+        dockerfileData.append("RUN chown newuser /upload-dir\n");
+        dockerfileData.append("USER newuser\n");
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("RUN mkdir -p src/main/java\n");
