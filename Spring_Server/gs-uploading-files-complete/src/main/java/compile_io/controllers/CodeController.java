@@ -9,6 +9,7 @@ import java.sql.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,6 +53,25 @@ public class CodeController {
 	public CodeController(StorageService storageService) {
 		this.storageService = storageService;
 	}
+	
+	 @GetMapping("/Code")
+	    public List<Code> getAllCodes() {
+	        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+	        return codeRepository.findAll(sortByCreatedAtDesc);
+	    }
+	    
+	    @GetMapping("/Code/getAssignment/{assignmentId}")
+	    public ResponseEntity<List<Code>> getAllCodesForAssignment(@PathVariable("assignmentId") String assignmentId) {
+	        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+	        return ResponseEntity.ok().body(codeRepository.findByassignmentId(assignmentId, sortByCreatedAtDesc));
+	    }
+	    
+	    @GetMapping(value="/Code/{id}")
+	    public ResponseEntity<Code> getCodeById(@PathVariable("id") String id) {
+	        return codeRepository.findById(id)
+	                .map(assignment -> ResponseEntity.ok().body(assignment))
+	                .orElse(ResponseEntity.notFound().build());
+	    }
 
 	@PostMapping("/Code/uploadFile")
 	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {

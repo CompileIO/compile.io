@@ -10,7 +10,5 @@ import org.springframework.data.util.Streamable;
 import compile_io.mongo.models.Assignment;
 
 public interface AssignmentRepository extends MongoRepository<Assignment, String> {
-
-//	Streamable<Order> findByName(String name);
 	List<Assignment> findBycourseName(String courseName, Sort sort);
 }

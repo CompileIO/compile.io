@@ -58,7 +58,7 @@ export class AssignmentService {
   }
 
   deleteAssignment(id: string){
-    return this.http.delete(this.apiUrl + '/Assignment/' + id, {withCredentials: true })
+    return this.http.delete(this.apiUrl + '/Assignment/deleteAssignment' + id, {withCredentials: true })
   }
 
 }
