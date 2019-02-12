@@ -21,6 +21,7 @@ public class Assignment {
 	private String id;
     private String assignmentName;
     private int timeout;
+    
     private String language;
     private int size;
     private int tries;

@@ -34,6 +34,7 @@ export class HomeworkPageComponent implements OnInit {
         next: x => {
           console.log(x)
         },
+        
         error: err => {
           console.log("UPLOADING FILE ERROR: " + err)
         },

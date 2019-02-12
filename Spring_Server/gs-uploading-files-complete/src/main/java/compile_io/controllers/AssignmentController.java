@@ -69,6 +69,7 @@ public class AssignmentController {
 		String userName = request.getParameter("userName");
 		storageService.storeAddPath(file, "professor", courseName, assignmentName, userName);
 		this.fileName = file.getOriginalFilename();
+		
 		return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename() );
     }
     

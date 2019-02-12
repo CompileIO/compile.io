@@ -29,7 +29,6 @@ export class ChangeHomeworkComponent implements OnInit {
 
   fileUploadFunction(event: any) {
     this.file = event.target.files[0];
-    // this.newAssignment.file = event.target.files[0];
     console.log("File was changed to this: " + this.file);
     this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
       next: x => {

@@ -75,6 +75,7 @@ public class CodeController {
 				.get("upload-dir\\" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "\\"
 						+ assignmentToRun.get().getassignmentName().replaceAll(" ", "_").toLowerCase()
 						+ "\\professor-files\\" + userName.replaceAll(" ", "_").toLowerCase());
+		
 		this.codePath = studentDir.toString();
 		System.out.println("\n\n\n\n\n" + this.codePath + "\n\n\n\n\n");
 		int runTimeNum = Integer.parseInt(runTime);
