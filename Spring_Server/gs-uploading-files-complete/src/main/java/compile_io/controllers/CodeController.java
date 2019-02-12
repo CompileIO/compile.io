@@ -113,10 +113,12 @@ public class CodeController {
 		File studentDirLocation = Paths.get(this.codePath).toFile();
 		File professorDirLocation = Paths.get(assignmentFilepath).toFile();
 		for (File file : studentDirLocation.listFiles()) {
+			System.out.println(studentDirLocation);
 			studentFiles.add(file);
 			System.out.println(file.getName());
 		}
 		for (File file : professorDirLocation.listFiles()) {
+			System.out.println(professorDirLocation.toString());
 			ProfessorFiles.add(file);
 			System.out.println(file.getName());
 		}
