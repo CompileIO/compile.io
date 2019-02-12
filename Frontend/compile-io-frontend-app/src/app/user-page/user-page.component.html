@@ -22,7 +22,7 @@
               <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedClass == cl && selectedHomework == hwk" alt="left" class="smicon" />
             </div>
             <div class="container" *ngIf="selectedClass == cl">
-              <div class="row" *ngFor="let hwk of Assignments" (click)="selectHomework(hwk.assignmentName)">
+              <div class="row" *ngFor="let hwk of Assignments" (click)="selectHomework(hwk.id)">
                 <div *ngIf="selectedHomework == hwk" class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
                     {{hwk.assignmentName}}
@@ -74,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk.assignmentName)">
+        <div class="row" *ngFor="let hwk of homeworks" (click)="selectHomework(hwk.id)">
           <div *ngIf="selectedHomework != hwk" class="col p-4 sidebarHover w-50 btn">
             <span>
               {{hwk.assignmentName}}
@@ -118,7 +118,7 @@
           <div class="col">
             <div class="p-3 w-100">
               <h1>
-                {{selectedClass | uppercase}} - {{selectedHomework | uppercase}}
+                {{selectedClass | uppercase}} - {{selectedHomework.assignmentName | uppercase}}
               </h1>
             </div>
           </div>
@@ -149,6 +149,7 @@
 
               <app-homework-page id="runPage"
                                  *ngIf="!change"
+                                 [username]="username"
                                  [assignmentInfo]="selectedHomework">
               </app-homework-page>
               <app-change-homework id="changePage" *ngIf="change"

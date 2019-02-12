@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import {Assignment} from '../../models/assignment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,10 @@ export class AssignmentService {
     
   }
 
-  getAssignmentsForSpecificCourse(courseName: string) { 
-    return this.http.get(this.apiUrl + '/Assignment/getCourse/' + courseName);
+  getAssignmentsForSpecificCourse(courseName: string): Observable<Assignment[]> { 
+    var response;
+    response = this.http.get(this.apiUrl + '/Assignment/getCourse/' + courseName);
+    return response;
   }
   uploadFile(file: File) {
     let body: FormData = new FormData();  

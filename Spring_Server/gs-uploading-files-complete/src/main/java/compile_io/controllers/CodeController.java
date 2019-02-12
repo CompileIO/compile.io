@@ -40,42 +40,59 @@ public class CodeController{
 	public CodeRepository codeRepository;
 
 	private final StorageService storageService;
-	private String fileName;
     private final int MAX_FILE_SIZE = 50000000;
     
     //Windows
+    private Path studentDirFilePath;
     private Path studentDir = Paths.get("upload-dir\\student-files");
-	private Path professorDir = Paths.get("upload-dir\\professor-files");
-	//Ubuntu
+  	private Path professorDir = Paths.get("upload-dir\\professor-files");
+  	//Ubuntu
+//  	private Path professorDir = Paths.get("upload-dir/professor-files");
 //	private Path studentDir = Paths.get("upload-dir/student-files");
-//	private Path professorDir = Paths.get("upload-dir/professor-files");
 
 	@Autowired
 	public CodeController(StorageService storageService) {
 		this.storageService = storageService;
 	}
+	
+	 @PostMapping("/Code/uploadFile")
+		public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
+			MultipartFile file = request.getFile("file");
+			storageService.storeAddPath(file, "student");
+			
+			//If absolute path is necessary then this commented out code is needed
+	/*
+			//Windows
+			String workingDir = System.getProperty("user.dir") + "\\upload-dir\\professor-files\\" + this.file.getOriginalFilename();
+			//Ubuntu
+//			String workingDir = System.getProperty("user.dir") + "/upload-dir/professor-files/" + this.file.getOriginalFilename();
+			workingDir = workingDir.substring(2);
+			System.out.println("\n\n\n\n\nWorking Directory = " + workingDir + "\n\n\n\n\n");
+//			File fileToUpload = new File(workingDir);
+//			this.filepath = workingDir;
+	 * 
+	 */
+			//Windows
+			this.studentDirFilePath = Paths.get("upload-dir\\student-files\\" + file.getOriginalFilename());
+			//Ubuntu
+//			professorDir = Paths.get("upload-dir/professor-files/" + file.getOriginalFilename());
+			return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename() );
+	    }
 		
-	@PostMapping("/{courseName}/{homeworkName}/uploadTest")
+	@PostMapping("/Code/uploadCode")
 	public ResponseEntity<List<String>> inputCodeforUser(MultipartHttpServletRequest request) {
-		MultipartFile file = request.getFile("file");
-		String fileString = request.getParameter("file");
 		String userName = request.getParameter("username");
 		String type = request.getParameter("type");
 		String runTime = request.getParameter("runTime");
-		String givenCourse = request.getParameter("class");
-		
-		//Save file to correct path
-//		storageService.cleanDirectory();   //Might want to clean the directory of all junk files
-		storageService.storeAddPath(file, "student");                
-		fileName = file.getName();		
+		String givenAssignmentId = request.getParameter("assignmentID");
+		String codePath = this.studentDirFilePath.toString();
+    	System.out.println("\n\n\n\n\n" + codePath + "\n\n\n\n\n");
 		int runTimeNum = Integer.parseInt(runTime);
 		LocalTime submissionTime = LocalTime.now();
-		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
+		Code newCode = new Code(type, runTimeNum, codePath, submissionTime, givenAssignmentId, userName);
 		
     	// Docker stuff
-		String result = runCompiler(type, runTimeNum);
-		String[] temp2 = {result};
-		newCode.addTestResponse(result);
+		newCode.addTestResponse(runCompiler(type, runTimeNum));
 		codeRepository.save(newCode);
 		return ResponseEntity.ok().body(newCode.getTestResponse());
 	}

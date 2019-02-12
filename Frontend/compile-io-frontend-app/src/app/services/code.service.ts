@@ -11,10 +11,20 @@ export class CodeService {
   private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) { }
 
-  uploadCode(file: File): Observable<any> {
+  uploadCode(type: string, runTime: number, givenAssignmentID: string, userName: string): Observable<any> {
+    let body: FormData = new FormData(); 
+    body.append('type', type);
+    body.append('username', userName);
+    body.append('runTime', runTime.toString());
+    body.append('assignmentID', givenAssignmentID.toString());
+    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" });
+    return this.http.post(this.apiUrl + "/Code/uploadCode", body , {headers: fileHeaders, withCredentials: true});
+  }
+
+  uploadFile(file: File): Observable<any> {
     let body = new FormData();
     body.append("file", file);
     const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
-    return this.http.post(this.apiUrl, body);
+    return this.http.post(this.apiUrl + "/Code/uploadFile", body);
   }
 }

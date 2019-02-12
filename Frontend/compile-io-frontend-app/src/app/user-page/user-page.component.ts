@@ -19,7 +19,7 @@ export class UserPageComponent implements OnInit {
   change: boolean = false;
   falseBoolean: boolean = false;
   trueBoolean: boolean = true;
-  Assignments: Assignment[];
+  Assignments: Assignment[] = [];
 
   constructor(private authenticationService: AuthenticationService,
               private courseService:CourseService,
@@ -55,15 +55,16 @@ export class UserPageComponent implements OnInit {
 
   getAssignmentsForSpecificCourse(assignmentName: string): void {
     this.assignmentService.getAssignmentsForSpecificCourse(assignmentName).subscribe({
+      next: x => {this.Assignments = x},
       error: err => console.log("GET HWK INFO ERROR: " + err),
       complete: () => assignments => this.Assignments = assignments
     });  
   }
 
-  selectHomework(givenHwk: string) {
+  selectHomework(hwkID: string) {
     var i = 0;
     for(i = 0; i < this.Assignments.length; i++) {
-      if (this.Assignments[i].assignmentName == givenHwk) {
+      if (this.Assignments[i].id == hwkID) {
         this.selectedHomework = this.Assignments[i];
       }
     }

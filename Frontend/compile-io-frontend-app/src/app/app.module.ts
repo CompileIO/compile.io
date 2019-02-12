@@ -9,7 +9,6 @@ import { UserPageComponent } from './user-page/user-page.component';
 import { HomeworkPageComponent } from './homework-page/homework-page.component'
 import { ROUTING } from './app-routing/app-routing.module';
 
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthenticationService } from './services/authentication.service';
 import { ChangeHomeworkComponent } from './change-homework/change-homework.component';
 
@@ -17,7 +16,7 @@ import { ChangeHomeworkComponent } from './change-homework/change-homework.compo
   declarations: [
     AppComponent,
     LoginComponent,
-    UserPageComponent,
+    UserPageComponent,  
     HomeworkPageComponent,
     ChangeHomeworkComponent
   ],
