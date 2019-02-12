@@ -90,7 +90,7 @@
     </div>
 
 
-    <div *ngIf="selectedHomework == 'new'" class="col mw-100 mt-5">
+    <div *ngIf="selectedHomework != null && selectedHomework.id == '-1'" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">
@@ -105,14 +105,14 @@
           <div class="col">
             <app-change-homework [className]="selectedClass"
                                  [userName]="username"
-                                 [newHwk]="trueBoolean"></app-change-homework>
+                                 [assignmentInfo]="selectedHomework"></app-change-homework>
           </div>
         </div>
       </div>
     </div>
 
 
-    <div *ngIf="selectedHomework != null && selectedHomework != 'new'" class="col mw-100 mt-5">
+    <div *ngIf="selectedHomework != null && selectedHomework.id != '-1'" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">
@@ -140,10 +140,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <!--<app-change-homework *ngIf="change"
-                               [givenClass]="selectedClass"
-                               [homework]="selectedHomework">
-            </app-change-homework>-->
+
             
             <div class="tab-content show active" id="myTabContent">
 
@@ -153,8 +150,7 @@
                                  [assignmentInfo]="selectedHomework">
               </app-homework-page>
               <app-change-homework id="changePage" *ngIf="change"
-                                 [assignmentInfo]="selectedHomework"
-                                 [newHwk] ="falseBoolean">
+                                 [assignmentInfo]="selectedHomework">
               </app-change-homework>
             </div>
           </div>

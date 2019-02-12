@@ -13,8 +13,6 @@ import { Time } from '@angular/common';
 export class ChangeHomeworkComponent implements OnInit {
   @Input() userName: string;
   @Input() className: string;
-  @Input() hwkName: string;
-  @Input() newHwk: boolean;
   name: string;
   timeout: string;
   language: string;
@@ -47,7 +45,7 @@ export class ChangeHomeworkComponent implements OnInit {
 
   submit() {
     this.newAssignment.courseName = this.className;
-    if (this.newHwk) {
+    if (this.assignmentInfo.id == "-1") {
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)
@@ -80,12 +78,6 @@ export class ChangeHomeworkComponent implements OnInit {
 
 
   ngOnInit() {
-    
-    console.log("newHwk: " + this.newHwk);
-    if (this.newHwk !== undefined &&
-      this.newHwk !== null &&
-      this.newHwk != true) {
-    }
   }
 
 }

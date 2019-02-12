@@ -17,8 +17,6 @@ export class UserPageComponent implements OnInit {
   // homeworks: string[] = [];
   selectedHomework: Assignment = null;
   change: boolean = false;
-  falseBoolean: boolean = false;
-  trueBoolean: boolean = true;
   Assignments: Assignment[] = [];
 
   constructor(private authenticationService: AuthenticationService,
@@ -68,6 +66,12 @@ export class UserPageComponent implements OnInit {
         this.selectedHomework = this.Assignments[i];
       }
     }
+  }
+
+  newHomework() {
+    this.selectedHomework = new Assignment();
+    this.selectedHomework.id = "-1";
+
   }
 
   changeChange(bool: boolean) {
