@@ -18,7 +18,7 @@ export class ChangeHomeworkComponent implements OnInit {
   name: string;
   timeout: string;
   language: string;
-  assignmentInfo: FormData;
+  @Input() assignmentInfo: Assignment;
   Assignments: Assignment[];
   newAssignment: Assignment = new Assignment();
   file: File;
@@ -43,17 +43,6 @@ export class ChangeHomeworkComponent implements OnInit {
       complete: () => console.log("Added File")
     });
 
-  }
-
-  getHomework() {
-    this.courseService.getHomeworkInfo(this.className, this.hwkName).subscribe({
-      next: x => this.newAssignment = x,
-      error: err => console.log("GET HWK INFO ERROR: " + err),
-      complete: () => console.log("got Hwk Info")
-    });
-    this.name = this.assignmentInfo.get("name").toString();
-    this.timeout = this.assignmentInfo.get("timeout").toString();
-    this.language = this.assignmentInfo.get("language").toString();
   }
 
   submit() {
@@ -88,19 +77,14 @@ export class ChangeHomeworkComponent implements OnInit {
     }
   }
 
-  getAssignments(): void {
-    this.assignmentService.getAssignments().subscribe({
-      complete: () => assignments => this.Assignments = assignments
-    });
-  }
+
 
   ngOnInit() {
-    this.getAssignments();
+    
     console.log("newHwk: " + this.newHwk);
     if (this.newHwk !== undefined &&
       this.newHwk !== null &&
       this.newHwk != true) {
-      this.getHomework();
     }
   }
 

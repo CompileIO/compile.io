@@ -1,9 +1,6 @@
 package compile_io.storage;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -14,7 +11,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -66,25 +62,16 @@ public class FileSystemStorageService implements StorageService {
     }
     
     public void storeAddPath(MultipartFile file, String addedFolderPathName) {
-    	
+    	Path dir;
     	if(addedFolderPathName == "student") {
-    		//Windows
-    		this.properties.setLocation("upload-dir\\student-files");
-    		
-    		//Ubuntu
-//    		this.properties.setLocation("upload-dir/student-files");
+    		dir = this.studentDir;
     	}
     	else if(addedFolderPathName == "professor") {
-    		//Windows
-    		this.properties.setLocation("upload-dir\\professor-files");
-    		
-    		//Ubuntu
-//    		this.properties.setLocation("upload-dir/professor-files");
+    		dir = this.professorDir;
     	}
     	else {
-    		this.properties.setLocation("upload-dir");
+    		dir = this.rootLocation;
     	}
-    	this.rootLocation = Paths.get(properties.getLocation());
     	
     	 String filename = StringUtils.cleanPath(file.getOriginalFilename());
          try {
@@ -98,14 +85,13 @@ public class FileSystemStorageService implements StorageService {
                                  + filename);
              }
              try (InputStream inputStream = file.getInputStream()) {
-                 Files.copy(inputStream, this.rootLocation.resolve(filename),
+                 Files.copy(inputStream, dir.resolve(filename),
                      StandardCopyOption.REPLACE_EXISTING);
              }
          }
          catch (IOException e) {
              throw new StorageException("Failed to store file " + filename, e);
          }
-         this.properties.setLocation("upload-dir");
     }
     
     @Override
@@ -159,13 +145,8 @@ public class FileSystemStorageService implements StorageService {
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-            //Windows
             Files.createDirectories(studentDir);
             Files.createDirectories(professorDir);
-            
-            //Ubuntu
-//            Files.createDirectories(Paths.get(rootLocation + "/student-files"));
-//            Files.createDirectories(Paths.get(rootLocation + "/professor-files"));
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);

@@ -18,13 +18,6 @@ export class CourseService {
     return this.http.get(this.apiUrl + "/courses", { headers: empHeaders, withCredentials: true });
   }
 
-  getHomeworkInfo(givenCourse: string, givenHomework: string): Observable<any> {
-    const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    let body = new FormData;
-    body.append("course",givenCourse);
-    body.append("course",givenHomework);
-    return this.http.put(this.apiUrl + "/Putcourses", body, { headers: empHeaders, withCredentials: true });
-  }
 
   // updateAssignment(assignmentData: Assignment) {
   //   const headers = new HttpHeaders({'enctype': "multipart/form-data" });

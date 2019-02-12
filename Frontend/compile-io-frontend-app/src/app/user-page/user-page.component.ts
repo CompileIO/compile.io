@@ -15,7 +15,7 @@ export class UserPageComponent implements OnInit {
   classes: string[] = [];
   selectedClass: string = null;
   // homeworks: string[] = [];
-  selectedHomework: string = null;
+  selectedHomework: Assignment = null;
   change: boolean = false;
   falseBoolean: boolean = false;
   trueBoolean: boolean = true;
@@ -43,18 +43,30 @@ export class UserPageComponent implements OnInit {
     } else {
       this.selectedClass = givenClass;
       this.selectedHomework = null;
-      this.getAssignments();
+      this.getAssignmentsForSpecificCourse(givenClass);
     }
   }
 
-  getAssignments(): void {
-    this.assignmentService.getAssignments().subscribe({
+  // getAssignments(): void {
+  //   this.assignmentService.getAssignments().subscribe({
+  //     complete: () => assignments => this.Assignments = assignments
+  //   });  
+  // }
+
+  getAssignmentsForSpecificCourse(assignmentName: string): void {
+    this.assignmentService.getAssignmentsForSpecificCourse(assignmentName).subscribe({
+      error: err => console.log("GET HWK INFO ERROR: " + err),
       complete: () => assignments => this.Assignments = assignments
     });  
   }
 
   selectHomework(givenHwk: string) {
-    this.selectedHomework = givenHwk;
+    var i = 0;
+    for(i = 0; i < this.Assignments.length; i++) {
+      if (this.Assignments[i].assignmentName == givenHwk) {
+        this.selectedHomework = this.Assignments[i];
+      }
+    }
   }
 
   changeChange(bool: boolean) {

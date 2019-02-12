@@ -1,6 +1,8 @@
 package compile_io.controllers;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,15 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import compile_io.mongo.models.Assignment;
 import compile_io.mongo.repositories.AssignmentRepository;
-import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 
 @RestController
@@ -32,9 +31,11 @@ public class AssignmentController {
 	@Autowired
     AssignmentRepository assignmentRepository;
 	
-	protected MultipartFile file;
 	private final StorageService storageService;
-	private String filepath;
+    //Windows
+	private Path professorDir = Paths.get("upload-dir\\professor-files");
+	//Ubuntu
+//	private Path professorDir = Paths.get("upload-dir/professor-files");
 	
 	private final int MAX_FILE_SIZE = 50000000;
 
@@ -50,6 +51,13 @@ public class AssignmentController {
         return assignmentRepository.findAll(sortByCreatedAtDesc);
     }
     
+    @GetMapping("/Assignment/getCourse/{courseName}")
+    public ResponseEntity<List<Assignment>> getAllAssignmentsForCourse(@PathVariable("courseName") String courseName) {
+//        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    	System.out.println("\n\n\n\n\n\n INSIDE GET ALL ASSIGNMENTS FOR COURSE  \n\n\n\n\n\n ");
+        return ResponseEntity.ok().body(assignmentRepository.findBycourseName(courseName));
+    }
+    
     @GetMapping(value="/Assignment/{id}")
     public ResponseEntity<Assignment> getassignmentById(@PathVariable("id") String id) {
         return assignmentRepository.findById(id)
@@ -60,10 +68,10 @@ public class AssignmentController {
     @PostMapping("/Assignmnet/uploadFile")
 	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
-		this.file = file;
-		System.out.println("\n\n\n\n\n" + this.file.getOriginalFilename() + "\n\n\n\n\n");
 		storageService.storeAddPath(file, "professor");
 		
+		//If absolute path is necessary then this commented out code is needed
+/*
 		//Windows
 		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\professor-files\\" + this.file.getOriginalFilename();
 		//Ubuntu
@@ -71,13 +79,19 @@ public class AssignmentController {
 		workingDir = workingDir.substring(2);
 		System.out.println("\n\n\n\n\nWorking Directory = " + workingDir + "\n\n\n\n\n");
 //		File fileToUpload = new File(workingDir);
-		this.filepath = workingDir;
-		return ResponseEntity.ok().body("uploaded " + this.file.getOriginalFilename() );
+//		this.filepath = workingDir;
+ * 
+ */
+		//Windows
+		professorDir = Paths.get("upload-dir\\professor-files\\" + file.getOriginalFilename());
+		//Ubuntu
+//		professorDir = Paths.get("upload-dir/professor-files/" + file.getOriginalFilename());
+		return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename() );
     }
     
     @PostMapping("/Assignment")
     public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {    	
-    	assignment.setFilePath(this.filepath);
+    	assignment.setFilePath(professorDir.toString());
     	System.out.println("\n\n\n\n\n" + assignment.toString() + "\n\n\n\n\n");
     	assignmentRepository.save(assignment);
         return ResponseEntity.ok().body("uploaded assignment: " + assignment.toString());
@@ -98,7 +112,7 @@ public class AssignmentController {
                     assignmentData.setStartTime(assignment.getStartTime());
                     assignmentData.setEndDate(assignment.getEndDate());
                     assignmentData.setEndTime(assignment.getEndTime());  
-                    assignmentData.setFilePath(this.filepath);
+                    assignmentData.setFilePath(professorDir.toString());
                     assignmentData.setCourseName(assignment.getCourseName());
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
                     return ResponseEntity.ok().body(updatedAssignment);

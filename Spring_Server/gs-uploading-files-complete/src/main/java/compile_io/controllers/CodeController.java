@@ -2,6 +2,7 @@ package compile_io.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
 
@@ -40,7 +41,14 @@ public class CodeController{
 
 	private final StorageService storageService;
 	private String fileName;
-  private final int MAX_FILE_SIZE = 50000000;
+    private final int MAX_FILE_SIZE = 50000000;
+    
+    //Windows
+    private Path studentDir = Paths.get("upload-dir\\student-files");
+	private Path professorDir = Paths.get("upload-dir\\professor-files");
+	//Ubuntu
+//	private Path studentDir = Paths.get("upload-dir/student-files");
+//	private Path professorDir = Paths.get("upload-dir/professor-files");
 
 	@Autowired
 	public CodeController(StorageService storageService) {
@@ -55,12 +63,15 @@ public class CodeController{
 		String type = request.getParameter("type");
 		String runTime = request.getParameter("runTime");
 		String givenCourse = request.getParameter("class");
+		
 		//Save file to correct path
+//		storageService.cleanDirectory();   //Might want to clean the directory of all junk files
 		storageService.storeAddPath(file, "student");                
 		fileName = file.getName();		
 		int runTimeNum = Integer.parseInt(runTime);
 		LocalTime submissionTime = LocalTime.now();
 		Code newCode = new Code(type, runTimeNum, fileName, submissionTime);
+		
     	// Docker stuff
 		String result = runCompiler(type, runTimeNum);
 		String[] temp2 = {result};
@@ -72,8 +83,8 @@ public class CodeController{
 	public String runCompiler(String language, int timeLimit) {
 		List<File> studentFiles = new ArrayList<>();
 		List<File> ProfessorFiles = new ArrayList<>();
-		File studentDirLocation = Paths.get("\\upload-dir\\student-files").toFile();
-		File professorDirLocation = Paths.get("\\upload-dir\\professor-files").toFile();
+		File studentDirLocation = this.studentDir.toFile();
+		File professorDirLocation = this.professorDir.toFile();
 		for (File file: studentDirLocation.listFiles()) {
 			studentFiles.add(file);
 		}

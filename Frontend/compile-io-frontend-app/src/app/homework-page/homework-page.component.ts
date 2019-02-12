@@ -12,6 +12,7 @@ export class HomeworkPageComponent implements OnInit {
   @Input() username: string;
   @Input() givenClass: string;
   @Input() homework: string;
+  @Input() assignmentInfo: Assignment;
   file: File;
   MAX_FILE_SIZE: number;
   fileReady: boolean;

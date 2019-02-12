@@ -18,6 +18,10 @@ export class AssignmentService {
     return this.http.get(this.apiUrl + '/Assignment')
     
   }
+
+  getAssignmentsForSpecificCourse(courseName: string) { 
+    return this.http.get(this.apiUrl + '/Assignment/getCourse/' + courseName);
+  }
   uploadFile(file: File) {
     let body: FormData = new FormData();  
     body.append('file', file);
