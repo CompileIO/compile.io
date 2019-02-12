@@ -23,11 +23,11 @@ export class HomeworkPageComponent implements OnInit {
 
   fileUploadFunction(event: any) {
     console.log("THIS IS THE FILE FROM file upload: " + event.target.files[0]);
-    // if (event.target.files[0].size < this.assignmentInfo.size) {
+    if (event.target.files[0].size < this.assignmentInfo.size) {
       this.file = event.target.files[0];
-    // } else {
-    //   alert("File is too large!");
-    // }
+    } else {
+      alert("File is too large!");
+    }
     if (this.file !== null) {
       console.log("Should run upload file")
       this.codeService.uploadFile(this.file, this.assignmentInfo.courseName, this.assignmentInfo.assignmentName, this.username).subscribe({
