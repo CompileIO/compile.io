@@ -76,8 +76,27 @@ export class ChangeHomeworkComponent implements OnInit {
       });
     }
   }
+  updateSize(givenSize: number) {
+    this.newAssignment.size = givenSize * 1000 * 1000;
+  }
 
-
+  readyToSubmit(): boolean {
+    if (this.assignmentInfo.id == '-1') {
+      if (this.newAssignment.assignmentName == undefined ||
+        this.newAssignment.endDate == undefined ||
+        this.newAssignment.endTime == undefined ||
+        this.newAssignment.startDate == undefined ||
+        this.newAssignment.startDate == undefined ||
+        this.newAssignment.size == undefined ||
+        this.newAssignment.language == undefined ||
+        this.newAssignment.timeout == undefined ||
+        this.newAssignment.tries == undefined ||
+        this.file == undefined) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   ngOnInit() {
   }
