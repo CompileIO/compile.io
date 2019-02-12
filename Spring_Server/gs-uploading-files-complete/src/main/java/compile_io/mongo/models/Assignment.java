@@ -35,6 +35,7 @@ public class Assignment {
 	private LocalTime endTime;
     private String filepath;
     private String courseName;
+    private String createdByUsername;
     
 //    @DBRef
 //	private List<UnitTest> unitTests;
@@ -156,6 +157,14 @@ public class Assignment {
 		this.courseName = courseName;
 	}
 	
+	public String getCreatedByUsername() {
+		return createdByUsername;
+	}
+
+	public void setCreatedByUsername(String createdByUsername) {
+		this.createdByUsername = createdByUsername;
+	}
+
 	@Override
 	public String toString() {
 		return "Assignment [Id= " +id +", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="

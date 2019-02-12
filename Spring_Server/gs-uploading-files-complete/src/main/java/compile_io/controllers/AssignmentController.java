@@ -32,10 +32,7 @@ public class AssignmentController {
     AssignmentRepository assignmentRepository;
 	
 	private final StorageService storageService;
-    //Windows
-	private Path professorDir = Paths.get("upload-dir\\professor-files");
-	//Ubuntu
-//	private Path professorDir = Paths.get("upload-dir/professor-files");
+    private String fileName;
 	
 	private final int MAX_FILE_SIZE = 50000000;
 
@@ -53,9 +50,8 @@ public class AssignmentController {
     
     @GetMapping("/Assignment/getCourse/{courseName}")
     public ResponseEntity<List<Assignment>> getAllAssignmentsForCourse(@PathVariable("courseName") String courseName) {
-//        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-    	System.out.println("\n\n\n\n\n\n INSIDE GET ALL ASSIGNMENTS FOR COURSE  \n\n\n\n\n\n ");
-        return ResponseEntity.ok().body(assignmentRepository.findBycourseName(courseName));
+        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+        return ResponseEntity.ok().body(assignmentRepository.findBycourseName(courseName, sortByCreatedAtDesc));
     }
     
     @GetMapping(value="/Assignment/{id}")
@@ -68,29 +64,21 @@ public class AssignmentController {
     @PostMapping("/Assignmnet/uploadFile")
 	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
-		storageService.storeAddPath(file, "professor");
-		
-		//If absolute path is necessary then this commented out code is needed
-/*
-		//Windows
-		String workingDir = System.getProperty("user.dir") + "\\upload-dir\\professor-files\\" + this.file.getOriginalFilename();
-		//Ubuntu
-//		String workingDir = System.getProperty("user.dir") + "/upload-dir/professor-files/" + this.file.getOriginalFilename();
-		workingDir = workingDir.substring(2);
-		System.out.println("\n\n\n\n\nWorking Directory = " + workingDir + "\n\n\n\n\n");
-//		File fileToUpload = new File(workingDir);
-//		this.filepath = workingDir;
- * 
- */
-		//Windows
-		professorDir = Paths.get("upload-dir\\professor-files\\" + file.getOriginalFilename());
-		//Ubuntu
-//		professorDir = Paths.get("upload-dir/professor-files/" + file.getOriginalFilename());
+		String courseName = request.getParameter("courseName");
+		String assignmentName = request.getParameter("assignmentName");
+		String userName = request.getParameter("userName");
+		storageService.storeAddPath(file, "professor", courseName, assignmentName, userName);
+		this.fileName = file.getOriginalFilename();
 		return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename() );
     }
     
     @PostMapping("/Assignment")
-    public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {    	
+    public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {   
+    	Path professorDir = Paths.get("upload-dir\\" + 
+				assignment.getCourseName().replaceAll(" ", "_").toLowerCase() + "\\" +
+				assignment.getassignmentName().replaceAll(" ", "_").toLowerCase() + 
+				"\\professor-files\\" +
+				assignment.getCreatedByUsername().replaceAll(" ", "_").toLowerCase());
     	assignment.setFilePath(professorDir.toString());
     	System.out.println("\n\n\n\n\n" + assignment.toString() + "\n\n\n\n\n");
     	assignmentRepository.save(assignment);
@@ -112,7 +100,7 @@ public class AssignmentController {
                     assignmentData.setStartTime(assignment.getStartTime());
                     assignmentData.setEndDate(assignment.getEndDate());
                     assignmentData.setEndTime(assignment.getEndTime());  
-                    assignmentData.setFilePath(professorDir.toString());
+//                    assignmentData.setFilePath(professorDir.toString());
                     assignmentData.setCourseName(assignment.getCourseName());
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
                     return ResponseEntity.ok().body(updatedAssignment);

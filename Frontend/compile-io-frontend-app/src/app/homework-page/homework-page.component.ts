@@ -30,7 +30,7 @@ export class HomeworkPageComponent implements OnInit {
     // }
     if (this.file !== null) {
       console.log("Should run upload file")
-      this.codeService.uploadFile(this.file).subscribe({
+      this.codeService.uploadFile(this.file, this.assignmentInfo.courseName, this.assignmentInfo.assignmentName, this.username).subscribe({
         next: x => {
           console.log(x)
         },

@@ -21,10 +21,13 @@ export class CodeService {
     return this.http.post(this.apiUrl + "/Code/uploadCode", body , {headers: fileHeaders, withCredentials: true});
   }
 
-  uploadFile(file: File): Observable<any> {
-    let body = new FormData();
-    body.append("file", file);
-    const fileHeaders = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
-    return this.http.post(this.apiUrl + "/Code/uploadFile", body);
+  uploadFile(file: File, className: string, assignmentName: string, userName: string): Observable<any> {
+    let body: FormData = new FormData();  
+    body.append('file', file);
+    body.append('courseName', className);
+    body.append('assignmentName', assignmentName);
+    body.append('userName', userName);
+    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
+    return this.http.post(this.apiUrl + "/Code/uploadFile", body, {headers: fileHeaders, withCredentials: true});
   }
 }

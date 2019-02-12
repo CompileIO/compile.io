@@ -24,7 +24,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import compile_io.docker.*;
+import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Code;
+import compile_io.mongo.repositories.AssignmentRepository;
 import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
@@ -32,80 +34,67 @@ import java.time.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-public class CodeController{
-	
-	@Autowired 
+public class CodeController {
+
+	@Autowired
 	public CodeRepository codeRepository;
 
+	@Autowired
+	public AssignmentRepository assignmentRepository;
+
 	private final StorageService storageService;
-    private final int MAX_FILE_SIZE = 50000000;
-    
-    //Windows
-    private Path studentDirFilePath;
-    private Path studentDir = Paths.get("upload-dir\\student-files");
-  	private Path professorDir = Paths.get("upload-dir\\professor-files");
-  	//Ubuntu
-//  	private Path professorDir = Paths.get("upload-dir/professor-files");
-//	private Path studentDir = Paths.get("upload-dir/student-files");
+	private String codePath;
 
 	@Autowired
 	public CodeController(StorageService storageService) {
 		this.storageService = storageService;
 	}
-	
-	 @PostMapping("/Code/uploadFile")
-		public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
-			MultipartFile file = request.getFile("file");
-			storageService.storeAddPath(file, "student");
-			
-			//If absolute path is necessary then this commented out code is needed
-	/*
-			//Windows
-			String workingDir = System.getProperty("user.dir") + "\\upload-dir\\professor-files\\" + this.file.getOriginalFilename();
-			//Ubuntu
-//			String workingDir = System.getProperty("user.dir") + "/upload-dir/professor-files/" + this.file.getOriginalFilename();
-			workingDir = workingDir.substring(2);
-			System.out.println("\n\n\n\n\nWorking Directory = " + workingDir + "\n\n\n\n\n");
-//			File fileToUpload = new File(workingDir);
-//			this.filepath = workingDir;
-	 * 
-	 */
-			//Windows
-			this.studentDirFilePath = Paths.get("upload-dir\\student-files\\" + file.getOriginalFilename());
-			//Ubuntu
-//			professorDir = Paths.get("upload-dir/professor-files/" + file.getOriginalFilename());
-			return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename() );
-	    }
-		
+
+	@PostMapping("/Code/uploadFile")
+	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
+		MultipartFile file = request.getFile("file");
+		String courseName = request.getParameter("courseName");
+		String assignmentName = request.getParameter("assignmentName");
+		String userName = request.getParameter("userName");
+		storageService.storeAddPath(file, "student", courseName, assignmentName, userName);
+		return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename());
+	}
+
 	@PostMapping("/Code/uploadCode")
 	public ResponseEntity<List<String>> inputCodeforUser(MultipartHttpServletRequest request) {
 		String userName = request.getParameter("username");
 		String type = request.getParameter("type");
 		String runTime = request.getParameter("runTime");
 		String givenAssignmentId = request.getParameter("assignmentID");
-		String codePath = this.studentDirFilePath.toString();
-    	System.out.println("\n\n\n\n\n" + codePath + "\n\n\n\n\n");
+		Optional<Assignment> assignmentToRun = assignmentRepository.findById(givenAssignmentId);
+		String assignmentFilepath = assignmentToRun.get().getFilePath();
+		Path studentDir = Paths
+				.get("upload-dir\\" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "\\"
+						+ assignmentToRun.get().getassignmentName().replaceAll(" ", "_").toLowerCase()
+						+ "\\professor-files\\" + userName.replaceAll(" ", "_").toLowerCase());
+		this.codePath = studentDir.toString();
+		System.out.println("\n\n\n\n\n" + this.codePath + "\n\n\n\n\n");
 		int runTimeNum = Integer.parseInt(runTime);
 		LocalTime submissionTime = LocalTime.now();
-		Code newCode = new Code(type, runTimeNum, codePath, submissionTime, givenAssignmentId, userName);
-		
-    	// Docker stuff
-		newCode.addTestResponse(runCompiler(type, runTimeNum));
+		Code newCode = new Code(type, runTimeNum, this.codePath, submissionTime, givenAssignmentId, userName);
+		// Docker stuff
+		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath));
 		codeRepository.save(newCode);
 		return ResponseEntity.ok().body(newCode.getTestResponse());
 	}
-	
-	public String runCompiler(String language, int timeLimit) {
+
+	public String runCompiler(String language, int timeLimit, String assignmentFilepath) {
 		List<File> studentFiles = new ArrayList<>();
 		List<File> ProfessorFiles = new ArrayList<>();
-		File studentDirLocation = this.studentDir.toFile();
-		File professorDirLocation = this.professorDir.toFile();
-		for (File file: studentDirLocation.listFiles()) {
+		File studentDirLocation = Paths.get(this.codePath).toFile();
+		File professorDirLocation = Paths.get(assignmentFilepath).toFile();
+		for (File file : studentDirLocation.listFiles()) {
 			studentFiles.add(file);
 		}
-		for (File file: professorDirLocation.listFiles()) {
+		for (File file : professorDirLocation.listFiles()) {
 			ProfessorFiles.add(file);
 		}
 		try {
@@ -121,9 +110,6 @@ public class CodeController{
 		return "Failed Running Docker";
 	}
 
-
-	
-	
 	@ExceptionHandler(StorageFileNotFoundException.class)
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return ResponseEntity.notFound().build();

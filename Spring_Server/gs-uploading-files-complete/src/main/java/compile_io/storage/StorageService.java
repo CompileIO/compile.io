@@ -13,7 +13,7 @@ public interface StorageService {
 
     void store(MultipartFile file);
     
-    void storeAddPath(MultipartFile file, String addedFolderPathName);
+    void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName);
 
     Stream<Path> loadAll();
 
@@ -22,7 +22,5 @@ public interface StorageService {
     Resource loadAsResource(String filename);
 
     void deleteAll();
-    
-    void cleanDirectory();
 
 }

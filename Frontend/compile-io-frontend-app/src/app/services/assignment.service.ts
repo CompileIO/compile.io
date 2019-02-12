@@ -25,9 +25,12 @@ export class AssignmentService {
     response = this.http.get(this.apiUrl + '/Assignment/getCourse/' + courseName);
     return response;
   }
-  uploadFile(file: File) {
+  uploadFile(file: File, className: string, assignmentName: string, userName: string) {
     let body: FormData = new FormData();  
     body.append('file', file);
+    body.append('courseName', className);
+    body.append('assignmentName', assignmentName);
+    body.append('userName', userName);
     const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
     return this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});
   }

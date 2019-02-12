@@ -40,8 +40,6 @@ public class Application {
 	@Bean
 	CommandLineRunner init(StorageService storageService) {
 		return (args) -> {
-//			storageService.deleteAll();
-//			storageService.cleanDirectory();
 			storageService.init();
 		};
 	}

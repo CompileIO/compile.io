@@ -31,7 +31,7 @@ export class ChangeHomeworkComponent implements OnInit {
     this.file = event.target.files[0];
     // this.newAssignment.file = event.target.files[0];
     console.log("File was changed to this: " + this.file);
-    this.assignmentService.uploadFile(this.file).subscribe({
+    this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
       next: x => {
         console.log(x)
       },
@@ -45,6 +45,7 @@ export class ChangeHomeworkComponent implements OnInit {
 
   submit() {
     this.newAssignment.courseName = this.className;
+    this.newAssignment.createdByUsername = this.userName;
     if (this.assignmentInfo.id == "-1") {
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {

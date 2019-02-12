@@ -1,6 +1,7 @@
 package compile_io.storage;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -9,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -24,13 +26,6 @@ public class FileSystemStorageService implements StorageService {
 
     private Path rootLocation;
     public StorageProperties properties;
-    
-  //Windows
-    private Path studentDir = Paths.get("upload-dir\\student-files");
-	private Path professorDir = Paths.get("upload-dir\\professor-files");
-	//Ubuntu
-//	private Path studentDir = Paths.get("upload-dir/student-files");
-//	private Path professorDir = Paths.get("upload-dir/professor-files");
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -61,17 +56,32 @@ public class FileSystemStorageService implements StorageService {
         }
     }
     
-    public void storeAddPath(MultipartFile file, String addedFolderPathName) {
+    public void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName) {
     	Path dir;
-    	if(addedFolderPathName == "student") {
-    		dir = this.studentDir;
+    	if(studentOrProfessor == "student") {
+    		dir = Paths.get("upload-dir\\" + 
+					className.replaceAll(" ", "_").toLowerCase() + "\\" +
+					assignmentName.replaceAll(" ", "_").toLowerCase() + 
+					"\\student-files\\" +
+					userName.replaceAll(" ", "_").toLowerCase());
     	}
-    	else if(addedFolderPathName == "professor") {
-    		dir = this.professorDir;
+    	else if(studentOrProfessor == "professor") {
+    		dir = Paths.get("upload-dir\\" + 
+					className.replaceAll(" ", "_").toLowerCase() + "\\" +
+					assignmentName.replaceAll(" ", "_").toLowerCase() + 
+					"\\professor-files\\" +
+					userName.replaceAll(" ", "_").toLowerCase());
     	}
     	else {
     		dir = this.rootLocation;
     	}
+    	
+    	
+        if (! dir.toFile().exists()){
+            dir.toFile().mkdirs();
+            // If you require it to make the entire directory path including parents,
+            // use directory.mkdirs(); here instead.
+        }
     	
     	 String filename = StringUtils.cleanPath(file.getOriginalFilename());
          try {
@@ -85,6 +95,9 @@ public class FileSystemStorageService implements StorageService {
                                  + filename);
              }
              try (InputStream inputStream = file.getInputStream()) {
+            	 for (File fileInDir : dir.toFile().listFiles()) {
+         			fileInDir.delete();
+         		}
                  Files.copy(inputStream, dir.resolve(filename),
                      StandardCopyOption.REPLACE_EXISTING);
              }
@@ -135,18 +148,11 @@ public class FileSystemStorageService implements StorageService {
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
-    
-    public void cleanDirectory() {
-    	FileSystemUtils.deleteRecursively(this.studentDir.toFile());
-    	FileSystemUtils.deleteRecursively(this.professorDir.toFile());
-    }
 
     @Override
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-            Files.createDirectories(studentDir);
-            Files.createDirectories(professorDir);
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
