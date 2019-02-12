@@ -31,12 +31,8 @@ public class JavaBuilder extends AbstractBuilder {
             dockerfileData.append("COPY /" + professorFiles.get(i).getParent() + "/" + professorFiles.get(i).getName() + " " + professorFiles.get(i).getName() +  "\n");
             dockerfileData.append("RUN mv " + professorFiles.get(i).getName() + " " + "src/test/java/\n");
         }
-        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && gradle test\n");
-
-        System.out.println(super.getWorkingDirectory());
-        System.out.println(professorFiles.get(0).getParent());
-        System.out.println(studentFiles.get(0).getParent());
-        System.out.println("COPY " + studentFiles.get(0).getParent() + "/" + studentFiles.get(0).getName());
+        //dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && gradle test\n");
+        dockerfileData.append("CMD cd src/main/java && ls\n");
 
         return dockerfileData.toString();
     }
