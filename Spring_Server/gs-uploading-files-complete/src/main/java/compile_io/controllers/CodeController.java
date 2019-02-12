@@ -114,9 +114,11 @@ public class CodeController {
 		File professorDirLocation = Paths.get(assignmentFilepath).toFile();
 		for (File file : studentDirLocation.listFiles()) {
 			studentFiles.add(file);
+			System.out.println(file.getName());
 		}
 		for (File file : professorDirLocation.listFiles()) {
 			ProfessorFiles.add(file);
+			System.out.println(file.getName());
 		}
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
