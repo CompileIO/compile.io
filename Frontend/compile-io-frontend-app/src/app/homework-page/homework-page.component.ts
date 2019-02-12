@@ -11,13 +11,13 @@ export class HomeworkPageComponent implements OnInit {
   @Input() username: string;
   @Input() assignmentInfo: Assignment;
   file: File;
-  result: string;
+  results: string[];
   error: string;
 
   constructor(private codeService: CodeService) {
     this.file = null;
     this.error = '';
-    this.result = '';
+    this.results = null;
     // this.getResults();
   }
 
@@ -45,7 +45,7 @@ export class HomeworkPageComponent implements OnInit {
   run() {
 
     this.codeService.uploadCode(this.assignmentInfo.language, this.assignmentInfo.timeout,  this.assignmentInfo.id,this.username).subscribe({
-      next: x => {console.log(x); this.result = x},
+      next: x => {console.log(x); this.results = x},
       error: err => {
         console.log("RUNNING DOCKER ERROR: " + err),
         this.error = err
@@ -58,7 +58,7 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   clearResult() {
-    this.result = '';
+    this.results = null;
   }
   // getResults() {
   //   this.codeService.getResults(this.assignmentInfo.id, this.username).subscribe({
