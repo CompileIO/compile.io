@@ -2,6 +2,7 @@ package compile_io.docker;
 
 import java.io.*;
 import java.util.*;
+import java.nio.file.Paths;
 
 /**
  * Abstract class for the compilers that builds and runs docker images.
@@ -16,12 +17,13 @@ public abstract class AbstractBuilder {
     private int numProfessorFiles;
 
     public AbstractBuilder(List<File> studentFiles, List<File> professorFiles) {
+        File workDir = Paths.get("upload-dir/").toFile();
         this.studentFiles = studentFiles;
         this.professorFiles = professorFiles;
         this.numStudentFiles = this.studentFiles.size();
         this.numProfessorFiles = this.professorFiles.size();
         this.executer = new CommandExecuter();
-        this.workingDirectory = studentFiles.get(0).getParent();
+        this.workingDirectory = workDir.getPath();
         if (this.workingDirectory == null) {
             this.workingDirectory = "/";
         }
@@ -29,17 +31,16 @@ public abstract class AbstractBuilder {
     }
 
     public void buildContainer() {
-        System.out.println("Attempting to build docker container...");
+        System.out.print("Attempting to build docker container...");
         String[] command = {"docker", "build", "-t", "compile-io-image", this.workingDirectory};
-        System.out.println(this.executer.executeCommand(command));
+        this.executer.executeCommand(command);
+        System.out.print("DONE\n");
     }
 
     public void teardownDockerImage() {
         System.out.println("Beginning teardown of Docker image...");
-        System.out.println();
         String[] command = {"docker", "rmi", "--force", "compile-io-image"};
         this.executer.executeCommand(command);
-        System.out.println();
         System.out.println("Successfully removed the Docker image.");
     }
 
@@ -47,7 +48,6 @@ public abstract class AbstractBuilder {
         System.out.println("Beginning teardown of Dockerfile...");
         File dockerfile = new File(this.workingDirectory + "/Dockerfile");
         dockerfile.delete();
-        System.out.println();
         System.out.println("Successfully removed the Dockerfile from " + this.workingDirectory);
     }
 
