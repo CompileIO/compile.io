@@ -1,4 +1,4 @@
-<div *ngIf="selectedResult == null">
+<div *ngIf="result == ''">
   <div class="container">
     <div class="row mt-5">
       <div class="col">
@@ -22,23 +22,23 @@
 </div>
 
 
-<div *ngIf="selectedResult != null">
+<div *ngIf="result != ''">
   <div>
     <div class="container">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col">
           <h1>HOW MANY TESTS PASSED</h1>
         </div>
-      </div>
+      </div> -->
       <div class="row">
         <div class="col">
-          <h1>OUTPUT FROM TEST</h1>
+          <h1>{{result}}</h1>
         </div>
       </div>
 
       <div class="row">
         <div class="col">
-          <h1>RETURN BUTTON</h1>
+          <button class = "btn btn-primary" (click)="clearResult()">RETURN</button>
         </div>
       </div>
     </div>

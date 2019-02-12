@@ -2,6 +2,7 @@ package compile_io.mongo.models;
 
 import java.sql.Date;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -34,6 +35,7 @@ public class Code {
 		this.submissionTime = submissionTime;
 		this.assignmentId = givenAssignmentId;
 		this.userName = userName;
+		this.testResponses = new ArrayList<String>();
 	}
 	public String getAssignmentName() {
 		return assignmentId;

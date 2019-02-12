@@ -118,7 +118,7 @@ public class CodeController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return "Failed Running Docker";
 	}
 
 

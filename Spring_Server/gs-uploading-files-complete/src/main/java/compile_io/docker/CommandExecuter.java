@@ -63,7 +63,7 @@ public class CommandExecuter implements ICommandExecuter {
             e.printStackTrace();
             System.exit(1);
         }
-        return null;
+        return "Failed to execute";
     }
 
 

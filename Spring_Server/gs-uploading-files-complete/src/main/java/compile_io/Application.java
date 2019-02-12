@@ -41,7 +41,7 @@ public class Application {
 	CommandLineRunner init(StorageService storageService) {
 		return (args) -> {
 //			storageService.deleteAll();
-			storageService.cleanDirectory();
+//			storageService.cleanDirectory();
 			storageService.init();
 		};
 	}
