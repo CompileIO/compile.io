@@ -60,17 +60,17 @@ public class FileSystemStorageService implements StorageService {
     public void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName) {
     	Path dir;
     	if(studentOrProfessor == "student") {
-    		dir = Paths.get("upload-dir\\" + 
-					className.replaceAll(" ", "_").toLowerCase() + "\\" +
+    		dir = Paths.get("upload-dir/" + 
+					className.replaceAll(" ", "_").toLowerCase() + "/" +
 					assignmentName.replaceAll(" ", "_").toLowerCase() + 
-					"\\student-files\\" +
+					"/student-files/" +
 					userName.replaceAll(" ", "_").toLowerCase());
     	}
     	else if(studentOrProfessor == "professor") {
-    		dir = Paths.get("upload-dir\\" + 
-					className.replaceAll(" ", "_").toLowerCase() + "\\" +
+    		dir = Paths.get("upload-dir/" + 
+					className.replaceAll(" ", "_").toLowerCase() + "/" +
 					assignmentName.replaceAll(" ", "_").toLowerCase() + 
-					"\\professor-files\\" +
+					"/professor-files/" +
 					userName.replaceAll(" ", "_").toLowerCase());
     	}
     	else {

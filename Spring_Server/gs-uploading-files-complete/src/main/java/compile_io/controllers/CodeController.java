@@ -92,9 +92,9 @@ public class CodeController {
 		Optional<Assignment> assignmentToRun = assignmentRepository.findById(givenAssignmentId);
 		String assignmentFilepath = assignmentToRun.get().getFilePath();
 		Path studentDir = Paths
-				.get("upload-dir\\" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "\\"
+				.get("upload-dir/" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "/"
 						+ assignmentToRun.get().getassignmentName().replaceAll(" ", "_").toLowerCase()
-						+ "\\student-files\\" + userName.replaceAll(" ", "_").toLowerCase());
+						+ "/student-files/" + userName.replaceAll(" ", "_").toLowerCase());
 		
 		this.codePath = studentDir.toString();
 		System.out.println("\n\n\n\n\n" + this.codePath + "\n\n\n\n\n");

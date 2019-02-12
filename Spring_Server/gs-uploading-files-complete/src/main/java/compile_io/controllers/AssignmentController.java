@@ -75,10 +75,10 @@ public class AssignmentController {
     
     @PostMapping("/Assignment")
     public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {   
-    	Path professorDir = Paths.get("upload-dir\\" + 
-				assignment.getCourseName().replaceAll(" ", "_").toLowerCase() + "\\" +
+    	Path professorDir = Paths.get("upload-dir/" + 
+				assignment.getCourseName().replaceAll(" ", "_").toLowerCase() + "/" +
 				assignment.getassignmentName().replaceAll(" ", "_").toLowerCase() + 
-				"\\professor-files\\" +
+				"/professor-files/" +
 				assignment.getCreatedByUsername().replaceAll(" ", "_").toLowerCase());
     	assignment.setFilePath(professorDir.toString());
     	System.out.println("\n\n\n\n\n" + assignment.toString() + "\n\n\n\n\n");
