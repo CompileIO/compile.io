@@ -2,6 +2,7 @@ package compile_io.mongo.models;
 
 import java.sql.Date;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -17,7 +18,9 @@ public class Code {
 	private int runTime;
     private List<String> testResponses;
     private String codePath;
-    private Assignment assignment;
+    private String assignmentId;
+    private String userName;
+    
     
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalTime submissionTime;
@@ -25,19 +28,24 @@ public class Code {
     
     public Code() {}
     
-    public Code(String language, int runTime, String codePath, LocalTime submissionTime) {
+    public Code(String language, int runTime, String codePath, LocalTime submissionTime, String givenAssignmentId, String userName) {
+    	super();
 		this.language = language;
 		this.runTime = runTime;
 		this.codePath = codePath;
 		this.submissionTime = submissionTime;
+		this.assignmentId = givenAssignmentId;
+		this.userName = userName;
+		this.testResponses = new ArrayList<String>();
 	}
-    
-//	public Code(String language, int runTime, Date submissionTime) {
-//		super();
-//		this.language = language;
-//		this.runTime = runTime;
-//		this.submissionTime = submissionTime;
-//	}
+	public String getAssignmentName() {
+		return assignmentId;
+	}
+
+	public void setAssignmentName(String assignmentName) {
+		this.assignmentId = assignmentName;
+	}
+
 	public String getLanguage() {
 		return language;
 	}
@@ -69,6 +77,14 @@ public class Code {
 		this.grade = grade;
 	}
 	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
 	
 	
 	
@@ -83,14 +99,13 @@ public class Code {
 	@Override
 	public String toString() {
 		return "Code [language=" + language + ", runTime=" + runTime + ", testResponses=" + testResponses
-				+ ", assignment=" + assignment + ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
+				+ ", codePath=" + codePath + ", assignmentId=" + assignmentId + ", userName=" + userName
+				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
 	}
 
-//	@Override
-//	public String toString() {
-//		return "Code [language=" + language + ", runTime=" + runTime + ", testResponse=" + testResponses
-//				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
-//	}
+
+
+	
     
     
 }

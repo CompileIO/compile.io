@@ -1,9 +1,7 @@
 package compile_io.storage;
 
-import java.io.BufferedReader;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -13,8 +11,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -26,14 +24,17 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
 
-    private final Path rootLocation;
-
+    private Path rootLocation;
+    public StorageProperties properties;
+    
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
+    	this.properties = properties;
         this.rootLocation = Paths.get(properties.getLocation());
+        
     }
 
-    @Override
+	@Override
     public void store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
@@ -55,6 +56,58 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Failed to store file " + filename, e);
         }
     }
+    
+    public void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName) {
+    	Path dir;
+    	if(studentOrProfessor == "student") {
+    		dir = Paths.get("upload-dir\\" + 
+					className.replaceAll(" ", "_").toLowerCase() + "\\" +
+					assignmentName.replaceAll(" ", "_").toLowerCase() + 
+					"\\student-files\\" +
+					userName.replaceAll(" ", "_").toLowerCase());
+    	}
+    	else if(studentOrProfessor == "professor") {
+    		dir = Paths.get("upload-dir\\" + 
+					className.replaceAll(" ", "_").toLowerCase() + "\\" +
+					assignmentName.replaceAll(" ", "_").toLowerCase() + 
+					"\\professor-files\\" +
+					userName.replaceAll(" ", "_").toLowerCase());
+    	}
+    	else {
+    		dir = this.rootLocation;
+    	}
+    	
+    	
+        if (! dir.toFile().exists()){
+            dir.toFile().mkdirs();
+            // If you require it to make the entire directory path including parents,
+            // use directory.mkdirs(); here instead.
+        }
+    	
+    	 String filename = StringUtils.cleanPath(file.getOriginalFilename());
+         try {
+             if (file.isEmpty()) {
+                 throw new StorageException("Failed to store empty file " + filename);
+             }
+             if (filename.contains("..")) {
+                 // This is a security check
+                 throw new StorageException(
+                         "Cannot store file with relative path outside current directory "
+                                 + filename);
+             }
+             try (InputStream inputStream = file.getInputStream()) {
+            	 for (File fileInDir : dir.toFile().listFiles()) {
+         			fileInDir.delete();
+         		}
+                 Files.copy(inputStream, dir.resolve(filename),
+                     StandardCopyOption.REPLACE_EXISTING);
+             }
+         }
+         catch (IOException e) {
+             throw new StorageException("Failed to store file " + filename, e);
+         }
+    }
+    
     @Override
     public Stream<Path> loadAll() {
         try {
@@ -106,33 +159,4 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Could not initialize storage", e);
         }
     }
-	
-//	@Override
-//    public void store(File file) {
-//        String filename = StringUtils.cleanPath(file.getName());
-//        
-//        try {
-//        	
-//        	BufferedReader br = new BufferedReader(new FileReader(filename));     
-//            if (br.readLine() == null) {
-//            	throw new StorageException("Failed to store empty file " + filename);
-//            }
-////            if (file.) {
-////                throw new StorageException("Failed to store empty file " + filename);
-////            }
-//            if (filename.contains("..")) {
-//                // This is a security check
-//                throw new StorageException(
-//                        "Cannot store file with relative path outside current directory "
-//                                + filename);
-//            }
-//            try (InputStream inputStream = ((InputStreamSource) file).getInputStream()) {
-//                Files.copy(inputStream, this.rootLocation.resolve(filename),
-//                    StandardCopyOption.REPLACE_EXISTING);
-//            }
-//        }
-//        catch (IOException e) {
-//            throw new StorageException("Failed to store file " + filename, e);
-//        }
-//    }
 }

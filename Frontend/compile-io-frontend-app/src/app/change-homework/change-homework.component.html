@@ -1,23 +1,15 @@
 <div class="container w-100 d-block">
-  <div class="row">
+  <div class="row justify-content-center mt-2">
     <div class="col">
-      <div class="p-3 w-100 d-block" style="height: 100px">
-        <h1 class="float-left">
-          {{class | uppercase}}
-        </h1>
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col">
-      <form class="w-50 p-3 border">
+      <form class="w-100 p-3">
         <div class="container">
           <div class="row">
             <div class="col">
               <div class="form-group p-3">
                 <label class="float-left" for="nameText">Name</label>
-                <input type="text" class="form-control" #nameText id="nameText" value = {{homework}} aria-describedby="nameHelp" placeholder="Hmk1" required>
-                <small id="nameHelp" class="form-text text-muted float-left">Try not to make the name so large as to overflow the sidebar.</small>
+                <input *ngIf="assignmentInfo.id == '-1'" type="text" class="form-control" #nameText id="nameText" aria-describedby="nameHelp" placeholder="Hmk1" (blur)="newAssignment.assignmentName=nameText.value" required>
+
+                <input *ngIf="assignmentInfo.id != '-1'" type="text" class="form-control" #nameText id="nameText" value={{assignmentInfo.assignmentName}} aria-describedby="nameHelp" placeholder="Hmk1" (blur)="newAssignment.assignmentName=nameText.value" required>
               </div>
             </div>
           </div>
@@ -25,39 +17,78 @@
             <div class="col">
               <div class="form-group p-3">
                 <label class="float-left" for="timeoutText">Timeout (s)</label>
-                <input type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" value = {{timeout}} placeholder="5" required>
+                <input *ngIf="assignmentInfo.id == '-1'" type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" (blur)="newAssignment.timeout=timeoutText.value" placeholder="5" required>
+
+                <input *ngIf="assignmentInfo.id != '-1'" type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" value={{assignmentInfo.timeout}}  (blur)="newAssignment.timeout=timeoutText.value" placeholder="5" required>
                 <small id="timeoutHelp" class="form-text text-muted float-left">How much time to spend running a test before timing out.</small>
               </div>
             </div>
-          </div>
-          <div class="row">
             <div class="col">
-              <div class="form-check p-3">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-2">
-                      <label class="form-check-label float-left" for="visibleCheck">Visible</label>
-                    </div>
-                    <div class="col-1">
-                      <input type="checkbox" class="form-check-input float-left" #visibleCheck id="visibleCheck" checked = {{visible}} aria-describedby="visibleHelp" required>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <small id="visibleHelp" class="form-text text-muted float-left">If the homework is visible to students.</small>
-                    </div>
-                  </div>
-                </div>
+              <div class="form-group p-3">
+                <label class="float-left" for="maxText">Max Size (Mbs)</label>
+                <input *ngIf="assignmentInfo.id == '-1'" type="number" class="form-control" #maxText id="maxText" aria-describedby="maxHelp" placeholder="5"  (blur)="newAssignment.size=maxText.value" required> 
+                
+                <input *ngIf="assignmentInfo.id != '-1'" type="number" class="form-control" #maxText id="maxText" aria-describedby="maxHelp" value = {{assignmentInfo.size}} placeholder="5"  (blur)="newAssignment.size=maxText.value" required> 
+                <small id="maxHelp" class="form-text text-muted float-left">How large student uploads can be in MegaBites.</small>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col">
               <div class="form-check p-3">
+                <label class="float-left" for="startDate">Start Date</label>
+                <input *ngIf="assignmentInfo.id == '-1'"type="date" class="form-control" #startDate id="startDate" aria-describedby="startDateHelp"  (blur)="newAssignment.startDate=startDate.value" required>
+
+                <input *ngIf="assignmentInfo.id != '-1'"type="date" class="form-control" #startDate id="startDate" aria-describedby="startDateHelp"  value = {{assignmentInfo.startDate}} (blur)="newAssignment.startDate=startDate.value" required>
+                <small id="startDateHelp" class="form-text text-muted float-left">What Date Students can start submitting to this assignment.</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left" for="startTime">Start Time</label>
+                <input *ngIf="assignmentInfo.id == '-1'" type="time" class="form-control" #startTime id="startTime" aria-describedby="startTimeHelp"   (blur)="newAssignment.startTime=startTime.value" required>
+                
+                <input *ngIf="assignmentInfo.id != '-1'" type="time" class="form-control" #startTime id="startTime" aria-describedby="startTimeHelp" value = {{assignmentInfo.startTime}}  (blur)="newAssignment.startTime=startTime.value" required>
+                <small id="startTimeHelp" class="form-text text-muted float-left">What Time Students can start submitting to this assignment.</small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left" for="endDate">End Date</label>
+                <input *ngIf="assignmentInfo.id == '-1'" type="date" class="form-control" #endDate id="endDate" aria-describedby="endDateHelp"  (blur)="newAssignment.endDate=endDate.value" required>
+                
+                <input *ngIf="assignmentInfo.id != '-1'" type="date" class="form-control" #endDate id="endDate" aria-describedby="endDateHelp" value = {{assignmentInfo.endDate}} (blur)="newAssignment.endDate=endDate.value" required>
+                <small id="endDateHelp" class="form-text text-muted float-left">What Date Students can no longer submit to this assignment.</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left" for="endTime">End Time</label>
+                <input *ngIf="assignmentInfo.id == '-1'" type="time" class="form-control" #endTime id="endTime" aria-describedby="endTimeHelp"  (blur)="newAssignment.endTime=endTime.value" required>
+                
+                <input *ngIf="assignmentInfo.id != '-1'" type="time" class="form-control" #endTime id="endTime" aria-describedby="endTimeHelp" value = {{assignmentInfo.endTime}} (blur)="newAssignment.endTime=endTime.value" required>
+                <small id="endTimeHelp" class="form-text text-muted float-left">What Time Students can no longer submit to this assignment.</small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="triesText">Number of tries</label>
+                <input *ngIf="assignmentInfo.id == '-1'" type="number" min="0" class="form-control" #triesText id="triesText" aria-describedby="triesHelp" placeholder="5"  (blur)="newAssignment.tries=triesText.value" required>
+
+                <input *ngIf="assignmentInfo.id != '-1'" type="number" min="0" class="form-control" #triesText id="triesText" aria-describedby="triesHelp" value = {{assignmentInfo.tries}} placeholder="5" (blur)="newAssignment.tries=triesText.value" required>
+                <small id="triesHelp" class="form-text text-muted float-left">How many times a student can submit an assignment. 0 for infinite</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check p-3">
                 <label for="language">Language</label>
-                <select multiple class="form-control" #languageSelect id="language" required>
-                  <option selected = "{{langauge}} == 'java'">Java</option>
-                  <option selected = "{{langauge}} == 'python'">Python</option>
+                <select multiple class="form-control" #languageSelect id="language"  (blur)="newAssignment.language=languageSelect.value.toLowerCase()" required>
+                  <option>Java</option>
+                  <option>Python</option>
                 </select>
               </div>
             </div>
@@ -65,7 +96,7 @@
           <div class="row">
             <div class="col">
               <div class="custom-file float-left p-3">
-                <input type="file" class="custom-file-input" #fileUpload id="fileUpload">
+                <input type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUpload id="fileUpload">
                 <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
                 <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
               </div>
@@ -73,7 +104,7 @@
           </div>
           <div class="row">
             <div class="col p-3">
-              <button type="submit" class="btn btn-primary" (click)="submit(nameText.value, timeoutText.value, visibleCheck.checked, fileUpload.value, languageSelect.value)">Submit</button>
+              <button type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
             </div>
           </div>
         </div>
@@ -81,3 +112,4 @@
     </div>
   </div>
 </div>
+

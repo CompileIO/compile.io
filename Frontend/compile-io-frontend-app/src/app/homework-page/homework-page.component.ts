@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AssignmentService } from '../services/assignment.service';
-import { TestService } from '../services/test.service';
+import { CodeService } from '../services/code.service';
+import {Assignment} from '../../models/assignment';
 
 @Component({
   selector: 'app-homework-page',
@@ -9,39 +9,32 @@ import { TestService } from '../services/test.service';
 })
 export class HomeworkPageComponent implements OnInit {
   @Input() username: string;
-  @Input() givenClass: string;
-  @Input() homework: string;
+  @Input() assignmentInfo: Assignment;
   file: File;
-  MAX_FILE_SIZE: number;
-  fileReady: boolean;
-  uploading: boolean;
+  results: string[];
   error: string;
-  results: string[] = [];
 
-  constructor(private assignmentService: AssignmentService, private testService: TestService) {
-    this.MAX_FILE_SIZE = 50000000;
-    this.fileReady = false;
-    this.uploading = false;
+  constructor(private codeService: CodeService) {
     this.file = null;
     this.error = '';
-    this.getResults();
+    this.results = null;
+    // this.getResults();
   }
 
-  fileUpload(event: any) {
+  fileUploadFunction(event: any) {
     console.log("THIS IS THE FILE FROM file upload: " + event.target.files[0]);
-    if (event.target.files[0].size < this.MAX_FILE_SIZE) {
+    // if (event.target.files[0].size < this.assignmentInfo.size) {
       this.file = event.target.files[0];
-    } else {
-      alert("File is too large!");
-    }
-  }
-
-  upload() {
+    // } else {
+    //   alert("File is too large!");
+    // }
     if (this.file !== null) {
-      this.assignmentService.addAssignment().subscribe({
+      console.log("Should run upload file")
+      this.codeService.uploadFile(this.file, this.assignmentInfo.courseName, this.assignmentInfo.assignmentName, this.username).subscribe({
         next: x => {
           console.log(x)
         },
+        
         error: err => {
           console.log("UPLOADING FILE ERROR: " + err)
         },
@@ -51,32 +44,36 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   run() {
-    this.testService.runDocker().subscribe({
-      next: x => console.log(x),
+
+    this.codeService.uploadCode(this.assignmentInfo.language, this.assignmentInfo.timeout,  this.assignmentInfo.id,this.username).subscribe({
+      next: x => {console.log(x); this.results = x},
       error: err => {
         console.log("RUNNING DOCKER ERROR: " + err),
         this.error = err
       },
       complete: () => {
-        console.log("Ran docker"),
-        this.getResults();
+        console.log("Ran docker")
+        // this.getResults();
       }
     });
   }
 
-  getResults() {
-    this.testService.getResults(this.givenClass, this.homework).subscribe({
-      next: x => {
-        console.log(x),
-        this.results = x.map(element => element.toString());
-        },
-      error: err => {
-        console.log("GET RESULTS ERROR: " + err),
-          this.error = err
-      },
-      complete: () => console.log("got results")
-    });
+  clearResult() {
+    this.results = null;
   }
+  // getResults() {
+  //   this.codeService.getResults(this.assignmentInfo.id, this.username).subscribe({
+  //     next: x => {
+  //       console.log(x),
+  //       this.results = x.map(element => element.toString());
+  //       },
+  //     error: err => {
+  //       console.log("GET RESULTS ERROR: " + err),
+  //         this.error = err
+  //     },
+  //     complete: () => console.log("got results")
+  //   });
+  // }
 
 
   ngOnInit() {

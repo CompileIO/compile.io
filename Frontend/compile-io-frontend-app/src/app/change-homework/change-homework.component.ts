@@ -1,5 +1,9 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit, Input } from '@angular/core';
 import { CourseService } from '../services/course.service';
+import { AssignmentService } from '../services/assignment.service';
+import { Assignment } from '../../models/assignment';
+import { Time } from '@angular/common';
 
 @Component({
   selector: 'app-change-homework',
@@ -7,33 +11,75 @@ import { CourseService } from '../services/course.service';
   styleUrls: ['./change-homework.component.css']
 })
 export class ChangeHomeworkComponent implements OnInit {
-
-  @Input() givenClass: string;
-  @Input() homework: string;
+  @Input() userName: string;
+  @Input() className: string;
   name: string;
   timeout: string;
-  visible: boolean;
   language: string;
+  @Input() assignmentInfo: Assignment;
+  Assignments: Assignment[];
+  newAssignment: Assignment = new Assignment();
   file: File;
-  homeworkInfo: FormData;
-  constructor(private courseService: CourseService) {}
+  // editing: boolean = false;
+  // editingTodo: Assignment = new Assignment();
 
-  getHomework() {
-    this.courseService.getHomeworkInfo(this.givenClass, this.homework).subscribe({
-      next: x => this.homeworkInfo = x,
-      error: err => console.log("GET CLASSES ERROR: " + err),
-      complete: () => console.log("got classes")
+  constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
+
+  }
+
+  fileUploadFunction(event: any) {
+    this.file = event.target.files[0];
+    console.log("File was changed to this: " + this.file);
+    this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
+      next: x => {
+        console.log(x)
+      },
+      error: err => {
+        console.log("ADDING FILE ERROR: " + err)
+      },
+      complete: () => console.log("Added File")
     });
-    this.name = this.homeworkInfo.get("name").toString();
-    this.timeout = this.homeworkInfo.get("timeout").toString();
-    //this.visible = this.homeworkInfo.get("visible");
-    this.language = this.homeworkInfo.get("language").toString();
-    //this.file = this.homeworkInfo.get("file");
+
+  }
+
+  submit() {
+    this.newAssignment.courseName = this.className;
+    this.newAssignment.createdByUsername = this.userName;
+    console.log(this.newAssignment.startTime);
+    if (this.assignmentInfo.id == "-1") {
+      
+      this.assignmentService.createAssignment(this.newAssignment).subscribe({
+        next: x => {
+          console.log(x)
+        },
+        error: err => {
+          console.log("ADDING HWK ERROR: " + err)
+        },
+        complete: () => {
+          this.newAssignment = new Assignment()
+          console.log("Added Homework Complete")
+        }
+      });
+    }
+    else {
+      this.assignmentService.updateAssignment(this.newAssignment).subscribe({
+        next: x => {
+          console.log(x)
+        },
+        error: err => {
+          console.log("UPDATING HWK ERROR: " + err)
+        },
+        complete: () => {
+          this.newAssignment = new Assignment()
+          console.log("Updated Homework Complete")
+        }
+      });
+    }
   }
 
 
+
   ngOnInit() {
-    this.getHomework();
   }
 
 }
