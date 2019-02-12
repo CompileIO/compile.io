@@ -45,6 +45,7 @@ export class ChangeHomeworkComponent implements OnInit {
   submit() {
     this.newAssignment.courseName = this.className;
     this.newAssignment.createdByUsername = this.userName;
+    console.log(this.newAssignment.startTime);
     if (this.assignmentInfo.id == "-1") {
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {

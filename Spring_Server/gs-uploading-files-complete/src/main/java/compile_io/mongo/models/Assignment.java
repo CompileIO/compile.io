@@ -27,7 +27,6 @@ public class Assignment {
     private int tries;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date startDate;
-//    @DateTimeFormat(pattern = "HH:mm")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
     private LocalTime startTime;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -38,22 +37,6 @@ public class Assignment {
     private String courseName;
     private String createdByUsername;
     
-//    @DBRef
-//	private List<UnitTest> unitTests;
-	
-    
-    
-    
-    //NOT NECESSARY
-//	private String name;
-//	
-//	@DBRef
-//	private Test test;
-//	
-//	@DBRef
-//	private List<Code> codes;
-//	
-//    private Date dueDate;
 	
 	public Assignment() {
 		super();

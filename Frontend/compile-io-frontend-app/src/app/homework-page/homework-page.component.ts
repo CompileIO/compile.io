@@ -22,7 +22,7 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   fileUploadFunction(event: any) {
-    // console.log("THIS IS THE FILE FROM file upload: " + event.target.files[0]);
+    console.log("THIS IS THE FILE FROM file upload: " + event.target.files[0]);
     // if (event.target.files[0].size < this.assignmentInfo.size) {
       this.file = event.target.files[0];
     // } else {
