@@ -18,34 +18,67 @@ export class ChangeHomeworkComponent implements OnInit {
   language: string;
   @Input() assignmentInfo: Assignment;
   Assignments: Assignment[];
-  newAssignment: Assignment = new Assignment();
+  newAssignment: Assignment;
   file: File;
   // editing: boolean = false;
   // editingTodo: Assignment = new Assignment();
 
   constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
-
+    this.newAssignment = new Assignment();
   }
 
   fileUploadFunction(event: any) {
     this.file = event.target.files[0];
     console.log("File was changed to this: " + this.file);
-    this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
-      next: x => {
-        console.log(x)
-      },
-      error: err => {
-        console.log("ADDING FILE ERROR: " + err)
-      },
-      complete: () => console.log("Added File")
-    });
+  }
 
+  sendFile() {
+    if (this.assignmentInfo.id == "-1") {
+      this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
+        next: x => {
+          console.log(x)
+        },
+        error: err => {
+          console.log("ADDING FILE ERROR: " + err)
+        },
+        complete: () => console.log("Added File")
+      });
+    } else {
+      if (this.newAssignment.assignmentName == undefined) {
+        this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
+          next: x => {
+            console.log(x)
+          },
+          error: err => {
+            console.log("ADDING FILE ERROR: " + err)
+          },
+          complete: () => console.log("Added File")
+        });
+      } else {
+        this.assignmentService.uploadFile(this.file, this.className, this.assignmentInfo.assignmentName, this.userName).subscribe({
+          next: x => {
+            console.log(x)
+          },
+          error: err => {
+            console.log("ADDING FILE ERROR: " + err)
+          },
+          complete: () => console.log("Added File")
+        });
+      }
+      
+    }
+    
   }
 
   submit() {
     this.newAssignment.courseName = this.className;
     this.newAssignment.createdByUsername = this.userName;
-    console.log(this.newAssignment.startTime);
+    //console.log(this.newAssignment.startTime);
+
+    if (this.file != null) {
+      this.sendFile();
+    }
+
     if (this.assignmentInfo.id == "-1") {
       
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
@@ -62,6 +95,7 @@ export class ChangeHomeworkComponent implements OnInit {
       });
     }
     else {
+      this.newAssignment.id = this.assignmentInfo.id;
       this.assignmentService.updateAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)
@@ -75,7 +109,7 @@ export class ChangeHomeworkComponent implements OnInit {
         }
       });
     }
-    window.location.reload();
+    //window.location.reload();
   }
   updateSize(givenSize: number) {
     this.newAssignment.size = givenSize * 1000 * 1000;
