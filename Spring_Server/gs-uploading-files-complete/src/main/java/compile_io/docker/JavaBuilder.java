@@ -18,22 +18,21 @@ public class JavaBuilder extends AbstractBuilder {
         List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
-        dockerfileData.append("RUN chown newuser /upload-dir\n");
-        dockerfileData.append("USER newuser\n");
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
-        dockerfileData.append("RUN mkdir -p src/main/java\n");
-        dockerfileData.append("RUN mkdir -p src/test/java\n");
+        dockerfileData.append("RUN mkdir -p $HOME/src/main/java\n");
+        dockerfileData.append("RUN mkdir -p $HOME/src/test/java\n");
         dockerfileData.append("COPY build.gradle build.gradle\n");
-        for (int i = 0; i < super.getNumStudentFiles(); i++) {
-            dockerfileData.append("COPY /student-files/" + studentFiles.get(i).getName() + " " + studentFiles.get(i).getName() +  "\n");
-            dockerfileData.append("RUN mv " + studentFiles.get(i).getName() + " " + "src/main/java/\n");
-        }
-        for (int i = 0; i < super.getNumProfessorFiles(); i++) {
-            dockerfileData.append("COPY /professor-files/" + professorFiles.get(i).getName() + " " + professorFiles.get(i).getName() +  "\n");
-            dockerfileData.append("RUN mv " + professorFiles.get(i).getName() + " " + "src/test/java/\n");
-        }
-        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && gradle test\n");
+        // for (int i = 0; i < super.getNumStudentFiles(); i++) {
+        //     dockerfileData.append("COPY /student-files/" + studentFiles.get(i).getName() + " " + studentFiles.get(i).getName() +  "\n");
+        //     dockerfileData.append("RUN mv " + studentFiles.get(i).getName() + " " + "src/main/java/\n");
+        // }
+        // for (int i = 0; i < super.getNumProfessorFiles(); i++) {
+        //     dockerfileData.append("COPY /professor-files/" + professorFiles.get(i).getName() + " " + professorFiles.get(i).getName() +  "\n");
+        //     dockerfileData.append("RUN mv " + professorFiles.get(i).getName() + " " + "src/test/java/\n");
+        // }
+        //dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && gradle test\n");
+        dockerfileData.append("CMD cd ../.. && ls\n");
 
         return dockerfileData.toString();
     }
