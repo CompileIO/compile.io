@@ -96,16 +96,21 @@
           <div class="row">
             <div class="col">
               <div class="custom-file float-left p-3">
+                <div *ngIf="newAssignment.assignmentName == undefined && assignmentInfo.id == '-1'">
+                  <input disabled type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUpload id="fileUpload">
+                  <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
+                  <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
+                </div>
                 <div *ngIf="newAssignment.assignmentName != undefined && assignmentInfo.id == '-1'">
                   <input type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUpload id="fileUpload">
                   <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
                   <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
                 </div>
-                <div *ngIf="newAssignment.assignmentName == undefined && assignmentInfo.id != '-1'">
-                  <input disabled type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUploadDisable id="fileUpload">
+                <div *ngIf="assignmentInfo.id != '-1'">
+                  <input type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUploadDisable id="fileUpload">
                   <label *ngIf="fileUploadDisable.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
                   <label *ngIf="fileUploadDisable.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
-                </div> 
+                </div>
               </div>
             </div>
           </div>

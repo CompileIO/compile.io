@@ -13,11 +13,15 @@ export class HomeworkPageComponent implements OnInit {
   file: File;
   results: string[];
   error: string;
+  running: boolean;
+  sDate: string;
+  eDate: string;
 
   constructor(private codeService: CodeService) {
     this.file = null;
     this.error = '';
     this.results = null;
+    this.running = false;
     // this.getResults();
   }
 
@@ -44,7 +48,7 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   run() {
-
+    this.running = true;
     this.codeService.uploadCode(this.assignmentInfo.language, this.assignmentInfo.timeout,  this.assignmentInfo.id,this.username).subscribe({
       next: x => {console.log(x); this.results = x},
       error: err => {
@@ -53,6 +57,7 @@ export class HomeworkPageComponent implements OnInit {
       },
       complete: () => {
         console.log("Ran docker")
+        this.running = false;
         // this.getResults();
       }
     });
@@ -61,6 +66,44 @@ export class HomeworkPageComponent implements OnInit {
   clearResult() {
     this.results = null;
   }
+
+  onTime(): boolean {
+    var today = new Date();
+    //if (today.getFullYear() >= this.assignmentInfo.startDate.getFullYear() &&
+    //  today.getFullYear() <= this.assignmentInfo.endDate.getFullYear() &&
+    //  today.getMonth() >= this.assignmentInfo.startDate.getMonth() &&
+    //  today.getMonth() <= this.assignmentInfo.endDate.getMonth() &&
+    //  today.getDay) {
+
+    //}
+    //console.log(this.assignmentInfo.startDate);
+    var sd = new Date(this.assignmentInfo.startDate);
+    var ed = new Date(this.assignmentInfo.endDate);
+    //console.log();
+    var sth = Number(this.assignmentInfo.startTime.toString().substring(0, this.assignmentInfo.startTime.toString().indexOf(":")));
+    sth += sd.getHours() + 5;
+    var stm = Number(this.assignmentInfo.startTime.toString().substring(this.assignmentInfo.startTime.toString().indexOf(":") + 1, this.assignmentInfo.startTime.toString().length));
+    stm += sd.getMinutes();
+    sd.setHours(sth);
+    sd.setMinutes(stm);
+
+    var eth = Number(this.assignmentInfo.endTime.toString().substring(0, this.assignmentInfo.endTime.toString().indexOf(":")));
+    eth += ed.getHours() + 5;
+    var etm = Number(this.assignmentInfo.endTime.toString().substring(this.assignmentInfo.endTime.toString().indexOf(":") + 1, this.assignmentInfo.endTime.toString().length));
+    etm += ed.getMinutes();
+    ed.setHours(eth);
+    ed.setMinutes(etm);
+
+    this.sDate = sd.toString().substring(0,sd.toString().indexOf(":")+3);
+    this.eDate = ed.toString().substring(0, ed.toString().indexOf(":") + 3);
+    if (today >= sd) {
+      if (today <= ed) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // getResults() {
   //   this.codeService.getResults(this.assignmentInfo.id, this.username).subscribe({
   //     next: x => {
