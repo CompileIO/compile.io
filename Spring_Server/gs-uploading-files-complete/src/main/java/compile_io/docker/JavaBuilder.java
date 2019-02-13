@@ -32,7 +32,7 @@ public class JavaBuilder extends AbstractBuilder {
         //     dockerfileData.append("RUN mv " + professorFiles.get(i).getName() + " " + "src/test/java/\n");
         // }
         //dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && gradle test\n");
-        dockerfileData.append("CMD cd .. && ls\n");
+        dockerfileData.append("CMD cd .. && cd src && ls\n");
 
         return dockerfileData.toString();
     }
