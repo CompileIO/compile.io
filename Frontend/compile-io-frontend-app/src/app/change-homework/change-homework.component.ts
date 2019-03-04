@@ -20,11 +20,9 @@ export class ChangeHomeworkComponent implements OnInit {
   Assignments: Assignment[];
   newAssignment: Assignment;
   file: File;
-  // editing: boolean = false;
-  // editingTodo: Assignment = new Assignment();
 
   constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
-    this.newAssignment = new Assignment();
+    
   }
 
   fileUploadFunction(event: any) {
@@ -134,6 +132,11 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.newAssignment = new Assignment();
+    if(this.assignmentInfo.id != '-1'){
+      this.newAssignment.assignmentName = this.assignmentInfo.assignmentName;
+      
+    }
   }
 
 }

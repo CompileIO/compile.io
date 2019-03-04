@@ -1,6 +1,5 @@
 package compile_io.mongo.models;
 
-import java.sql.Date;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,6 @@ public class Code {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalTime submissionTime;
     private String grade;
-    
-    public Code() {}
     
     public Code(String language, int runTime, String codePath, LocalTime submissionTime, String givenAssignmentId, String userName) {
     	super();

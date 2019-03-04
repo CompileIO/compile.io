@@ -5,10 +5,8 @@ package compile_io.mongo.models;
 import java.util.Date;
 import java.time.LocalTime;
 
-import javax.validation.Valid;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
