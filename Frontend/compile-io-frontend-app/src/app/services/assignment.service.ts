@@ -13,6 +13,7 @@ export class AssignmentService {
   constructor(private http: HttpClient) {}
 
   getAssignment(assignmentData: Assignment) {
+    console.log("Get assignment: " + assignmentData.assignmentName);
     return this.http.get(this.apiUrl + "/Assignment/"  + assignmentData.id);
   }
   getAssignments() {
