@@ -15,8 +15,6 @@ public class Professor {
 	private String userName;
 	@DBRef
     private List<Assignment> assignments;
-	@DBRef
-    private List<Test> tests;
 
     public Professor() {}
 
@@ -43,21 +41,13 @@ public class Professor {
 	
 	
 
-//	public List<Assignment> getAssignmentIds() {
-//		return assignmentIds;
-//	}
-//
-//	public void setAssignmentIds(List<String> assignmentIds) {
-//		this.assignmentIds = assignmentIds;
-//	}
-//
-//	public List<String> getTestIds() {
-//		return testIds;
-//	}
-//
-//	public void setTestIds(List<String> testIds) {
-//		this.testIds = testIds;
-//	}
+	public List<Assignment> getAssignmentIds() {
+		return this.assignments;
+	}
+
+	public void setAssignmentIds(List<Assignment> assignments) {
+		this.assignments = assignments;
+	}
 
 	@Override
 	public String toString() {

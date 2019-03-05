@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UntitTestService {
+export class SectionService {
 
   private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) { }

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UntitTestService } from '../services/untit-test.service';
+import { SectionService } from '../services/section.service';
 
 describe('UntitTestService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: UntitTestService = TestBed.get(UntitTestService);
+    const service: SectionService = TestBed.get(SectionService);
     expect(service).toBeTruthy();
   });
 });
