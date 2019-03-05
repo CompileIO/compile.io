@@ -5,6 +5,7 @@ import { AssignmentService } from '../services/assignment.service';
 import { Assignment } from '../../models/assignment';
 import { Time } from '@angular/common';
 
+
 @Component({
   selector: 'app-change-homework',
   templateUrl: './change-homework.component.html',
@@ -23,6 +24,11 @@ export class ChangeHomeworkComponent implements OnInit {
 
   constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
     
+  }
+
+  submitForm(form: any): void {
+    console.log('Form Data: ');
+    console.log(form);
   }
 
   fileUploadFunction(event: any) {
