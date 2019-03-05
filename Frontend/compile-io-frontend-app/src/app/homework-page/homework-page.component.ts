@@ -50,7 +50,7 @@ export class HomeworkPageComponent implements OnInit {
   run() {
     this.running = true;
     this.codeService.uploadCode(this.assignmentInfo.language, this.assignmentInfo.timeout,  this.assignmentInfo.id,this.username).subscribe({
-      next: x => {console.log(x); this.results = x},
+      next: x => {console.log("This is the result: " + x); this.results = x},
       error: err => {
         console.log("RUNNING DOCKER ERROR: " + err),
         this.error = err
