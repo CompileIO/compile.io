@@ -73,7 +73,7 @@ public class AssignmentController {
 		return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename() );
     }
     
-    @PostMapping("/Assignment")
+    @PostMapping("/Assignment/Create")
     public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {   
     	Path professorDir = Paths.get("upload-dir/" + 
 				assignment.getCourseName().replaceAll(" ", "_").toLowerCase() + "/" +
@@ -81,15 +81,16 @@ public class AssignmentController {
 				"/professor-files/" +
 				assignment.getCreatedByUsername().replaceAll(" ", "_").toLowerCase());
     	assignment.setFilePath(professorDir.toString());
-    	System.out.println("\n\n\n\n\n" + assignment.toString() + "\n\n\n\n\n");
+    	System.out.println("\n\n\n\n\n Assignment Created: " + assignment.toString() + "\n\n\n\n\n");
     	assignmentRepository.save(assignment);
         return ResponseEntity.ok().body("uploaded assignment: " + assignment.toString());
     } 
     
 
-    @PutMapping(value="/Assignment/{id}")
+    @PutMapping(value="/Assignment/Update/{id}")
     public ResponseEntity<Assignment> updateAssignment(@PathVariable("id") String id,
                                            @Valid @RequestBody Assignment assignment) {
+    	System.out.println(assignment.toString());
     	return assignmentRepository.findById(id)
                 .map(assignmentData -> {
                     assignmentData.setAssignmentName(assignment.getassignmentName());
@@ -104,12 +105,13 @@ public class AssignmentController {
 //                    assignmentData.setFilePath(professorDir.toString());
                     assignmentData.setCourseName(assignment.getCourseName());
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
+                    System.out.println("\n\n\n\n\n Assignment Updated: " + updatedAssignment.toString() + "\n\n\n\n\n");
                     return ResponseEntity.ok().body(updatedAssignment);
                 }).orElse(ResponseEntity.notFound().build());							
      
     }
 
-    @DeleteMapping(value="/Assignment/{id}")
+    @DeleteMapping(value="/Assignment/Delete/{id}")
     public ResponseEntity<?> deleteAssignment(@PathVariable("id") String id) {
         return assignmentRepository.findById(id)
                 .map(assignment -> {
@@ -117,112 +119,4 @@ public class AssignmentController {
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
-	
-	
-	
-	
-	
-
-//	private StorageService storageService;
-//	private String fileName;
-//
-//	@Autowired
-//	AssignmentRepository assignmentRepo;
-//
-//	@Autowired
-//	public AssignmentController(StorageService storageService) {
-//		this.storageService = storageService;
-//	}
-//
-////	
-////	@GetMapping("/{className}")
-////	public String[] getAssignments(@PathVariable String className) {
-////		String[] temp = { "Hwk1", "Hwk2", "Hwk3", "Hwk4" };
-////		return temp;
-////	}
-////	
-//	@GetMapping("/Assignment")
-//	public List<Assignment> getAllAssignments() {
-//
-//		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-//		return AssignmentRepository.findAll(sortByCreatedAtDesc);
-//	}
-//
-//	@GetMapping(value="/Assignment/{Course}/{oldAssignmentName}")
-//	    public ResponseEntity<Assignment> getassignmentById(String name) {
-//	        return AssignmentRepository.findByName(name)
-//	                .map(assignment -> ResponseEntity.ok().body(assignment))
-//	                .orElse(ResponseEntity.notFound().build());
-//	    }}}
-//}
-//
-//@PostMapping("Assignment/{AssignmentName}/addAssignment")
-//	public Assignment addAssigment(@RequestBody Assignment assignment) {
-//		return assignment;}
-//		
-//		
-//		assignment.file = RequestBody.getFile("file");
-//		assignment.newAssignmentName = request.getParameter("oldAssignmentName");
-//		assignment.timeout = request.getParameter("timeout");
-//		assignment.language = request.getParameter("language");
-//		assignment.size = request.getParameter("size");
-//		assignment.tries = request.getParameter("tries");
-//		assignment.coursename = request.getParameter("coursename");
-//		
-//		
-//		storageService.store(assignment.file);                
-//		this.fileName = assignment.file.getName();
-//		this.fileName = assignment.file.getName();
-//		
-//		String workingDir = System.getProperty("user.dir") + "/upload-dir/" + fileName;
-//		workingDir = workingDir.substring(2);
-//		System.out.println("Working Directory = " + workingDir);
-//		
-//		
-//		
-//		
-//		
-//		
-//		Assignment newAssignment = new Assignment();
-//		
-//		
-//		
-//		
-//		
-//		assignmentRepo.save(newAssignment);
-//
-//		return true;
-//	}
-//	
-//	@PutMapping("Assignment/{AssignmentName}/updateAssignment")
-//	public boolean updateAssigment(MultipartHttpServletRequest request) {
-//		MultipartFile file = request.getFile("file");
-//		String oldAssignmentName = request.getParameter("oldAssignmentName");
-//		String newAssignmentName = request.getParameter("newAssignmentName");
-//		String timeout = request.getParameter("timeout");
-//		String language = request.getParameter("language");
-//		String size = request.getParameter("size");
-//		String tries = request.getParameter("tries");
-//		String coursename = request.getParameter("coursename");
-//		
-//		
-//		
-//		return false;
-//	}
-//	
-//
-//	@ExceptionHandler(StorageFileNotFoundException.class)
-//	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
-//		return ResponseEntity.notFound().build();
-//	}
-//	
-//	public class AddAssignmentJson {
-//		protected MultipartFile file;
-//		protected String newAssignmentName;
-//		protected String timeout; 
-//		protected String language; 
-//		protected String size; 
-//		protected String tries; 
-//		protected String coursename;
-//	}
 }
