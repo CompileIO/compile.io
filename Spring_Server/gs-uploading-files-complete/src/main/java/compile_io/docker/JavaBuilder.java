@@ -18,10 +18,12 @@ public class JavaBuilder extends AbstractBuilder {
         List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
-        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
+        dockerfileData.append("WORKDIR /" + super.getWorkingDirectory() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
-        dockerfileData.append("RUN mkdir -p src/main/java\n");
-        dockerfileData.append("RUN mkdir -p src/test/java\n");
+        dockerfileData.append("RUN mkdir -p /" + super.getWorkingDirectory() + "/src/main/java\n");
+        dockerfileData.append("RUN mkdir -p /" + super.getWorkingDirectory() + "/src/test/java\n");
+        dockerfileData.append("RUN chown newuser /" + super.getWorkingDirectory() + '\n');
+        dockerfileData.append("USER newuser\n");
         dockerfileData.append("COPY build.gradle build.gradle\n");
         for (int i = 0; i < super.getNumStudentFiles(); i++) {
             dockerfileData.append("COPY /student-files/" + studentFiles.get(i).getName() + " " + studentFiles.get(i).getName() +  "\n");
