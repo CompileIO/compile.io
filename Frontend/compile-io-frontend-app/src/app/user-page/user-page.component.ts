@@ -21,7 +21,7 @@ export class UserPageComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService,
               private courseService:CourseService,
               private assignmentService:AssignmentService) {
-    this.getCourses();
+    
   }
 
   getCourses() {
@@ -89,6 +89,11 @@ export class UserPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getCourses();
+    if (sessionStorage.getItem('course')) {
+      this.selectClass(sessionStorage.getItem('course'));
+    }
+    sessionStorage.removeItem('course');
   }
 
 }
