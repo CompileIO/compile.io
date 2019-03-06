@@ -52,7 +52,7 @@ export class AuthenticationService {
   logout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
-    this.router.navigate(['/login']);
+    //this.router.navigate(['/login']);
 
     this.isLoginSubject.next(false);
   }

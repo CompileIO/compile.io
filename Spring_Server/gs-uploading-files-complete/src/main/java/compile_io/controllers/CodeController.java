@@ -92,9 +92,9 @@ public class CodeController {
 		Optional<Assignment> assignmentToRun = assignmentRepository.findById(givenAssignmentId);
 		String assignmentFilepath = assignmentToRun.get().getFilePath();
 		Path studentDir = Paths
-				.get("upload-dir\\" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "\\"
+				.get("upload-dir/" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "/"
 						+ assignmentToRun.get().getassignmentName().replaceAll(" ", "_").toLowerCase()
-						+ "\\student-files\\" + userName.replaceAll(" ", "_").toLowerCase());
+						+ "/student-files/" + userName.replaceAll(" ", "_").toLowerCase());
 		
 		this.codePath = studentDir.toString();
 		System.out.println("\n\n\n\n\n" + this.codePath + "\n\n\n\n\n");
@@ -103,6 +103,7 @@ public class CodeController {
 		Code newCode = new Code(type, runTimeNum, this.codePath, submissionTime, givenAssignmentId, userName);
 		// Docker stuff
 		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath));
+
 		codeRepository.save(newCode);
 		return ResponseEntity.ok().body(newCode.getTestResponse());
 	}
@@ -113,10 +114,14 @@ public class CodeController {
 		File studentDirLocation = Paths.get(this.codePath).toFile();
 		File professorDirLocation = Paths.get(assignmentFilepath).toFile();
 		for (File file : studentDirLocation.listFiles()) {
+			System.out.println(studentDirLocation);
 			studentFiles.add(file);
+			System.out.println(file.getName());
 		}
 		for (File file : professorDirLocation.listFiles()) {
+			System.out.println(professorDirLocation.toString());
 			ProfessorFiles.add(file);
+			System.out.println(file.getName());
 		}
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();

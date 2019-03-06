@@ -13,6 +13,7 @@ export class AssignmentService {
   constructor(private http: HttpClient) {}
 
   getAssignment(assignmentData: Assignment) {
+    console.log("Get assignment: " + assignmentData.assignmentName);
     return this.http.get(this.apiUrl + "/Assignment/"  + assignmentData.id);
   }
   getAssignments() {
@@ -49,16 +50,16 @@ export class AssignmentService {
     "start time: " + assignmentData.startTime + "\n" +
     "end date: " + assignmentData.endDate + "\n" +
     "end time: " + assignmentData.endTime);
-    return this.http.post(this.apiUrl + '/Assignment' , assignmentData, { headers: headers, withCredentials: true })
+    return this.http.post(this.apiUrl + '/Assignment/Create' , assignmentData, { headers: headers, withCredentials: true })
   }
 
   updateAssignment(assignmentData: Assignment) {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    return this.http.put(this.apiUrl + '/Assignment/' + assignmentData.id +"/updateAssignment", assignmentData, { headers: headers, withCredentials: true })
+    return this.http.put(this.apiUrl + '/Assignment/Update/' + assignmentData.id, assignmentData, { headers: headers, withCredentials: true })
   }
 
   deleteAssignment(id: string){
-    return this.http.delete(this.apiUrl + '/Assignment/deleteAssignment' + id, {withCredentials: true })
+    return this.http.delete(this.apiUrl + '/Assignment/Delete' + id, {withCredentials: true })
   }
 
 }

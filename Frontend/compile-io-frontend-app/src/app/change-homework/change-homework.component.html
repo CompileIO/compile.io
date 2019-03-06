@@ -1,92 +1,76 @@
 <div class="container w-100 d-block">
   <div class="row justify-content-center mt-2">
     <div class="col">
-      <form class="w-100 p-3">
+      <form #form="ngForm" ngNativeValidate (ngSubmit)="submitForm(form.value)" class="w-100 p-3">
         <div class="container">
           <div class="row">
             <div class="col">
               <div class="form-group p-3">
-                <label class="float-left" for="nameText">Name</label>
-                <input *ngIf="assignmentInfo.id == '-1'" type="text" class="form-control" #nameText id="nameText" aria-describedby="nameHelp" placeholder="Hmk1" (blur)="newAssignment.assignmentName=nameText.value" required>
-
-                <input *ngIf="assignmentInfo.id != '-1'" type="text" class="form-control" #nameText id="nameText" value={{assignmentInfo.assignmentName}} aria-describedby="nameHelp" placeholder="Hmk1" (blur)="newAssignment.assignmentName=nameText.value" required>
+                <label class="float-left">Name</label>
+                <input  type="text" class="form-control" name="nameText" #nameText placeholder="Hmk1" [(ngModel)]="newAssignment.assignmentName" required>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col">
               <div class="form-group p-3">
-                <label class="float-left" for="timeoutText">Timeout (s)</label>
-                <input *ngIf="assignmentInfo.id == '-1'" type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" (blur)="newAssignment.timeout=timeoutText.value" placeholder="5" required>
-
-                <input *ngIf="assignmentInfo.id != '-1'" type="number" class="form-control" #timeoutText id="timeoutText" aria-describedby="timeoutHelp" value={{assignmentInfo.timeout}}  (blur)="newAssignment.timeout=timeoutText.value" placeholder="5" required>
-                <small id="timeoutHelp" class="form-text text-muted float-left">How much time to spend running a test before timing out.</small>
+                <label class="float-left">Timeout (s)</label>
+                <input type="number" class="form-control" name="timeoutText" #timeoutText [(ngModel)]="newAssignment.timeout"  placeholder="5"  required>
+                <small class="form-text text-muted float-left">How much time to spend running a test before timing out.</small>
               </div>
             </div>
             <div class="col">
               <div class="form-group p-3">
-                <label class="float-left" for="maxText">Max Size (Mbs)</label>
-                <input *ngIf="assignmentInfo.id == '-1'" type="number" class="form-control" #maxText id="maxText" aria-describedby="maxHelp" placeholder="5"  (blur)="newAssignment.size=maxText.value" required> 
-                
-                <input *ngIf="assignmentInfo.id != '-1'" type="number" class="form-control" #maxText id="maxText" aria-describedby="maxHelp" value = {{assignmentInfo.size}} placeholder="5"  (blur)="newAssignment.size=maxText.value" required> 
-                <small id="maxHelp" class="form-text text-muted float-left">How large student uploads can be in MegaBites.</small>
+                <label class="float-left">Max Size (Mbs)</label>
+                <input type="number" class="form-control" name="maxText" #maxText [(ngModel)] = "newAssignment.size" placeholder="5"  required> 
+                <small class="form-text text-muted float-left">How large student uploads can be in MegaBites.</small>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col">
               <div class="form-check p-3">
-                <label class="float-left" for="startDate">Start Date</label>
-                <input *ngIf="assignmentInfo.id == '-1'"type="date" class="form-control" #startDate id="startDate" aria-describedby="startDateHelp"  (blur)="newAssignment.startDate=startDate.value" required>
-
-                <input *ngIf="assignmentInfo.id != '-1'"type="date" class="form-control" #startDate id="startDate" aria-describedby="startDateHelp"  value = {{assignmentInfo.startDate}} (blur)="newAssignment.startDate=startDate.value" required>
-                <small id="startDateHelp" class="form-text text-muted float-left">What Date Students can start submitting to this assignment.</small>
+                <label class="float-left">Start Date</label>
+                <input type="date" class="form-control" name="startDate" #startDate [(ngModel)] = "givenStartDate"  required>
+                <small class="form-text text-muted float-left">What Date Students can start submitting to this assignment.</small>
               </div>
             </div>
             <div class="col">
               <div class="form-check p-3">
-                <label class="float-left" for="startTime">Start Time</label>
-                <input *ngIf="assignmentInfo.id == '-1'" type="time" class="form-control" #startTime id="startTime" aria-describedby="startTimeHelp"   (blur)="newAssignment.startTime=startTime.value" required>
-                
-                <input *ngIf="assignmentInfo.id != '-1'" type="time" class="form-control" #startTime id="startTime" aria-describedby="startTimeHelp" value = {{assignmentInfo.startTime}}  (blur)="newAssignment.startTime=startTime.value" required>
-                <small id="startTimeHelp" class="form-text text-muted float-left">What Time Students can start submitting to this assignment.</small>
+                <label class="float-left">Start Time</label>
+                <input type="time" class="form-control" name="startTime" #startTime [(ngModel)] = "newAssignment.startTime"  required>
+                <small class="form-text text-muted float-left">What Time Students can start submitting to this assignment.</small>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col">
               <div class="form-check p-3">
-                <label class="float-left" for="endDate">End Date</label>
-                <input *ngIf="assignmentInfo.id == '-1'" type="date" class="form-control" #endDate id="endDate" aria-describedby="endDateHelp"  (blur)="newAssignment.endDate=endDate.value" required>
-                
-                <input *ngIf="assignmentInfo.id != '-1'" type="date" class="form-control" #endDate id="endDate" aria-describedby="endDateHelp" value = {{assignmentInfo.endDate}} (blur)="newAssignment.endDate=endDate.value" required>
-                <small id="endDateHelp" class="form-text text-muted float-left">What Date Students can no longer submit to this assignment.</small>
+                <label class="float-left">End Date</label>
+                <input type="date" class="form-control" name="endDate" #endDate [(ngModel)] = "givenEndDate" required>
+                <small class="form-text text-muted float-left">What Date Students can no longer submit to this assignment.</small>
               </div>
             </div>
             <div class="col">
               <div class="form-check p-3">
-                <label class="float-left" for="endTime">End Time</label>
-                <input *ngIf="assignmentInfo.id == '-1'" type="time" class="form-control" #endTime id="endTime" aria-describedby="endTimeHelp"  (blur)="newAssignment.endTime=endTime.value" required>
-                
-                <input *ngIf="assignmentInfo.id != '-1'" type="time" class="form-control" #endTime id="endTime" aria-describedby="endTimeHelp" value = {{assignmentInfo.endTime}} (blur)="newAssignment.endTime=endTime.value" required>
-                <small id="endTimeHelp" class="form-text text-muted float-left">What Time Students can no longer submit to this assignment.</small>
+                <label class="float-left">End Time</label>
+                <input type="time" class="form-control" name="endTime" #endTime [(ngModel)] = "newAssignment.endTime" required>
+                <small class="form-text text-muted float-left">What Time Students can no longer submit to this assignment.</small>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col">
               <div class="form-group p-3">
-                <label class="float-left" for="triesText">Number of tries</label>
-                <input *ngIf="assignmentInfo.id == '-1'" type="number" min="0" class="form-control" #triesText id="triesText" aria-describedby="triesHelp" placeholder="5"  (blur)="newAssignment.tries=triesText.value" required>
-
-                <input *ngIf="assignmentInfo.id != '-1'" type="number" min="0" class="form-control" #triesText id="triesText" aria-describedby="triesHelp" value = {{assignmentInfo.tries}} placeholder="5" (blur)="newAssignment.tries=triesText.value" required>
-                <small id="triesHelp" class="form-text text-muted float-left">How many times a student can submit an assignment. 0 for infinite</small>
+                <label class="float-left">Number of tries</label>
+                <input type="number" min="0" class="form-control" name="triesText" #triesText [(ngModel)] = "newAssignment.tries" placeholder="5" required>
+                <small class="form-text text-muted float-left">How many times a student can submit an assignment. 0 for infinite</small>
               </div>
             </div>
             <div class="col">
               <div class="form-check p-3">
-                <label for="language">Language</label>
-                <select multiple class="form-control" #languageSelect id="language"  (blur)="newAssignment.language=languageSelect.value.toLowerCase()" required>
+                <label>Language</label>
+                <select multiple class="form-control" name="languageSelect" #languageSelect ngModel required>
                   <option>Java</option>
                   <option>Python</option>
                 </select>
@@ -96,15 +80,30 @@
           <div class="row">
             <div class="col">
               <div class="custom-file float-left p-3">
-                <input type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUpload id="fileUpload">
-                <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
-                <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
+                <div *ngIf="newAssignment.assignmentName == undefined && assignmentInfo.id == '-1'">
+                  <input disabled type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUploadDisable id="fileUpload">
+                  <label *ngIf="fileUploadDisable.files.length == 0" class="custom-file-label" for="fileUploadDisable">Select File</label>
+                  <label *ngIf="fileUploadDisable.files.length != 0" class="custom-file-label" for="fileUploadDisable">{{fileUploadDisable.files[0].name}}</label>
+                </div>
+                <div *ngIf="newAssignment.assignmentName != undefined && assignmentInfo.id == '-1'">
+                  <input type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUpload id="fileUpload">
+                  <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
+                  <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
+                </div>
+                <div *ngIf="assignmentInfo.id != '-1'">
+                  <input type="file" class="custom-file-input" (change)="fileUploadFunction($event)" #fileUploadChange id="fileUpload">
+                  <label *ngIf="fileUploadChange.files.length == 0" class="custom-file-label" for="fileUploadChange">Select File</label>
+                  <label *ngIf="fileUploadChange.files.length != 0" class="custom-file-label" for="fileUploadChange">{{fileUploadChange.files[0].name}}</label>
+                </div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col p-3">
-              <button type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <!--<button *ngIf="readyToSubmit()" type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
+
+              <button *ngIf="!readyToSubmit()" disabled type="submit" class="btn btn-primary" (click)="submit()">Submit</button>-->
             </div>
           </div>
         </div>

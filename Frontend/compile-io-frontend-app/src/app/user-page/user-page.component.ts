@@ -14,7 +14,6 @@ export class UserPageComponent implements OnInit {
   @Input() group: string;
   classes: string[] = [];
   selectedClass: string = null;
-  // homeworks: string[] = [];
   selectedHomework: Assignment = null;
   change: boolean = false;
   Assignments: Assignment[] = [];
@@ -22,7 +21,7 @@ export class UserPageComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService,
               private courseService:CourseService,
               private assignmentService:AssignmentService) {
-    this.getCourses();
+    
   }
 
   getCourses() {
@@ -64,6 +63,7 @@ export class UserPageComponent implements OnInit {
     for(i = 0; i < this.Assignments.length; i++) {
       if (this.Assignments[i].id == hwkID) {
         this.selectedHomework = this.Assignments[i];
+        this.changeChange(false)
       }
     }
   }
@@ -89,6 +89,11 @@ export class UserPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getCourses();
+    if (sessionStorage.getItem('course')) {
+      this.selectClass(sessionStorage.getItem('course'));
+    }
+    sessionStorage.removeItem('course');
   }
 
 }
