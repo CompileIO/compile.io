@@ -42,24 +42,44 @@ public class Student {
 		this.userName = userName;
 	}
 	
+	public void addCode(Code newCode) {
+		this.codes.add(newCode);
+	}
 	
+	public void deleteCode (Code newCode) {
+		for(Code code : this.codes) {
+			if(newCode == code) {
+				this.codes.remove(code);
+			}
+		}
+	}
+	public List<Code> getCodes() {
+		return codes;
+	}
 
-//	public List<String> getCodeIds() {
-//		return codeIds;
-//	}
-//
-//	public void setCodeIds(List<String> codeIds) {
-//		this.codeIds = codeIds;
-//	}
-//
-//	public List<String> getCourseIds() {
-//		return courseIds;
-//	}
-//
-//	public void setCourseIds(List<String> courseIds) {
-//		this.courseIds = courseIds;
-//	}
+	public void setCodes(List<Code> codes) {
+		this.codes = codes;
+	}
 	
+	public void addCourse(Course newCourse) {
+		this.courses.add(newCourse);
+	}
+	
+	public void deleteCourse (Course newCourse) {
+		for(Course course : this.courses) {
+			if(newCourse == course) {
+				this.courses.remove(course);
+			}
+		}
+	}
+
+	public List<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
 
 	@Override
 	public String toString() {

@@ -18,15 +18,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Course;
-import compile_io.mongo.models.Section;
+import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.CourseRepository;
-import compile_io.mongo.repositories.SectionRepository;
+import compile_io.mongo.repositories.ProfessorRepository;
 
 @RestController
 public class CourseController {
 	
 	@Autowired
     CourseRepository courseRepository;
+	
+	@Autowired
+	ProfessorRepository professorRepository;
 	
 	//As soon as we don't need this we can get rid of this api call
 	@GetMapping("/courses")
@@ -48,24 +51,41 @@ public class CourseController {
                 .orElse(ResponseEntity.notFound().build());
     }
 	
+    @GetMapping("/Course/getInstructorCourses/{instructorName}")
+    public ResponseEntity<List<Course>> getAllCoursesForProfessor(@PathVariable("instructorName") String instructorName) {
+        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+        return ResponseEntity.ok().body(courseRepository.findByInstructor(instructorName, sortByCreatedAtDesc));
+    }
 	
 	@PostMapping("/Course/Create")
     public ResponseEntity<String> createCourse(@Valid @RequestBody Course course) {   
-    	System.out.println("\n\n\n\n\n Assignment Created: " + course.toString() + "\n\n\n\n\n");
+    	System.out.println("\n\n\n\n\n Course Created: " + course.toString() + "\n\n\n\n\n");
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    	List<Professor> newProfessors = professorRepository.findByuserName(course.getInstructor().getUserName(), sortByCreatedAtDesc);
+    	Professor newProf;
+    	if(newProfessors.isEmpty()) {
+    		newProf = new Professor(course.getInstructor().getUserName());
+    	} else {
+    		newProf = newProfessors.get(0);
+    	}
+    	newProf.addCourse(course);
+    	professorRepository.save(newProf);
     	courseRepository.save(course);
-        return ResponseEntity.ok().body("uploaded assignment: " + course.toString());
+        return ResponseEntity.ok().body("uploaded Course: " + course.toString());
     } 
     
 
     @PutMapping(value="/Course/Update/{id}")
-    public ResponseEntity<Course> updateAssignment(@PathVariable("id") String id,
+    public ResponseEntity<Course> updateCourse(@PathVariable("id") String id,
                                            @Valid @RequestBody Course course) {
     	System.out.println(course.toString());
     	return courseRepository.findById(id)
                 .map(courseData -> {
                 	courseData.setCrn(course.getCrn());
-                	courseData.setName(course.getName());
-                	courseData.setSection(course.getSection());
+                	courseData.setCourseName(course.getCourseName());
+                	courseData.setInstructor(course.getInstructor());
+                	courseData.setSectionNumber(course.getSectionNumber());
+                	courseData.setStudents(course.getStudents());
                     Course updatedCourse = courseRepository.save(courseData);
                     System.out.println("\n\n\n\n\n Course Updated: " + updatedCourse.toString() + "\n\n\n\n\n");
                     return ResponseEntity.ok().body(updatedCourse);
@@ -74,11 +94,16 @@ public class CourseController {
     }
 
     @DeleteMapping(value="/Course/Delete/{id}")
-    public ResponseEntity<?> deleteAssignment(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteCourse(@PathVariable("id") String id) {
         return courseRepository.findById(id)
-                .map(assignment -> {
+                .map(course -> {
+                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                	List<Professor> newProfessors = professorRepository.findByuserName(course.getInstructor().getUserName(), sortByCreatedAtDesc);
+                	Professor newProf = newProfessors.get(0);
+                	newProf.deleteCourse(course);
+                	professorRepository.save(newProf);
                     courseRepository.deleteById(id);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.ok().body("Deleted a course");
                 }).orElse(ResponseEntity.notFound().build());
     }
 

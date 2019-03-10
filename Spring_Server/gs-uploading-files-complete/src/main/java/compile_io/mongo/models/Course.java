@@ -10,44 +10,78 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Course {
 	@Id
 	private String id;
-	private String name; 
+	private String courseName; 
 	private String crn;
+	private int sectionNumber;
+	@DBRef
+	private Professor instructor;
+	@DBRef
+	private List<Student> students;
 	
-	private List<Section> section;
 	
-	
-	public Course(String name, String crn, List<Section> section) {
+	public Course(String courseName, String crn, int sectionNumber, String instructorName) {
 		super();
-		this.name = name;
+		this.courseName = courseName;
 		this.crn = crn;
-		this.section = section;
+		this.sectionNumber = sectionNumber;
+		this.instructor.setName(instructorName);
 	}
-	public String getName() {
-		return name;
+
+
+	public String getCourseName() {
+		return courseName;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
+
+
 	public String getCrn() {
 		return crn;
 	}
+
+
 	public void setCrn(String crn) {
 		this.crn = crn;
 	}
-	public List<Section> getSection() {
-		return section;
+
+
+	public int getSectionNumber() {
+		return sectionNumber;
 	}
-	public void setSection(List<Section> section) {
-		this.section = section;
+
+
+	public void setSectionNumber(int sectionNumber) {
+		this.sectionNumber = sectionNumber;
 	}
-	
-	
-	
-	
-	
+
+
+	public Professor getInstructor() {
+		return instructor;
+	}
+
+
+	public void setInstructor(Professor instructor) {
+		this.instructor = instructor;
+	}
+
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Course [name=" + name + ", crn=" + crn + ", section=" + section + "]";
+		return "Course [id=" + id + ", courseName=" + courseName + ", crn=" + crn + ", sectionNumber=" + sectionNumber
+				+ ", instructor=" + instructor + ", students=" + students + "]";
 	}
 	
 	

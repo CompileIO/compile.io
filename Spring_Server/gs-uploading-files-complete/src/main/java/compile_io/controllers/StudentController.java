@@ -1,76 +1,76 @@
 package compile_io.controllers;
 
-import java.io.File;
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import compile_io.docker.AbstractBuilder;
-import compile_io.docker.BuilderFactory;
-import compile_io.docker.CommandExecuter;
-import compile_io.docker.DockerRunner;
-import compile_io.docker.IDockerRunner;
 import compile_io.mongo.models.Student;
 import compile_io.mongo.repositories.StudentRepository;
 
 @RestController
 public class StudentController{
 	@Autowired 
-	public StudentRepository repository;
+	public StudentRepository studentRepository;
 	
-//	public void submitCode(String username, Sring runtim, language, file, assignment) {
-//		
-//	}
+	@GetMapping("/Students")
+	public List<Student> getStudents() {
+		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+        return studentRepository.findAll(sortByCreatedAtDesc);
+	}
+    
+    @GetMapping(value="/Student/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable("id") String id) {
+        return studentRepository.findById(id)
+                .map(student -> ResponseEntity.ok().body(student))
+                .orElse(ResponseEntity.notFound().build());
+    }
 	
-//	@GetMapping("/test")
-//	public String runCompiler(String username, File fileToUpload, String language, int timeLimit) {
-//		try {
-//			BuilderFactory builderFactory = new BuilderFactory();
-//			AbstractBuilder builder = builderFactory.getBuilder(language, fileToUpload);
-//			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
-//			builder.createDockerfile(builder.getDockerfileData());
-//			builder.buildContainer();
-//			
-//			
-//			Student newStudent = new Student();
-//			
-////			newStudent.inputTest(username, language, timeLimit);
-////			repository.save(newStudent);
-////			
-//			return runner.run(timeLimit);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
+//    @GetMapping("/Student/getInstructorCourses/{instructorName}")
+//    public ResponseEntity<List<Course>> getAllCoursesForStudent(@PathVariable("instructorName") String instructorName) {
+//        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+//        return ResponseEntity.ok().body(courseRepository.findByInstructor(instructorName, sortByCreatedAtDesc));
+//    }
 	
+	@PostMapping("/Student/Create")
+    public ResponseEntity<String> createStudent(@Valid @RequestBody Student student) {   
+    	System.out.println("\n\n\n\n\n Student Created: " + student.toString() + "\n\n\n\n\n");
+    	studentRepository.save(student);
+        return ResponseEntity.ok().body("uploaded Student: " + student.toString());
+    } 
+    
 
-//		repository.deleteAll();
-//
-//		// save a couple of customers
-//		repository.save(new User("Sam", "Pastoriza"));
-//		repository.save(new User("James", "Edwards"));
-//		repository.save(new User("Donald", "Sisco"));
-//
-//		// fetch all customers
-//		System.out.println("Customers found with findAll():");
-//		System.out.println("-------------------------------");
-//		for (User user : repository.findAll()) {
-//			System.out.println(user);
-//		}
-//		System.out.println();
-//
-//		// fetch an individual customer
-//		System.out.println("User found with findByFirstName('Sam'):");
-//		System.out.println("--------------------------------");
-//		System.out.println(repository.findByFirstName("Sam"));
-//
-//		System.out.println("Users found with findByLastName('Pastoriza'):");
-//		System.out.println("--------------------------------");
-//		for (User user : repository.findByLastName("Pastoriza")) {
-//			System.out.println(user);
-//		}
-//	}
+    @PutMapping(value="/Student/Update/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") String id,
+                                           @Valid @RequestBody Student student) {
+    	System.out.println(student.toString());
+    	return studentRepository.findById(id)
+                .map(studentData -> {
+                	studentData.setName(student.getName());
+                	Student updatedStudent = studentRepository.save(studentData);
+                    System.out.println("\n\n\n\n\n Student Updated: " + updatedStudent.toString() + "\n\n\n\n\n");
+                    return ResponseEntity.ok().body(updatedStudent);
+                }).orElse(ResponseEntity.notFound().build());							
+     
+    }
+
+    @DeleteMapping(value="/Student/Delete/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable("id") String id) {
+        return studentRepository.findById(id)
+                .map(student -> {
+                	studentRepository.deleteById(id);
+                    return ResponseEntity.ok().body("Deleted a Student");
+                }).orElse(ResponseEntity.notFound().build());
+    }
 
 }
