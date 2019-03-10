@@ -14,15 +14,14 @@ export class CourseService {
   constructor(private http: HttpClient) { }
 
   
-  getCourses(): Observable<any> {
-    const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get(this.apiUrl + "/courses", { headers: empHeaders, withCredentials: true });
-  }
-
-  // getCourses() {
-  //   return this.http.get(this.apiUrl + '/Courses')
-    
+  // getCourses(): Observable<any> {
+  //   const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  //   return this.http.get(this.apiUrl + "/courses", { headers: empHeaders, withCredentials: true });
   // }
+
+  getCourses(): Observable<any>{
+    return this.http.get(this.apiUrl + '/Courses')
+  }
 
   getCourse(courseData: Course) {
     console.log("Get Course: " + courseData.courseName);

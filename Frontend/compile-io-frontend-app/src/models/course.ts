@@ -1,8 +1,12 @@
+import { Professor } from './professor';
+import { Student } from './student';
 export class Course {
     id: string;
     courseName: string;
 	crn: string;
 	
-	section: List<Section>;
+    sectionNumber: number;
+	instructor: Professor;
+	students: Student[];
     
 }

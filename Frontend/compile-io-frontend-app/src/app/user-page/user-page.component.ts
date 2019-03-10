@@ -3,6 +3,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { AssignmentService } from '../services/assignment.service';
 import { CourseService } from '../services/course.service';
 import {Assignment} from '../../models/assignment';
+import { Course } from 'src/models/course';
 
 @Component({
   selector: 'app-user-page',
@@ -12,10 +13,9 @@ import {Assignment} from '../../models/assignment';
 export class UserPageComponent implements OnInit {
   @Input() username: string;
   @Input() group: string;
-  classes: string[] = [];
-  selectedClass: string = null;
-  // homeworks: string[] = [];
-  selectedHomework: Assignment = null;
+  Courses: Course[] = [];
+  selectedCourse: Course = null;
+  selectedAssignment: Assignment = null;
   change: boolean = false;
   Assignments: Assignment[] = [];
 
@@ -25,24 +25,38 @@ export class UserPageComponent implements OnInit {
     this.getCourses();
   }
 
-  getCourses() {
+  getCourses() : void {
     this.courseService.getCourses().subscribe({
-      next: x => this.classes = x.map(element => element.toString()),
-      error: err => console.log("GET CLASSES ERROR: " + err),
-      complete: () => console.log("got classes")
+      next: x => {this.Courses = x},
+      error: err => console.log("GET COURSES ERROR: " + err),
+      complete: () => courses => this.Courses = courses
     });
   }
 
-  selectClass(givenClass: string) {
-    if (this.selectedClass == givenClass) {
-      this.selectedClass = null;
+  selectCourse(givenCourse: Course) {
+    if (this.selectedCourse == givenCourse) {
+      this.selectedCourse = null;
       this.Assignments = [];
-      this.selectedHomework = null;
+      this.selectedAssignment = null;
     } else {
-      this.selectedClass = givenClass;
-      this.selectedHomework = null;
-      this.getAssignmentsForSpecificCourse(givenClass);
+      this.selectedCourse = givenCourse;
+      this.selectedAssignment = null;
+      this.getAssignmentsForSpecificCourse(givenCourse.courseName);
     }
+  }
+
+  // selectCourse(courseID: string) {
+  //   var i = 0;
+  //   for(i = 0; i < this.Courses.length; i++) {
+  //     if (this.Courses[i].id == courseID) {
+  //       this.selectedCourse = this.Courses[i];
+  //     }
+  //   }
+  // }
+
+  newCourse() {
+    this.selectedCourse = new Course();
+    this.selectedCourse.id = "-1";
   }
 
   // getAssignments(): void {
@@ -51,26 +65,26 @@ export class UserPageComponent implements OnInit {
   //   });  
   // }
 
-  getAssignmentsForSpecificCourse(assignmentName: string): void {
-    this.assignmentService.getAssignmentsForSpecificCourse(assignmentName).subscribe({
+  getAssignmentsForSpecificCourse(courseName: string): void {
+    this.assignmentService.getAssignmentsForSpecificCourse(courseName).subscribe({
       next: x => {this.Assignments = x},
       error: err => console.log("GET HWK INFO ERROR: " + err),
       complete: () => assignments => this.Assignments = assignments
     });  
   }
 
-  selectHomework(hwkID: string) {
+  selectAssignment(assignmentID: string) {
     var i = 0;
     for(i = 0; i < this.Assignments.length; i++) {
-      if (this.Assignments[i].id == hwkID) {
-        this.selectedHomework = this.Assignments[i];
+      if (this.Assignments[i].id == assignmentID) {
+        this.selectedAssignment = this.Assignments[i];
       }
     }
   }
 
-  newHomework() {
-    this.selectedHomework = new Assignment();
-    this.selectedHomework.id = "-1";
+  newAssignment() {
+    this.selectedAssignment = new Assignment();
+    this.selectedAssignment.id = "-1";
 
   }
 
@@ -80,10 +94,10 @@ export class UserPageComponent implements OnInit {
 
   logout() {
     this.username = null;
-    this.selectedClass = null;
-    this.classes = [];
+    this.selectedCourse = null;
+    this.Courses = [];
     this.Assignments = [];
-    this.selectedHomework = null;
+    this.selectedAssignment = null;
     this.authenticationService.logout();
     window.location.reload();
   }

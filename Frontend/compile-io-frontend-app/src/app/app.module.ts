@@ -11,6 +11,7 @@ import { ROUTING } from './app-routing/app-routing.module';
 
 import { AuthenticationService } from './services/authentication.service';
 import { ChangeHomeworkComponent } from './change-homework/change-homework.component';
+import { CoursePageComponent } from './course-page/course-page.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ChangeHomeworkComponent } from './change-homework/change-homework.compo
     LoginComponent,
     UserPageComponent,  
     HomeworkPageComponent,
-    ChangeHomeworkComponent
+    ChangeHomeworkComponent,
+    CoursePageComponent
   ],
   imports: [
     BrowserModule,

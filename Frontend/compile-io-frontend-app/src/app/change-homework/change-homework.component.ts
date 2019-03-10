@@ -12,7 +12,7 @@ import { Time } from '@angular/common';
 })
 export class ChangeHomeworkComponent implements OnInit {
   @Input() userName: string;
-  @Input() className: string;
+  @Input() courseName: string;
   name: string;
   timeout: string;
   language: string;
@@ -32,7 +32,7 @@ export class ChangeHomeworkComponent implements OnInit {
 
   sendFile() {
     if (this.assignmentInfo.id == "-1") {
-      this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
+      this.assignmentService.uploadFile(this.file, this.courseName, this.newAssignment.assignmentName, this.userName).subscribe({
         next: x => {
           console.log(x)
         },
@@ -43,7 +43,7 @@ export class ChangeHomeworkComponent implements OnInit {
       });
     } else {
       if (this.newAssignment.assignmentName == undefined) {
-        this.assignmentService.uploadFile(this.file, this.className, this.newAssignment.assignmentName, this.userName).subscribe({
+        this.assignmentService.uploadFile(this.file, this.courseName, this.newAssignment.assignmentName, this.userName).subscribe({
           next: x => {
             console.log(x)
           },
@@ -53,7 +53,7 @@ export class ChangeHomeworkComponent implements OnInit {
           complete: () => console.log("Added File")
         });
       } else {
-        this.assignmentService.uploadFile(this.file, this.className, this.assignmentInfo.assignmentName, this.userName).subscribe({
+        this.assignmentService.uploadFile(this.file, this.courseName, this.assignmentInfo.assignmentName, this.userName).subscribe({
           next: x => {
             console.log(x)
           },
@@ -69,7 +69,7 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   submit() {
-    this.newAssignment.courseName = this.className;
+    this.newAssignment.courseName = this.courseName;
     this.newAssignment.createdByUsername = this.userName;
     //console.log(this.newAssignment.startTime);
 

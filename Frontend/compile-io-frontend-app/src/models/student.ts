@@ -1,11 +1,11 @@
-import { Assignment } from './assignment';
+import { Code } from './code';
 import { Course } from './course';
 
-export class Professor {
+export class Student {
     id: string;
     name: string;
     userName: string;
     courses: Course[];
-    assignments: Assignment[] ;
+    codes: Code[] ;
 
 }
