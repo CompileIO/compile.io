@@ -21,7 +21,7 @@ export class ChangeHomeworkComponent implements OnInit {
   newAssignment: Assignment;
   file: File;
 
-  constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
+  constructor(private assignmentService: AssignmentService) {
     
   }
 

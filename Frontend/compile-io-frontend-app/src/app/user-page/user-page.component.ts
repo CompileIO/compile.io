@@ -17,6 +17,7 @@ export class UserPageComponent implements OnInit {
   selectedCourse: Course = null;
   selectedAssignment: Assignment = null;
   change: boolean = false;
+  courseChange: boolean = false;
   Assignments: Assignment[] = [];
 
   constructor(private authenticationService: AuthenticationService,

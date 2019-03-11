@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { CourseService } from '../services/course.service';
+import {Course} from '../../models/course';
 
 @Component({
   selector: 'app-course-page',
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./course-page.component.css']
 })
 export class CoursePageComponent implements OnInit {
-
-  constructor() { }
+  @Input() username: string;
+  @Input() courseInfo: Course;
+  newCourse: Course;
+  constructor(private courseService: CourseService) { }
 
   ngOnInit() {
+    this.newCourse = new Course();
   }
 
 }

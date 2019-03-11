@@ -50,9 +50,19 @@
           <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
         </div>
       </div>
+
+      
       <!-- tohere -->
     </nav>
-
+    <!-- here -->
+    <div *ngIf="selectedCourse != null && selectedCourse.id == '-1'" class="col mw-100 mt-5">
+      <div class="row">
+        <div class="col">
+          <app-course-page></app-course-page>
+        </div>
+      </div>
+    </div>
+<!-- tohere -->
 
     <div *ngIf="selectedAssignment == null && selectedCourse == null" class="col">
       <div class="container mt-5 shadow h-100">
@@ -70,7 +80,7 @@
     </div>
 
 
-    <div *ngIf="selectedAssignment == null && selectedCourse != null" class="col mw-100 mt-5">
+    <div *ngIf="selectedAssignment == null && selectedCourse != null  && courseChange == true" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">

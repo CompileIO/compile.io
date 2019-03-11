@@ -1,3 +1,26 @@
+<div class="container w-100 d-block">
+  <div class="row justify-content-center mt-2">
+    <div class="col">
+      <form class="w-100 p-3">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="nameText">Name</label>
+                <input *ngIf="courseInfo.id == '-1'" type="text" class="form-control" #nameText id="nameText" aria-describedby="nameHelp" placeholder="CSSE120" (blur)="newCourse.courseName=nameText.value" required>
+
+                <input *ngIf="courseInfo.id != '-1'" type="text" class="form-control" #nameText id="nameText" value={{courseInfo.courseName}} aria-describedby="nameHelp" placeholder="CSSE120" (blur)="newCourse.courseName=nameText.value" required>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
 <p>
   course-page works!
 </p>
