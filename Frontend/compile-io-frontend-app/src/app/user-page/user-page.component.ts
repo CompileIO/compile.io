@@ -2,16 +2,23 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { AssignmentService } from '../services/assignment.service';
 import { CourseService } from '../services/course.service';
+import { ProfessorService } from '../services/professor.service';
+import { StudentService } from '../services/student.service';
 import {Assignment} from '../../models/assignment';
 import { Course } from 'src/models/course';
+import {Professor} from '../../models/professor';
+import { Student } from 'src/models/student';
+// const jwtDecode = require('jwt-decode');
 
 @Component({
   selector: 'app-user-page',
+  // decode = jwtDecode;
   templateUrl: './user-page.component.html',
-  styleUrls: ['./user-page.component.css']
+  styleUrls: ['./user-page.component.css'],
 })
 export class UserPageComponent implements OnInit {
   @Input() username: string;
+  @Input() name: string;
   @Input() group: string;
   Courses: Course[] = [];
   selectedCourse: Course = null;
@@ -22,7 +29,9 @@ export class UserPageComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
               private courseService:CourseService,
-              private assignmentService:AssignmentService) {
+              private assignmentService:AssignmentService,
+              private professorService:ProfessorService,
+              private studentService:StudentService) {
     this.getCourses();
   }
 
@@ -104,6 +113,8 @@ export class UserPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    // const token = window.sessionStorage.token;
+    // const decoded = this.decode(token);
   }
 
 }

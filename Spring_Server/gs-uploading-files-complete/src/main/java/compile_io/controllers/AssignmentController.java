@@ -91,7 +91,8 @@ public class AssignmentController {
     	List<Professor> newProfessors = professorRepository.findByuserName(assignment.getCreatedByUsername(), sortByCreatedAtDesc);
     	Professor newProf;
     	if(newProfessors.isEmpty()) {
-    		newProf = new Professor(assignment.getCreatedByUsername());
+    		newProf = new Professor();
+    		newProf.setUserName(assignment.getCreatedByUsername());
     	} else {
     		newProf = newProfessors.get(0);
     	}

@@ -1,5 +1,6 @@
 package compile_io.mongo.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -11,7 +12,7 @@ public class Course {
 	@Id
 	private String id;
 	private String courseName; 
-	private String crn;
+	private int crn;
 	private int sectionNumber;
 	@DBRef
 	private Professor instructor;
@@ -19,12 +20,17 @@ public class Course {
 	private List<Student> students;
 	
 	
-	public Course(String courseName, String crn, int sectionNumber, String instructorName) {
+//	public Course(String courseName, int crn, int sectionNumber, String instructorName) {
+//		super();
+//		this.courseName = courseName;
+//		this.crn = crn;
+//		this.sectionNumber = sectionNumber;
+//		this.instructor.setName(instructorName);
+//		this.students = new ArrayList<Student>();
+//	}
+	
+	public Course() {
 		super();
-		this.courseName = courseName;
-		this.crn = crn;
-		this.sectionNumber = sectionNumber;
-		this.instructor.setName(instructorName);
 	}
 
 
@@ -38,12 +44,12 @@ public class Course {
 	}
 
 
-	public String getCrn() {
+	public int getCrn() {
 		return crn;
 	}
 
 
-	public void setCrn(String crn) {
+	public void setCrn(int crn) {
 		this.crn = crn;
 	}
 

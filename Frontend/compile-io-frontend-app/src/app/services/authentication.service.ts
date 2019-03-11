@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
+
 @Injectable()
 export class AuthenticationService {
   isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
@@ -14,8 +15,6 @@ export class AuthenticationService {
     
   ) {
   }
-
-
   isLoggedIn(): Observable<boolean> {
     return this.isLoginSubject.asObservable();
   }
@@ -34,6 +33,7 @@ export class AuthenticationService {
       } else {
         if (rfUser) {
           sessionStorage.setItem('user', rfUser.username);
+          sessionStorage.setItem('name', rfUser.name);
           this.admins.forEach(element => {
             if(element == rfUser.username){
               rfUser.group = 'ADMIN';

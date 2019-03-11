@@ -58,7 +58,8 @@
     <div *ngIf="selectedCourse != null && selectedCourse.id == '-1'" class="col mw-100 mt-5">
       <div class="row">
         <div class="col">
-          <app-course-page></app-course-page>
+          <app-course-page [username]="username"
+                           [courseInfo]="selectedCourse"></app-course-page>
         </div>
       </div>
     </div>

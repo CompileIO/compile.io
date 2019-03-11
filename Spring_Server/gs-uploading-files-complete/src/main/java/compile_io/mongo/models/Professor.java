@@ -18,16 +18,18 @@ public class Professor {
 	@DBRef
     private List<Assignment> assignments;
 
-    public Professor() {}
+    public Professor() {
+    	super();
+    }
 
-    public Professor(String name, String userName) {
-        this.name = name;
-        this.userName = userName;
-    }
+//    public Professor(String name, String userName) {
+//        this.name = name;
+//        this.userName = userName;
+//    }
     
-    public Professor(String userName) {
-        this.userName = userName;
-    }
+//    public Professor(String userName) {
+//        this.userName = userName;
+//    }
 
 	public String getName() {
 		return name;
@@ -87,7 +89,8 @@ public class Professor {
 
 	@Override
 	public String toString() {
-		return "Professor [name=" + name + ", userName=" + userName + "]";
+		return "Professor [id=" + id + ", name=" + name + ", userName=" + userName + ", courses=" + courses
+				+ ", assignments=" + assignments + "]";
 	}
 
 }
