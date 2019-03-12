@@ -88,6 +88,7 @@ export class UserPageComponent implements OnInit {
     for(i = 0; i < this.Assignments.length; i++) {
       if (this.Assignments[i].id == assignmentID) {
         this.selectedAssignment = this.Assignments[i];
+        this.changeChange(false)
       }
     }
   }
@@ -115,6 +116,7 @@ export class UserPageComponent implements OnInit {
   ngOnInit() {
     // const token = window.sessionStorage.token;
     // const decoded = this.decode(token);
+    this.getCourses();
   }
 
 }

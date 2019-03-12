@@ -103,6 +103,7 @@ public class CodeController {
 		Code newCode = new Code(type, runTimeNum, this.codePath, submissionTime, givenAssignmentId, userName);
 		// Docker stuff
 		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath));
+
 		codeRepository.save(newCode);
 		return ResponseEntity.ok().body(newCode.getTestResponse());
 	}

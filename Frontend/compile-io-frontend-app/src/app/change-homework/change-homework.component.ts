@@ -5,6 +5,7 @@ import { AssignmentService } from '../services/assignment.service';
 import { Assignment } from '../../models/assignment';
 import { Time } from '@angular/common';
 
+
 @Component({
   selector: 'app-change-homework',
   templateUrl: './change-homework.component.html',
@@ -17,12 +18,23 @@ export class ChangeHomeworkComponent implements OnInit {
   timeout: string;
   language: string;
   @Input() assignmentInfo: Assignment;
-  Assignments: Assignment[];
+  givenStartDate: any;
+  givenEndDate: any;
+  //Assignments: Assignment[];
   newAssignment: Assignment;
   file: File;
+  
+  constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
+    this.newAssignment = new Assignment();
+  }
 
-  constructor(private assignmentService: AssignmentService) {
-    
+  submitForm(form: any): void {
+    console.log('Form Data: ');
+    this.newAssignment.startDate = form.startDate;
+    this.newAssignment.endDate = form.endDate;
+    console.log(this.newAssignment);
+    sessionStorage.setItem('course', this.className);
+    this.submit();
   }
 
   fileUploadFunction(event: any) {
@@ -107,28 +119,10 @@ export class ChangeHomeworkComponent implements OnInit {
         }
       });
     }
-    //window.location.reload();
+    window.location.reload();
   }
   updateSize(givenSize: number) {
     this.newAssignment.size = givenSize * 1000 * 1000;
-  }
-
-  readyToSubmit(): boolean {
-    if (this.assignmentInfo.id == '-1') {
-      if (this.newAssignment.assignmentName == undefined ||
-        this.newAssignment.endDate == undefined ||
-        this.newAssignment.endTime == undefined ||
-        this.newAssignment.startDate == undefined ||
-        this.newAssignment.startTime == undefined ||
-        this.newAssignment.size == undefined ||
-        this.newAssignment.language == undefined ||
-        this.newAssignment.timeout == undefined ||
-        this.newAssignment.tries == undefined ||
-        this.file == undefined) {
-        return false;
-      }
-    }
-    return true;
   }
 
   ngOnInit() {
@@ -143,7 +137,9 @@ export class ChangeHomeworkComponent implements OnInit {
       this.newAssignment.language = this.assignmentInfo.language;
       this.newAssignment.timeout = this.assignmentInfo.timeout;
       this.newAssignment.tries = this.assignmentInfo.tries;
-      
+      this.givenStartDate = this.newAssignment.startDate.toString().substring(0, this.newAssignment.startDate.toString().indexOf("T"));
+      this.givenEndDate = this.newAssignment.endDate.toString().substring(0, this.newAssignment.endDate.toString().indexOf("T"));
+      console.log(this.givenStartDate);
     }
   }
 
