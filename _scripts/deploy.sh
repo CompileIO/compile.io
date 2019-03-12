@@ -8,6 +8,11 @@ if [ $TRAVIS_BRANCH == 'master' ] ; then
     # git remote add deploy "git@compile-io.csse.rose-hulman.edu:~/srv/git/project.git"
     # git config user.name "Travis CI"
     # git config user.email "joshpal97@gmail.com"
+
+
+
+    ########From Conner: Want to scp instructions.sh to the compile.io server, and then run the commands because right now everything is running
+    ####on the travis runner, not the server
     
     echo "Making sure the repo has everything it needs"
     git add .

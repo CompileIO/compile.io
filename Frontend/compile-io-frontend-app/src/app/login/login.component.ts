@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
   loggedIn: boolean;
   finalUsername: string;
   finalGroup: string;
+  finalName: string;
   
   constructor(
     private authenticationService: AuthenticationService
@@ -32,8 +33,10 @@ export class LoginComponent implements OnInit {
     if (this.authenticationService.hasToken()) {
       const group = sessionStorage.getItem('group');
       const username = sessionStorage.getItem('user');
+      const name = sessionStorage.getItem('name');
       this.finalGroup = group;
       this.finalUsername = username;
+      this.finalName = name;
       this.loggedIn = true;
     }
   }

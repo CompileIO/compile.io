@@ -21,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import compile_io.mongo.models.Assignment;
+import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.AssignmentRepository;
+import compile_io.mongo.repositories.ProfessorRepository;
 import compile_io.storage.StorageService;
 
 @RestController
@@ -30,6 +32,9 @@ public class AssignmentController {
 	
 	@Autowired
     AssignmentRepository assignmentRepository;
+	
+	@Autowired
+	ProfessorRepository professorRepository;
 	
 	private final StorageService storageService;
     private String fileName;
@@ -82,6 +87,17 @@ public class AssignmentController {
 				assignment.getCreatedByUsername().replaceAll(" ", "_").toLowerCase());
     	assignment.setFilePath(professorDir.toString());
     	System.out.println("\n\n\n\n\n Assignment Created: " + assignment.toString() + "\n\n\n\n\n");
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    	List<Professor> newProfessors = professorRepository.findByuserName(assignment.getCreatedByUsername(), sortByCreatedAtDesc);
+    	Professor newProf;
+    	if(newProfessors.isEmpty()) {
+    		newProf = new Professor();
+    		newProf.setUserName(assignment.getCreatedByUsername());
+    	} else {
+    		newProf = newProfessors.get(0);
+    	}
+    	newProf.addAssignment(assignment);
+    	professorRepository.save(newProf);
     	assignmentRepository.save(assignment);
         return ResponseEntity.ok().body("uploaded assignment: " + assignment.toString());
     } 
@@ -115,6 +131,11 @@ public class AssignmentController {
     public ResponseEntity<?> deleteAssignment(@PathVariable("id") String id) {
         return assignmentRepository.findById(id)
                 .map(assignment -> {
+                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                	List<Professor> newProfessors = professorRepository.findByuserName(assignment.getCreatedByUsername(), sortByCreatedAtDesc);
+                	Professor newProf = newProfessors.get(0);
+                	newProf.deleteAssignment(assignment);
+                	professorRepository.save(newProf);
                     assignmentRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());

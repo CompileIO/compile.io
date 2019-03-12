@@ -13,29 +13,29 @@
     <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark">
       <div class="container noselect mt-5">
         
-        <div *ngFor="let cl of classes" class="row">
+        <div *ngFor="let co of courses" class="row">
           <div class="w-100">
-            <div class="w-100 sidebarHover p-3 btn blackText" (click)="selectClass(cl)">
+            <div class="w-100 sidebarHover p-3 btn blackText" (click)="selectCourse(co)">
               <span>
-                {{cl}}
+                {{co}}
               </span>
-              <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedClass == cl && selectedHomework == hwk" alt="left" class="smicon" />
+              <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedCourse == co && selectedAssignment == assgn" alt="left" class="smicon" />
             </div>
-            <div class="container" *ngIf="selectedClass == cl">
-              <div class="row" *ngFor="let hwk of Assignments" (click)="selectHomework(hwk.id)">
-                <div *ngIf="selectedHomework == hwk" class="col p-2 sidebarHover w-50 btn blackText">
+            <div class="container" *ngIf="selectedCourse == co">
+              <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn.id)">
+                <div *ngIf="selectedAssignment == assgn" class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
-                    {{hwk.assignmentName}}
+                    {{assgn.assignmentName}}
                   </span>
                   <img src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
                 </div>
-                <div *ngIf="selectedHomework != hwk" class="col p-2 sidebarHover w-50 btn blackText">
+                <div *ngIf="selectedAssignment != assgn" class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
-                    {{hwk.assignmentName}}
+                    {{assgn.assignmentName}}
                   </span>
                 </div>
               </div>
-              <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newHomework()">
+              <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newAssignment()">
                 <div class="col p-2 sidebarHover w-50 btn blackText">
                   <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
                 </div>
@@ -44,10 +44,28 @@
           </div>
         </div>
       </div>
+       <!-- here -->
+       <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newCourse()">
+        <div class="col p-2 sidebarHover w-50 btn blackText">
+          <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+        </div>
+      </div>
+
+      
+      <!-- tohere -->
     </nav>
+    <!-- here -->
+    <div *ngIf="selectedCourse != null && selectedCourse.id == '-1'" class="col mw-100 mt-5">
+      <div class="row">
+        <div class="col">
+          <app-course-page [username]="username"
+                           [courseInfo]="selectedCourse"></app-course-page>
+        </div>
+      </div>
+    </div>
+<!-- tohere -->
 
-
-    <div *ngIf="selectedHomework == null && selectedClass == null" class="col">
+    <div *ngIf="selectedAssignment == null && selectedCourse == null" class="col">
       <div class="container mt-5 shadow h-100">
         <div class="row">
           <div class="col">
@@ -63,25 +81,25 @@
     </div>
 
 
-    <div *ngIf="selectedHomework == null && selectedClass != null" class="col mw-100 mt-5">
+    <div *ngIf="selectedAssignment == null && selectedCourse != null  && courseChange == true" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">
             <div class="p-3 w-100">
               <h1>
-                {{selectedClass | uppercase}}
+                {{selectedCourse.courseName | uppercase}}
               </h1>
             </div>
           </div>
         </div>
-        <div class="row" *ngFor="let hwk of Assignments" (click)="selectHomework(hwk.id)">
-          <div *ngIf="selectedHomework != hwk" class="col p-4 sidebarHover w-50 btn">
+        <div class="row" *ngFor="let assgn of assignments" (click)="selectedAssignment(assgn.id)">
+          <div *ngIf="selectedAssignment != assgn" class="col p-4 sidebarHover w-50 btn">
             <span>
-              {{hwk.assignmentName}}
+              {{assgn.assignmentName}}
             </span>
           </div>
         </div>
-        <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newHomework()">
+        <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newAssignment()">
           <div class="col p-2 sidebarHover w-50 btn p-4">
             <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
           </div>
@@ -90,33 +108,34 @@
     </div>
 
 
-    <div *ngIf="selectedHomework != null && selectedHomework.id == '-1'" class="col mw-100 mt-5">
+    <div *ngIf="selectedAssignment != null && selectedAssignment.id == '-1'" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">
             <div class="p-3 w-100 d-block" style="height: 100px">
               <h1>
-                {{selectedClass | uppercase}}
+                {{selectedCourse.courseName | uppercase}}
               </h1>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <app-change-homework [className]="selectedClass"
+            <app-change-homework [courseName]="selectedCourse"
                                  [userName]="username"
-                                 [assignmentInfo]="selectedHomework"></app-change-homework>
+                                 [assignmentInfo]="selectedAssignment"></app-change-homework>
           </div>
         </div>
       </div>
     </div>
-    <div *ngIf="selectedHomework != null && selectedHomework.id != '-1'" class="col mw-100 mt-5">
+
+    <div *ngIf="selectedAssignment != null && selectedAssignment.id != '-1'" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">
             <div class="p-3 w-100">
               <h1>
-                {{selectedClass | uppercase}} - {{selectedHomework.assignmentName | uppercase}}
+                {{selectedCourse.courseName | uppercase}} - {{selectedAssignment.assignmentName | uppercase}}
               </h1>
             </div>
           </div>
@@ -141,12 +160,11 @@
               <app-homework-page id="runPage"
                                  *ngIf="!change"
                                  [username]="username"
-                                 [assignmentInfo]="selectedHomework">
+                                 [assignmentInfo]="selectedAssignment">
               </app-homework-page>
               <app-change-homework id="changePage" *ngIf="change"
-                                 [assignmentInfo]="selectedHomework"
-                                 [className]="selectedClass"
-                                 [userName]="username">
+                                 [assignmentInfo]="selectedAssignment"
+                                 [courseName]="selectedCourse">
               </app-change-homework>
             </div>
           </div>

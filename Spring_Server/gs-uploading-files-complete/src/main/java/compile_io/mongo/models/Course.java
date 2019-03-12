@@ -1,5 +1,6 @@
 package compile_io.mongo.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -10,44 +11,83 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Course {
 	@Id
 	private String id;
-	private String name; 
-	private String crn;
+	private String courseName; 
+	private int crn;
+	private int sectionNumber;
 	@DBRef
-	private List<Section> section;
+	private Professor instructor;
+	@DBRef
+	private List<Student> students;
 	
 	
-	public Course(String name, String crn, List<Section> section) {
+//	public Course(String courseName, int crn, int sectionNumber, String instructorName) {
+//		super();
+//		this.courseName = courseName;
+//		this.crn = crn;
+//		this.sectionNumber = sectionNumber;
+//		this.instructor.setName(instructorName);
+//		this.students = new ArrayList<Student>();
+//	}
+	
+	public Course() {
 		super();
-		this.name = name;
-		this.crn = crn;
-		this.section = section;
 	}
-	public String getName() {
-		return name;
+
+
+	public String getCourseName() {
+		return courseName;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
-	public String getCrn() {
+
+
+	public int getCrn() {
 		return crn;
 	}
-	public void setCrn(String crn) {
+
+
+	public void setCrn(int crn) {
 		this.crn = crn;
 	}
-	public List<Section> getSection() {
-		return section;
+
+
+	public int getSectionNumber() {
+		return sectionNumber;
 	}
-	public void setSection(List<Section> section) {
-		this.section = section;
+
+
+	public void setSectionNumber(int sectionNumber) {
+		this.sectionNumber = sectionNumber;
 	}
-	
-	
-	
-	
-	
+
+
+	public Professor getInstructor() {
+		return instructor;
+	}
+
+
+	public void setInstructor(Professor instructor) {
+		this.instructor = instructor;
+	}
+
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Course [name=" + name + ", crn=" + crn + ", section=" + section + "]";
+		return "Course [id=" + id + ", courseName=" + courseName + ", crn=" + crn + ", sectionNumber=" + sectionNumber
+				+ ", instructor=" + instructor + ", students=" + students + "]";
 	}
 	
 	

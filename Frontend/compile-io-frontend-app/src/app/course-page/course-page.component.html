@@ -1,0 +1,53 @@
+<div class="container w-100 d-block">
+  <div class="row justify-content-center mt-2">
+    <div class="col">
+      <form class="w-100 p-3">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="nameText">Course Name</label>
+                <input *ngIf="this.courseInfo.id == '-1'" type="text" class="form-control" #nameText id="nameText" aria-describedby="nameHelp" placeholder="CSSE120" (blur)="newCourse.courseName=nameText.value" required>
+
+                <input *ngIf="this.courseInfo.id != '-1'" type="text" class="form-control" #nameText id="nameText" value={{courseInfo.courseName}} aria-describedby="nameHelp" placeholder="CSSE120" (blur)="newCourse.courseName=nameText.value" required>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="nameText">Course Crn</label>
+                <input *ngIf="this.courseInfo.id == '-1'" type="number" class="form-control" #crnText id="crnText" aria-describedby="crnHelp" placeholder="12345" (blur)="newCourse.crn=crnText.value" required>
+
+                <input *ngIf="this.courseInfo.id != '-1'" type="number" class="form-control" #crnText id="crnText" value={{this.courseInfo.crn}} aria-describedby="crnHelp" placeholder="12345" (blur)="newCourse.crn=crnText.value" required>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left" for="nameText">Section Number</label>
+                <input *ngIf="this.courseInfo.id == '-1'" type="number" class="form-control" #sectionText id="sectionText" aria-describedby="sectionHelp" placeholder="01" (blur)="newCourse.sectionNumber=sectionText.value" required>
+
+                <input *ngIf="this.courseInfo.id != '-1'" type="number" class="form-control" #sectionText id="sectionText" value={{courseInfo.sectionNumber}} aria-describedby="sectionHelp" placeholder="01" (blur)="newCourse.sectionNumber=sectionText.value" required>
+              </div>
+            </div>
+
+            <!-- <div class="row"> -->
+              <div class="col p-3">
+                <button *ngIf="readyToSubmit()" type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
+  
+                <button *ngIf="!readyToSubmit()" disabled type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
+              </div>
+            <!-- </div> -->
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<p>
+  course-page works!
+</p>
