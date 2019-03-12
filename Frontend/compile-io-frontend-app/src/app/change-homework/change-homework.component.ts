@@ -33,7 +33,6 @@ export class ChangeHomeworkComponent implements OnInit {
     this.newAssignment.startDate = form.startDate;
     this.newAssignment.endDate = form.endDate;
     console.log(this.newAssignment);
-    sessionStorage.setItem('course', this.className);
     this.submit();
   }
 

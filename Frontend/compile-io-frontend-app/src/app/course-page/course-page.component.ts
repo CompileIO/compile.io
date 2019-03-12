@@ -16,6 +16,10 @@ export class CoursePageComponent implements OnInit {
   constructor(private courseService: CourseService) { 
   }
 
+  submitForm(form: any) {
+    console.log(form);
+  }
+
   submit() {
     if (this.courseInfo.id == "-1") {
       this.courseService.createCourse(this.newCourse).subscribe({
