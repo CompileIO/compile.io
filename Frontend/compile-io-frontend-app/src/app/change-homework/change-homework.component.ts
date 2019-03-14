@@ -114,6 +114,7 @@ export class ChangeHomeworkComponent implements OnInit {
           this.newAssignment = new Assignment()
           console.log("Updated Homework Complete")
         }
+        
       });
     }
     window.location.reload();
