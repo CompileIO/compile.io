@@ -7,7 +7,7 @@ import { StudentService } from '../services/student.service';
 import {Assignment} from '../../models/assignment';
 import { Course } from 'src/models/course';
 import {Professor} from '../../models/professor';
-import { Student } from 'src/models/student';
+import { ɵangular_packages_forms_forms_f } from '@angular/forms';
 // const jwtDecode = require('jwt-decode');
 
 @Component({
@@ -26,15 +26,42 @@ export class UserPageComponent implements OnInit {
   change: boolean = false;
   courseChange: boolean = false;
   Assignments: Assignment[] = [];
+  Professors: Professor[] = []
+  profToAdd: Professor;
 
   constructor(private authenticationService: AuthenticationService,
               private courseService:CourseService,
               private assignmentService:AssignmentService,
-              private professorService:ProfessorService,
-              private studentService:StudentService) {
-    this.getCourses();
+              private professorService:ProfessorService) {
   }
 
+  isProfessor() : void {
+    if(this.group === "PROFESSOR" || this.group === "ADMIN") {
+      this.professorService.getProfessors().subscribe({
+        next: x => {this.Professors = x},
+        error: err => console.log("GET PROFESSOR ERROR: " + err),
+        complete: () => professor => this.Professors.forEach((professor: Professor) => {
+        if (professor.userName === this.username) {
+          //could update, I don't see the point
+          console.log("should break");
+          this.Professors = [];
+          return;
+        }
+      }) 
+      this.profToAdd = new Professor();
+      this.profToAdd.name = this.name;
+      this.profToAdd.userName = this.username;
+      this.professorService.createProfessor(this.profToAdd).subscribe({
+        next: x => {console.log(x)},
+        error: err => {console.log("ADDING PROFESSOR ERROR: " + err)},
+        complete: () => {console.log("Added Professor Complete")}
+      });
+      this.Professors = [];
+    });  
+      
+
+    }
+  }
   getCourses() : void {
     this.courseService.getCourses().subscribe({
       next: x => {this.Courses = x},
@@ -55,25 +82,11 @@ export class UserPageComponent implements OnInit {
     }
   }
 
-  // selectCourse(courseID: string) {
-  //   var i = 0;
-  //   for(i = 0; i < this.Courses.length; i++) {
-  //     if (this.Courses[i].id == courseID) {
-  //       this.selectedCourse = this.Courses[i];
-  //     }
-  //   }
-  // }
 
   newCourse() {
     this.selectedCourse = new Course();
     this.selectedCourse.id = "-1";
   }
-
-  // getAssignments(): void {
-  //   this.assignmentService.getAssignments().subscribe({
-  //     complete: () => assignments => this.Assignments = assignments
-  //   });  
-  // }
 
   getAssignmentsForSpecificCourse(courseName: string): void {
     this.assignmentService.getAssignmentsForSpecificCourse(courseName).subscribe({
@@ -117,6 +130,7 @@ export class UserPageComponent implements OnInit {
     // const token = window.sessionStorage.token;
     // const decoded = this.decode(token);
     this.getCourses();
+    this.isProfessor();
   }
 
 }
