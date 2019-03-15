@@ -58,25 +58,9 @@ public class CourseController {
     }
 	
 	@PostMapping("/Course/Create")
-    public ResponseEntity<String> createCourse(@Valid @RequestBody Course course) {   
-    	System.out.println("\n\n\n\n\n Adding Course: " + course.toString() + "\n\n\n\n\n");
-    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-    	List<Professor> newProfessors = professorRepository.findByuserName(course.getInstructor().getUserName(), sortByCreatedAtDesc);
-    	Professor newProf;
-    	if(newProfessors.isEmpty()) {
-    		newProf = new Professor();
-    		newProf.setUserName(course.getInstructor().getUserName());
-    	} else {
-    		newProf = newProfessors.get(0);
-    	}
-    	newProf = professorRepository.save(newProf);
-    	System.out.println("\n\n\n\n\n Professor Created: " + newProf.toString() + "\n\n\n\n\n");
-    	System.out.println("adding course");
-    	Course addedCourse = courseRepository.save(course);
+    public ResponseEntity<String> createCourse(@Valid @RequestBody Course course) {  
+    	courseRepository.save(course);
     	System.out.println("\n\n\n\n\n Course Created: " + course.toString() + "\n\n\n\n\n");
-    	
-    	newProf.addCourse(addedCourse);
-    	professorRepository.save(newProf);
         return ResponseEntity.ok().body("uploaded Course: " + course.toString());
     } 
     

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CourseService } from '../services/course.service';
+import { ProfessorService } from '../services/professor.service';
 import {Course} from '../../models/course';
 import { Professor } from 'src/models/professor';
 
@@ -13,27 +14,48 @@ export class CoursePageComponent implements OnInit {
   @Input() courseInfo: Course;
   prof: Professor;
   newCourse: Course;
-  constructor(private courseService: CourseService) { 
+  constructor(private courseService: CourseService, private professorService: ProfessorService) { 
   }
 
   submitForm(form: any) {
     console.log(form);
+    this.submit();
   }
 
   submit() {
     if (this.courseInfo.id == "-1") {
-      this.courseService.createCourse(this.newCourse).subscribe({
+      console.log(this.newCourse.courseName);
+      //add course to professor
+      this.professorService.getProfessorbyUsername(this.username).subscribe({
         next: x => {
-          console.log(x)
+          this.prof = x
+          this.prof.courses = [];
+          this.prof.courses.push(this.newCourse);
         },
         error: err => {
-          console.log("ADDING COURSE ERROR: " + err)
+          console.log("GET PROFESSOR BY USERNAME ERROR: " + err)
         },
-        complete: () => {
-          this.newCourse = new Course()
-          console.log("Added Course Complete")
-        }
+        complete: () => this.professorService.updateProfessor(this.prof).subscribe({
+          next: x => {this.newCourse.instructor = x},
+          error: err => {
+            console.log("UPDATING PROFESSOR ERROR: " + err)
+          },
+          complete: () => this.courseService.createCourse(this.newCourse).subscribe({
+            next: x => {
+              console.log(x)
+            },
+            error: err => {
+              console.log("ADDING COURSE ERROR: " + err)
+            },
+            complete: () => {
+              this.newCourse = new Course()
+              console.log("Added Course Complete")
+            }
+          })
+        })
       });
+      
+      
     }
     else {
       this.newCourse.id = this.courseInfo.id;
@@ -57,8 +79,8 @@ export class CoursePageComponent implements OnInit {
     if (this.courseInfo.id == '-1') {
       if (this.newCourse.courseName== undefined ||
         this.newCourse.crn == undefined ||
-        this.newCourse.sectionNumber == undefined ||
-        this.newCourse.instructor == undefined
+        this.newCourse.sectionNumber == undefined 
+        // this.newCourse.instructor == undefined
         // this.newCourse.students == undefined
         ) {
         return false;
@@ -69,9 +91,6 @@ export class CoursePageComponent implements OnInit {
 
   ngOnInit() {
     this.newCourse = new Course();
-    this.prof = new Professor();
-    this.prof.userName = this.username;
-    this.newCourse.instructor= this.prof;
     if(this.courseInfo.id != '-1'){
       this.newCourse.courseName = this.courseInfo.courseName;
       this.newCourse.crn = this.courseInfo.crn;

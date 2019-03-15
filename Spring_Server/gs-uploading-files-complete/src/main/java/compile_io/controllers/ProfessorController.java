@@ -36,6 +36,15 @@ public class ProfessorController{
                 .map(professor -> ResponseEntity.ok().body(professor))
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping(value="/Professor/Username/{username}")
+    public ResponseEntity<Professor> getProfessorByUsername(@PathVariable("username") String username) {
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+        List<Professor> professors = professorRepository.findByuserName(username, sortByCreatedAtDesc);
+        if(professors.isEmpty()) {
+        	return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(professors.get(0));
+    }
 	
 //    @GetMapping("/Professor/getInstructorCourses/{instructorName}")
 //    public ResponseEntity<List<Course>> getAllCoursesForProfessor(@PathVariable("instructorName") String instructorName) {
@@ -45,8 +54,8 @@ public class ProfessorController{
 	
 	@PostMapping("/Professor/Create")
     public ResponseEntity<String> createProfessor(@Valid @RequestBody Professor professor) {   
-    	System.out.println("\n\n\n\n\n professor Created: " + professor.toString() + "\n\n\n\n\n");
     	professorRepository.save(professor);
+    	System.out.println("\n\n\n\n\n professor Created: " + professor.toString() + "\n\n\n\n\n");
         return ResponseEntity.ok().body("uploaded professor: " + professor.toString());
     } 
     

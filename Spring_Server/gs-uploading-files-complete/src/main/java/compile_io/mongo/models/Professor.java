@@ -13,9 +13,7 @@ public class Professor {
 	
 	private String name;
 	private String userName;
-	@DBRef
     private List<Course> courses;
-	@DBRef
     private List<Assignment> assignments;
 
     public Professor() {

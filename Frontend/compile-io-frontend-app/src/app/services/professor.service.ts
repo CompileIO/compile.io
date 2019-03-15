@@ -26,14 +26,17 @@ export class ProfessorService {
     console.log("Get Professor: " + professorData.name);
     return this.http.get(this.apiUrl + "/Professor/"  + professorData.id);
   }
-  
 
+  getProfessorbyUsername(username: string): Observable<any> {
+    return this.http.get(this.apiUrl + "/Professor/Username/" + username);
+  }
+  
   createProfessor(professorData: Professor) {
     const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
     return this.http.post(this.apiUrl + '/Professor/Create' , professorData, { headers: headers, withCredentials: true })
   }
 
-  updateProfessor(professorData: Professor) {
+  updateProfessor(professorData: Professor): Observable<any> {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
     return this.http.put(this.apiUrl + '/Professor/Update/' + professorData.id, professorData, { headers: headers, withCredentials: true })
   }
