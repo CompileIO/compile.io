@@ -4,9 +4,9 @@ import { AssignmentService } from '../services/assignment.service';
 import { CourseService } from '../services/course.service';
 import { ProfessorService } from '../services/professor.service';
 import { StudentService } from '../services/student.service';
-import {Assignment} from '../../models/assignment';
+import { Assignment } from '../../models/assignment';
 import { Course } from 'src/models/course';
-import {Professor} from '../../models/professor';
+import { Professor } from '../../models/professor';
 import { ɵangular_packages_forms_forms_f } from '@angular/forms';
 // const jwtDecode = require('jwt-decode');
 
@@ -26,45 +26,50 @@ export class UserPageComponent implements OnInit {
   change: boolean = false;
   courseChange: boolean = false;
   Assignments: Assignment[] = [];
-  Professors: Professor[] = []
   profToAdd: Professor;
 
   constructor(private authenticationService: AuthenticationService,
-              private courseService:CourseService,
-              private assignmentService:AssignmentService,
-              private professorService:ProfessorService) {
+    private courseService: CourseService,
+    private assignmentService: AssignmentService,
+    private professorService: ProfessorService) {
   }
 
-  isProfessor() : void {
-    if(this.group === "PROFESSOR" || this.group === "ADMIN") {
+  isProfessor(): void {
+    var addProf = true;
+    if (this.group === "PROFESSOR" || this.group === "ADMIN") {
       this.professorService.getProfessors().subscribe({
-        next: x => {this.Professors = x},
+        next: professors => {
+          for (var i = 0; i < professors.length; i++) {
+            if (professors[i].userName === this.username) {
+              //could update, I don't see the point
+              addProf = false;
+              break;
+            }
+          }
+        },
         error: err => console.log("GET PROFESSOR ERROR: " + err),
-        complete: () => professor => this.Professors.forEach((professor: Professor) => {
-        if (professor.userName === this.username) {
-          //could update, I don't see the point
-          console.log("should break");
-          this.Professors = [];
-          return;
+        complete: () => {
+          if (addProf) {
+            this.profToAdd = new Professor();
+            this.profToAdd.name = this.name;
+            this.profToAdd.userName = this.username;
+            console.log("Adding Professor");
+            this.professorService.createProfessor(this.profToAdd).subscribe({
+              next: x => { console.log(x) },
+              error: err => { console.log("ADDING PROFESSOR ERROR: " + err) },
+              complete: () => { console.log("Added Professor Complete") }
+            });
+          }
         }
-      }) 
-      this.profToAdd = new Professor();
-      this.profToAdd.name = this.name;
-      this.profToAdd.userName = this.username;
-      this.professorService.createProfessor(this.profToAdd).subscribe({
-        next: x => {console.log(x)},
-        error: err => {console.log("ADDING PROFESSOR ERROR: " + err)},
-        complete: () => {console.log("Added Professor Complete")}
+
       });
-      this.Professors = [];
-    });  
-      
+
 
     }
   }
-  getCourses() : void {
+  getCourses(): void {
     this.courseService.getCourses().subscribe({
-      next: x => {this.Courses = x},
+      next: x => { this.Courses = x },
       error: err => console.log("GET COURSES ERROR: " + err),
       complete: () => courses => this.Courses = courses
     });
@@ -90,15 +95,15 @@ export class UserPageComponent implements OnInit {
 
   getAssignmentsForSpecificCourse(courseName: string): void {
     this.assignmentService.getAssignmentsForSpecificCourse(courseName).subscribe({
-      next: x => {this.Assignments = x},
+      next: x => { this.Assignments = x },
       error: err => console.log("GET HWK INFO ERROR: " + err),
       complete: () => assignments => this.Assignments = assignments
-    });  
+    });
   }
 
   selectAssignment(assignmentID: string) {
     var i = 0;
-    for(i = 0; i < this.Assignments.length; i++) {
+    for (i = 0; i < this.Assignments.length; i++) {
       if (this.Assignments[i].id == assignmentID) {
         this.selectedAssignment = this.Assignments[i];
         this.changeChange(false)
