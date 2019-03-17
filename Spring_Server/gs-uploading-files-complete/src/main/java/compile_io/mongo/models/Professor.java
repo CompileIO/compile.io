@@ -5,12 +5,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection="Professor")
 public class Professor {
 
 	@Id
 	private String id;
-	
 	private String name;
 	private String userName;
     private List<Course> courses;
@@ -19,15 +18,14 @@ public class Professor {
     public Professor() {
     	super();
     }
-
-//    public Professor(String name, String userName) {
-//        this.name = name;
-//        this.userName = userName;
-//    }
     
-//    public Professor(String userName) {
-//        this.userName = userName;
-//    }
+    public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;

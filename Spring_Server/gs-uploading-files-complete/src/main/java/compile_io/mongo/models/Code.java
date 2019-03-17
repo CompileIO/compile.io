@@ -33,11 +33,20 @@ public class Code {
 		this.userName = userName;
 		this.testResponses = new ArrayList<String>();
 	}
-	public String getAssignmentName() {
+    public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+    
+	public String getAssignmentId() {
 		return assignmentId;
 	}
 
-	public void setAssignmentName(String assignmentName) {
+	public void setAssignmentId(String assignmentName) {
 		this.assignmentId = assignmentName;
 	}
 

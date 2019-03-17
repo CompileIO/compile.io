@@ -27,7 +27,8 @@ public class ProfessorController{
 	@GetMapping("/Professors")
 	public List<Professor> getProfessors() {
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        return professorRepository.findAll(sortByCreatedAtDesc);
+		List<Professor> Professors = professorRepository.findAll(sortByCreatedAtDesc);
+        return Professors;
 	}
     
     @GetMapping(value="/Professor/{id}")
@@ -46,24 +47,18 @@ public class ProfessorController{
         return ResponseEntity.ok().body(professors.get(0));
     }
 	
-//    @GetMapping("/Professor/getInstructorCourses/{instructorName}")
-//    public ResponseEntity<List<Course>> getAllCoursesForProfessor(@PathVariable("instructorName") String instructorName) {
-//        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-//        return ResponseEntity.ok().body(courseRepository.findByInstructor(instructorName, sortByCreatedAtDesc));
-//    }
-	
 	@PostMapping("/Professor/Create")
     public ResponseEntity<String> createProfessor(@Valid @RequestBody Professor professor) {   
-    	professorRepository.save(professor);
-    	System.out.println("\n\n\n\n\n professor Created: " + professor.toString() + "\n\n\n\n\n");
-        return ResponseEntity.ok().body("uploaded professor: " + professor.toString());
+    	Professor createdProf = professorRepository.save(professor);
+    	System.out.println("\n\n\n\n\n professor Created: " + createdProf.toString() + "\n\n\n\n\n");
+        return ResponseEntity.ok().body("Created Professor: " + createdProf.toString());
     } 
     
 
     @PutMapping(value="/Professor/Update/{id}")
     public ResponseEntity<Professor> updateProfessor(@PathVariable("id") String id,
                                            @Valid @RequestBody Professor professor) {
-    	System.out.println(professor.toString());
+    	System.out.println("\n\n\n\n\n Updating this professor: " +professor.toString()+ "\n\n\n\n\n");
     	return professorRepository.findById(id)
                 .map(professorData -> {
                 	professorData.setAssignments(professor.getAssignments());

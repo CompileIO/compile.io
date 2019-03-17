@@ -18,13 +18,23 @@ public class Student {
 	private String name;
 	private String userName;
 
-    public Student() {}
+    public Student() {
+    	super();
+    }
 
-	public Student(String name, String userName) {
-		super();
-		this.name = name;
-		this.userName = userName;
+//	public Student(String name, String userName) {
+//		super();
+//		this.name = name;
+//		this.userName = userName;
+//	}
+    public String getId() {
+		return id;
 	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 
 	public String getName() {
 		return name;

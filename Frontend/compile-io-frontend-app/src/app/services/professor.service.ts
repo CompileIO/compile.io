@@ -18,8 +18,10 @@ export class ProfessorService {
   //   return this.http.get(this.apiUrl + "/Professors", { headers: empHeaders, withCredentials: true });
   // }
 
-  getProfessors(): Observable<any>{
-    return this.http.get(this.apiUrl + '/Professors')
+  getProfessors(): Observable<Professor[]>{
+    var response;
+    response = this.http.get(this.apiUrl + '/Professors');
+    return response;
   }
 
   getProfessor(professorData: Professor) {

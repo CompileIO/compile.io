@@ -41,7 +41,6 @@ export class UserPageComponent implements OnInit {
         next: professors => {
           for (var i = 0; i < professors.length; i++) {
             if (professors[i].userName === this.username) {
-              //could update, I don't see the point
               addProf = false;
               break;
             }
