@@ -13,6 +13,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { ChangeHomeworkComponent } from './change-homework/change-homework.component';
 import { CoursePageComponent } from './course-page/course-page.component';
 import { SectionComponent } from './section/section.component';
+import { ChangeCoursePageComponent } from './change-course-page/change-course-page.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { SectionComponent } from './section/section.component';
     HomeworkPageComponent,
     ChangeHomeworkComponent,
     CoursePageComponent,
-    SectionComponent
+    SectionComponent,
+    ChangeCoursePageComponent
   ],
   imports: [
     BrowserModule,

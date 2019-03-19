@@ -25,7 +25,6 @@ export class UserPageComponent implements OnInit {
   selectedCourse: Course = null;
   selectedAssignment: Assignment = null;
   change: boolean = false;
-  courseChange: boolean = false;
   Assignments: Assignment[] = [];
   Sections: Section[] = [];
   profToAdd: Professor;
@@ -70,7 +69,7 @@ export class UserPageComponent implements OnInit {
   }
   getCourses(): void {
     this.courseService.getCourses().subscribe({
-      next: x => { this.Courses = x },
+      next: x => { this.Courses = x; console.log(x); },
       error: err => console.log("GET COURSES ERROR: " + err),
       complete: () => courses => this.Courses = courses
     });

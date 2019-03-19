@@ -1,53 +1,7 @@
-<div class="container w-100 d-block">
-  <div class="row justify-content-center mt-2">
+<div class="container">
+  <div class="row">
     <div class="col">
-      <form #form="ngForm" ngNativeValidate (ngSubmit)="submitForm(form.value)" class="w-100 p-3">
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              <div class="form-group p-3">
-                <label class="float-left">Course Name</label>
-                <input type="text" class="form-control" name="nameText" #nameText placeholder="CSSE120" [(ngModel)]="newCourse.courseName" required>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-group p-3">
-                <label class="float-left">Course Crn</label>
-                <input type="number" min="0" class="form-control" #crnText name="crnText" placeholder="12345" [(ngModel)]="newCourse.crn" required>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="form-group p-3">
-                <label class="float-left">Section Number</label>
-                <input type="number" min="0" class="form-control" #sectionText name="sectionText" placeholder="01" [(ngModel)]="newCourse.sectionNumber" required>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="row">
-            <div class="col">
-              <!-- DO STUDENT STUFF HERE, IE UPLOADING CSV-->
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <label class="float-left">Description</label>
-              <textarea rows="8" cols="50" type="text" class="form-control" name="nameText" #nameText placeholder="Information for the students e.g. syllabus, piazza, website, etc" [(ngModel)]="newCourse.courseName">
-              </textarea>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col p-3">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-          </div>
-        </div>
-      </form>
+      <h1>{{courseInfo.description}}</h1>
     </div>
   </div>
 </div>
-
