@@ -10,9 +10,10 @@
 
 <div class="container-fluid">
   <div class="row">
-    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark">
+
+    <!-- NavBar for Profs-->
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
       <div class="container noselect mt-5">
-        
         <div *ngFor="let co of courses" class="row">
           <div class="w-100">
             <div class="w-100 sidebarHover p-3 btn blackText" (click)="selectCourse(co)">
@@ -22,39 +23,66 @@
               <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedCourse == co && selectedAssignment == assgn" alt="left" class="smicon" />
             </div>
             <div class="container" *ngIf="selectedCourse == co">
-              <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn.id)">
-                <div *ngIf="selectedAssignment == assgn" class="col p-2 sidebarHover w-50 btn blackText">
-                  <span>
-                    {{assgn.assignmentName}}
-                  </span>
-                  <img src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
-                </div>
-                <div *ngIf="selectedAssignment != assgn" class="col p-2 sidebarHover w-50 btn blackText">
-                  <span>
-                    {{assgn.assignmentName}}
-                  </span>
-                </div>
-              </div>
-              <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newAssignment()">
+              <div class="row" *ngFor="let sec of Sections" (click)="selectedSection(sec.id)">
                 <div class="col p-2 sidebarHover w-50 btn blackText">
-                  <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+                  <span>
+                    {{sec.term}}{{sec.year}}{{sec.number}}
+                  </span>
+                  <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+                  <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn.id)">
+                    <div class="col p-2 sidebarHover w-50 btn blackText">
+                      <span>
+                        {{assgn.assignmentName}}
+                      </span>
+                      <img *ngIf="selectedAssignment == assgn" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+                    </div>
+                    <div class="row" (click)="newAssignment()">
+                      <div class="col p-2 sidebarHover w-50 btn blackText">
+                        <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" (click)="newSection()">
+                  <div class="col p-2 sidebarHover w-50 btn blackText">
+                    <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-       <!-- here -->
-       <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newCourse()">
-        <div class="col p-2 sidebarHover w-50 btn blackText">
-          <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+        <div class="row" (click)="newCourse()">
+          <div class="col p-2 sidebarHover w-50 btn blackText">
+            <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+          </div>
         </div>
       </div>
-
-      
-      <!-- tohere -->
     </nav>
-    <!-- here -->
+
+    <!-- NavBar for Students-->
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark" *ngIf="group == 'STUDENT'">
+      <div class="container noselect mt-5">
+        <div class="row" *ngFor="let sec of Sections" (click)="selectedSection(sec.id)">
+          <div class="col p-2 sidebarHover w-50 btn blackText">
+            <span>
+              {{sec.term}}{{sec.year}}{{sec.number}}
+            </span>
+            <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+            <div *ngIf="selectedSection == sec" class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn.id)">
+              <div class="col p-2 sidebarHover w-50 btn blackText">
+                <span>
+                  {{assgn.assignmentName}}
+                </span>
+                <img *ngIf="selectedAssignment == assgn" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- new Course -->
     <div *ngIf="selectedCourse != null && selectedCourse.id == '-1'" class="col mw-100 mt-5">
       <div class="container mt-5 shadow h-100">
         <div class="row">
@@ -70,8 +98,8 @@
         </div>
       </div>
     </div>
-<!-- tohere -->
 
+    <!-- welcome page -->
     <div *ngIf="selectedAssignment == null && selectedCourse == null" class="col">
       <div class="container mt-5 shadow h-100">
         <div class="row">
@@ -87,7 +115,7 @@
       </div>
     </div>
 
-
+    <!-- selected Course -->
     <div *ngIf="selectedAssignment == null && selectedCourse != null  && courseChange == true" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
@@ -114,7 +142,7 @@
       </div>
     </div>
 
-
+    <!-- new Assignment -->
     <div *ngIf="selectedAssignment != null && selectedAssignment.id == '-1'" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
@@ -136,6 +164,7 @@
       </div>
     </div>
 
+    <!-- Assignment Page -->
     <div *ngIf="selectedAssignment != null && selectedAssignment.id != '-1'" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
@@ -170,15 +199,14 @@
                                  [assignmentInfo]="selectedAssignment">
               </app-homework-page>
               <app-change-homework id="changePage" *ngIf="change"
-                                 [assignmentInfo]="selectedAssignment"
-                                 [courseName]="selectedCourse">
+                                   [assignmentInfo]="selectedAssignment"
+                                   [courseName]="selectedCourse">
               </app-change-homework>
             </div>
           </div>
         </div>
       </div>
     </div>
-
 
   </div>
 </div>
