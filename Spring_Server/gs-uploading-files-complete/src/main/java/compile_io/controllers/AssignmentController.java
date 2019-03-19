@@ -38,8 +38,6 @@ public class AssignmentController {
 	
 	private final StorageService storageService;
     private String fileName;
-	
-	private final int MAX_FILE_SIZE = 50000000;
 
 	@Autowired
 	public AssignmentController(StorageService storageService) {
@@ -87,17 +85,6 @@ public class AssignmentController {
 				assignment.getCreatedByUsername().replaceAll(" ", "_").toLowerCase());
     	assignment.setFilePath(professorDir.toString());
     	System.out.println("\n\n\n\n\n Assignment Created: " + assignment.toString() + "\n\n\n\n\n");
-    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-    	List<Professor> newProfessors = professorRepository.findByuserName(assignment.getCreatedByUsername(), sortByCreatedAtDesc);
-    	Professor newProf;
-    	if(newProfessors.isEmpty()) {
-    		newProf = new Professor();
-    		newProf.setUserName(assignment.getCreatedByUsername());
-    	} else {
-    		newProf = newProfessors.get(0);
-    	}
-    	newProf.addAssignment(assignment);
-    	professorRepository.save(newProf);
     	assignmentRepository.save(assignment);
         return ResponseEntity.ok().body("uploaded assignment: " + assignment.toString());
     } 
@@ -131,11 +118,11 @@ public class AssignmentController {
     public ResponseEntity<?> deleteAssignment(@PathVariable("id") String id) {
         return assignmentRepository.findById(id)
                 .map(assignment -> {
-                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-                	List<Professor> newProfessors = professorRepository.findByuserName(assignment.getCreatedByUsername(), sortByCreatedAtDesc);
-                	Professor newProf = newProfessors.get(0);
-                	newProf.deleteAssignment(assignment);
-                	professorRepository.save(newProf);
+//                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+//                	List<Professor> newProfessors = professorRepository.findByuserName(assignment.getCreatedByUsername(), sortByCreatedAtDesc);
+//                	Professor newProf = newProfessors.get(0);
+//                	newProf.deleteAssignment(assignment);
+//                	professorRepository.save(newProf);
                     assignmentRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());

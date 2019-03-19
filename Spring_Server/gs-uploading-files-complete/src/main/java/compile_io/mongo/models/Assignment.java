@@ -34,6 +34,7 @@ public class Assignment {
     private String filepath;
     private String courseName;
     private String createdByUsername;
+    private boolean availableToOtherSections; //changed
     
 	
 	public Assignment() {
@@ -146,14 +147,39 @@ public class Assignment {
 	public void setCreatedByUsername(String createdByUsername) {
 		this.createdByUsername = createdByUsername;
 	}
+	
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+
+	public boolean isAvailableToOtherSections() {
+		return availableToOtherSections;
+	}
+
+	public void setAvailableToOtherSections(boolean availableToOtherSections) {
+		this.availableToOtherSections = availableToOtherSections;
+	}
+
+	public String getAssignmentName() {
+		return assignmentName;
+	}
 
 	@Override
 	public String toString() {
-		return "Assignment [Id= " +id +", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
+		return "Assignment [id=" + id + ", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
 				+ language + ", size=" + size + ", tries=" + tries + ", startDate=" + startDate + ", startTime="
-				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", File=" + filepath + ", courseName="
-				+ courseName + "]";
+				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", filepath=" + filepath
+				+ ", courseName=" + courseName + ", createdByUsername=" + createdByUsername
+				+ ", availableToOtherSections=" + availableToOtherSections + "]";
 	}
+
+	
+	
+	
 
 	
 	
