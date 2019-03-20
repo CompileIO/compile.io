@@ -19,7 +19,7 @@ export class CourseService {
   // }
 
   getCourses(): Observable<any>{
-    return this.http.get(this.apiUrl + '/Courses')
+    return this.http.get(this.apiUrl + '/Courses');
   }
 
   getCourse(courseData: Course) {

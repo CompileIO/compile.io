@@ -10,32 +10,41 @@
 
 <div class="container-fluid">
   <div class="row">
-    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark">
+
+    <!-- NavBar for Profs-->
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
       <div class="container noselect mt-5">
-        
-        <div *ngFor="let co of courses" class="row">
+        <div *ngFor="let co of Courses" class="row">
           <div class="w-100">
             <div class="w-100 sidebarHover p-3 btn blackText" (click)="selectCourse(co)">
               <span>
-                {{co}}
+                {{co.courseName}}
               </span>
               <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedCourse == co && selectedAssignment == assgn" alt="left" class="smicon" />
             </div>
             <div class="container" *ngIf="selectedCourse == co">
-              <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn.id)">
-                <div *ngIf="selectedAssignment == assgn" class="col p-2 sidebarHover w-50 btn blackText">
+              <div class="row" *ngFor="let sec of Sections" (click)="selectedSection(sec.id)">
+                <div class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
-                    {{assgn.assignmentName}}
+                    {{sec.term}}{{sec.year}}{{sec.number}}
                   </span>
-                  <img src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
-                </div>
-                <div *ngIf="selectedAssignment != assgn" class="col p-2 sidebarHover w-50 btn blackText">
-                  <span>
-                    {{assgn.assignmentName}}
-                  </span>
+                  <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+                  <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn.id)">
+                    <div class="col p-2 sidebarHover w-50 btn blackText">
+                      <span>
+                        {{assgn.assignmentName}}
+                      </span>
+                      <img *ngIf="selectedAssignment == assgn" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+                    </div>
+                    <div class="row" (click)="newAssignment()">
+                      <div class="col p-2 sidebarHover w-50 btn blackText">
+                        <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newAssignment()">
+              <div class="row" (click)="newSection()">
                 <div class="col p-2 sidebarHover w-50 btn blackText">
                   <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
                 </div>
@@ -43,35 +52,39 @@
             </div>
           </div>
         </div>
-      </div>
-       <!-- here -->
-       <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newCourse()">
-        <div class="col p-2 sidebarHover w-50 btn blackText">
-          <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+        <div class="row" (click)="newCourse()">
+          <div class="col p-2 sidebarHover w-50 btn blackText">
+            <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+          </div>
         </div>
       </div>
-
-      
-      <!-- tohere -->
     </nav>
-    <!-- here -->
-    <div *ngIf="selectedCourse != null && selectedCourse.id == '-1'" class="col mw-100 mt-5">
-      <div class="container mt-5 shadow h-100">
-        <div class="row">
-          <div class="col">
-            <h1>New Course</h1>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <app-course-page [username]="username"
-                             [courseInfo]="selectedCourse"></app-course-page>
+
+    <!-- NavBar for Students-->
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark" *ngIf="group == 'STUDENT'">
+      <div class="container noselect mt-5">
+        <div class="row" *ngFor="let sec of Sections" (click)="selectedSection(sec.id)">
+          <div class="col p-2 sidebarHover w-50 btn blackText">
+            <span>
+              {{sec.term}}{{sec.year}}{{sec.number}}
+            </span>
+            <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+            <div *ngIf="selectedSection == sec">
+              <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn.id)">
+                <div class="col p-2 sidebarHover w-50 btn blackText">
+                  <span>
+                    {{assgn.assignmentName}}
+                  </span>
+                  <img *ngIf="selectedAssignment == assgn" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-<!-- tohere -->
+    </nav>
 
+    <!-- welcome page -->
     <div *ngIf="selectedAssignment == null && selectedCourse == null" class="col">
       <div class="container mt-5 shadow h-100">
         <div class="row">
@@ -87,92 +100,174 @@
       </div>
     </div>
 
-
-    <div *ngIf="selectedAssignment == null && selectedCourse != null  && courseChange == true" class="col mw-100 mt-5">
+    <!-- selected Course -->
+    <div *ngIf="selectedAssignment == null && selectedSection == null && selectedCourse != null" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">
             <div class="p-3 w-100">
-              <h1>
+              <h1 *ngIf="selectedCourse.id != '-1'">
                 {{selectedCourse.courseName | uppercase}}
+              </h1>
+              <h1 *ngIf="selectedCourse.id == '-1'">
+                New Course
               </h1>
             </div>
           </div>
         </div>
-        <div class="row" *ngFor="let assgn of assignments" (click)="selectedAssignment(assgn.id)">
-          <div *ngIf="selectedAssignment != assgn" class="col p-4 sidebarHover w-50 btn">
-            <span>
-              {{assgn.assignmentName}}
-            </span>
+        <div *ngIf="selectedCourse.id != '-1'">
+          <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+            <div class="col">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">View</a>
+                  <a *ngIf="this.change" class="nav-link" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">View</a>
+                </li>
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                  <a *ngIf="this.change" class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="tab-content show active">
+                <app-course-page *ngIf="!change"
+                                 [courseInfo]="selectedCourse">
+                </app-course-page>
+                <app-change-course-page *ngIf="change"
+                                        [username]="username"
+                                        [courseInfo]="selectedCourse">
+                </app-change-course-page>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'" (click)="newAssignment()">
-          <div class="col p-2 sidebarHover w-50 btn p-4">
-            <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+        <div *ngIf="selectedCourse.id == '-1'">
+          <div class="row">
+            <div class="col">
+              <div class="tab-content show active">
+                <app-change-course-page [username]="username"
+                                        [courseInfo]="selectedCourse">
+                </app-change-course-page>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- selected Section -->
+    <div *ngIf="selectedAssignment == null && selectedSection != null" class="col mw-100 mt-5">
+      <div class="container shadow h-100">
+        <div class="row">
+          <div class="col">
+            <div class="p-3 w-100">
+              <h1 *ngIf="selectedCourse.id != '-1'">
+                {{selectedSection.term}}{{selectedSection.year}}{{selectedSection.number}}
+              </h1>
+              <h1 *ngIf="selectedCourse.id == '-1'">
+                New Section
+              </h1>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedCourse.id != '-1'">
+          <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+            <div class="col">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">View</a>
+                  <a *ngIf="this.change" class="nav-link" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">View</a>
+                </li>
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                  <a *ngIf="this.change" class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="tab-content show active">
+                <app-section *ngIf="!change"
+                                 [sectionInfo]="selectedSection">
+                </app-section>
+                <app-change-section-page *ngIf="change"
+                                        [username]="username"
+                                        [sectionInfo]="selectedSection">
+                </app-change-section-page>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedSection.id == '-1'">
+          <div class="row">
+            <div class="col">
+              <div class="tab-content show active">
+                <app-change-section-page [username]="username"
+                                        [sectionInfo]="selectedSection">
+                </app-change-section-page>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div *ngIf="selectedAssignment != null && selectedAssignment.id == '-1'" class="col mw-100 mt-5">
+    <!-- selected Assignment -->
+    <div *ngIf="selectedAssignment != null" class="col mw-100 mt-5">
       <div class="container shadow h-100">
         <div class="row">
           <div class="col">
             <div class="p-3 w-100 d-block" style="height: 100px">
-              <h1>
+              <h1 *ngIf="selectedAssignment.id == '-1'">
                 {{selectedCourse.courseName | uppercase}}
               </h1>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <app-change-homework [courseName]="selectedCourse"
-                                 [userName]="username"
-                                 [assignmentInfo]="selectedAssignment"></app-change-homework>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="selectedAssignment != null && selectedAssignment.id != '-1'" class="col mw-100 mt-5">
-      <div class="container shadow h-100">
-        <div class="row">
-          <div class="col">
-            <div class="p-3 w-100">
-              <h1>
+              <h1 *ngIf="selectedAssignment.id != '-1'">
                 {{selectedCourse.courseName | uppercase}} - {{selectedAssignment.assignmentName | uppercase}}
               </h1>
             </div>
           </div>
         </div>
-        <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
-          <div class="col">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item noselect">
-                <a *ngIf="!this.change" class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
-                <a *ngIf="this.change" class="nav-link" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
-              </li>
-              <li class="nav-item noselect">
-                <a *ngIf="!this.change" class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
-                <a *ngIf="this.change" class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
-              </li>
-            </ul>
+        <div *ngIf="selectedAssignment.id != '-1'">
+          <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+            <div class="col">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
+                  <a *ngIf="this.change" class="nav-link" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">Run</a>
+                </li>
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                  <a *ngIf="this.change" class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="tab-content show active" id="myTabContent">
+                <app-homework-page id="runPage"
+                                   *ngIf="!change"
+                                   [username]="username"
+                                   [assignmentInfo]="selectedAssignment">
+                </app-homework-page>
+                <app-change-homework id="changePage" *ngIf="change"
+                                     [assignmentInfo]="selectedAssignment"
+                                     [courseName]="selectedCourse">
+                </app-change-homework>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <div class="tab-content show active" id="myTabContent">
-              <app-homework-page id="runPage"
-                                 *ngIf="!change"
-                                 [username]="username"
-                                 [assignmentInfo]="selectedAssignment">
-              </app-homework-page>
-              <app-change-homework id="changePage" *ngIf="change"
-                                 [assignmentInfo]="selectedAssignment"
-                                 [courseName]="selectedCourse">
-              </app-change-homework>
+        <div *ngIf="selectedAssignment.id == '-1'">
+          <div class="row">
+            <div class="col">
+              <app-change-homework [courseName]="selectedCourse"
+                                   [userName]="username"
+                                   [assignmentInfo]="selectedAssignment"></app-change-homework>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { CourseService } from '../services/course.service';
 import { ProfessorService } from '../services/professor.service';
 import { StudentService } from '../services/student.service';
 import { Assignment } from '../../models/assignment';
+import { Section } from '../../models/section';
 import { Course } from 'src/models/course';
 import { Professor } from '../../models/professor';
 import { ɵangular_packages_forms_forms_f } from '@angular/forms';
@@ -23,9 +24,10 @@ export class UserPageComponent implements OnInit {
   Courses: Course[] = [];
   selectedCourse: Course = null;
   selectedAssignment: Assignment = null;
+  selectedSection: Section = null;
   change: boolean = false;
-  courseChange: boolean = false;
   Assignments: Assignment[] = [];
+  Sections: Section[] = [];
   profToAdd: Professor;
 
   constructor(private authenticationService: AuthenticationService,
@@ -68,12 +70,11 @@ export class UserPageComponent implements OnInit {
   }
   getCourses(): void {
     this.courseService.getCourses().subscribe({
-      next: x => { this.Courses = x },
+      next: x => { this.Courses = x; console.log(x); },
       error: err => console.log("GET COURSES ERROR: " + err),
       complete: () => courses => this.Courses = courses
     });
   }
-
   selectCourse(givenCourse: Course) {
     if (this.selectedCourse == givenCourse) {
       this.selectedCourse = null;
@@ -85,13 +86,10 @@ export class UserPageComponent implements OnInit {
       this.getAssignmentsForSpecificCourse(givenCourse.courseName);
     }
   }
-
-
   newCourse() {
     this.selectedCourse = new Course();
     this.selectedCourse.id = "-1";
   }
-
   getAssignmentsForSpecificCourse(courseName: string): void {
     this.assignmentService.getAssignmentsForSpecificCourse(courseName).subscribe({
       next: x => { this.Assignments = x },
@@ -99,7 +97,6 @@ export class UserPageComponent implements OnInit {
       complete: () => assignments => this.Assignments = assignments
     });
   }
-
   selectAssignment(assignmentID: string) {
     var i = 0;
     for (i = 0; i < this.Assignments.length; i++) {
@@ -109,17 +106,27 @@ export class UserPageComponent implements OnInit {
       }
     }
   }
-
   newAssignment() {
     this.selectedAssignment = new Assignment();
     this.selectedAssignment.id = "-1";
 
   }
-
+  newSection() {
+    this.selectedSection = new Section();
+    this.selectedSection.id = "-1";
+  }
+  selectSection(sectionID: string) {
+    var i = 0;
+    for (i = 0; i < this.Sections.length; i++) {
+      if (this.Sections[i].id == sectionID) {
+        this.selectedSection = this.Sections[i];
+        this.changeChange(false)
+      }
+    }
+  }
   changeChange(bool: boolean) {
     this.change = bool;
   }
-
   logout() {
     this.username = null;
     this.selectedCourse = null;
@@ -129,7 +136,6 @@ export class UserPageComponent implements OnInit {
     this.authenticationService.logout();
     window.location.reload();
   }
-
   ngOnInit() {
     // const token = window.sessionStorage.token;
     // const decoded = this.decode(token);
