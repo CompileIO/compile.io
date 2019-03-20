@@ -1,6 +1,5 @@
 package compile_io.controllers;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import compile_io.mongo.models.Assignment;
-import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.AssignmentRepository;
 import compile_io.mongo.repositories.ProfessorRepository;
 import compile_io.storage.StorageService;

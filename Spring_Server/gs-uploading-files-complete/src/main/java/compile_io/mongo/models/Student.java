@@ -11,7 +11,9 @@ public class Student {
 	@Id
 	private String id;
 	
+	@DBRef
 	private List<Code> codes;
+	@DBRef
 	private List<Section> sections;
 	private String name;
 	private String userName;

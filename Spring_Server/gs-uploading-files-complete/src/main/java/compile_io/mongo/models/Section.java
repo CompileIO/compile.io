@@ -13,9 +13,11 @@ public class Section {
 	private int Year; //2019
 	private int Term; //1
 	private int sectionNumber;
+	@DBRef
 	private List<Student> students;
 	private boolean useClassDescription;
 	private String description;
+	@DBRef
 	private List<Assignment> assignments;
 	
 	public String getId() {

@@ -12,7 +12,8 @@ public class JavaBuilder extends AbstractBuilder {
         super(studentFiles, professorFiles);
     }
 
-    public String getDockerfileData() {
+
+	public String getDockerfileData() {
         StringBuilder dockerfileData = new StringBuilder();
         List<File> studentFiles = super.getStudentFiles();
         List<File> professorFiles = super.getProfessorFiles();

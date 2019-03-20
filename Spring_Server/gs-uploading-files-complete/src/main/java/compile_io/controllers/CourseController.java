@@ -1,7 +1,5 @@
 package compile_io.controllers;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Course;
-import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.CourseRepository;
 import compile_io.mongo.repositories.ProfessorRepository;
 
@@ -26,6 +23,7 @@ import compile_io.mongo.repositories.ProfessorRepository;
 public class CourseController {
 	
 	@Autowired
+	
     CourseRepository courseRepository;
 	
 	@Autowired
@@ -49,12 +47,6 @@ public class CourseController {
         return courseRepository.findById(id)
                 .map(course -> ResponseEntity.ok().body(course))
                 .orElse(ResponseEntity.notFound().build());
-    }
-	
-    @GetMapping("/Course/getInstructorCourses/{instructorName}")
-    public ResponseEntity<List<Course>> getAllCoursesForProfessor(@PathVariable("instructorName") String instructorName) {
-        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        return ResponseEntity.ok().body(courseRepository.findByInstructor(instructorName, sortByCreatedAtDesc));
     }
 	
 	@PostMapping("/Course/Create")
