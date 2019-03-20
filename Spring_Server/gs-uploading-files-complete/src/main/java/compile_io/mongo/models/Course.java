@@ -11,7 +11,9 @@ public class Course {
 	@Id
 	private String id;
 	private String courseName; 
+	@DBRef
 	private List<Professor> professors;
+	@DBRef
 	private List<Section> sections;
 	
 

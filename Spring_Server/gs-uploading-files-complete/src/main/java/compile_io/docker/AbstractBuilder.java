@@ -30,7 +30,8 @@ public abstract class AbstractBuilder {
         System.out.println("Files received. Target directory: " + this.workingDirectory);
     }
 
-    public void buildContainer() {
+
+	public void buildContainer() {
         System.out.print("Attempting to build docker container...");
         String[] command = {"docker", "build", "-t", "compile-io-image", this.workingDirectory};
         System.out.println(this.executer.executeCommand(command));

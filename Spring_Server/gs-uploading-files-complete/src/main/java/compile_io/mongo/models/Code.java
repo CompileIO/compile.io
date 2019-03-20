@@ -28,18 +28,19 @@ public class Code {
     	super();
     }
     
-    public Code(String language, int runTime, String codePath, LocalTime submissionTime, String givenAssignmentId, String userName) {
-    	super();
-		this.language = language;
-		this.runTime = runTime;
-		this.codePath = codePath;
-		this.submissionTime = submissionTime;
-		//add submission Attempts
-		this.assignmentId = givenAssignmentId;
-		this.userName = userName;
-		this.testResponses = new ArrayList<String>();
-	}
-    public String getId() {
+//    public Code(String language, int runTime, String codePath, LocalTime submissionTime, String givenAssignmentId, String userName) {
+//    	super();
+//		this.language = language;
+//		this.runTime = runTime;
+//		this.codePath = codePath;
+//		this.submissionTime = submissionTime;
+//		//add submission Attempts
+//		this.assignmentId = givenAssignmentId;
+//		this.userName = userName;
+//		this.testResponses = new ArrayList<String>();
+//	}
+
+	public String getId() {
 		return id;
 	}
 

@@ -1,16 +1,11 @@
 package compile_io.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,25 +14,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import compile_io.docker.*;
 import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Code;
-import compile_io.mongo.models.Course;
-import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.AssignmentRepository;
 import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,7 +95,13 @@ public class CodeController {
 		System.out.println("\n\n\n\n\n" + this.codePath + "\n\n\n\n\n");
 		int runTimeNum = Integer.parseInt(runTime);
 		LocalTime submissionTime = LocalTime.now();
-		Code newCode = new Code(type, runTimeNum, this.codePath, submissionTime, givenAssignmentId, userName);
+		Code newCode = new Code();
+		newCode.setLanguage(type);
+		newCode.setRunTime(runTimeNum);
+		newCode.setCodePath(this.codePath);
+		newCode.setSubmissionTime(submissionTime);
+		newCode.setAssignmentId(givenAssignmentId);
+		newCode.setUserName(userName);
 		// Docker stuff
 		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath));
 
