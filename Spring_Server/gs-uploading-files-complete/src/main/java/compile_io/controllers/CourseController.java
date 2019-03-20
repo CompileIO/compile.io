@@ -71,11 +71,10 @@ public class CourseController {
     	System.out.println(course.toString());
     	return courseRepository.findById(id)
                 .map(courseData -> {
-                	courseData.setCrn(course.getCrn());
+                	courseData.setAssignments(course.getAssignments());
+                	courseData.setProfessors(course.getProfessors());
                 	courseData.setCourseName(course.getCourseName());
-                	courseData.setInstructor(course.getInstructor());
-                	courseData.setSectionNumber(course.getSectionNumber());
-                	courseData.setStudents(course.getStudents());
+                	courseData.setSections(course.getSections());
                     Course updatedCourse = courseRepository.save(courseData);
                     System.out.println("\n\n\n\n\n Course Updated: " + updatedCourse.toString() + "\n\n\n\n\n");
                     return ResponseEntity.ok().body(updatedCourse);
@@ -88,10 +87,10 @@ public class CourseController {
         return courseRepository.findById(id)
                 .map(course -> {
                 	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-                	List<Professor> newProfessors = professorRepository.findByuserName(course.getInstructor().getUserName(), sortByCreatedAtDesc);
-                	Professor newProf = newProfessors.get(0);
-                	newProf.deleteCourse(course);
-                	professorRepository.save(newProf);
+//                	List<Professor> newProfessors = professorRepository.findByuserName(course.getInstructor().getUserName(), sortByCreatedAtDesc);
+//                	Professor newProf = newProfessors.get(0);
+//                	newProf.deleteCourse(course);
+//                	professorRepository.save(newProf);
                     courseRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a course");
                 }).orElse(ResponseEntity.notFound().build());

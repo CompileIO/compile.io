@@ -12,10 +12,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +29,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import compile_io.docker.*;
 import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Code;
+import compile_io.mongo.models.Course;
+import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.AssignmentRepository;
 import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
@@ -36,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 @RestController
 public class CodeController {
@@ -140,5 +146,45 @@ public class CodeController {
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return ResponseEntity.notFound().build();
 	}
+	
+	@PostMapping("/Code/Create")
+    public ResponseEntity<String> createCode(@Valid @RequestBody Code code) {  
+    	codeRepository.save(code);
+    	System.out.println("\n\n\n\n\n Code Created: " + code.toString() + "\n\n\n\n\n");
+        return ResponseEntity.ok().body("uploaded Code: " + code.toString());
+    } 
+    
+
+    @PutMapping(value="/Code/Update/{id}")
+    public ResponseEntity<Code> updateCode(@PathVariable("id") String id,
+                                           @Valid @RequestBody Code code) {
+    	System.out.println(code.toString());
+    	return codeRepository.findById(id)
+                .map(codeData -> {
+                	codeData.setAssignmentId(code.getAssignmentId());
+                	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
+                	codeData.setCodePath(code.getCodePath());
+                	codeData.setGrade(code.getGrade());
+                	codeData.setLanguage(code.getLanguage());
+                	codeData.setRunTime(code.getRunTime());
+                	codeData.setSubmissionTime(code.getSubmissionTime());
+                	codeData.setTestResponses(code.getTestResponse());
+                	codeData.setUserName(code.getUserName());
+                    Code updatedCode = codeRepository.save(codeData);
+                    System.out.println("\n\n\n\n\n Code Updated: " + updatedCode.toString() + "\n\n\n\n\n");
+                    return ResponseEntity.ok().body(updatedCode);
+                }).orElse(ResponseEntity.notFound().build());							
+     
+    }
+
+    @DeleteMapping(value="/Code/Delete/{id}")
+    public ResponseEntity<?> deleteCode(@PathVariable("id") String id) {
+        return codeRepository.findById(id)
+                .map(code -> {
+                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                    codeRepository.deleteById(id);
+                    return ResponseEntity.ok().body("Deleted a code");
+                }).orElse(ResponseEntity.notFound().build());
+    }
 
 }

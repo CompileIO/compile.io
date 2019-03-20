@@ -1,6 +1,5 @@
 package compile_io.mongo.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -12,22 +11,11 @@ public class Course {
 	@Id
 	private String id;
 	private String courseName; 
-	private int crn;
-	private int sectionNumber;
-	@DBRef
-	private Professor instructor;
-	@DBRef
-	private List<Student> students;
+	private List<Professor> professors;
+	private List<Section> sections;
 	
-	
-//	public Course(String courseName, int crn, int sectionNumber, String instructorName) {
-//		super();
-//		this.courseName = courseName;
-//		this.crn = crn;
-//		this.sectionNumber = sectionNumber;
-//		this.instructor.setName(instructorName);
-//		this.students = new ArrayList<Student>();
-//	}
+
+	private List<Assignment> assignments;
 	
 	public Course() {
 		super();
@@ -41,7 +29,6 @@ public class Course {
 		this.id = id;
 	}
 
-
 	public String getCourseName() {
 		return courseName;
 	}
@@ -50,53 +37,76 @@ public class Course {
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
 	}
-
-
-	public int getCrn() {
-		return crn;
+	
+	public void addProfessor(Professor newprofessor) {
+		this.professors.add(newprofessor);
+	}
+	
+	public void deleteProfessor (Professor newprofessor) {
+		for(Professor professor : this.professors) {
+			if(newprofessor == professor) {
+				this.professors.remove(professor);
+			}
+		}
+	}
+	
+	public List<Professor> getProfessors() {
+		return professors;
 	}
 
-
-	public void setCrn(int crn) {
-		this.crn = crn;
+	public void setProfessors(List<Professor> professors) {
+		this.professors = professors;
+	}
+	
+	public void addSection(Section newSection) {
+		this.sections.add(newSection);
+	}
+	
+	public void deleteSection (Section newSection) {
+		for(Section section : this.sections) {
+			if(newSection == section) {
+				this.sections.remove(section);
+			}
+		}
 	}
 
-
-	public int getSectionNumber() {
-		return sectionNumber;
+	public List<Section> getSections() {
+		return sections;
 	}
 
-
-	public void setSectionNumber(int sectionNumber) {
-		this.sectionNumber = sectionNumber;
+	public void setSections(List<Section> sections) {
+		this.sections = sections;
+	}
+	
+	public void addAssignment(Assignment newAssignment) {
+		this.assignments.add(newAssignment);
+	}
+	
+	public void deleteAssignment (Assignment newAssignment) {
+		for(Assignment professor : this.assignments) {
+			if(newAssignment == professor) {
+				this.assignments.remove(professor);
+			}
+		}
 	}
 
-
-	public Professor getInstructor() {
-		return instructor;
+	public List<Assignment> getAssignments() {
+		return assignments;
 	}
 
-
-	public void setInstructor(Professor instructor) {
-		this.instructor = instructor;
+	public void setAssignments(List<Assignment> assignments) {
+		this.assignments = assignments;
 	}
-
-
-	public List<Student> getStudents() {
-		return students;
-	}
-
-
-	public void setStudents(List<Student> students) {
-		this.students = students;
-	}
-
 
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", courseName=" + courseName + ", crn=" + crn + ", sectionNumber=" + sectionNumber
-				+ ", instructor=" + instructor + ", students=" + students + "]";
+		return "Course [id=" + id + ", courseName=" + courseName + ", professors=" + professors + ", sections="
+				+ sections + ", assignments=" + assignments + "]";
 	}
+
+	
+	
+	
 	
 	
 	

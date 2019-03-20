@@ -13,7 +13,6 @@ public class Professor {
 	private String name;
 	private String userName;
     private List<Course> courses;
-    private List<Assignment> assignments;
 
     public Professor() {
     	super();
@@ -63,30 +62,10 @@ public class Professor {
 		this.courses = courses;
 	}
 	
-	public void addAssignment(Assignment newAssignment) {
-		this.assignments.add(newAssignment);
-	}
-	
-	public void deleteAssignment (Assignment newAssignment) {
-		for(Assignment assignment : this.assignments) {
-			if(newAssignment == assignment) {
-				this.assignments.remove(assignment);
-			}
-		}
-	}
-
-	public List<Assignment> getAssignments() {
-		return this.assignments;
-	}
-
-	public void setAssignments(List<Assignment> assignments) {
-		this.assignments = assignments;
-	}
 
 	@Override
 	public String toString() {
-		return "Professor [id=" + id + ", name=" + name + ", userName=" + userName + ", courses=" + courses
-				+ ", assignments=" + assignments + "]";
+		return "Professor [id=" + id + ", name=" + name + ", userName=" + userName + ", courses=" + courses + "]";
 	}
 
 }

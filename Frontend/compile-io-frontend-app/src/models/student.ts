@@ -1,11 +1,11 @@
 import { Code } from './code';
-import { Course } from './course';
+import { Section } from './section';
 
 export class Student {
     id: string;
     name: string;
     userName: string;
-    courses: Course[];
+    sections: Section[];
     codes: Code[] ;
 
 }

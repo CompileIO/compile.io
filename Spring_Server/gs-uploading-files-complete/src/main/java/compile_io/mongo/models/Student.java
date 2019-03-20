@@ -5,28 +5,21 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document 
+@Document(collection="Student") 
 public class Student {
 
 	@Id
 	private String id;
 	
-	@DBRef
 	private List<Code> codes;
-	@DBRef
-	private List<Course> courses;
+	private List<Section> sections;
 	private String name;
 	private String userName;
 
     public Student() {
     	super();
     }
-
-//	public Student(String name, String userName) {
-//		super();
-//		this.name = name;
-//		this.userName = userName;
-//	}
+    
     public String getId() {
 		return id;
 	}
@@ -71,24 +64,24 @@ public class Student {
 		this.codes = codes;
 	}
 	
-	public void addCourse(Course newCourse) {
-		this.courses.add(newCourse);
+	public void addSection(Section newSection) {
+		this.sections.add(newSection);
 	}
 	
-	public void deleteCourse (Course newCourse) {
-		for(Course course : this.courses) {
-			if(newCourse == course) {
-				this.courses.remove(course);
+	public void deleteSection (Section newSection) {
+		for(Section section : this.sections) {
+			if(newSection == section) {
+				this.sections.remove(section);
 			}
 		}
 	}
 
-	public List<Course> getCourses() {
-		return courses;
+	public List<Section> getSections() {
+		return sections;
 	}
 
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
+	public void setSections(List<Section> sections) {
+		this.sections = sections;
 	}
 
 	@Override

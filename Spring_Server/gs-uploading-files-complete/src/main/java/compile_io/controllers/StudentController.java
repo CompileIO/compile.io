@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import compile_io.mongo.models.Professor;
 import compile_io.mongo.models.Student;
 import compile_io.mongo.repositories.StudentRepository;
 
@@ -24,9 +25,9 @@ public class StudentController{
 	public StudentRepository studentRepository;
 	
 	@GetMapping("/Students")
-	public List<Student> getStudents() {
+	public ResponseEntity<List<Student>> getStudents() {
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        return studentRepository.findAll(sortByCreatedAtDesc);
+        return ResponseEntity.ok().body(studentRepository.findAll(sortByCreatedAtDesc));
 	}
     
     @GetMapping(value="/Student/{id}")
@@ -35,13 +36,16 @@ public class StudentController{
                 .map(student -> ResponseEntity.ok().body(student))
                 .orElse(ResponseEntity.notFound().build());
     }
-	
-//    @GetMapping("/Student/getInstructorCourses/{instructorName}")
-//    public ResponseEntity<List<Course>> getAllCoursesForStudent(@PathVariable("instructorName") String instructorName) {
-//        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-//        return ResponseEntity.ok().body(courseRepository.findByInstructor(instructorName, sortByCreatedAtDesc));
-//    }
-	
+    
+    @GetMapping(value="/Student/Username/{username}")
+    public ResponseEntity<Student> getProfessorByUsername(@PathVariable("username") String username) {
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+        List<Student> students = studentRepository.findByuserName(username, sortByCreatedAtDesc);
+        if(students.isEmpty()) {
+        	return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(students.get(0));
+    }
 	@PostMapping("/Student/Create")
     public ResponseEntity<String> createStudent(@Valid @RequestBody Student student) {   
     	System.out.println("\n\n\n\n\n Student Created: " + student.toString() + "\n\n\n\n\n");
@@ -57,6 +61,9 @@ public class StudentController{
     	return studentRepository.findById(id)
                 .map(studentData -> {
                 	studentData.setName(student.getName());
+                	studentData.setCodes(student.getCodes());
+                	studentData.setSections(student.getSections());
+                	student.setUserName(student.getUserName());
                 	Student updatedStudent = studentRepository.save(studentData);
                     System.out.println("\n\n\n\n\n Student Updated: " + updatedStudent.toString() + "\n\n\n\n\n");
                     return ResponseEntity.ok().body(updatedStudent);

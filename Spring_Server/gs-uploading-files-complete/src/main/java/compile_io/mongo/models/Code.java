@@ -8,13 +8,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Document
+@Document(collection="Code") 
 public class Code {
 	@Id
 	private String id;
 
 	private String language;
 	private int runTime;
+	private int submissionAttempts;//change
     private List<String> testResponses;
     private String codePath;
     private String assignmentId;
@@ -23,12 +24,17 @@ public class Code {
     private LocalTime submissionTime;
     private String grade;
     
+    public Code() {
+    	super();
+    }
+    
     public Code(String language, int runTime, String codePath, LocalTime submissionTime, String givenAssignmentId, String userName) {
     	super();
 		this.language = language;
 		this.runTime = runTime;
 		this.codePath = codePath;
 		this.submissionTime = submissionTime;
+		//add submission Attempts
 		this.assignmentId = givenAssignmentId;
 		this.userName = userName;
 		this.testResponses = new ArrayList<String>();
@@ -42,6 +48,8 @@ public class Code {
 	}
 
     
+
+
 	public String getAssignmentId() {
 		return assignmentId;
 	}
@@ -62,15 +70,35 @@ public class Code {
 	public void setRunTime(int runTime) {
 		this.runTime = runTime;
 	}
+	
+	public void addTestResponse(String testResponse) {
+		this.testResponses.add(testResponse);
+	}
+	
 	public List<String> getTestResponse() {
 		return testResponses;
 	}
-	public void addTestResponse(String testResponse) {
-		this.testResponses.add(testResponse);
+	
+	public int getSubmissionAttempts() {
+		return submissionAttempts;
+	}
+
+	public void setSubmissionAttempts(int submissionAttempts) {
+		this.submissionAttempts = submissionAttempts;
+	}
+
+	public List<String> getTestResponses() {
+		return testResponses;
+	}
+
+	public void setTestResponses(List<String> testResponses) {
+		this.testResponses = testResponses;
 	}
 	public LocalTime getSubmissionTime() {
 		return submissionTime;
 	}
+	
+	
 	public void setSubmissionTime(LocalTime submissionTime) {
 		this.submissionTime = submissionTime;
 	}

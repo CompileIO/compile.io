@@ -61,7 +61,6 @@ public class ProfessorController{
     	System.out.println("\n\n\n\n\n Updating this professor: " +professor.toString()+ "\n\n\n\n\n");
     	return professorRepository.findById(id)
                 .map(professorData -> {
-                	professorData.setAssignments(professor.getAssignments());
                 	professorData.setCourses(professor.getCourses());
                 	professorData.setName(professor.getName());
                 	professorData.setUserName(professor.getUserName());

@@ -1,11 +1,13 @@
+import { Student } from './student';
 import { Assignment } from './assignment';
-import { Course } from './course';
-
 export class Section {
-  id: string;
-  number: string;
-  term: string;
-  year: string;
-  course: Course;
-  assignments: Assignment[];
+    id: string;
+	Year: number; //2019
+	Term: number; //1
+	sectionNumber: number ;
+	students: Student[];
+	useClassDescription: boolean ;
+	description: string ;
+	assignments: Assignment[];
+
 }
