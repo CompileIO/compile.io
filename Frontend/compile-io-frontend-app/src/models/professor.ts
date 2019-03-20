@@ -1,4 +1,3 @@
-import { Assignment } from './assignment';
 import { Course } from './course';
 
 export class Professor {
@@ -6,6 +5,4 @@ export class Professor {
     name: string;
     userName: string;
     courses: Course[];
-    assignments: Assignment[] ;
-
 }

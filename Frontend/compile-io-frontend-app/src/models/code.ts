@@ -5,9 +5,15 @@ export class Code {
     id: string;
     language: string;
     runTime: number;
+    submissionAttempts: number;
     testResponses: string [];
     codePath: string;
-    Assignment: Assignment;
+    Assignment: Assignment; // supposed to be private String assignmentId;
+    userName: string ; //currently don't use this
     submisstionTime:Time;
     grade: string;
+
+
+    
+    
 }

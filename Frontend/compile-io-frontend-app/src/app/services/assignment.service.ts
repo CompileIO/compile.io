@@ -38,18 +38,18 @@ export class AssignmentService {
 
   createAssignment(assignmentData: Assignment) {
     const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
-    console.log("Inside the create Assignment Method: " + "\n" + 
-    "ID: " + assignmentData.id + "\n" +
-    "Course Name: " + assignmentData.courseName + "\n" +
-    "Assignment Name: " + assignmentData.assignmentName + "\n" +
-    "Timeout: " + assignmentData.timeout + "\n" +
-    "language: " + assignmentData.language + "\n" +
-    "Size: " + assignmentData.size + "\n" +
-    "tries: " + assignmentData.tries + "\n" +
-    "start date: " + assignmentData.startDate + "\n" +
-    "start time: " + assignmentData.startTime + "\n" +
-    "end date: " + assignmentData.endDate + "\n" +
-    "end time: " + assignmentData.endTime);
+    // console.log("Inside the create Assignment Method: " + "\n" + 
+    // "ID: " + assignmentData.id + "\n" +
+    // "Course Name: " + assignmentData.courseName + "\n" +
+    // "Assignment Name: " + assignmentData.assignmentName + "\n" +
+    // "Timeout: " + assignmentData.timeout + "\n" +
+    // "language: " + assignmentData.language + "\n" +
+    // "Size: " + assignmentData.size + "\n" +
+    // "tries: " + assignmentData.tries + "\n" +
+    // "start date: " + assignmentData.startDate + "\n" +
+    // "start time: " + assignmentData.startTime + "\n" +
+    // "end date: " + assignmentData.endDate + "\n" +
+    // "end time: " + assignmentData.endTime);
     return this.http.post(this.apiUrl + '/Assignment/Create' , assignmentData, { headers: headers, withCredentials: true })
   }
 

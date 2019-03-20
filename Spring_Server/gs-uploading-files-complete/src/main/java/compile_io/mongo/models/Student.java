@@ -5,15 +5,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document 
+@Document(collection="Student") 
 public class Student {
 
 	@Id
 	private String id;
 	
-	@DBRef
 	private List<Code> codes;
-	@DBRef
 	private List<Section> sections;
 	private String name;
 	private String userName;

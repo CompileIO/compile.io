@@ -1,12 +1,9 @@
 import { Professor } from './professor';
-import { Student } from './student';
+import { Section } from './section';
 export class Course {
     id: string;
     courseName: string;
-	crn: number;
-	
-    sectionNumber: number;
-	instructor: Professor;
-	students: Student[];
+	professors: Professor[];
+    sections: Section[];
     
 }
