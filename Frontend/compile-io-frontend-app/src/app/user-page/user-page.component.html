@@ -159,7 +159,62 @@
     </div>
 
     <!-- selected Section -->
-
+    <div *ngIf="selectedAssignment == null && selectedSection != null" class="col mw-100 mt-5">
+      <div class="container shadow h-100">
+        <div class="row">
+          <div class="col">
+            <div class="p-3 w-100">
+              <h1 *ngIf="selectedCourse.id != '-1'">
+                {{selectedSection.term}}{{selectedSection.year}}{{selectedSection.number}}
+              </h1>
+              <h1 *ngIf="selectedCourse.id == '-1'">
+                New Section
+              </h1>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedCourse.id != '-1'">
+          <div class="row" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+            <div class="col">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">View</a>
+                  <a *ngIf="this.change" class="nav-link" id="profile-tab" data-toggle="tab" role="tab" aria-controls="runPage" aria-selected="false" (click)="changeChange(false)">View</a>
+                </li>
+                <li class="nav-item noselect">
+                  <a *ngIf="!this.change" class="nav-link" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                  <a *ngIf="this.change" class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="changePage" aria-selected="true" (click)="changeChange(true)">Change</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="tab-content show active">
+                <app-section *ngIf="!change"
+                                 [sectionInfo]="selectedSection">
+                </app-section>
+                <app-change-section-page *ngIf="change"
+                                        [username]="username"
+                                        [sectionInfo]="selectedSection">
+                </app-change-section-page>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedSection.id == '-1'">
+          <div class="row">
+            <div class="col">
+              <div class="tab-content show active">
+                <app-change-section-page [username]="username"
+                                        [sectionInfo]="selectedSection">
+                </app-change-section-page>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- selected Assignment -->
     <div *ngIf="selectedAssignment != null" class="col mw-100 mt-5">

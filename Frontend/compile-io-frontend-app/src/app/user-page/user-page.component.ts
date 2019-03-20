@@ -24,6 +24,7 @@ export class UserPageComponent implements OnInit {
   Courses: Course[] = [];
   selectedCourse: Course = null;
   selectedAssignment: Assignment = null;
+  selectedSection: Section = null;
   change: boolean = false;
   Assignments: Assignment[] = [];
   Sections: Section[] = [];
@@ -111,10 +112,17 @@ export class UserPageComponent implements OnInit {
 
   }
   newSection() {
-    //TODO
+    this.selectedSection = new Section();
+    this.selectedSection.id = "-1";
   }
   selectSection(sectionID: string) {
-    //TODO
+    var i = 0;
+    for (i = 0; i < this.Sections.length; i++) {
+      if (this.Sections[i].id == sectionID) {
+        this.selectedSection = this.Sections[i];
+        this.changeChange(false)
+      }
+    }
   }
   changeChange(bool: boolean) {
     this.change = bool;

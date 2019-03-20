@@ -80,10 +80,13 @@ export class ChangeCoursePageComponent implements OnInit {
     this.newCourse = new Course();
     if (this.courseInfo.id != '-1') {
       this.newCourse.courseName = this.courseInfo.courseName;
-      this.newCourse.crn = this.courseInfo.crn;
-      this.newCourse.sectionNumber = this.courseInfo.sectionNumber;
+      this.newCourse.professors = this.courseInfo.professors;
+      this.newCourse.description = this.courseInfo.description;
+      this.newCourse.id = this.courseInfo.id; 
+      //this.newCourse.crn = this.courseInfo.crn;
+      //this.newCourse.sectionNumber = this.courseInfo.sectionNumber;
       this.newCourse.instructor = this.courseInfo.instructor;
-      this.newCourse.students = this.courseInfo.students;
+      //this.newCourse.students = this.courseInfo.students;
     }
   }
 

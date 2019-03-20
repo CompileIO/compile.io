@@ -14,6 +14,7 @@ import { ChangeHomeworkComponent } from './change-homework/change-homework.compo
 import { CoursePageComponent } from './course-page/course-page.component';
 import { SectionComponent } from './section/section.component';
 import { ChangeCoursePageComponent } from './change-course-page/change-course-page.component';
+import { ChangeSectionPageComponent } from './change-section-page/change-section-page.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ChangeCoursePageComponent } from './change-course-page/change-course-pa
     ChangeHomeworkComponent,
     CoursePageComponent,
     SectionComponent,
-    ChangeCoursePageComponent
+    ChangeCoursePageComponent,
+    ChangeSectionPageComponent
   ],
   imports: [
     BrowserModule,
