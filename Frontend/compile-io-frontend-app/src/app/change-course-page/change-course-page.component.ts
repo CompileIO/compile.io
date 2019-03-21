@@ -36,7 +36,7 @@ export class ChangeCoursePageComponent implements OnInit {
           console.log("GET PROFESSOR BY USERNAME ERROR: " + err)
         },
         complete: () => this.professorService.updateProfessor(this.prof).subscribe({
-          next: x => { this.newCourse.instructor = x },
+          next: x => { this.newCourse.professors = x },
           error: err => {
             console.log("UPDATING PROFESSOR ERROR: " + err)
           },
@@ -85,7 +85,7 @@ export class ChangeCoursePageComponent implements OnInit {
       this.newCourse.id = this.courseInfo.id; 
       //this.newCourse.crn = this.courseInfo.crn;
       //this.newCourse.sectionNumber = this.courseInfo.sectionNumber;
-      this.newCourse.instructor = this.courseInfo.instructor;
+      this.newCourse.professors = this.courseInfo.professors;
       //this.newCourse.students = this.courseInfo.students;
     }
   }

@@ -15,7 +15,16 @@ public class Course {
 	private List<Professor> professors;
 	@DBRef
 	private List<Section> sections;
+	private String description;
 	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	private List<Assignment> assignments;
 	
@@ -103,8 +112,10 @@ public class Course {
 	@Override
 	public String toString() {
 		return "Course [id=" + id + ", courseName=" + courseName + ", professors=" + professors + ", sections="
-				+ sections + ", assignments=" + assignments + "]";
+				+ sections + ", description=" + description + ", assignments=" + assignments + "]";
 	}
+
+	
 
 	
 	

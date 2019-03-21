@@ -66,6 +66,7 @@ public class CourseController {
                 	courseData.setAssignments(course.getAssignments());
                 	courseData.setProfessors(course.getProfessors());
                 	courseData.setCourseName(course.getCourseName());
+                	courseData.setDescription(course.getDescription());
                 	courseData.setSections(course.getSections());
                     Course updatedCourse = courseRepository.save(courseData);
                     System.out.println("\n\n\n\n\n Course Updated: " + updatedCourse.toString() + "\n\n\n\n\n");
