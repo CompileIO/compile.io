@@ -1,3 +1,55 @@
-<p>
-  change-section-page works!
-</p>
+<div class="container w-100 d-block">
+  <div class="row justify-content-center mt-2">
+    <div class="col">
+      <form #form="ngForm" ngNativeValidate (ngSubmit)="submitForm(form.value)" class="w-100 p-3">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left">Year</label>
+                <input type="number" class="form-control" name="year" #year placeholder="2019" [(ngModel)]="newSection.Year" required>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left">Term</label>
+                <input type="number" class="form-control" name="term" #term [(ngModel)]="newSection.term" placeholder="1" required>
+                <small class="form-text text-muted float-left">1 = fall, 2 = winter, 3 = spring, 4 = summer</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left">Section Number</label>
+                <input type="number" class="form-control" name="num" #num [(ngModel)]="newSection.sectionNumber" placeholder="01" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left">Students</label>
+                <!--<input type="date" class="form-control" name="endDate" #endDate [(ngModel)]="givenEndDate" required>-->
+                <small class="form-text text-muted float-left">Add this please</small>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check p-3">
+                <label class="float-left">Use Course Description</label>
+                <input type="button" class="form-control" name="ucd" #ucd [(ngModel)]="newAssignment.useClassDescription" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col p-3">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <!--<button *ngIf="readyToSubmit()" type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
+
+              <button *ngIf="!readyToSubmit()" disabled type="submit" class="btn btn-primary" (click)="submit()">Submit</button>-->
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
