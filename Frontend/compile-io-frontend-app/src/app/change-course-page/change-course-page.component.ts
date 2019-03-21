@@ -54,8 +54,7 @@ export class ChangeCoursePageComponent implements OnInit {
           })
         })
       });
-
-
+      
     }
     else {
       this.newCourse.id = this.courseInfo.id;

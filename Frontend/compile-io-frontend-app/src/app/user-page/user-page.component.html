@@ -196,7 +196,8 @@
                 </app-section>
                 <app-change-section-page *ngIf="this.change"
                                         [username]="username"
-                                        [sectionInfo]="selectedSection">
+                                        [sectionInfo]="selectedSection"
+                                        [courseInfo]="selectedCourse">
                 </app-change-section-page>
               </div>
             </div>
@@ -207,7 +208,8 @@
             <div class="col">
               <div class="tab-content show active">
                 <app-change-section-page [username]="username"
-                                        [sectionInfo]="selectedSection">
+                                         [sectionInfo]="selectedSection"
+                                         [courseInfo]="selectedCourse">
                 </app-change-section-page>
               </div>
             </div>
