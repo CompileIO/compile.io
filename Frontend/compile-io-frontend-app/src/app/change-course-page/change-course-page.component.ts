@@ -12,7 +12,7 @@ import { Professor } from 'src/models/professor';
 export class ChangeCoursePageComponent implements OnInit {
   @Input() username: string;
   @Input() courseInfo: Course;
-  prof: Professor;
+  @Input() prof: Professor;
   newCourse: Course;
   constructor(private courseService: CourseService, private professorService: ProfessorService) {
   }
@@ -25,18 +25,24 @@ export class ChangeCoursePageComponent implements OnInit {
   submit() {
     if (this.courseInfo.id == "-1") {
       console.log(this.newCourse.courseName);
+      this.newCourse.sections = [];
+      this.newCourse.professors = [];
+      this.newCourse.id = "-1";
       //add course to professor
-      this.professorService.getProfessorbyUsername(this.username).subscribe({
-        next: x => {
-          this.prof = x
-          this.prof.courses = [];
-          this.prof.courses.push(this.newCourse);
-        },
-        error: err => {
-          console.log("GET PROFESSOR BY USERNAME ERROR: " + err)
-        },
-        complete: () => this.professorService.updateProfessor(this.prof).subscribe({
-          next: x => { this.newCourse.professors = x },
+      // this.professorService.getProfessorbyUsername(this.username).subscribe({
+      //   next: x => {
+      //     this.prof = x
+      //     this.prof.courses = [];
+      //     this.prof.courses.push(this.newCourse);
+      //   },
+      //   error: err => {
+      //     console.log("GET PROFESSOR BY USERNAME ERROR: " + err)
+      //   },
+      //   complete: () => 
+      // this.prof.courses = [];
+      this.prof.courses.push(this.newCourse);
+        this.professorService.updateProfessor(this.prof).subscribe({
+          next: x => { this.newCourse.professors.push(x) },
           error: err => {
             console.log("UPDATING PROFESSOR ERROR: " + err)
           },
@@ -52,9 +58,7 @@ export class ChangeCoursePageComponent implements OnInit {
               console.log("Added Course Complete")
             }
           })
-        })
-      });
-      
+        });
     }
     else {
       this.newCourse.id = this.courseInfo.id;

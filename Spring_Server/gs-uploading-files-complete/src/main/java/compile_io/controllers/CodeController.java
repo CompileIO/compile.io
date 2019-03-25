@@ -88,7 +88,7 @@ public class CodeController {
 		String assignmentFilepath = assignmentToRun.get().getFilePath();
 		Path studentDir = Paths
 				.get("upload-dir/" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "/"
-						+ assignmentToRun.get().getassignmentName().replaceAll(" ", "_").toLowerCase()
+						+ assignmentToRun.get().getAssignmentName().replaceAll(" ", "_").toLowerCase()
 						+ "/student-files/" + userName.replaceAll(" ", "_").toLowerCase());
 		
 		this.codePath = studentDir.toString();

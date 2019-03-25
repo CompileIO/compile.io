@@ -49,7 +49,7 @@ public class Assignment {
 		this.id = id;
 	}
 
-	public String getassignmentName() {
+	public String getAssignmentName() {
 		return assignmentName;
 	}
 
@@ -164,9 +164,6 @@ public class Assignment {
 		this.availableToOtherSections = availableToOtherSections;
 	}
 
-	public String getAssignmentName() {
-		return assignmentName;
-	}
 
 	@Override
 	public String toString() {

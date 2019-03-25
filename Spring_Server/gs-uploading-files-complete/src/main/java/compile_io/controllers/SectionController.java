@@ -48,10 +48,11 @@ public class SectionController {
 //    }
 	
 	@PostMapping("/Section/Create")
-    public ResponseEntity<String> createSection(@Valid @RequestBody Section section) {  
-    	sectionRepository.save(section);
-    	System.out.println("\n\n\n\n\n section Created: " + section.toString() + "\n\n\n\n\n");
-        return ResponseEntity.ok().body("uploaded section: " + section.toString());
+    public ResponseEntity<Section> createSection(@Valid @RequestBody Section section) {  
+		System.out.println("Inside create section with: " + section.toString());
+    	Section sectionAdded = sectionRepository.save(section);
+    	System.out.println("\n\n\n\n\n section Created: " + sectionAdded.toString() + "\n\n\n\n\n");
+        return ResponseEntity.ok().body(sectionAdded);
     } 
     
 

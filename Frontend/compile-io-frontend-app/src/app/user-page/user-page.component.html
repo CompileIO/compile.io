@@ -23,7 +23,7 @@
               <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedCourse == co && selectedAssignment == assgn" alt="left" class="smicon" />
             </div>
             <div class="container" *ngIf="selectedCourse == co">
-              <div class="row" *ngFor="let sec of Sections" (click)="selectedSection(sec)">
+              <div class="row" *ngFor="let sec of Sections" (click)="selectSection(sec)">
                 <div class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
                     {{sec.term}}{{sec.year}}{{sec.number}}
@@ -63,7 +63,7 @@
     <!-- NavBar for Students-->
     <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark" *ngIf="group == 'STUDENT'">
       <div class="container noselect mt-5">
-        <div class="row" *ngFor="let sec of Sections" (click)="selectedSection(sec)">
+        <div class="row" *ngFor="let sec of Sections" (click)="selectSection(sec)">
           <div class="col p-2 sidebarHover w-50 btn blackText">
             <span>
               {{sec.term}}{{sec.year}}{{sec.number}}
@@ -138,7 +138,8 @@
                 </app-course-page>
                 <app-change-course-page *ngIf="change"
                                         [username]="username"
-                                        [courseInfo]="selectedCourse">
+                                        [courseInfo]="selectedCourse"
+                                        [prof]="profInfo">
                 </app-change-course-page>
               </div>
             </div>
@@ -149,7 +150,8 @@
             <div class="col">
               <div class="tab-content show active">
                 <app-change-course-page [username]="username"
-                                        [courseInfo]="selectedCourse">
+                                        [courseInfo]="selectedCourse"
+                                        [prof]="profInfo">
                 </app-change-course-page>
               </div>
             </div>

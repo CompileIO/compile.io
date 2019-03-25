@@ -48,10 +48,10 @@ public class ProfessorController{
     }
 	
 	@PostMapping("/Professor/Create")
-    public ResponseEntity<String> createProfessor(@Valid @RequestBody Professor professor) {   
+    public ResponseEntity<Professor> createProfessor(@Valid @RequestBody Professor professor) {   
     	Professor createdProf = professorRepository.save(professor);
     	System.out.println("\n\n\n\n\n professor Created: " + createdProf.toString() + "\n\n\n\n\n");
-        return ResponseEntity.ok().body("Created Professor: " + createdProf.toString());
+        return ResponseEntity.ok().body(createdProf);
     } 
     
 

@@ -12,7 +12,7 @@ public class Professor {
 	private String id;
 	private String name;
 	private String userName;
-	@DBRef
+//	@DBRef
     private List<Course> courses;
 
     public Professor() {

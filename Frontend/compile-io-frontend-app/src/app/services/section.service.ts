@@ -27,9 +27,11 @@ export class SectionService {
   }
   
 
-  createSection(sectionData: Section) {
-    const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
-    return this.http.post(this.apiUrl + '/Section/Create' , sectionData, { headers: headers, withCredentials: true })
+  createSection(sectionData: Section): Observable<Section> {
+    var response;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    response = this.http.post(this.apiUrl + '/Section/Create' , sectionData, { headers: headers, withCredentials: true });
+    return response
   }
 
   updateSection(sectionData: Section) {

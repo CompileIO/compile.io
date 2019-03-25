@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Section } from '../../models/section';
 import { SectionService } from '../services/section.service';
 import { Course } from '../../models/course';
+import { CourseService } from '../services/course.service';
 
 @Component({
   selector: 'app-change-section-page',
@@ -14,7 +15,8 @@ export class ChangeSectionPageComponent implements OnInit {
   @Input() courseInfo: Course;
   @Input() username: string;
   newSection: Section;
-  constructor(private sectionService: SectionService) { }
+  constructor(private sectionService: SectionService,
+              private courseService: CourseService) { }
 
   submitForm(form: any) {
     console.log(form);
@@ -26,13 +28,21 @@ export class ChangeSectionPageComponent implements OnInit {
       this.sectionService.createSection(this.newSection).subscribe({
         next: x => {
           console.log(x);
+          this.courseInfo.sections.push(x);
         },
         error: err => {
           console.log("CREATING SECTION ERROR:" + err);
         },
         complete: () => {
+          
           this.newSection = new Section();
           console.log("Creating Section Complete");
+          
+          this.courseService.updateCourse(this.courseInfo).subscribe({
+            next: x=> {
+              console.log(x);
+            }
+          });
         }
       });
     } else {

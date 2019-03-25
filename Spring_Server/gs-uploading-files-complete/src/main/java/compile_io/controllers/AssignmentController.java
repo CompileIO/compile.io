@@ -78,7 +78,7 @@ public class AssignmentController {
     public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {   
     	Path professorDir = Paths.get("upload-dir/" + 
 				assignment.getCourseName().replaceAll(" ", "_").toLowerCase() + "/" +
-				assignment.getassignmentName().replaceAll(" ", "_").toLowerCase() + 
+				assignment.getAssignmentName().replaceAll(" ", "_").toLowerCase() + 
 				"/professor-files/" +
 				assignment.getCreatedByUsername().replaceAll(" ", "_").toLowerCase());
     	assignment.setFilePath(professorDir.toString());
@@ -94,7 +94,7 @@ public class AssignmentController {
     	System.out.println(assignment.toString());
     	return assignmentRepository.findById(id)
                 .map(assignmentData -> {
-                    assignmentData.setAssignmentName(assignment.getassignmentName());
+                    assignmentData.setAssignmentName(assignment.getAssignmentName());
                     assignmentData.setTimeout(assignment.getTimeout());
                     assignmentData.setLanguage(assignment.getLanguage());
                     assignmentData.setSize(assignment.getSize());

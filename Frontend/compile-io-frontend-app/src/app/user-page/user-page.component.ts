@@ -74,11 +74,11 @@ export class UserPageComponent implements OnInit {
   getUserInfo(): void {
     if (this.group === "PROFESSOR" || this.group === "ADMIN") {
       this.professorService.getProfessorbyUsername(this.username).subscribe({
-        next: prof => { this.profInfo = prof; this.Courses = this.profInfo.courses; }
+        next: prof => { this.profInfo = prof; if (this.profInfo.courses == null) { this.profInfo.courses = [];} this.Courses = this.profInfo.courses; }
       });
     } else {
       this.studentService.getStudentbyUsername(this.username).subscribe({
-        next: stud => { this.studentInfo = stud; this.Sections = this.studentInfo.sections; }
+        next: stud => { this.studentInfo = stud; if (this.studentInfo.sections == null) { this.studentInfo.sections = [];} this.Sections = this.studentInfo.sections; }
       });
     }
   }

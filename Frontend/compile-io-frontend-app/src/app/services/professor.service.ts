@@ -33,9 +33,11 @@ export class ProfessorService {
     return this.http.get(this.apiUrl + "/Professor/Username/" + username);
   }
   
-  createProfessor(professorData: Professor) {
-    const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
-    return this.http.post(this.apiUrl + '/Professor/Create' , professorData, { headers: headers, withCredentials: true })
+  createProfessor(professorData: Professor) : Observable<Professor> {
+    var response;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    response = this.http.post(this.apiUrl + '/Professor/Create' , professorData, { headers: headers, withCredentials: true })
+    return response;
   }
 
   updateProfessor(professorData: Professor): Observable<any> {
