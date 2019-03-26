@@ -41,7 +41,7 @@ export class SectionService {
   }
 
   updateSection(sectionData: Section): Observable<Section> {
-    const headers = new HttpHeaders({'enctype': "multipart/form-data" });
+    const headers = new HttpHeaders({'Content-Type': 'application/json' });
     // for(var i = 0; i < sectionData.students.length; i++) {
     //   sectionData.students[i].sections.push(sectionData);
       

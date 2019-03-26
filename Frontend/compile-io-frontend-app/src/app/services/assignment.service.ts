@@ -43,7 +43,7 @@ export class AssignmentService {
   }
 
   createAssignment(assignmentData: Assignment): Observable<Assignment> {
-    const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
     // console.log("Inside the create Assignment Method: " + "\n" + 
     // "ID: " + assignmentData.id + "\n" +
     // "Course Name: " + assignmentData.courseName + "\n" +
@@ -62,7 +62,7 @@ export class AssignmentService {
   }
 
   updateAssignment(assignmentData: Assignment): Observable<Assignment> {
-    const headers = new HttpHeaders({'enctype': "multipart/form-data" });
+    const headers = new HttpHeaders({'Content-Type': 'application/json'  });
     var response;
     response = this.http.put(this.apiUrl + '/Assignment/Update/' + assignmentData.id, assignmentData, { headers: headers, withCredentials: true });
     return response;

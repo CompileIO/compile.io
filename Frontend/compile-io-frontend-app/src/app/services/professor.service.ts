@@ -45,7 +45,7 @@ export class ProfessorService {
   }
 
   updateProfessor(professorData: Professor): Observable<Professor> {
-    const headers = new HttpHeaders({'enctype': "multipart/form-data" });
+    const headers = new HttpHeaders({'Content-Type': 'application/json'  });
     var response;
     response = this.http.put(this.apiUrl + '/Professor/Update/' + professorData.id, professorData, { headers: headers, withCredentials: true });
     return response;

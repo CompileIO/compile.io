@@ -31,14 +31,14 @@ export class StudentService {
   }
   
   createStudent(studentData: Student): Observable<Student> {
-    const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
     var response;
     response = this.http.post(this.apiUrl + '/Student/Create' , studentData, { headers: headers, withCredentials: true });
     return response;
   }
 
   updateStudent(studentData: Student): Observable<Student> {
-    const headers = new HttpHeaders({'enctype': "multipart/form-data" });
+    const headers = new HttpHeaders({'Content-Type': 'application/json'  });
     var response;
     response = this.http.put(this.apiUrl + '/Student/Update/' + studentData.id, studentData, { headers: headers, withCredentials: true });
     return response;

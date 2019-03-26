@@ -37,7 +37,7 @@ export class CodeService {
     body.append('username', userName);
     body.append('runTime', runTime.toString());
     body.append('assignmentID', givenAssignmentID.toString());
-    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" });
+    const fileHeaders = new HttpHeaders({'Content-Type': 'application/json'  });
     var response;
     response = this.http.post(this.apiUrl + "/Code/uploadCode", body , {headers: fileHeaders, withCredentials: true});
     return response;
@@ -49,7 +49,7 @@ export class CodeService {
     body.append('courseName', className);
     body.append('assignmentName', assignmentName);
     body.append('userName', userName);
-    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
+    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data"}); 
     var response;
     response = this.http.post(this.apiUrl + "/Code/uploadFile", body, {headers: fileHeaders, withCredentials: true});
     return response;
