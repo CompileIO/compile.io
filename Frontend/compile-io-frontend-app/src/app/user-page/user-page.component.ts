@@ -104,6 +104,8 @@ export class UserPageComponent implements OnInit {
   }
 
   newCourse() {
+    this.selectAssignment = null;
+    this.selectedSection = null;
     this.selectedCourse = new Course();
     this.selectedCourse.id = "-1";
   }
@@ -127,9 +129,9 @@ export class UserPageComponent implements OnInit {
   newAssignment() {
     this.selectedAssignment = new Assignment();
     this.selectedAssignment.id = "-1";
-
   }
   newSection() {
+    this.selectedAssignment = null;
     this.selectedSection = new Section();
     this.selectedSection.id = "-1";
   }

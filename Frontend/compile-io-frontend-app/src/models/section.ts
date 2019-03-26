@@ -4,7 +4,7 @@ export class Section {
     id: string;
 	Year: number; //2019
 	Term: number; //1
-	sectionNumber: number ;
+	sectionNumber: number;
 	students: Student[];
 	useClassDescription: boolean ;
 	description: string ;
