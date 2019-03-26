@@ -20,33 +20,47 @@
               <span>
                 {{co.courseName}}
               </span>
-              <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedCourse == co && selectedAssignment == assgn" alt="left" class="smicon" />
+              <img src="./assets/open-iconic/svg/caret-left.svg" *ngIf="selectedCourse == co" alt="left" class="smicon" />
             </div>
             <div class="container" *ngIf="selectedCourse == co">
-              <div class="row" *ngFor="let sec of Sections" (click)="selectSection(sec)">
-                <div class="col p-2 sidebarHover w-50 btn blackText">
-                  <span>
-                    {{sec.term}}{{sec.year}}{{sec.number}}
-                  </span>
-                  <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
-                  <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn)">
-                    <div class="col p-2 sidebarHover w-50 btn blackText">
+              <div class="row" *ngFor="let sec of Sections" >
+                <div class="container">
+                  <div class="row">
+                    <div class="col p-2 sidebarHover w-50 btn blackText" (click)="selectSection(sec)">
                       <span>
-                        {{assgn.assignmentName}}
+                        {{sec.Term}}{{sec.Year}}{{sec.sectionNumber}}
                       </span>
-                      <img *ngIf="selectedAssignment == assgn" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+                      <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
                     </div>
-                    <div class="row" (click)="newAssignment()">
-                      <div class="col p-2 sidebarHover w-50 btn blackText">
-                        <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+                  </div>
+                  <div class="row" *ngIf="selectedSection == sec">
+                    <div class="col p-2 sidebarHover w-50 btn blackText">
+                      <div class="container">
+                        <div class="row" *ngFor="let assgn of Assignments">
+                          <div class="col p-2 sidebarHover w-50 btn blackText" (click)="selectedAssignment(assgn)">
+                            <span>
+                              {{assgn.assignmentName}}
+                            </span>
+                            <img *ngIf="selectedAssignment == assgn" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+                          </div>
+                        </div>
+                        <div class="row" (click)="newAssignment()">
+                          <div class="col p-2 sidebarHover w-50 btn blackText">
+                            <!--<img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />-->
+                            <span>new Assignment</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                
+                
               </div>
               <div class="row" (click)="newSection()">
                 <div class="col p-2 sidebarHover w-50 btn blackText">
-                  <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+                  <!--<img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />-->
+                  <span>new section</span>
                 </div>
               </div>
             </div>
@@ -54,7 +68,8 @@
         </div>
         <div class="row" (click)="newCourse()">
           <div class="col p-2 sidebarHover w-50 btn blackText">
-            <img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />
+            <!--<img src="./assets/open-iconic/svg/plus.svg" alt="left" class="smicon" />-->
+            <span>new Course</span>
           </div>
         </div>
       </div>

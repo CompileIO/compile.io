@@ -19,34 +19,29 @@ export class ChangeSectionPageComponent implements OnInit {
               private courseService: CourseService) { }
 
   submitForm(form: any) {
-    console.log(form);
+    console.log(this.newSection);
     this.submit();
   }
 
   submit() {
+    this.newSection.id = this.sectionInfo.id;
+    console.log(this.newSection.id);
     if (this.sectionInfo.id == "-1") {
       this.sectionService.createSection(this.newSection).subscribe({
         next: x => {
           console.log(x);
+          if (this.courseInfo.sections == null) {
+            this.courseInfo.sections = [];
+          }
           this.courseInfo.sections.push(x);
         },
         error: err => {
           console.log("CREATING SECTION ERROR:" + err);
         },
         complete: () => {
-          
-          this.newSection = new Section();
-          console.log("Creating Section Complete");
-          
-          this.courseService.updateCourse(this.courseInfo).subscribe({
-            next: x=> {
-              console.log(x);
-            }
-          });
         }
       });
     } else {
-      this.newSection.id = this.sectionInfo.id;
       this.sectionService.updateSection(this.newSection).subscribe({
         next: x => {
           console.log(x)
@@ -73,7 +68,7 @@ export class ChangeSectionPageComponent implements OnInit {
       this.newSection.Term = this.sectionInfo.Term;
       this.newSection.useClassDescription = this.sectionInfo.useClassDescription;
       this.newSection.Year = this.sectionInfo.Year;
-    }
+    } 
   }
 
 }
