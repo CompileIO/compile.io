@@ -47,10 +47,10 @@ public class StudentController{
         return ResponseEntity.ok().body(students.get(0));
     }
 	@PostMapping("/Student/Create")
-    public ResponseEntity<String> createStudent(@Valid @RequestBody Student student) {   
-    	System.out.println("\n\n\n\n\n Student Created: " + student.toString() + "\n\n\n\n\n");
-    	studentRepository.save(student);
-        return ResponseEntity.ok().body("uploaded Student: " + student.toString());
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {   
+    	Student addedStudent = studentRepository.save(student);
+    	System.out.println("\n\n\n\n\n Student Created: " + addedStudent.toString() + "\n\n\n\n\n");
+        return ResponseEntity.ok().body(addedStudent);
     } 
     
 
@@ -72,7 +72,7 @@ public class StudentController{
     }
 
     @DeleteMapping(value="/Student/Delete/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteStudent(@PathVariable("id") String id) {
         return studentRepository.findById(id)
                 .map(student -> {
                 	studentRepository.deleteById(id);

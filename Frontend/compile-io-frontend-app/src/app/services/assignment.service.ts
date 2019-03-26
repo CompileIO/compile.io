@@ -12,12 +12,16 @@ export class AssignmentService {
   private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) {}
 
-  getAssignment(assignmentData: Assignment) {
+  getAssignment(assignmentData: Assignment): Observable<Assignment> {
+    var response;
     console.log("Get assignment: " + assignmentData.assignmentName);
-    return this.http.get(this.apiUrl + "/Assignment/"  + assignmentData.id);
+    response = this.http.get(this.apiUrl + "/Assignment/"  + assignmentData.id)
+    return response;
   }
-  getAssignments() {
-    return this.http.get(this.apiUrl + '/Assignment')
+  getAssignments(): Observable<Assignment[]> {
+    var response; 
+    response = this.http.get(this.apiUrl + '/Assignment');
+    return response;
     
   }
 
@@ -26,17 +30,19 @@ export class AssignmentService {
     response = this.http.get(this.apiUrl + '/Assignment/getCourse/' + courseName);
     return response;
   }
-  uploadFile(file: File, className: string, assignmentName: string, userName: string) {
+  uploadFile(file: File, className: string, assignmentName: string, userName: string): Observable<String> {
     let body: FormData = new FormData();  
     body.append('file', file);
     body.append('courseName', className);
     body.append('assignmentName', assignmentName);
     body.append('userName', userName);
     const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
-    return this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});
+    var response; 
+    response = this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});
+    return response;
   }
 
-  createAssignment(assignmentData: Assignment) {
+  createAssignment(assignmentData: Assignment): Observable<Assignment> {
     const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
     // console.log("Inside the create Assignment Method: " + "\n" + 
     // "ID: " + assignmentData.id + "\n" +
@@ -50,16 +56,22 @@ export class AssignmentService {
     // "start time: " + assignmentData.startTime + "\n" +
     // "end date: " + assignmentData.endDate + "\n" +
     // "end time: " + assignmentData.endTime);
-    return this.http.post(this.apiUrl + '/Assignment/Create' , assignmentData, { headers: headers, withCredentials: true })
+    var response;
+    response =  this.http.post(this.apiUrl + '/Assignment/Create' , assignmentData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  updateAssignment(assignmentData: Assignment) {
+  updateAssignment(assignmentData: Assignment): Observable<Assignment> {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    return this.http.put(this.apiUrl + '/Assignment/Update/' + assignmentData.id, assignmentData, { headers: headers, withCredentials: true })
+    var response;
+    response = this.http.put(this.apiUrl + '/Assignment/Update/' + assignmentData.id, assignmentData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  deleteAssignment(id: string){
-    return this.http.delete(this.apiUrl + '/Assignment/Delete' + id, {withCredentials: true })
+  deleteAssignment(id: string): Observable<String>{
+    var response;
+    response = this.http.delete(this.apiUrl + '/Assignment/Delete' + id, {withCredentials: true });
+    return response;
   }
 
 }

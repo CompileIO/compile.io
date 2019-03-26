@@ -17,26 +17,36 @@ export class StudentService {
     return response;
   }
 
-  getStudent(studentData: Student) {
+  getStudent(studentData: Student): Observable<Student> {
     console.log("Get Student: " + studentData.name);
-    return this.http.get(this.apiUrl + "/Student/"  + studentData.id);
+    var response;
+    response = this.http.get(this.apiUrl + "/Student/"  + studentData.id);
+    return response;
   }
 
-  getStudentbyUsername(username: string): Observable<any> {
-    return this.http.get(this.apiUrl + "/Student/Username/" + username);
+  getStudentbyUsername(username: string): Observable<Student> {
+    var response;
+    response =  this.http.get(this.apiUrl + "/Student/Username/" + username);
+    return response;
   }
   
-  createStudent(studentData: Student) {
+  createStudent(studentData: Student): Observable<Student> {
     const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
-    return this.http.post(this.apiUrl + '/Student/Create' , studentData, { headers: headers, withCredentials: true })
+    var response;
+    response = this.http.post(this.apiUrl + '/Student/Create' , studentData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  updateStudent(studentData: Student): Observable<any> {
+  updateStudent(studentData: Student): Observable<Student> {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    return this.http.put(this.apiUrl + '/Student/Update/' + studentData.id, studentData, { headers: headers, withCredentials: true })
+    var response;
+    response = this.http.put(this.apiUrl + '/Student/Update/' + studentData.id, studentData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  deleteStudent(id: string){
-    return this.http.delete(this.apiUrl + '/Student/Delete' + id, {withCredentials: true })
+  deleteStudent(id: string):  Observable<string>{
+    var response;
+    response = this.http.delete(this.apiUrl + '/Student/Delete' + id, {withCredentials: true });
+    return response;
   }
 }

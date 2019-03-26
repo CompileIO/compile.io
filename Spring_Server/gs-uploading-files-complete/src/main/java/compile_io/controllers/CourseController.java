@@ -37,9 +37,9 @@ public class CourseController {
 	}
 	
 	@GetMapping("/Courses")
-	public List<Course> getCourses() {
+	public ResponseEntity<List<Course>> getCourses() {
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        return courseRepository.findAll(sortByCreatedAtDesc);
+        return ResponseEntity.ok().body(courseRepository.findAll(sortByCreatedAtDesc));
 	}
     
     @GetMapping(value="/Course/{id}")
@@ -50,10 +50,10 @@ public class CourseController {
     }
 	
 	@PostMapping("/Course/Create")
-    public ResponseEntity<String> createCourse(@Valid @RequestBody Course course) {  
-    	courseRepository.save(course);
-    	System.out.println("\n\n\n\n\n Course Created: " + course.toString() + "\n\n\n\n\n");
-        return ResponseEntity.ok().body("uploaded Course: " + course.toString());
+    public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course) {  
+    	Course addedCourse = courseRepository.save(course);
+    	System.out.println("\n\n\n\n\n Course Created: " + addedCourse.toString() + "\n\n\n\n\n");
+        return ResponseEntity.ok().body(addedCourse);
     } 
     
 
@@ -76,15 +76,10 @@ public class CourseController {
     }
 
     @DeleteMapping(value="/Course/Delete/{id}")
-    public ResponseEntity<?> deleteCourse(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteCourse(@PathVariable("id") String id) {
         return courseRepository.findById(id)
                 .map(course -> {
-                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-//                	List<Professor> newProfessors = professorRepository.findByuserName(course.getInstructor().getUserName(), sortByCreatedAtDesc);
-//                	Professor newProf = newProfessors.get(0);
-//                	newProf.deleteCourse(course);
-//                	professorRepository.save(newProf);
-                    courseRepository.deleteById(id);
+                	courseRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a course");
                 }).orElse(ResponseEntity.notFound().build());
     }

@@ -25,10 +25,10 @@ public class ProfessorController{
 	public ProfessorRepository professorRepository;
 	
 	@GetMapping("/Professors")
-	public List<Professor> getProfessors() {
+	public ResponseEntity<List<Professor>> getProfessors() {
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
 		List<Professor> Professors = professorRepository.findAll(sortByCreatedAtDesc);
-        return Professors;
+        return ResponseEntity.ok().body(Professors);
 	}
     
     @GetMapping(value="/Professor/{id}")
@@ -72,7 +72,7 @@ public class ProfessorController{
     }
 
     @DeleteMapping(value="/Professor/Delete/{id}")
-    public ResponseEntity<?> deleteProfessor(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteProfessor(@PathVariable("id") String id) {
         return professorRepository.findById(id)
                 .map(professor -> {
                     professorRepository.deleteById(id);

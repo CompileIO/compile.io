@@ -44,9 +44,9 @@ public class AssignmentController {
 	
 
     @GetMapping("/Assignment")
-    public List<Assignment> getAllAssignments() {
+    public  ResponseEntity<List<Assignment>> getAllAssignments() {
         Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        return assignmentRepository.findAll(sortByCreatedAtDesc);
+        return ResponseEntity.ok().body(assignmentRepository.findAll(sortByCreatedAtDesc));
     }
     
     @GetMapping("/Assignment/getCourse/{courseName}")
@@ -75,16 +75,16 @@ public class AssignmentController {
     }
     
     @PostMapping("/Assignment/Create")
-    public ResponseEntity<String> createassignment(@Valid @RequestBody Assignment assignment) {   
+    public ResponseEntity<Assignment> createassignment(@Valid @RequestBody Assignment assignment) {   
     	Path professorDir = Paths.get("upload-dir/" + 
 				assignment.getCourseName().replaceAll(" ", "_").toLowerCase() + "/" +
 				assignment.getAssignmentName().replaceAll(" ", "_").toLowerCase() + 
 				"/professor-files/" +
 				assignment.getCreatedByUsername().replaceAll(" ", "_").toLowerCase());
     	assignment.setFilePath(professorDir.toString());
-    	System.out.println("\n\n\n\n\n Assignment Created: " + assignment.toString() + "\n\n\n\n\n");
-    	assignmentRepository.save(assignment);
-        return ResponseEntity.ok().body("uploaded assignment: " + assignment.toString());
+    	Assignment addedAssignment = assignmentRepository.save(assignment);
+    	System.out.println("\n\n\n\n\n Assignment Created: " +  addedAssignment.toString() + "\n\n\n\n\n");
+        return ResponseEntity.ok().body(addedAssignment);
     } 
     
 
@@ -113,16 +113,11 @@ public class AssignmentController {
     }
 
     @DeleteMapping(value="/Assignment/Delete/{id}")
-    public ResponseEntity<?> deleteAssignment(@PathVariable("id") String id) {
-        return assignmentRepository.findById(id)
+    public ResponseEntity<String> deleteAssignment(@PathVariable("id") String id) {
+    	return assignmentRepository.findById(id)
                 .map(assignment -> {
-//                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-//                	List<Professor> newProfessors = professorRepository.findByuserName(assignment.getCreatedByUsername(), sortByCreatedAtDesc);
-//                	Professor newProf = newProfessors.get(0);
-//                	newProf.deleteAssignment(assignment);
-//                	professorRepository.save(newProf);
-                    assignmentRepository.deleteById(id);
-                    return ResponseEntity.ok().build();
+                	assignmentRepository.deleteById(id);
+                    return ResponseEntity.ok().body("Deleted a course");
                 }).orElse(ResponseEntity.notFound().build());
     }
 }

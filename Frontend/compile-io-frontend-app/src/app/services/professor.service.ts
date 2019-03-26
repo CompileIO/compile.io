@@ -24,13 +24,17 @@ export class ProfessorService {
     return response;
   }
 
-  getProfessor(professorData: Professor) {
+  getProfessor(professorData: Professor): Observable<Professor> {
     console.log("Get Professor: " + professorData.name);
-    return this.http.get(this.apiUrl + "/Professor/"  + professorData.id);
+    var response;
+    response = this.http.get(this.apiUrl + "/Professor/"  + professorData.id);
+    return response;
   }
 
-  getProfessorbyUsername(username: string): Observable<any> {
-    return this.http.get(this.apiUrl + "/Professor/Username/" + username);
+  getProfessorbyUsername(username: string): Observable<Professor> {
+    var response;
+    response =  this.http.get(this.apiUrl + "/Professor/Username/" + username);
+    return response;
   }
   
   createProfessor(professorData: Professor) : Observable<Professor> {
@@ -40,12 +44,16 @@ export class ProfessorService {
     return response;
   }
 
-  updateProfessor(professorData: Professor): Observable<any> {
+  updateProfessor(professorData: Professor): Observable<Professor> {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    return this.http.put(this.apiUrl + '/Professor/Update/' + professorData.id, professorData, { headers: headers, withCredentials: true })
+    var response;
+    response = this.http.put(this.apiUrl + '/Professor/Update/' + professorData.id, professorData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  deleteProfessor(id: string){
-    return this.http.delete(this.apiUrl + '/Professor/Delete' + id, {withCredentials: true })
+  deleteProfessor(id: string): Observable<String>{
+    var response;
+    response =  this.http.delete(this.apiUrl + '/Professor/Delete' + id, {withCredentials: true });
+    return response;
   }
 }

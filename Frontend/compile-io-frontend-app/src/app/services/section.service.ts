@@ -12,18 +12,24 @@ export class SectionService {
   constructor(private http: HttpClient) { }
 
 
-  getSections(): Observable<any>{
-    return this.http.get(this.apiUrl + '/Sections')
+  getSections(): Observable<Section[]>{
+    var response;
+    response = this.http.get(this.apiUrl + '/Sections');
+    return response;
   }
 
-  getSection(sectionData: Section) {
+  getSection(sectionData: Section): Observable<Section> {
     console.log("Get Course: " + sectionData.sectionNumber);
-    return this.http.get(this.apiUrl + "/Section/"  + sectionData.id);
+    var response;
+    response = this.http.get(this.apiUrl + "/Section/"  + sectionData.id);
+    return response;
   }
 
-  getSectionForGivenClass(sectionData: Section) {
+  getSectionForGivenClass(sectionData: Section): Observable<Section> {
     console.log("Get Course: " + sectionData.sectionNumber);
-    return this.http.get(this.apiUrl + "/Section/"  + sectionData.id);
+    var response;
+    response = this.http.get(this.apiUrl + "/Section/"  + sectionData.id);
+    return response;
   }
   
 
@@ -34,16 +40,20 @@ export class SectionService {
     return response
   }
 
-  updateSection(sectionData: Section) {
+  updateSection(sectionData: Section): Observable<Section> {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
     // for(var i = 0; i < sectionData.students.length; i++) {
     //   sectionData.students[i].sections.push(sectionData);
       
     // }
-    return this.http.put(this.apiUrl + '/Section/Update/' + sectionData.id, sectionData, { headers: headers, withCredentials: true })
+    var response; 
+    response =  this.http.put(this.apiUrl + '/Section/Update/' + sectionData.id, sectionData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  deleteSection(id: string){
-    return this.http.delete(this.apiUrl + '/Section/Delete' + id, {withCredentials: true })
+  deleteSection(id: string): Observable<String>{
+    var response;
+    response = this.http.delete(this.apiUrl + '/Section/Delete' + id, {withCredentials: true });
+    return response;
   }
 }

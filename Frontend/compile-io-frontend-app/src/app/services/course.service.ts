@@ -18,27 +18,37 @@ export class CourseService {
   //   return this.http.get(this.apiUrl + "/courses", { headers: empHeaders, withCredentials: true });
   // }
 
-  getCourses(): Observable<any>{
-    return this.http.get(this.apiUrl + '/Courses');
+  getCourses(): Observable<Course[]>{
+    var response;
+    response = this.http.get(this.apiUrl + '/Courses');
+    return response;
   }
 
-  getCourse(courseData: Course) {
+  getCourse(courseData: Course): Observable<Course> {
     console.log("Get Course: " + courseData.courseName);
-    return this.http.get(this.apiUrl + "/Course/"  + courseData.id);
+    var response; 
+    response = this.http.get(this.apiUrl + "/Course/"  + courseData.id);
+    return response;
   }
   
 
-  createCourse(courseData: Course) {
+  createCourse(courseData: Course): Observable<Course> {
     const headers = new HttpHeaders({ 'enctype': "multipart/form-data" });
-    return this.http.post(this.apiUrl + '/Course/Create' , courseData, { headers: headers, withCredentials: true })
+    var response;
+    response = this.http.post(this.apiUrl + '/Course/Create' , courseData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  updateCourse(courseData: Course) {
+  updateCourse(courseData: Course): Observable<Course> {
     const headers = new HttpHeaders({'enctype': "multipart/form-data" });
-    return this.http.put(this.apiUrl + '/Course/Update/' + courseData.id, courseData, { headers: headers, withCredentials: true })
+    var response;
+    response = this.http.put(this.apiUrl + '/Course/Update/' + courseData.id, courseData, { headers: headers, withCredentials: true });
+    return response;
   }
 
-  deleteCourse(id: string){
-    return this.http.delete(this.apiUrl + '/Course/Delete' + id, {withCredentials: true })
+  deleteCourse(id: string): Observable<String>{
+    var response;
+    response = this.http.delete(this.apiUrl + '/Course/Delete' + id, {withCredentials: true });
+    return response;
   }
 }

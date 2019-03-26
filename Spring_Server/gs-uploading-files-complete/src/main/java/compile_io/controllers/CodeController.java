@@ -50,9 +50,9 @@ public class CodeController {
 	}
 	
 	 @GetMapping("/Code")
-	    public List<Code> getAllCodes() {
+	    public ResponseEntity<List<Code>> getAllCodes() {
 	        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-	        return codeRepository.findAll(sortByCreatedAtDesc);
+	        return ResponseEntity.ok().body(codeRepository.findAll(sortByCreatedAtDesc));
 	    }
 	    
 	    @GetMapping("/Code/getAssignment/{assignmentId}")
@@ -143,10 +143,10 @@ public class CodeController {
 	}
 	
 	@PostMapping("/Code/Create")
-    public ResponseEntity<String> createCode(@Valid @RequestBody Code code) {  
-    	codeRepository.save(code);
-    	System.out.println("\n\n\n\n\n Code Created: " + code.toString() + "\n\n\n\n\n");
-        return ResponseEntity.ok().body("uploaded Code: " + code.toString());
+    public ResponseEntity<Code> createCode(@Valid @RequestBody Code code) {  
+    	Code addedCode = codeRepository.save(code);
+    	System.out.println("\n\n\n\n\n Code Created: " + addedCode.toString() + "\n\n\n\n\n");
+        return ResponseEntity.ok().body(addedCode);
     } 
     
 
@@ -173,7 +173,7 @@ public class CodeController {
     }
 
     @DeleteMapping(value="/Code/Delete/{id}")
-    public ResponseEntity<?> deleteCode(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteCode(@PathVariable("id") String id) {
         return codeRepository.findById(id)
                 .map(code -> {
                 	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");

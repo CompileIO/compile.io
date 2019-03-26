@@ -29,14 +29,14 @@ public class Section {
 	public int getYear() {
 		return Year;
 	}
-	public void setYear(int year) {
-		Year = year;
+	public void setYear(int Year) {
+		Year = Year;
 	}
 	public int getTerm() {
 		return Term;
 	}
-	public void setTerm(int term) {
-		Term = term;
+	public void setTerm(int Term) {
+		Term = Term;
 	}
 	public int getSectionNumber() {
 		return sectionNumber;

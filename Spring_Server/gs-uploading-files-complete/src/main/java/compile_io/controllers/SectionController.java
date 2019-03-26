@@ -29,9 +29,9 @@ public class SectionController {
     SectionRepository sectionRepository;
 			
 	@GetMapping("/Sections")
-	public List<Section> getSections() {
+	public ResponseEntity<List<Section>> getSections() {
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        return sectionRepository.findAll(sortByCreatedAtDesc);
+        return ResponseEntity.ok().body(sectionRepository.findAll(sortByCreatedAtDesc));
 	}
     
     @GetMapping(value="/Section/{id}")
@@ -77,7 +77,7 @@ public class SectionController {
     }
 
     @DeleteMapping(value="/Section/Delete/{id}")
-    public ResponseEntity<?> deletesection(@PathVariable("id") String id) {
+    public ResponseEntity<String> deletesection(@PathVariable("id") String id) {
         return sectionRepository.findById(id)
                 .map(section -> {
                     sectionRepository.deleteById(id);
