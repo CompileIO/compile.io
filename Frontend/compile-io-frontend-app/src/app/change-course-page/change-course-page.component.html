@@ -10,32 +10,16 @@
                 <input type="text" class="form-control" name="nameText" #nameText placeholder="CSSE120" [(ngModel)]="newCourse.courseName" required>
               </div>
             </div>
-            <!--<div class="col">
-              <div class="form-group p-3">
-                <label class="float-left">Course Crn</label>
-                <input type="number" min="0" class="form-control" #crnText name="crnText" placeholder="12345" [(ngModel)]="newCourse.crn" required>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="form-group p-3">
-                <label class="float-left">Section Number</label>
-                <input type="number" min="0" class="form-control" #sectionText name="sectionText" placeholder="01" [(ngModel)]="newCourse.sectionNumber" required>
-              </div>
-            </div>-->
           </div>
-
-
           <div class="row">
             <div class="col">
               <div class="form-group p-3">
                 <label class="float-left">Professors with access</label>
-                <input type="text" class="form-control" name="professorText"  placeholder="footezo;" [(ngModel)]="newCourse.professors" required>
+                <input type="text" class="form-control" name="professorText"  placeholder="username;" [(ngModel)]="newCourse.professors" required>
                 <small class="form-text text-muted float-left">Professor usernames separated by semicolons (;)</small>
               </div>
             </div>
           </div>
-
           <div class="row">
             <div class="col">
               <label class="float-left">Description</label>
@@ -43,7 +27,6 @@
               </textarea>
             </div>
           </div>
-
           <div class="row">
             <div class="col p-3">
               <button type="submit" class="btn btn-primary">Submit</button>

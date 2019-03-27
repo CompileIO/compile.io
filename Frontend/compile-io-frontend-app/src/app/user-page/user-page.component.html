@@ -81,7 +81,7 @@
         <div class="row" *ngFor="let sec of Sections" (click)="selectSection(sec)">
           <div class="col p-2 sidebarHover w-50 btn blackText">
             <span>
-              {{sec.term}}{{sec.year}}{{sec.number}}
+              {{sec.Term}}{{sec.Year}}{{sec.sectionNumber}}
             </span>
             <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
             <div *ngIf="selectedSection == sec">
@@ -181,10 +181,10 @@
         <div class="row">
           <div class="col">
             <div class="p-3 w-100">
-              <h1 *ngIf="selectedCourse.id != '-1'">
-                {{selectedSection.Term}}{{selectedSection.Year}}{{selectedSection.SectionNumber}}
+              <h1 *ngIf="selectedSection.id != '-1'">
+                {{selectedSection.Term}}{{selectedSection.Year}}{{selectedSection.sectionNumber}}
               </h1>
-              <h1 *ngIf="selectedCourse.id == '-1'">
+              <h1 *ngIf="selectedSection.id == '-1'">
                 New Section
               </h1>
             </div>
@@ -209,7 +209,8 @@
             <div class="col">
               <div class="tab-content show active">
                 <app-section *ngIf="!this.change"
-                                 [sectionInfo]="selectedSection">
+                                 [sectionInfo]="selectedSection"
+                                 [courseInfo]="selectedCourse">
                 </app-section>
                 <app-change-section-page *ngIf="this.change"
                                         [username]="username"
@@ -242,7 +243,7 @@
           <div class="col">
             <div class="p-3 w-100 d-block" style="height: 100px">
               <h1 *ngIf="selectedAssignment.id == '-1'">
-                {{selectedCourse.courseName | uppercase}}
+                {{selectedCourse.courseName | uppercase}} - {{selectedSection.sectionNumber}}
               </h1>
               <h1 *ngIf="selectedAssignment.id != '-1'">
                 {{selectedCourse.courseName | uppercase}} - {{selectedAssignment.assignmentName | uppercase}}

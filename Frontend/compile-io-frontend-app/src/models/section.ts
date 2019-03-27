@@ -9,5 +9,4 @@ export class Section {
 	useClassDescription: boolean ;
 	description: string ;
 	assignments: Assignment[];
-
 }

@@ -75,7 +75,7 @@ export class ChangeCoursePageComponent implements OnInit {
         }
       });
     }
-    //window.location.reload();
+    window.location.reload();
   }
 
 

@@ -92,13 +92,13 @@ export class UserPageComponent implements OnInit {
   //}
 
   selectCourse(givenCourse: Course) {
+    this.selectedAssignment = null;
+    this.selectedSection = null;
     if (this.selectedCourse == givenCourse) {
       this.selectedCourse = null;
       this.Sections = [];
-      this.selectedSection = null;
     } else {
       this.selectedCourse = givenCourse;
-      this.selectedSection = null;
       this.Sections = givenCourse.sections;
     }
   }
@@ -143,13 +143,12 @@ export class UserPageComponent implements OnInit {
     //    this.changeChange(false)
     //  }
     //}
+    this.selectedAssignment = null;
     if (this.selectedSection == section) {
       this.selectedSection = null;
       this.Assignments = [];
-      this.selectedAssignment = null;
     } else {
       this.selectedSection = section;
-      this.selectedAssignment = null;
       this.Assignments = section.assignments;
     }
   }

@@ -118,7 +118,7 @@ export class ChangeHomeworkComponent implements OnInit {
         }
       });
     }
-    window.location.reload();
+    //window.location.reload();
   }
   updateSize(givenSize: number) {
     this.newAssignment.size = givenSize * 1000 * 1000;

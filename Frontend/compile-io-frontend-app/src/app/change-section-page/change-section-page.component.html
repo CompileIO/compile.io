@@ -37,6 +37,13 @@
                 <label class="float-left">Use Course Description</label>
                 <input type="checkbox" class="form-control" name="ucd" #ucd [(ngModel)]="newSection.useClassDescription">
               </div>
+              <div class="form-check p-3">
+                <label class="float-left">Use Course Description</label>
+                <textarea *ngIf="newSection.useClassDescription" disabled rows="8" cols="50" name="descriptionText" type="text" class="form-control" placeholder="Information for the students e.g. syllabus, piazza, website, etc" [(ngModel)]="newSection.description">
+              </textarea>
+                <textarea *ngIf="!newSection.useClassDescription" rows="8" cols="50" name="descriptionText" type="text" class="form-control" placeholder="Information for the students e.g. syllabus, piazza, website, etc" [(ngModel)]="newSection.description">
+              </textarea>
+              </div>
             </div>
           </div>
           <div class="row">

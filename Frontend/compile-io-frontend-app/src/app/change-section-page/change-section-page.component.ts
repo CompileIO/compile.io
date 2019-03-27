@@ -55,6 +55,7 @@ export class ChangeSectionPageComponent implements OnInit {
         }
       });
     }
+    window.location.reload();
   }
 
   ngOnInit() {
