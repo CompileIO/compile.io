@@ -1,4 +1,5 @@
 package compile_io.mongo.models;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -12,11 +13,12 @@ public class Professor {
 	private String id;
 	private String name;
 	private String userName;
-//	@DBRef
+	@DBRef
     private List<Course> courses;
 
     public Professor() {
     	super();
+    	courses = new ArrayList<Course>();
     }
     
     public String getId() {
@@ -44,12 +46,14 @@ public class Professor {
 	}
 	
 	public void addCourse(Course newCourse) {
+		System.out.println("add courses in professors: " + newCourse.toString());
 		this.courses.add(newCourse);
 	}
 	
 	public void deleteCourse (Course newCourse) {
 		for(Course course : this.courses) {
-			if(newCourse == course) {
+			if(newCourse.getId().equals(course.getId())) {
+				System.out.println("Deleteing courses in professors: " + newCourse.toString());
 				this.courses.remove(course);
 			}
 		}

@@ -1,6 +1,7 @@
 package compile_io.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Course;
+import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.CourseRepository;
 import compile_io.mongo.repositories.ProfessorRepository;
 
@@ -51,8 +53,21 @@ public class CourseController {
 	
 	@PostMapping("/Course/Create")
     public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course) {  
+		if(course.getId() == "-1") {
+			course.setId(null);
+		}
     	Course addedCourse = courseRepository.save(course);
     	System.out.println("\n\n\n\n\n Course Created: " + addedCourse.toString() + "\n\n\n\n\n");
+    	List<String> professorUsernamesInCourse = course.getProfessors();
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    	for(int i = 0; i < professorUsernamesInCourse.size(); i++) {
+    			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+    			if(!profs.isEmpty()) {
+    				profs.get(0).addCourse(addedCourse);
+        			this.professorRepository.save(profs.get(0));
+    			}
+    	}
+    	
         return ResponseEntity.ok().body(addedCourse);
     } 
     
@@ -60,7 +75,42 @@ public class CourseController {
     @PutMapping(value="/Course/Update/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable("id") String id,
                                            @Valid @RequestBody Course course) {
-    	System.out.println(course.toString());
+    	Optional<Course> Potentialcourse = courseRepository.findById(id);
+    	Course courseToUpdate = Potentialcourse.get();
+    	List<String> professorUsernamesInCourse = courseToUpdate.getProfessors();
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    	for(int i = 0; i < professorUsernamesInCourse.size(); i++) {
+    		if (course.getProfessors().contains(professorUsernamesInCourse.get(i))) {
+    			//update this prof
+    			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+    			if(!profs.isEmpty()) {	
+    				profs.get(0).deleteCourse(courseToUpdate);
+    				profs.get(0).addCourse(course);
+        			Professor updatedProf = this.professorRepository.save(profs.get(0));
+        			System.out.println("\n\n\n\n\n Professor Updated in the first if: " + updatedProf.toString() + "\n\n\n\n\n");
+    			}
+    		} else {
+    			//remove course from this prof
+    			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+    			if(!profs.isEmpty()) {
+    				profs.get(0).deleteCourse(courseToUpdate);
+    				Professor updatedProf = this.professorRepository.save(profs.get(0));
+        			System.out.println("\n\n\n\n\n Professor Updated removed: " + updatedProf.toString() + "\n\n\n\n\n");
+    			}
+    		}
+    	}
+    	List<String> professorUsernamesInNewCourse = course.getProfessors();
+    	for(int i = 0; i < professorUsernamesInNewCourse.size(); i++) {
+    		if (!professorUsernamesInCourse.contains(professorUsernamesInNewCourse.get(i))) {
+    			//add this course in this prof
+    			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+    			if(!profs.isEmpty()) {
+    				profs.get(0).addCourse(course);
+    				Professor updatedProf = this.professorRepository.save(profs.get(0));
+        			System.out.println("\n\n\n\n\n Professor Updated second if: " + updatedProf.toString() + "\n\n\n\n\n");
+    			}
+    		}
+    	}
     	return courseRepository.findById(id)
                 .map(courseData -> {
                 	courseData.setAssignments(course.getAssignments());

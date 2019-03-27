@@ -1,21 +1,28 @@
 package compile_io.mongo.models;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import compile_io.mongo.repositories.ProfessorRepository;
 
 @Document(collection="Course")
 public class Course {
 	@Id
 	private String id;
 	private String courseName; 
-	@DBRef
-	private List<Professor> professors;
+	private List<String> professorUsernames;
 	@DBRef
 	private List<Section> sections;
 	private String description;
+	
+	@Autowired 
+	public ProfessorRepository professorRepository;
 	
 
 	public String getDescription() {
@@ -49,24 +56,37 @@ public class Course {
 		this.courseName = courseName;
 	}
 	
-	public void addProfessor(Professor newprofessor) {
-		this.professors.add(newprofessor);
+	public void addProfessorId(String newProfessorUsername) {
+		this.professorUsernames.add(newProfessorUsername);
+		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+		List<Professor> prof = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
+		if(!prof.isEmpty()) {
+			prof.get(0).addCourse(this);
+			this.professorRepository.save(prof.get(0));
+		}
 	}
 	
-	public void deleteProfessor (Professor newprofessor) {
-		for(Professor professor : this.professors) {
-			if(newprofessor == professor) {
-				this.professors.remove(professor);
+	public void deleteProfessor (String newProfessorUsername) {
+		for(String professorUsername : this.professorUsernames) {
+			if(newProfessorUsername == professorUsername) {
+				this.professorUsernames.remove(professorUsername);
+				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+				List<Professor> prof = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
+				if(!prof.isEmpty()) {
+					prof.get(0).deleteCourse(this);
+					this.professorRepository.save(prof.get(0));
+				}
+				
 			}
 		}
 	}
 	
-	public List<Professor> getProfessors() {
-		return professors;
+	public List<String> getProfessors() {
+		return professorUsernames;
 	}
 
-	public void setProfessors(List<Professor> professors) {
-		this.professors = professors;
+	public void setProfessors(List<String> professorUsernames) {
+		this.professorUsernames = professorUsernames;
 	}
 	
 	public void addSection(Section newSection) {
@@ -111,7 +131,7 @@ public class Course {
 
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", courseName=" + courseName + ", professors=" + professors + ", sections="
+		return "Course [id=" + id + ", courseName=" + courseName + ", professorIds=" + professorUsernames + ", sections="
 				+ sections + ", description=" + description + ", assignments=" + assignments + "]";
 	}
 

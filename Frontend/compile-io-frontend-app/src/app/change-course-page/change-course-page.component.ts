@@ -13,6 +13,7 @@ export class ChangeCoursePageComponent implements OnInit {
   @Input() username: string;
   @Input() courseInfo: Course;
   @Input() prof: Professor;
+  professorList: string[] = [];
   newCourse: Course;
   constructor(private courseService: CourseService, private professorService: ProfessorService) {
   }
@@ -22,43 +23,37 @@ export class ChangeCoursePageComponent implements OnInit {
     this.submit();
   }
 
+  addProfessor(profUsername: string) {
+    this.professorList.push(profUsername);
+  }
+
+  removeProfessor(profUsername: string) {
+    this.professorList.splice(this.professorList.indexOf(profUsername), 1);
+  }
+
+
+
+
   submit() {
+    this.newCourse.professors = this.professorList
     if (this.courseInfo.id == "-1") {
+      this.newCourse.professors.push(this.prof.userName);
       console.log(this.newCourse.courseName);
       this.newCourse.sections = [];
-      this.newCourse.professors = [];
       this.newCourse.id = "-1";
-      //add course to professor
-      // this.professorService.getProfessorbyUsername(this.username).subscribe({
-      //   next: x => {
-      //     this.prof = x
-      //     this.prof.courses = [];
-      //     this.prof.courses.push(this.newCourse);
-      //   },
-      //   error: err => {
-      //     console.log("GET PROFESSOR BY USERNAME ERROR: " + err)
-      //   },
-      //   complete: () => 
-      // this.prof.courses = [];
-      this.prof.courses.push(this.newCourse);
-        this.professorService.updateProfessor(this.prof).subscribe({
-          next: x => { this.newCourse.professors.push(x) },
-          error: err => {
-            console.log("UPDATING PROFESSOR ERROR: " + err)
-          },
-          complete: () => this.courseService.createCourse(this.newCourse).subscribe({
-            next: x => {
-              console.log(x)
-            },
-            error: err => {
-              console.log("ADDING COURSE ERROR: " + err)
-            },
-            complete: () => {
-              this.newCourse = new Course()
-              console.log("Added Course Complete")
-            }
-          })
-        });
+
+      this.courseService.createCourse(this.newCourse).subscribe({
+              next: x => {
+                console.log(x)
+              },
+              error: err => {
+                console.log("ADDING COURSE ERROR: " + err)
+              },
+              complete: () => {
+                this.newCourse = new Course()
+                console.log("Added Course Complete")
+              }
+            });
     }
     else {
       this.newCourse.id = this.courseInfo.id;
@@ -81,9 +76,11 @@ export class ChangeCoursePageComponent implements OnInit {
 
   ngOnInit() {
     this.newCourse = new Course();
+    this.newCourse.professors = [];
     if (this.courseInfo.id != '-1') {
       this.newCourse.courseName = this.courseInfo.courseName;
       this.newCourse.professors = this.courseInfo.professors;
+      this.professorList = this.newCourse.professors;
       this.newCourse.description = this.courseInfo.description;
       this.newCourse.id = this.courseInfo.id; 
       //this.newCourse.crn = this.courseInfo.crn;

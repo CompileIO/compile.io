@@ -13,11 +13,21 @@
           </div>
           <div class="row">
             <div class="col">
-              <div class="form-group p-3">
+              <div class="p-3">
                 <label class="float-left">Professors with access</label>
-                <input type="text" class="form-control" name="professorText"  placeholder="username;" [(ngModel)]="newCourse.professors" required>
-                <small class="form-text text-muted float-left">Professor usernames separated by semicolons (;)</small>
+                <input type="text" class="form-control" #profText name="professorUsernameText"  placeholder="username">
+                <button type="button" (click)="addProfessor(profText.value); profText.value = ''">add</button>
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <div class="p-3">
+                    <select multiple class="form-control" name="professorsWithAccess" #professorsWithAccess>
+                        <option *ngFor="let p of professorList">{{p}}</option>
+                    </select>
+                    <button type="button" (click)="removeProfessor(p)">remove</button>
+                </div>
             </div>
           </div>
           <div class="row">

@@ -62,7 +62,7 @@ export class UserPageComponent implements OnInit {
             this.professorService.createProfessor(this.profToAdd).subscribe({
               next: x => { console.log(x) },
               error: err => { console.log("ADDING PROFESSOR ERROR: " + err) },
-              complete: () => { console.log("Added Professor Complete") }
+              complete: () => { console.log("Added Professor Complete"); this.getUserInfo(); }
             });
           }
         }
@@ -101,6 +101,7 @@ export class UserPageComponent implements OnInit {
       this.selectedCourse = givenCourse;
       this.Sections = givenCourse.sections;
     }
+    console.log(givenCourse);
   }
 
   newCourse() {

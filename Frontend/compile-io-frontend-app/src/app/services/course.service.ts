@@ -35,6 +35,7 @@ export class CourseService {
   createCourse(courseData: Course): Observable<Course> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
     var response;
+    courseData.id = null;
     response = this.http.post(this.apiUrl + '/Course/Create' , courseData, { headers: headers, withCredentials: true });
     return response;
   }
