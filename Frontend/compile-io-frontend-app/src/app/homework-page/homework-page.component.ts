@@ -11,7 +11,7 @@ export class HomeworkPageComponent implements OnInit {
   @Input() username: string;
   @Input() assignmentInfo: Assignment;
   file: File;
-  results: string[];
+  results: String[];
   error: string;
   running: boolean;
   sDate: string;

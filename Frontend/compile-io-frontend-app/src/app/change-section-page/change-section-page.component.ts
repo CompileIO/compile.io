@@ -59,6 +59,7 @@ export class ChangeSectionPageComponent implements OnInit {
 
   ngOnInit() {
     this.newSection = new Section();
+    this.newSection.id = this.sectionInfo.id;
     if (this.sectionInfo.id != "-1") {
       this.newSection.assignments = this.sectionInfo.assignments;
       this.newSection.description = this.sectionInfo.description;
