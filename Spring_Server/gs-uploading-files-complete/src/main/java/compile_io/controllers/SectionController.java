@@ -3,6 +3,7 @@ package compile_io.controllers;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Section;
+import compile_io.mongo.models.Course;
 import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.SectionRepository;
+import compile_io.mongo.repositories.CourseRepository;
 import compile_io.mongo.repositories.ProfessorRepository;
 
 @RestController
@@ -27,6 +30,8 @@ public class SectionController {
 	
 	@Autowired
     SectionRepository sectionRepository;
+	@Autowired
+    CourseRepository courseRepository;
 			
 	@GetMapping("/Sections")
 	public ResponseEntity<List<Section>> getSections() {
@@ -49,9 +54,16 @@ public class SectionController {
 	
 	@PostMapping("/Section/Create")
     public ResponseEntity<Section> createSection(@Valid @RequestBody Section section) {  
+		if(section.getId() == "-1") {
+			section.setId(null);
+		}
 		System.out.println("Inside create section with: " + section.toString());
     	Section sectionAdded = sectionRepository.save(section);
     	System.out.println("\n\n\n\n\n section Created: " + sectionAdded.toString() + "\n\n\n\n\n");
+    	Optional<Course> courseToFind = this.courseRepository.findById(section.getCourseId());
+    	Course course = courseToFind.get();
+    	course.addSection(sectionAdded);
+    	this.courseRepository.save(course);
         return ResponseEntity.ok().body(sectionAdded);
     } 
     
@@ -59,18 +71,32 @@ public class SectionController {
     @PutMapping(value="/Section/Update/{id}")
     public ResponseEntity<Section> updateSection(@PathVariable("id") String id,
                                            @Valid @RequestBody Section section) {
+    	Optional<Section> sectionToFind = this.sectionRepository.findById(id);
+    	Section sectionToUpdate = sectionToFind.get();
     	System.out.println(section.toString());
     	return sectionRepository.findById(id)
                 .map(sectionData -> {
                 	sectionData.setAssignments(section.getAssignments());
                 	sectionData.setDescription(section.getDescription());
                 	sectionData.setSectionNumber(section.getSectionNumber());
-                	sectionData.setStudents(section.getStudents());
+                	sectionData.setStudentUsernames(section.getStudentUsernames());
                 	sectionData.setTerm(section.getTerm());
                 	sectionData.setYear(section.getYear());
                 	sectionData.setUseClassDescription(section.isUseClassDescription());
+                	sectionData.setCourseId(section.getCourseId());
                     Section updatedsection = sectionRepository.save(sectionData);
                     System.out.println("\n\n\n\n\n section Updated: " + updatedsection.toString() + "\n\n\n\n\n");
+                    //updating courses
+                    
+                	if(!section.getCourseId().equals(sectionToUpdate.getCourseId())) {
+                		Optional<Course> courseToDeleteASectionFind = this.courseRepository.findById(sectionToUpdate.getCourseId());
+                    	Course courseToDeleteASection = courseToDeleteASectionFind.get();
+                    	courseToDeleteASection.deleteSection(sectionToUpdate);
+                    	
+                    	Optional<Course> courseToAddASectionFind = this.courseRepository.findById(section.getCourseId());
+                    	Course courseToAddASection = courseToAddASectionFind.get();
+                    	courseToAddASection.addSection(updatedsection);
+                	}
                     return ResponseEntity.ok().body(updatedsection);
                 }).orElse(ResponseEntity.notFound().build());							
      

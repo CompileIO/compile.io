@@ -36,17 +36,18 @@ export class SectionService {
   createSection(sectionData: Section): Observable<Section> {
     var response;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    sectionData.id = null;
+    console.log("Term: " + sectionData.term);
+    console.log("Year: "  + sectionData.year);
     response = this.http.post(this.apiUrl + '/Section/Create' , sectionData, { headers: headers, withCredentials: true });
     return response
   }
 
   updateSection(sectionData: Section): Observable<Section> {
     const headers = new HttpHeaders({'Content-Type': 'application/json' });
-    // for(var i = 0; i < sectionData.students.length; i++) {
-    //   sectionData.students[i].sections.push(sectionData);
-      
-    // }
     var response; 
+    console.log("Term: " + sectionData.term);
+    console.log("Year: "  + sectionData.year);
     response =  this.http.put(this.apiUrl + '/Section/Update/' + sectionData.id, sectionData, { headers: headers, withCredentials: true });
     return response;
   }

@@ -46,7 +46,6 @@ public class Professor {
 	}
 	
 	public void addCourse(Course newCourse) {
-		System.out.println("add courses in professors: " + newCourse.toString());
 		this.courses.add(newCourse);
 	}
 	
@@ -54,10 +53,8 @@ public class Professor {
 		for(int i = 0; i < this.courses.size(); i ++) {
 			Course course = this.courses.get(i);
 			if(newCourse.getId().equals(course.getId())) {
-				System.out.println("Deleteing courses in professors: " + newCourse.toString());
 				this.courses.remove(course);
 				i--;
-				//delete from Database
 			}
 		}
 	}

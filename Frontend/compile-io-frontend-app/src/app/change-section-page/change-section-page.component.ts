@@ -25,6 +25,7 @@ export class ChangeSectionPageComponent implements OnInit {
 
   submit() {
     this.newSection.id = this.sectionInfo.id;
+    this.newSection.courseId = this.courseInfo.id;
     console.log(this.newSection.id);
     if (this.sectionInfo.id == "-1") {
       this.sectionService.createSection(this.newSection).subscribe({
@@ -67,9 +68,9 @@ export class ChangeSectionPageComponent implements OnInit {
       this.newSection.id = this.sectionInfo.id;
       this.newSection.sectionNumber = this.sectionInfo.sectionNumber;
       this.newSection.students = this.sectionInfo.students;
-      this.newSection.Term = this.sectionInfo.Term;
+      this.newSection.term = this.sectionInfo.term;
       this.newSection.useClassDescription = this.sectionInfo.useClassDescription;
-      this.newSection.Year = this.sectionInfo.Year;
+      this.newSection.year = this.sectionInfo.year;
     } 
   }
 

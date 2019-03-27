@@ -113,7 +113,6 @@ public class CourseController {
     	}
     	return courseRepository.findById(id)
                 .map(courseData -> {
-                	courseData.setAssignments(course.getAssignments());
                 	courseData.setProfessors(course.getProfessors());
                 	courseData.setCourseName(course.getCourseName());
                 	courseData.setDescription(course.getDescription());

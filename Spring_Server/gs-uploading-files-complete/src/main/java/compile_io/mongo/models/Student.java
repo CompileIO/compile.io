@@ -1,4 +1,5 @@
 package compile_io.mongo.models;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -20,6 +21,8 @@ public class Student {
 
     public Student() {
     	super();
+    	this.codes = new ArrayList<Code>();
+    	this.sections = new ArrayList<Section>();
     }
     
     public String getId() {
@@ -52,9 +55,11 @@ public class Student {
 	}
 	
 	public void deleteCode (Code newCode) {
-		for(Code code : this.codes) {
+		for(int i = 0; i < this.codes.size(); i++) {
+			Code code = this.codes.get(i);
 			if(newCode == code) {
 				this.codes.remove(code);
+				i--;
 			}
 		}
 	}
@@ -71,9 +76,11 @@ public class Student {
 	}
 	
 	public void deleteSection (Section newSection) {
-		for(Section section : this.sections) {
+		for(int i = 0; i < this.sections.size(); i++) {
+			Section section = this.sections.get(i);
 			if(newSection == section) {
 				this.sections.remove(section);
+				i--;
 			}
 		}
 	}

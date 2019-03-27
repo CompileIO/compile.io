@@ -1,5 +1,6 @@
 package compile_io.mongo.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,19 +25,10 @@ public class Course {
 	@Autowired 
 	public ProfessorRepository professorRepository;
 	
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	private List<Assignment> assignments;
-	
 	public Course() {
 		super();
+		this.professorUsernames = new ArrayList<String>();
+		this.sections = new ArrayList<Section>();
 	}
 	
 	public String getId() {
@@ -56,7 +48,7 @@ public class Course {
 		this.courseName = courseName;
 	}
 	
-	public void addProfessorId(String newProfessorUsername) {
+	public void addProfessorUsername(String newProfessorUsername) {
 		this.professorUsernames.add(newProfessorUsername);
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
 		List<Professor> prof = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
@@ -66,13 +58,16 @@ public class Course {
 		}
 	}
 	
-	public void deleteProfessor (String newProfessorUsername) {
-		for(String professorUsername : this.professorUsernames) {
+	public void deleteProfessorUsername (String newProfessorUsername) {
+		for(int i = 0; i < this.professorUsernames.size(); i++) {
+			String professorUsername = this.professorUsernames.get(i);
 			if(newProfessorUsername == professorUsername) {
 				this.professorUsernames.remove(professorUsername);
+				i--;
 				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
 				List<Professor> prof = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
 				if(!prof.isEmpty()) {
+					//might have to use id's
 					prof.get(0).deleteCourse(this);
 					this.professorRepository.save(prof.get(0));
 				}
@@ -94,9 +89,11 @@ public class Course {
 	}
 	
 	public void deleteSection (Section newSection) {
-		for(Section section : this.sections) {
+		for(int i = 0; i < this.sections.size(); i++) {
+			Section section = this.sections.get(i);
 			if(newSection == section) {
 				this.sections.remove(section);
+				i--;
 			}
 		}
 	}
@@ -109,30 +106,18 @@ public class Course {
 		this.sections = sections;
 	}
 	
-	public void addAssignment(Assignment newAssignment) {
-		this.assignments.add(newAssignment);
-	}
-	
-	public void deleteAssignment (Assignment newAssignment) {
-		for(Assignment professor : this.assignments) {
-			if(newAssignment == professor) {
-				this.assignments.remove(professor);
-			}
-		}
+	public String getDescription() {
+		return description;
 	}
 
-	public List<Assignment> getAssignments() {
-		return assignments;
-	}
-
-	public void setAssignments(List<Assignment> assignments) {
-		this.assignments = assignments;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", courseName=" + courseName + ", professorIds=" + professorUsernames + ", sections="
-				+ sections + ", description=" + description + ", assignments=" + assignments + "]";
+		return "Course [id=" + id + ", courseName=" + courseName + ", professorUsernames=" + professorUsernames + ", sections="
+				+ sections + ", description=" + description + "]";
 	}
 
 	
