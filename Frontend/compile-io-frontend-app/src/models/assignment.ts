@@ -12,7 +12,6 @@ export class Assignment {
     endDate: Date;
     endTime: Time;
     filepath: string;
-    courseName: string;
     createdByUsername: string;
     sectionIds: string[];
     availableToOtherSections: boolean ;

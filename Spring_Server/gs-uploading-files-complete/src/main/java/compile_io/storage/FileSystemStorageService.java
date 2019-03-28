@@ -57,30 +57,9 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 	
-	public void storeAddPathFile(MultipartFile file, String filePath) {
-		Path dir = Paths.get(filePath);
-	}
     
-    public void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName) {
-    	Path dir;
-    	if(studentOrProfessor == "student") {
-    		dir = Paths.get("upload-dir/" + 
-					className.replaceAll(" ", "_").toLowerCase() + "/" +
-					assignmentName.replaceAll(" ", "_").toLowerCase() + 
-					"/student-files/" +
-					userName.replaceAll(" ", "_").toLowerCase());
-    	}
-    	else if(studentOrProfessor == "professor") {
-    		dir = Paths.get("upload-dir/" + 
-					className.replaceAll(" ", "_").toLowerCase() + "/" +
-					assignmentName.replaceAll(" ", "_").toLowerCase() + 
-					"/professor-files/" +
-					userName.replaceAll(" ", "_").toLowerCase());
-    	}
-    	else {
-    		dir = this.rootLocation;
-    	}
-    	
+    public void storeAddPath(MultipartFile file,String filePath) {
+    	Path dir = Paths.get(filePath);  	
     	
         if (! dir.toFile().exists()){
             dir.toFile().mkdirs();

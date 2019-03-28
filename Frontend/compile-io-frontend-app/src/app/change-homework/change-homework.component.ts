@@ -41,9 +41,10 @@ export class ChangeHomeworkComponent implements OnInit {
     console.log("File was changed to this: " + this.file);
   }
 
-  sendFile() {
+  sendFile(assignment: Assignment) {
     if (this.assignmentInfo.id == "-1") {
-      this.assignmentService.uploadFile(this.file, this.courseName, this.newAssignment.assignmentName, this.userName).subscribe({
+      
+      this.assignmentService.uploadFile(this.file, assignment.filepath).subscribe({
         next: x => {
           console.log(x)
         },
@@ -54,7 +55,7 @@ export class ChangeHomeworkComponent implements OnInit {
       });
     } else {
       if (this.newAssignment.assignmentName == undefined) {
-        this.assignmentService.uploadFile(this.file, this.courseName, this.newAssignment.assignmentName, this.userName).subscribe({
+        this.assignmentService.uploadFile(this.file, assignment.filepath).subscribe({
           next: x => {
             console.log(x)
           },
@@ -64,7 +65,7 @@ export class ChangeHomeworkComponent implements OnInit {
           complete: () => console.log("Added File")
         });
       } else {
-        this.assignmentService.uploadFile(this.file, this.courseName, this.assignmentInfo.assignmentName, this.userName).subscribe({
+        this.assignmentService.uploadFile(this.file, assignment.filepath).subscribe({
           next: x => {
             console.log(x)
           },
@@ -80,19 +81,19 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   submit() {
-    this.newAssignment.courseName = this.courseName;
     this.newAssignment.createdByUsername = this.userName;
     //console.log(this.newAssignment.startTime);
 
-    if (this.file != null) {
-      this.sendFile();
-    }
+    // if (this.file != null) {
+    //   this.sendFile();
+    // }
 
     if (this.assignmentInfo.id == "-1") {
       
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)
+          this.sendFile(x);
         },
         error: err => {
           console.log("ADDING HWK ERROR: " + err)
@@ -108,11 +109,13 @@ export class ChangeHomeworkComponent implements OnInit {
       this.assignmentService.updateAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)
+          this.sendFile(x);
         },
         error: err => {
           console.log("UPDATING HWK ERROR: " + err)
         },
         complete: () => {
+          
           this.newAssignment = new Assignment()
           console.log("Updated Homework Complete")
         }

@@ -1,7 +1,6 @@
 package compile_io.controllers;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,6 @@ public class CodeController {
 	public AssignmentRepository assignmentRepository;
 
 	private final StorageService storageService;
-	private String codePath;
 
 	@Autowired
 	public CodeController(StorageService storageService) {
@@ -71,48 +69,41 @@ public class CodeController {
 	@PostMapping("/Code/uploadFile")
 	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
-		String courseName = request.getParameter("courseName");
-		String assignmentName = request.getParameter("assignmentName");
-		String userName = request.getParameter("userName");
-		storageService.storeAddPath(file, "student", courseName, assignmentName, userName);
-		return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename());
+		String filePath = request.getParameter("filePath");
+		storageService.storeAddPath(file, filePath);
+		return ResponseEntity.ok().body("Code uploaded " + file.getOriginalFilename());
 	}
 
 	@PostMapping("/Code/uploadCode")
-	public ResponseEntity<List<String>> inputCodeforUser(MultipartHttpServletRequest request) {
+	public ResponseEntity<Code> inputCodeforUser(MultipartHttpServletRequest request) {
 		String userName = request.getParameter("username");
 		String type = request.getParameter("type");
 		String runTime = request.getParameter("runTime");
 		String givenAssignmentId = request.getParameter("assignmentID");
 		Optional<Assignment> assignmentToRun = assignmentRepository.findById(givenAssignmentId);
 		String assignmentFilepath = assignmentToRun.get().getFilePath();
-		Path studentDir = Paths
-				.get("upload-dir/" + assignmentToRun.get().getCourseName().replaceAll(" ", "_").toLowerCase() + "/"
-						+ assignmentToRun.get().getAssignmentName().replaceAll(" ", "_").toLowerCase()
-						+ "/student-files/" + userName.replaceAll(" ", "_").toLowerCase());
-		
-		this.codePath = studentDir.toString();
-		System.out.println("\n\n\n\n\n" + this.codePath + "\n\n\n\n\n");
+		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
+		System.out.println("\n\n\n\n\n" + codePath + "\n\n\n\n\n");
 		int runTimeNum = Integer.parseInt(runTime);
 		LocalTime submissionTime = LocalTime.now();
 		Code newCode = new Code();
 		newCode.setLanguage(type);
 		newCode.setRunTime(runTimeNum);
-		newCode.setCodePath(this.codePath);
+		newCode.setCodePath(codePath);
 		newCode.setSubmissionTime(submissionTime);
 		newCode.setAssignmentId(givenAssignmentId);
 		newCode.setUserName(userName);
 		// Docker stuff
-		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath));
+		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath, codePath));
 
 		codeRepository.save(newCode);
-		return ResponseEntity.ok().body(newCode.getTestResponse());
+		return ResponseEntity.ok().body(newCode);
 	}
 
-	public String runCompiler(String language, int timeLimit, String assignmentFilepath) {
+	public String runCompiler(String language, int timeLimit, String assignmentFilepath, String codePath) {
 		List<File> studentFiles = new ArrayList<>();
 		List<File> ProfessorFiles = new ArrayList<>();
-		File studentDirLocation = Paths.get(this.codePath).toFile();
+		File studentDirLocation = Paths.get(codePath).toFile();
 		File professorDirLocation = Paths.get(assignmentFilepath).toFile();
 		for (File file : studentDirLocation.listFiles()) {
 			System.out.println(studentDirLocation);
@@ -176,7 +167,7 @@ public class CodeController {
     public ResponseEntity<String> deleteCode(@PathVariable("id") String id) {
         return codeRepository.findById(id)
                 .map(code -> {
-                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+//                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
                     codeRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a code");
                 }).orElse(ResponseEntity.notFound().build());

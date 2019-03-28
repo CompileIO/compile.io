@@ -6,7 +6,7 @@ export class Section {
 	term: number;
 	sectionNumber: number;
 	students: Student[];
-	useCourseDescription: boolean ;
+	useCourseDescription: boolean;
 	description: string ;
 	assignments: Assignment[];
 	courseId: string;

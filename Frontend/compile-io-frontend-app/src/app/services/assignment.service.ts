@@ -30,12 +30,10 @@ export class AssignmentService {
     response = this.http.get(this.apiUrl + '/Assignment/getCourse/' + courseName);
     return response;
   }
-  uploadFile(file: File, className: string, assignmentName: string, userName: string): Observable<String> {
+  uploadFile(file: File, assignmentFilePath: string): Observable<String> {
     let body: FormData = new FormData();  
     body.append('file', file);
-    body.append('courseName', className);
-    body.append('assignmentName', assignmentName);
-    body.append('userName', userName);
+    body.append('filePath', assignmentFilePath);
     const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
     var response; 
     response = this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});

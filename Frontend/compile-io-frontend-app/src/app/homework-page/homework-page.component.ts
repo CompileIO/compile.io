@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CodeService } from '../services/code.service';
 import {Assignment} from '../../models/assignment';
+import {Code} from '../../models/code';
 
 @Component({
   selector: 'app-homework-page',
@@ -32,25 +33,32 @@ export class HomeworkPageComponent implements OnInit {
     } else {
       alert("File is too large!");
     }
-    if (this.file !== null) {
-      console.log("Should run upload file")
-      this.codeService.uploadFile(this.file, this.assignmentInfo.courseName, this.assignmentInfo.assignmentName, this.username).subscribe({
+    
+  }
+
+  sendFile(code:Code) {
+    console.log("Should run upload file")
+      this.codeService.uploadFile(this.file, code.codePath).subscribe({
         next: x => {
           console.log(x)
         },
-        
         error: err => {
           console.log("UPLOADING FILE ERROR: " + err)
         },
         complete: () => console.log("Uploaded file")
       });
-    }
   }
+
 
   run() {
     this.running = true;
     this.codeService.uploadCode(this.assignmentInfo.language, this.assignmentInfo.timeout,  this.assignmentInfo.id,this.username).subscribe({
-      next: x => {console.log("This is the result: " + x); this.results = x},
+      next: x => {console.log("This is the result: " + x); 
+                  this.results = x.testResponses;
+                  if (this.file !== null) {
+                    this.sendFile(x);
+                  }
+                },
       error: err => {
         console.log("RUNNING DOCKER ERROR: " + err),
         this.error = err

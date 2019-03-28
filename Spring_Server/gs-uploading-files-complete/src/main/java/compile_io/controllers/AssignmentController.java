@@ -1,7 +1,5 @@
 package compile_io.controllers;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +40,6 @@ public class AssignmentController {
 	CourseRepository courseRepository;
 
 	private final StorageService storageService;
-	private String fileName;
 
 	@Autowired
 	public AssignmentController(StorageService storageService) {
@@ -71,10 +68,9 @@ public class AssignmentController {
 	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
 		String filePath = request.getParameter("filePath");
-		storageService.storeAddPathFile(file, filePath);
-		this.fileName = file.getOriginalFilename();
+		storageService.storeAddPath(file, filePath);
 
-		return ResponseEntity.ok().body("uploaded " + file.getOriginalFilename());
+		return ResponseEntity.ok().body("Assignment uploaded " + file.getOriginalFilename());
 	}
 
 	@PostMapping("/Assignment/Create")
@@ -84,7 +80,6 @@ public class AssignmentController {
 			String directory = createFilePathInServer(sectionId, assignment.getAssignmentName(),
 					assignment.getCreatedByUsername());
 			assignment.setFilePath(directory);
-//    	Path professorDir = Paths.get(directory);
 			addedAssignment = assignmentRepository.save(assignment);
 			System.out.println("\n\n\n\n\n Assignment Created: " + addedAssignment.toString() + "\n\n\n\n\n");
 			Optional<Section> sectionToFind = this.sectionRepository.findById(sectionId);
@@ -107,7 +102,7 @@ public class AssignmentController {
 		directory = "upload-dir/" + Integer.toString(section.getYear()) + "/" + Integer.toString(section.getTerm())
 				+ "/" + course.getCourseName().replaceAll(" ", "_").toLowerCase() + "/"
 				+ Integer.toString(section.getSectionNumber()) + "/" + AssignmentName.replaceAll(" ", "_").toLowerCase()
-				+ "/" + "/professor-files/" + createdByUser.replaceAll(" ", "_").toLowerCase();
+				+ "/professor-files/" + createdByUser.replaceAll(" ", "_").toLowerCase();
 
 		return directory;
 	}
