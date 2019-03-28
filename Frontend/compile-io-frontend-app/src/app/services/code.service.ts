@@ -53,6 +53,15 @@ export class CodeService {
     return response;
   }
 
+  serveFile(filename: string, filepath: string) { //: Observable<Resource>
+    let body: FormData = new FormData();
+    body.append('filepath', filepath);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
+    var response; 
+    response = this.http.post(this.apiUrl + "/Code/getFile/" + filename, body , {headers: headers, withCredentials: true});
+    return response;
+  }
+
   deleteCode(id: string): Observable<String>{
     var response;
     response = this.http.delete(this.apiUrl + '/Code/deleteCode' + id, {withCredentials: true });

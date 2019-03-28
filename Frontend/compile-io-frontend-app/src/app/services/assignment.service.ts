@@ -35,6 +35,15 @@ export class AssignmentService {
     return response;
   }
 
+  serveFile(filename: string, filepath: string) { //: Observable<Resource>
+    let body: FormData = new FormData();
+    body.append('filepath', filepath);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
+    var response; 
+    response = this.http.post(this.apiUrl + "/Assignment/getFile/" + filename, body , {headers: headers, withCredentials: true});
+    return response;
+  }
+
   createAssignment(assignmentData: Assignment): Observable<Assignment> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
     // console.log("Inside the create Assignment Method: " + "\n" + 
