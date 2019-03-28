@@ -14,7 +14,7 @@ export class SectionComponent implements OnInit {
   @Input() courseInfo: Course;
 
   constructor() { }
-
+  
   ngOnInit() {
   }
 

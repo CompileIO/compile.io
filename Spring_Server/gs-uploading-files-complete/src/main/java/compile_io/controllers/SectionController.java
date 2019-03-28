@@ -82,20 +82,21 @@ public class SectionController {
                 	sectionData.setStudentUsernames(section.getStudentUsernames());
                 	sectionData.setTerm(section.getTerm());
                 	sectionData.setYear(section.getYear());
-                	sectionData.setUseClassDescription(section.isUseClassDescription());
+                	sectionData.setUseCourseDescription(section.isUseCourseDescription());
                 	sectionData.setCourseId(section.getCourseId());
                     Section updatedsection = sectionRepository.save(sectionData);
                     System.out.println("\n\n\n\n\n section Updated: " + updatedsection.toString() + "\n\n\n\n\n");
                     //updating courses
-                    
+                    Optional<Course> courseToAddASectionFind = this.courseRepository.findById(section.getCourseId());
+                	Course courseToAddASection = courseToAddASectionFind.get();
                 	if(!section.getCourseId().equals(sectionToUpdate.getCourseId())) {
                 		Optional<Course> courseToDeleteASectionFind = this.courseRepository.findById(sectionToUpdate.getCourseId());
                     	Course courseToDeleteASection = courseToDeleteASectionFind.get();
                     	courseToDeleteASection.deleteSection(sectionToUpdate);
-                    	
-                    	Optional<Course> courseToAddASectionFind = this.courseRepository.findById(section.getCourseId());
-                    	Course courseToAddASection = courseToAddASectionFind.get();
                     	courseToAddASection.addSection(updatedsection);
+                	} else {
+                		courseToAddASection.deleteSection(sectionToUpdate);
+                		courseToAddASection.addSection(updatedsection);
                 	}
                     return ResponseEntity.ok().body(updatedsection);
                 }).orElse(ResponseEntity.notFound().build());							

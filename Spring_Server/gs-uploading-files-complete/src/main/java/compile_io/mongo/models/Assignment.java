@@ -3,6 +3,7 @@ package compile_io.mongo.models;
 
 
 import java.util.Date;
+import java.util.List;
 import java.time.LocalTime;
 
 
@@ -32,8 +33,8 @@ public class Assignment {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
 	private LocalTime endTime;
     private String filepath;
-    private String courseName;
     private String createdByUsername;
+    private List<String> sectionIds;
     private boolean availableToOtherSections; //changed
     
 	
@@ -131,14 +132,6 @@ public class Assignment {
 	public void setFilePath(String file) {
 		this.filepath = file;
 	}
-
-	public String getCourseName() {
-		return courseName;
-	}
-
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
-	}
 	
 	public String getCreatedByUsername() {
 		return createdByUsername;
@@ -156,6 +149,14 @@ public class Assignment {
 		this.filepath = filepath;
 	}
 
+	public List<String> getSectionIds() {
+		return sectionIds;
+	}
+
+	public void setSectionIds(List<String> sectionIds) {
+		this.sectionIds = sectionIds;
+	}
+
 	public boolean isAvailableToOtherSections() {
 		return availableToOtherSections;
 	}
@@ -167,10 +168,12 @@ public class Assignment {
 
 	@Override
 	public String toString() {
+		final int maxLen = 10;
 		return "Assignment [id=" + id + ", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
 				+ language + ", size=" + size + ", tries=" + tries + ", startDate=" + startDate + ", startTime="
 				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", filepath=" + filepath
-				+ ", courseName=" + courseName + ", createdByUsername=" + createdByUsername
+				+ ", createdByUsername=" + createdByUsername + ", sectionIds="
+				+ (sectionIds != null ? sectionIds.subList(0, Math.min(sectionIds.size(), maxLen)) : null)
 				+ ", availableToOtherSections=" + availableToOtherSections + "]";
 	}
 

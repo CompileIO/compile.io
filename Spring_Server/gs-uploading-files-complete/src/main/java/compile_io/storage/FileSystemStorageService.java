@@ -56,6 +56,10 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Failed to store file " + filename, e);
         }
     }
+	
+	public void storeAddPathFile(MultipartFile file, String filePath) {
+		Path dir = Paths.get(filePath);
+	}
     
     public void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName) {
     	Path dir;

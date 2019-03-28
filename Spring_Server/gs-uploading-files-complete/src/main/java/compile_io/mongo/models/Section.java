@@ -19,7 +19,7 @@ public class Section {
 	private int term; //1
 	private int sectionNumber;
 	private List<String> studentUsernames;
-	private boolean useClassDescription;
+	private boolean useCourseDescription;
 	private String description;
 	private String courseId;
 	@DBRef
@@ -99,11 +99,11 @@ public class Section {
 
 
 
-	public boolean isUseClassDescription() {
-		return useClassDescription;
+	public boolean isUseCourseDescription() {
+		return useCourseDescription;
 	}
-	public void setUseClassDescription(boolean useClassDescription) {
-		this.useClassDescription = useClassDescription;
+	public void setUseCourseDescription(boolean useClassDescription) {
+		this.useCourseDescription = useClassDescription;
 	}
 	public String getDescription() {
 		return description;
@@ -148,7 +148,7 @@ public class Section {
 	@Override
 	public String toString() {
 		return "Section [id=" + id + ", Year=" + year + ", Term=" + term + ", sectionNumber=" + sectionNumber
-				+ ", studentUsernames=" + studentUsernames + ", useClassDescription=" + useClassDescription
+				+ ", studentUsernames=" + studentUsernames + ", useCourseDescription=" + useCourseDescription
 				+ ", description=" + description + ", courseId=" + courseId + ", assignments=" + assignments + "]";
 	}
 	

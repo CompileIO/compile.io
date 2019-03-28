@@ -77,40 +77,7 @@ public class CourseController {
                                            @Valid @RequestBody Course course) {
     	Optional<Course> Potentialcourse = courseRepository.findById(id);
     	Course courseToUpdate = Potentialcourse.get();
-    	List<String> professorUsernamesInCourse = courseToUpdate.getProfessors();
-    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-    	for(int i = 0; i < professorUsernamesInCourse.size(); i++) {
-    		if (course.getProfessors().contains(professorUsernamesInCourse.get(i))) {
-    			//update this prof
-    			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
-    			if(!profs.isEmpty()) {	
-    				profs.get(0).deleteCourse(courseToUpdate);
-    				profs.get(0).addCourse(course);
-        			Professor updatedProf = this.professorRepository.save(profs.get(0));
-        			System.out.println("\n\n\n\n\n Professor Updated in the first if: " + updatedProf.toString() + "\n\n\n\n\n");
-    			}
-    		} else {
-    			//remove course from this prof
-    			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
-    			if(!profs.isEmpty()) {
-    				profs.get(0).deleteCourse(courseToUpdate);
-    				Professor updatedProf = this.professorRepository.save(profs.get(0));
-        			System.out.println("\n\n\n\n\n Professor Updated removed: " + updatedProf.toString() + "\n\n\n\n\n");
-    			}
-    		}
-    	}
-    	List<String> professorUsernamesInNewCourse = course.getProfessors();
-    	for(int i = 0; i < professorUsernamesInNewCourse.size(); i++) {
-    		if (!professorUsernamesInCourse.contains(professorUsernamesInNewCourse.get(i))) {
-    			//add this course in this prof
-    			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
-    			if(!profs.isEmpty()) {
-    				profs.get(0).addCourse(course);
-    				Professor updatedProf = this.professorRepository.save(profs.get(0));
-        			System.out.println("\n\n\n\n\n Professor Updated second if: " + updatedProf.toString() + "\n\n\n\n\n");
-    			}
-    		}
-    	}
+    	
     	return courseRepository.findById(id)
                 .map(courseData -> {
                 	courseData.setProfessors(course.getProfessors());
@@ -119,6 +86,43 @@ public class CourseController {
                 	courseData.setSections(course.getSections());
                     Course updatedCourse = courseRepository.save(courseData);
                     System.out.println("\n\n\n\n\n Course Updated: " + updatedCourse.toString() + "\n\n\n\n\n");
+                    
+                    List<String> professorUsernamesInCourse = courseToUpdate.getProfessors();
+                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                	for(int i = 0; i < professorUsernamesInCourse.size(); i++) {
+            			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+
+                		if (course.getProfessors().contains(professorUsernamesInCourse.get(i))) {
+                			//update this prof
+                			if(!profs.isEmpty()) {	
+                				profs.get(0).deleteCourse(courseToUpdate);
+                				profs.get(0).addCourse(updatedCourse);
+                    			Professor updatedProf = this.professorRepository.save(profs.get(0));
+                    			System.out.println("\n\n\n\n\n Professor Updated in the first for loop: " + updatedProf.toString() + "\n\n\n\n\n");
+                			}
+                		} else {
+                			//remove course from this prof
+//                			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+                			if(!profs.isEmpty()) {
+                				profs.get(0).deleteCourse(courseToUpdate);
+                				Professor updatedProf = this.professorRepository.save(profs.get(0));
+                    			System.out.println("\n\n\n\n\n Professor Updated removed: " + updatedProf.toString() + "\n\n\n\n\n");
+                			}
+                		}
+                	}
+                	List<String> professorUsernamesInNewCourse = course.getProfessors();
+                	for(int i = 0; i < professorUsernamesInNewCourse.size(); i++) {
+                		if (!professorUsernamesInCourse.contains(professorUsernamesInNewCourse.get(i))) {
+                			//add this course in this prof
+                			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+                			if(!profs.isEmpty()) {
+                				profs.get(0).addCourse(updatedCourse);
+                				Professor updatedProf = this.professorRepository.save(profs.get(0));
+                    			System.out.println("\n\n\n\n\n Professor Updated second for loop: " + updatedProf.toString() + "\n\n\n\n\n");
+                			}
+                		}
+                	}
+                    
                     return ResponseEntity.ok().body(updatedCourse);
                 }).orElse(ResponseEntity.notFound().build());							
      

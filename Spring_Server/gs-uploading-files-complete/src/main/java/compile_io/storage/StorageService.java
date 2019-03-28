@@ -13,7 +13,9 @@ public interface StorageService {
     void store(MultipartFile file);
     
     void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName);
-
+    
+    void storeAddPathFile(MultipartFile file, String filePath);
+    
     Stream<Path> loadAll();
 
     Path load(String filename);

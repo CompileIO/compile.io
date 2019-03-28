@@ -69,7 +69,7 @@ export class ChangeSectionPageComponent implements OnInit {
       this.newSection.sectionNumber = this.sectionInfo.sectionNumber;
       this.newSection.students = this.sectionInfo.students;
       this.newSection.term = this.sectionInfo.term;
-      this.newSection.useClassDescription = this.sectionInfo.useClassDescription;
+      this.newSection.useCourseDescription = this.sectionInfo.useCourseDescription;
       this.newSection.year = this.sectionInfo.year;
     } 
   }

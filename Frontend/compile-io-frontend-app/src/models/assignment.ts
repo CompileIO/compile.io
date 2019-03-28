@@ -14,6 +14,7 @@ export class Assignment {
     filepath: string;
     courseName: string;
     createdByUsername: string;
+    sectionIds: string[];
     availableToOtherSections: boolean ;
     
 }

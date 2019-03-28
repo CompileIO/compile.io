@@ -28,7 +28,7 @@
                   <div class="row">
                     <div class="col p-2 sidebarHover w-50 btn blackText" (click)="selectSection(sec)">
                       <span>
-                        {{sec.Term}}{{sec.Year}}{{sec.sectionNumber}}
+                        {{sec.term}}{{sec.year}}{{sec.sectionNumber}}
                       </span>
                       <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
                     </div>
@@ -81,7 +81,7 @@
         <div class="row" *ngFor="let sec of Sections" (click)="selectSection(sec)">
           <div class="col p-2 sidebarHover w-50 btn blackText">
             <span>
-              {{sec.Term}}{{sec.Year}}{{sec.sectionNumber}}
+                {{sec.term}}{{sec.year}}{{sec.sectionNumber}}
             </span>
             <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
             <div *ngIf="selectedSection == sec">
@@ -182,7 +182,7 @@
           <div class="col">
             <div class="p-3 w-100">
               <h1 *ngIf="selectedSection.id != '-1'">
-                {{selectedSection.Term}}{{selectedSection.Year}}{{selectedSection.sectionNumber}}
+                {{selectedSection.term}}{{selectedSection.year}}{{selectedSection.sectionNumber}}
               </h1>
               <h1 *ngIf="selectedSection.id == '-1'">
                 New Section
