@@ -140,14 +140,6 @@ public class Assignment {
 	public void setCreatedByUsername(String createdByUsername) {
 		this.createdByUsername = createdByUsername;
 	}
-	
-	public String getFilepath() {
-		return filepath;
-	}
-
-	public void setFilepath(String filepath) {
-		this.filepath = filepath;
-	}
 
 	public List<String> getSectionIds() {
 		return sectionIds;
