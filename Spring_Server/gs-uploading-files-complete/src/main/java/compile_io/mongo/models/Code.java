@@ -65,6 +65,9 @@ public class Code {
 	public List<String> getTestResponse() {
 		return testResponses;
 	}
+	public void setTestResponses(List<String> testResponses) {
+		this.testResponses = testResponses;
+	}
 	
 	public int getSubmissionAttempts() {
 		return submissionAttempts;
@@ -74,13 +77,7 @@ public class Code {
 		this.submissionAttempts = submissionAttempts;
 	}
 
-	public List<String> getTestResponses() {
-		return testResponses;
-	}
-
-	public void setTestResponses(List<String> testResponses) {
-		this.testResponses = testResponses;
-	}
+	
 	public LocalTime getSubmissionTime() {
 		return submissionTime;
 	}
@@ -103,9 +100,6 @@ public class Code {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
-	
-	
 	
 	public String getCodePath() {
 		return codePath;

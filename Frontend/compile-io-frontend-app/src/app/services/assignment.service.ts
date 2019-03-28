@@ -24,12 +24,7 @@ export class AssignmentService {
     return response;
     
   }
-
-  getAssignmentsForSpecificCourse(courseName: string): Observable<Assignment[]> { 
-    var response;
-    response = this.http.get(this.apiUrl + '/Assignment/getCourse/' + courseName);
-    return response;
-  }
+  
   uploadFile(file: File, assignmentFilePath: string): Observable<String> {
     let body: FormData = new FormData();  
     body.append('file', file);

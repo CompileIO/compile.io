@@ -52,12 +52,6 @@ public class AssignmentController {
 		return ResponseEntity.ok().body(assignmentRepository.findAll(sortByCreatedAtDesc));
 	}
 
-	@GetMapping("/Assignment/getCourse/{courseName}")
-	public ResponseEntity<List<Assignment>> getAllAssignmentsForCourse(@PathVariable("courseName") String courseName) {
-		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-		return ResponseEntity.ok().body(assignmentRepository.findBycourseName(courseName, sortByCreatedAtDesc));
-	}
-
 	@GetMapping(value = "/Assignment/{id}")
 	public ResponseEntity<Assignment> getassignmentById(@PathVariable("id") String id) {
 		return assignmentRepository.findById(id).map(assignment -> ResponseEntity.ok().body(assignment))
