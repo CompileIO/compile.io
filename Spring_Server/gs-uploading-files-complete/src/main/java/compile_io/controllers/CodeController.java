@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import compile_io.docker.*;
 import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Code;
+import compile_io.mongo.models.Student;
 import compile_io.mongo.repositories.AssignmentRepository;
+import compile_io.mongo.repositories.StudentRepository;
 import compile_io.mongo.repositories.CodeRepository;
 import compile_io.storage.StorageFileNotFoundException;
 import compile_io.storage.StorageService;
@@ -39,6 +41,9 @@ public class CodeController {
 
 	@Autowired
 	public AssignmentRepository assignmentRepository;
+	
+	@Autowired
+	public StudentRepository studentRepository;
 
 	private final StorageService storageService;
 
@@ -95,9 +100,15 @@ public class CodeController {
 		newCode.setUserName(userName);
 		// Docker stuff
 		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath, codePath));
-
-		codeRepository.save(newCode);
-		return ResponseEntity.ok().body(newCode);
+		Code addedCode = codeRepository.save(newCode);
+		
+		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+		List<Student> students = this.studentRepository.findByuserName(userName, sortByCreatedAtDesc);
+		Student student = students.get(0);
+		student.addCode(addedCode);
+		this.studentRepository.save(student);
+		
+		return ResponseEntity.ok().body(addedCode);
 	}
 
 	public String runCompiler(String language, int timeLimit, String assignmentFilepath, String codePath) {

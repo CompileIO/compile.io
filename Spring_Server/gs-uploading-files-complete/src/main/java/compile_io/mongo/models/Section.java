@@ -66,7 +66,7 @@ public class Section {
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
 		List<Student> student = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
 		if(!student.isEmpty()) {
-			student.get(0).addSection(this);
+			student.get(0).addSectionIds(this.id);
 			this.studentRepository.save(student.get(0));
 		}
 	}
@@ -81,7 +81,7 @@ public class Section {
 				List<Student> student = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
 				if(!student.isEmpty()) {
 					//might have to use id's
-					student.get(0).deleteSection(this);
+					student.get(0).deleteSectionIds(this.id);
 					this.studentRepository.save(student.get(0));
 				}
 				

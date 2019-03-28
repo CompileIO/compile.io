@@ -14,15 +14,14 @@ public class Student {
 	
 	@DBRef
 	private List<Code> codes;
-	@DBRef
-	private List<Section> sections;
+	private List<String> sectionIds;
 	private String name;
 	private String userName;
 
     public Student() {
     	super();
     	this.codes = new ArrayList<Code>();
-    	this.sections = new ArrayList<Section>();
+    	this.sectionIds = new ArrayList<String>();
     }
     
     public String getId() {
@@ -71,31 +70,35 @@ public class Student {
 		this.codes = codes;
 	}
 	
-	public void addSection(Section newSection) {
-		this.sections.add(newSection);
+	public void addSectionIds(String newSectionId) {
+		this.sectionIds.add(newSectionId);
 	}
 	
-	public void deleteSection (Section newSection) {
-		for(int i = 0; i < this.sections.size(); i++) {
-			Section section = this.sections.get(i);
-			if(newSection == section) {
-				this.sections.remove(section);
+	public void deleteSectionIds (String newSectionId) {
+		for(int i = 0; i < this.sectionIds.size(); i++) {
+			String sectionId = this.sectionIds.get(i);
+			if(newSectionId == sectionId) {
+				this.sectionIds.remove(sectionId);
 				i--;
 			}
 		}
 	}
 
-	public List<Section> getSections() {
-		return sections;
+	public List<String> getSections() {
+		return sectionIds;
 	}
 
-	public void setSections(List<Section> sections) {
-		this.sections = sections;
+	public void setSections(List<String> sectionIds) {
+		this.sectionIds = sectionIds;
 	}
 
 	@Override
 	public String toString() {
-		return "Student [name=" + name + ", userName=" + userName + "]";
+		final int maxLen = 10;
+		return "Student [id=" + id + ", codes="
+				+ (codes != null ? codes.subList(0, Math.min(codes.size(), maxLen)) : null) + ", sectionIds="
+				+ (sectionIds != null ? sectionIds.subList(0, Math.min(sectionIds.size(), maxLen)) : null) + ", name="
+				+ name + ", userName=" + userName + "]";
 	}
    
 }
