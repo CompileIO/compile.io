@@ -84,11 +84,11 @@ public class Student {
 		}
 	}
 
-	public List<String> getSections() {
+	public List<String> getSectionIds() {
 		return sectionIds;
 	}
 
-	public void setSections(List<String> sectionIds) {
+	public void setSectionIds(List<String> sectionIds) {
 		this.sectionIds = sectionIds;
 	}
 

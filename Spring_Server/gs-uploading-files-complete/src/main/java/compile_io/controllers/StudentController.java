@@ -1,6 +1,7 @@
 package compile_io.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -15,14 +16,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Professor;
+import compile_io.mongo.models.Section;
 import compile_io.mongo.models.Student;
 import compile_io.mongo.repositories.StudentRepository;
+import compile_io.mongo.repositories.SectionRepository;
 
 @RestController
 public class StudentController{
 	@Autowired 
 	public StudentRepository studentRepository;
+	
+	@Autowired 
+	public SectionRepository sectionRepository;
 	
 	@GetMapping("/Students")
 	public ResponseEntity<List<Student>> getStudents() {
@@ -50,6 +57,15 @@ public class StudentController{
     public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {   
     	Student addedStudent = studentRepository.save(student);
     	System.out.println("\n\n\n\n\n Student Created: " + addedStudent.toString() + "\n\n\n\n\n");
+    	
+    	if(!addedStudent.getSectionIds().isEmpty()) {
+    	for(String sectionId : addedStudent.getSectionIds()) {
+    		Optional<Section> sectionToFind = this.sectionRepository.findById(sectionId);
+    		Section section = sectionToFind.get();
+    		section.addStudentUsername(student.getUserName());
+    	}
+    	}
+    	
         return ResponseEntity.ok().body(addedStudent);
     } 
     
@@ -57,15 +73,41 @@ public class StudentController{
     @PutMapping(value="/Student/Update/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable("id") String id,
                                            @Valid @RequestBody Student student) {
+    	Optional<Student> studentToFind = this.studentRepository.findById(student.getId());
+    	Student studentToUpdate = studentToFind.get();//change
     	System.out.println(student.toString());
     	return studentRepository.findById(id)
                 .map(studentData -> {
                 	studentData.setName(student.getName());
                 	studentData.setCodes(student.getCodes());
-                	studentData.setSections(student.getSections());
+                	studentData.setSectionIds(student.getSectionIds());
                 	student.setUserName(student.getUserName());
                 	Student updatedStudent = studentRepository.save(studentData);
                     System.out.println("\n\n\n\n\n Student Updated: " + updatedStudent.toString() + "\n\n\n\n\n");
+                    for(String sectionId : studentToUpdate.getSectionIds()) {
+                   	 Optional<Section> sectionToFind = this.sectionRepository.findById(sectionId);
+               		 Section section = sectionToFind.get();
+               		 if(section.getStudentUsernames().contains(studentToUpdate.getUserName())) {
+               			 section.deleteStudentUsername(studentToUpdate.getUserName());
+               			section.addStudentUsername(studentToUpdate.getUserName());
+               			 Section updatedSection = this.sectionRepository.save(section);
+               			 System.out.println("\n\n\n\n\n Section Updated in Student controller: " + updatedSection.toString());
+               		 } else {
+               			section.deleteStudentUsername(studentToUpdate.getUserName());
+               			 Section updatedSection = this.sectionRepository.save(section);
+               			 System.out.println("\n\n\n\n\n Section Updated in Student controller removed: " + updatedSection.toString() + "\n\n\n\n\n");
+               		 }
+                   }
+                   
+                   for(String sectionId : updatedStudent.getSectionIds() ) {
+                   	if(!updatedStudent.getSectionIds().contains(sectionId)) {
+                   		Optional<Section> sectionToFind = this.sectionRepository.findById(sectionId);
+                  		 	Section section = sectionToFind.get();
+                  		 	section.addStudentUsername(updatedStudent.getUserName());
+                  		 	Section updatedSection = this.sectionRepository.save(section);
+                  		 System.out.println("\n\n\n\n\n Section Updated in Student controller second for loop: " + updatedSection.toString() + "\n\n\n\n\n");
+                   	}
+                   }
                     return ResponseEntity.ok().body(updatedStudent);
                 }).orElse(ResponseEntity.notFound().build());							
      
