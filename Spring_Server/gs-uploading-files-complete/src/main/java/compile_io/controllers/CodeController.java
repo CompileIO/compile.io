@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -195,6 +196,10 @@ public class CodeController {
                 	List<Student> students = this.studentRepository.findByuserName(code.getUserName(),sortByCreatedAtDesc);
                 	students.get(0).deleteCode(code);
                 	this.studentRepository.save(students.get(0));
+                	
+                	File codeFile = Paths.get(code.getCodePath()).toFile();
+        			FileSystemUtils.deleteRecursively(codeFile);
+                	
                     codeRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a code");
                 }).orElse(ResponseEntity.notFound().build());

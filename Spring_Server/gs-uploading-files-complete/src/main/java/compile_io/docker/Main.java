@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 public class Main {
     public static void main(String[] args){
         BuilderFactory builderFactory = new BuilderFactory();
-        File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/student-files/Simple.java");
-        File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/professor-files/SimpleTest.java");
+        // File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/student-files/Simple.java");
+        // File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/professor-files/SimpleTest.java");
 
         File studentDir = Paths.get("mock-upload-dir/student-files").toFile();
         List<File> studentFiles = new ArrayList<>();

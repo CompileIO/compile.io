@@ -1,5 +1,7 @@
 package compile_io.controllers;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Code;
-import compile_io.mongo.models.Professor;
 import compile_io.mongo.models.Section;
 import compile_io.mongo.models.Student;
 import compile_io.mongo.repositories.StudentRepository;
@@ -123,6 +124,8 @@ public class StudentController{
         return studentRepository.findById(id)
                 .map(student -> {
                 	for(Code code : student.getCodes()) {
+                		File codeFile = Paths.get(code.getCodePath()).toFile();
+            			FileSystemUtils.deleteRecursively(codeFile);
                 		codeRepository.deleteById(code.getId());
                 	}
                 	

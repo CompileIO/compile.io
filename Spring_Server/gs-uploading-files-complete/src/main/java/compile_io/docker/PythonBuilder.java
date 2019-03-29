@@ -17,7 +17,7 @@ public class PythonBuilder extends AbstractBuilder {
     public String getDockerfileData() { 
         StringBuilder dockerfileData = new StringBuilder();
         List<File> studentFiles = super.getStudentFiles();
-        List<File> professorFiles = super.getProfessorFiles();
+        // List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM python:latest\n");
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");

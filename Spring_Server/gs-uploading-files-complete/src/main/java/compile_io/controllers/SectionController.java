@@ -1,7 +1,5 @@
 package compile_io.controllers;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,15 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Section;
-import compile_io.mongo.models.Student;
-import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Course;
-import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.SectionRepository;
 import compile_io.mongo.repositories.StudentRepository;
 import compile_io.mongo.repositories.AssignmentRepository;
 import compile_io.mongo.repositories.CourseRepository;
-import compile_io.mongo.repositories.ProfessorRepository;
 
 @RestController
 public class SectionController {
@@ -103,12 +96,15 @@ public class SectionController {
                     	Course courseToDeleteASection = courseToDeleteASectionFind.get();
                     	courseToDeleteASection.deleteSection(sectionToUpdate);
                     	courseToAddASection.addSection(updatedsection);
-                    	this.courseRepository.save(courseToDeleteASection);
-                    	this.courseRepository.save(courseToAddASection);
+                    	Course courseDelete = this.courseRepository.save(courseToDeleteASection);
+                    	Course courseAdd = this.courseRepository.save(courseToAddASection);
+                    	System.out.println("\n\n\nCourse Updated in Section Controller If deleted: " + courseDelete.toString());
+                    	System.out.println("\n\n\nCourse Updated in Section Controller If Added: " + courseAdd.toString());
                 	} else {
-                		courseToAddASection.deleteSection(sectionToUpdate);
-                		courseToAddASection.addSection(updatedsection);
-                		this.courseRepository.save(courseToAddASection);
+//                		courseToAddASection.deleteSection(sectionToUpdate);
+//                		courseToAddASection.addSection(updatedsection);
+//                		Course course  = this.courseRepository.save(courseToAddASection);
+//                		System.out.println("\n\n\nCourse Updated in Section Controller ELSE: " + course.toString() + "\n\n\n\n\n");
                 		
                 	}
                     return ResponseEntity.ok().body(updatedsection);

@@ -193,12 +193,13 @@ public class AssignmentController {
 			
 			//might not have to delete assignments in sections because of DBRef
 			
-//			for(String sectionIds : assignment.getSectionIds()) {
-//				//delete assignments from section
-//				Optional<Section> sectionToFind = this.sectionRepository.findById(sectionIds);
-//				Section section = sectionToFind.get();
-//				section.get
-//			}
+			for(String sectionIds : assignment.getSectionIds()) {
+				//delete assignments from section
+				Optional<Section> sectionToFind = this.sectionRepository.findById(sectionIds);
+				Section section = sectionToFind.get();
+				section.deleteAssignment(assignment);
+				this.sectionRepository.save(section);
+			}
 			
 			assignmentRepository.deleteById(id);
 			return ResponseEntity.ok().body("Deleted a Assignment");

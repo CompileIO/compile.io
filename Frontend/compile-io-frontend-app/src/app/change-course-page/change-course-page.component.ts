@@ -83,6 +83,7 @@ export class ChangeCoursePageComponent implements OnInit {
       this.professorList = this.newCourse.professors;
       this.newCourse.description = this.courseInfo.description;
       this.newCourse.id = this.courseInfo.id; 
+      this.newCourse.sections = this.courseInfo.sections;
       //this.newCourse.crn = this.courseInfo.crn;
       //this.newCourse.sectionNumber = this.courseInfo.sectionNumber;
       this.newCourse.professors = this.courseInfo.professors;
