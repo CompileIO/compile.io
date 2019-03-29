@@ -89,8 +89,8 @@ public class CourseController {
                 	courseData.setCourseName(course.getCourseName());
                 	courseData.setDescription(course.getDescription());
                 	courseData.setSections(course.getSections());
-                    Course updatedCourse = courseRepository.save(courseData);
-                    System.out.println("\n\n\n\n\n Course Updated: " + updatedCourse.toString() + "\n\n\n\n\n");
+                	Course updatedcourse = courseRepository.save(courseData);
+                    System.out.println("\n\n\n\n\n Course Updated: " + updatedcourse.toString() + "\n\n\n\n\n");
                     
                     List<String> professorUsernamesInCourse = courseToUpdate.getProfessors();
                 	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
@@ -98,20 +98,12 @@ public class CourseController {
             			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
 
                 		if (course.getProfessors().contains(professorUsernamesInCourse.get(i))) {
-                			//update this prof
                 			if(!profs.isEmpty()) {	
-                				profs.get(0).deleteCourse(courseToUpdate);
-                				profs.get(0).addCourse(updatedCourse);
-                    			Professor updatedProf = this.professorRepository.save(profs.get(0));
-                    			System.out.println("\n\n\n\n\n Professor Updated in the first for loop: " + updatedProf.toString() + "\n\n\n\n\n");
+                				updatedcourse.updateProfessorUserName(profs.get(0).getUserName(),updatedcourse,courseToUpdate);
                 			}
                 		} else {
-                			//remove course from this prof
-//                			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
                 			if(!profs.isEmpty()) {
-                				profs.get(0).deleteCourse(courseToUpdate);
-                				Professor updatedProf = this.professorRepository.save(profs.get(0));
-                    			System.out.println("\n\n\n\n\n Professor Updated removed: " + updatedProf.toString() + "\n\n\n\n\n");
+                				updatedcourse.deleteProfessorUsername(profs.get(0).getUserName());
                 			}
                 		}
                 	}
@@ -121,13 +113,11 @@ public class CourseController {
                 			//add this course in this prof
                 			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
                 			if(!profs.isEmpty()) {
-                				profs.get(0).addCourse(updatedCourse);
-                				Professor updatedProf = this.professorRepository.save(profs.get(0));
-                    			System.out.println("\n\n\n\n\n Professor Updated second for loop: " + updatedProf.toString() + "\n\n\n\n\n");
+                				updatedcourse.addProfessorUsername(profs.get(0).getUserName());
                 			}
                 		}
                 	}
-                    
+                	Course updatedCourse = this.courseRepository.save(updatedcourse);
                     return ResponseEntity.ok().body(updatedCourse);
                 }).orElse(ResponseEntity.notFound().build());							
      

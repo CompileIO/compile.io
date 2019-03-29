@@ -70,11 +70,11 @@ public class Student {
 		this.codes = codes;
 	}
 	
-	public void addSectionIds(String newSectionId) {
+	public void addSectionId(String newSectionId) {
 		this.sectionIds.add(newSectionId);
 	}
 	
-	public void deleteSectionIds (String newSectionId) {
+	public void deleteSectionId (String newSectionId) {
 		for(int i = 0; i < this.sectionIds.size(); i++) {
 			String sectionId = this.sectionIds.get(i);
 			if(newSectionId == sectionId) {

@@ -30,6 +30,7 @@ export class UserPageComponent implements OnInit {
   Assignments: Assignment[] = [];
   Sections: Section[] = [];
   profToAdd: Professor;
+  studentToAdd: Student;
   profInfo: Professor;
   studentInfo: Student;
 
@@ -43,13 +44,11 @@ export class UserPageComponent implements OnInit {
   isProfessor(): void {
     var addProf = true;
     if (this.group === "PROFESSOR" || this.group === "ADMIN") {
-      this.professorService.getProfessors().subscribe({
-        next: professors => {
-          for (var i = 0; i < professors.length; i++) {
-            if (professors[i].userName === this.username) {
+      this.professorService.getProfessorbyUsername(this.username).subscribe({
+        next: professor => {
+            if (professor.userName === this.username) {
               addProf = false;
-              break;
-            }
+              this.getUserInfo;
           }
         },
         error: err => console.log("GET PROFESSOR ERROR: " + err),
@@ -63,6 +62,43 @@ export class UserPageComponent implements OnInit {
               next: x => { console.log(x) },
               error: err => { console.log("ADDING PROFESSOR ERROR: " + err) },
               complete: () => { console.log("Added Professor Complete"); this.getUserInfo(); }
+            });
+          }
+        }
+
+      });
+    }
+  }
+
+  isStudent(): void {
+    var addStudent = true;
+    if (this.group === "STUDENT") {
+      this.studentService.getStudentbyUsername(this.username).subscribe({
+        next: student => {
+            if (student.userName === this.username) {
+              addStudent = false;
+              if(student.name === null || student.name === undefined) {
+                student.name = this.name;
+                this.studentService.updateStudent(student).subscribe({
+                  next: x => { console.log(x) },
+                  error: err => { console.log("UPDATING STUDENT ERROR: " + err) },
+                  complete: () => { console.log("Updating Student Complete");}
+                });
+              }
+              this.getUserInfo;
+            }
+        },
+        error: err => console.log("GET STUDENT ERROR: " + err),
+        complete: () => {
+          if (addStudent) {
+            this.studentToAdd = new Student();
+            this.studentToAdd.name = this.name;
+            this.studentToAdd.userName = this.username;
+            console.log("Adding Student");
+            this.studentService.createStudent(this.studentToAdd).subscribe({
+              next: x => { console.log(x) },
+              error: err => { console.log("ADDING STUDENT ERROR: " + err) },
+              complete: () => { console.log("Added Student Complete"); this.getUserInfo(); }
             });
           }
         }
@@ -171,7 +207,10 @@ export class UserPageComponent implements OnInit {
     // const decoded = this.decode(token);
     //this.getCourses();
     this.isProfessor();
+    this.isStudent();
     this.getUserInfo();
+
+    //The above is very inefficient too many gets on database and can be consolidated getUserInfo is not necessary
   }
 
 }

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Section;
+import compile_io.mongo.models.Student;
 import compile_io.mongo.models.Course;
+import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.SectionRepository;
 import compile_io.mongo.repositories.StudentRepository;
 import compile_io.mongo.repositories.AssignmentRepository;
@@ -59,13 +61,23 @@ public class SectionController {
 		if(section.getId() == "-1") {
 			section.setId(null);
 		}
-		System.out.println("Inside create section with: " + section.toString());
     	Section sectionAdded = sectionRepository.save(section);
     	System.out.println("\n\n\n\n\n section Created: " + sectionAdded.toString() + "\n\n\n\n\n");
     	Optional<Course> courseToFind = this.courseRepository.findById(section.getCourseId());
     	Course course = courseToFind.get();
     	course.addSection(sectionAdded);
     	this.courseRepository.save(course);
+    	
+    	List<String> studentUsernamesInSection = section.getStudentUsernames();
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    	for(int i = 0; i < studentUsernamesInSection.size(); i++) {
+    			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
+    			Student student = students.get(0);
+    			if(!students.isEmpty()) {
+    				student.addSectionId(sectionAdded.getId());
+        			this.studentRepository.save(student);
+    			} 
+    	}
         return ResponseEntity.ok().body(sectionAdded);
     } 
     
@@ -81,7 +93,7 @@ public class SectionController {
                 	sectionData.setAssignments(section.getAssignments());
                 	sectionData.setDescription(section.getDescription());
                 	sectionData.setSectionNumber(section.getSectionNumber());
-                	sectionData.setStudentUsernames(section.getStudentUsernames());
+                	sectionData.setStudentUsernames(section.getStudentUsernames()); // might need to deal with this in a better way
                 	sectionData.setTerm(section.getTerm());
                 	sectionData.setYear(section.getYear());
                 	sectionData.setUseCourseDescription(section.isUseCourseDescription());
@@ -100,14 +112,39 @@ public class SectionController {
                     	Course courseAdd = this.courseRepository.save(courseToAddASection);
                     	System.out.println("\n\n\nCourse Updated in Section Controller If deleted: " + courseDelete.toString());
                     	System.out.println("\n\n\nCourse Updated in Section Controller If Added: " + courseAdd.toString());
-                	} else {
-//                		courseToAddASection.deleteSection(sectionToUpdate);
-//                		courseToAddASection.addSection(updatedsection);
-//                		Course course  = this.courseRepository.save(courseToAddASection);
-//                		System.out.println("\n\n\nCourse Updated in Section Controller ELSE: " + course.toString() + "\n\n\n\n\n");
-                		
                 	}
-                    return ResponseEntity.ok().body(updatedsection);
+                	
+                	List<String> studentUsernamesInSection = sectionToUpdate.getStudentUsernames();
+                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                	for(int i = 0; i < studentUsernamesInSection.size(); i++) {
+            			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
+            			Student student = students.get(0);
+                		if (section.getStudentUsernames().contains(studentUsernamesInSection.get(i))) {
+                			//update this Student
+                			if(!students.isEmpty()) {	
+                    			updatedsection.updateStudentUserName(student.getUserName(), updatedsection.getId(), sectionToUpdate.getId());
+                			}
+                		} else {
+                			//remove Section Id from this student
+                			if(!students.isEmpty()) {
+                    			updatedsection.deleteStudentUsername(student.getUserName());
+                			}
+                		}
+                	}
+                	List<String> studentUsernamesInNewSection = section.getStudentUsernames();
+                	for(int i = 0; i < studentUsernamesInNewSection.size(); i++) {
+                		if (!studentUsernamesInSection.contains(studentUsernamesInNewSection.get(i))) {
+                			//add this course in this prof
+                			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
+                			Student student = students.get(0);
+                			if(!students.isEmpty()) {
+                				updatedsection.addStudentUsername(student.getUserName());
+                			}
+                		}
+                	}
+                	
+                	Section updatedSection = this.sectionRepository.save(updatedsection);
+                    return ResponseEntity.ok().body(updatedSection);
                 }).orElse(ResponseEntity.notFound().build());							
      
     }
@@ -116,7 +153,8 @@ public class SectionController {
     public ResponseEntity<String> deleteSection(@PathVariable("id") String id) {
         return sectionRepository.findById(id)
                 .map(section -> {
-                	section.deleteSection();
+                	//put the delete in the section class itself
+                	   section.deleteSection();
                     return ResponseEntity.ok().body("Deleted a section");
                 }).orElse(ResponseEntity.notFound().build());
     }

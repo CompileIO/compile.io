@@ -53,22 +53,49 @@ public class Course {
 		List<Professor> prof = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
 		if(!prof.isEmpty()) {
 			prof.get(0).addCourse(this);
-			this.professorRepository.save(prof.get(0));
+			Professor updatedProf = this.professorRepository.save(prof.get(0));
+			System.out.println("\n\n\n\n\n Professor Added in Course AddProfessorUserName: " + updatedProf.toString() + "\n\n\n\n\n");
+		}
+		else {
+			Professor newProfessor = new Professor();
+			newProfessor.setUserName(newProfessorUsername);
+			newProfessor.addCourse(this);
+			Professor updatedProf = this.professorRepository.save(newProfessor);
+			System.out.println("\n\n\n\n\n Professor Added in else Course AddProfessorUserName: " + updatedProf.toString() + "\n\n\n\n\n");
+		}
+	}
+	
+	public void updateProfessorUserName(String newProfessorUsername, Course courseToUpdate, Course courseToDelete) {
+		for(int i = 0; i < this.professorUsernames.size(); i ++) {
+			String professorUsername = this.professorUsernames.get(i);
+			if(newProfessorUsername.equals(professorUsername)) {
+				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+				List<Professor> profs = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
+				Professor prof = profs.get(0);
+				if(!profs.isEmpty()) {
+					//might have to use id's
+					prof.deleteCourse(courseToDelete);
+					prof.addCourse(courseToUpdate);
+					Professor updatedProf = this.professorRepository.save(profs.get(0));
+        			System.out.println("\n\n\n\n\n Professor Updated in Course UpdateProfessorUserName: " + updatedProf.toString() + "\n\n\n\n\n");
+				}
+			}
 		}
 	}
 	
 	public void deleteProfessorUsername (String newProfessorUsername) {
 		for(int i = 0; i < this.professorUsernames.size(); i++) {
 			String professorUsername = this.professorUsernames.get(i);
-			if(newProfessorUsername == professorUsername) {
+			if(newProfessorUsername.equals(professorUsername)) {
 				this.professorUsernames.remove(professorUsername);
 				i--;
 				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-				List<Professor> prof = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
-				if(!prof.isEmpty()) {
+				List<Professor> profs = this.professorRepository.findByuserName(newProfessorUsername, sortByCreatedAtDesc);
+				if(!profs.isEmpty()) {
 					//might have to use id's
-					prof.get(0).deleteCourse(this);
-					this.professorRepository.save(prof.get(0));
+					profs.get(0).deleteCourse(this);
+					Professor updatedProf = this.professorRepository.save(profs.get(0));
+        			System.out.println("\n\n\n\n\n Professor Updated removed in Course deleteProfessorUserName: " + updatedProf.toString() + "\n\n\n\n\n");
 				}
 				
 			}

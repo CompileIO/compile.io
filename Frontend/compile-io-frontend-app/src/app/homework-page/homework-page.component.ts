@@ -17,6 +17,7 @@ export class HomeworkPageComponent implements OnInit {
   running: boolean;
   sDate: string;
   eDate: string;
+  codes: Code[];
 
   constructor(private codeService: CodeService) {
     this.file = null;
@@ -71,6 +72,20 @@ export class HomeworkPageComponent implements OnInit {
     });
   }
 
+  getCodesForAssignment() {
+    this.codeService.getCodesForSpecificAssignment(this.assignmentInfo.id, this.username).subscribe({
+      next: x => {
+        this.codes = x;
+      },
+      error: err => {
+        console.log("GET CODES FOR ASSIGNMENT ERROR: " + err),
+        this.error = err
+      },
+      complete: () => {
+      }
+    });
+  }
+
   clearResult() {
     this.results = null;
   }
@@ -112,19 +127,6 @@ export class HomeworkPageComponent implements OnInit {
     return false;
   }
 
-  // getResults() {
-  //   this.codeService.getResults(this.assignmentInfo.id, this.username).subscribe({
-  //     next: x => {
-  //       console.log(x),
-  //       this.results = x.map(element => element.toString());
-  //       },
-  //     error: err => {
-  //       console.log("GET RESULTS ERROR: " + err),
-  //         this.error = err
-  //     },
-  //     complete: () => console.log("got results")
-  //   });
-  // }
 
 
   ngOnInit() {

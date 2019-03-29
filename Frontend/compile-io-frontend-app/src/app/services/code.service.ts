@@ -25,9 +25,15 @@ export class CodeService {
     
   }
 
-  getCodesForSpecificAssignment(assignmentId: string): Observable<Code[]> { 
+  getCodesForSpecificAssignment(assignmentId: string, studentUsername: string): Observable<Code[]> { 
     var response;
-    response = this.http.get(this.apiUrl + '/Code/getAssignment/' + assignmentId);
+    response = this.http.get(this.apiUrl + '/Code/getAssignment/' + assignmentId +'/' + studentUsername);
+    return response;
+  }
+
+  getCodesForStudent(studentUsername: string): Observable<Code[]> { 
+    var response;
+    response = this.http.get(this.apiUrl + '/Code/getStudent/' + studentUsername);
     return response;
   }
 

@@ -62,10 +62,29 @@ public class CodeController {
 	        return ResponseEntity.ok().body(codeRepository.findAll(sortByCreatedAtDesc));
 	    }
 	    
-	    @GetMapping("/Code/getAssignment/{assignmentId}")
-	    public ResponseEntity<List<Code>> getAllCodesForAssignment(@PathVariable("assignmentId") String assignmentId) {
+	    @GetMapping("/Code/getAssignment/{assignmentId}/{studentUsername}")
+	    public ResponseEntity<List<Code>> getAllCodesForAssignment(@PathVariable("assignmentId") String assignmentId, @PathVariable("studentUsername") String studentUsername) {
 	        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-	        return ResponseEntity.ok().body(codeRepository.findByassignmentId(assignmentId, sortByCreatedAtDesc));
+	        List<Student> students = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
+	        Student student = students.get(0);
+	        List<Code> codesToReturn = new ArrayList<>();
+	        for(Code code : student.getCodes()) {
+	        	if(assignmentId.equals(code.getAssignmentId())) {
+	        		codesToReturn.add(code);
+	        	}
+	        }
+	        
+	        return ResponseEntity.ok().body(codesToReturn);
+	    }
+	    
+	    @GetMapping("/Code/getStudent/{studentUsername}") 
+	    ResponseEntity<List<Code>> getAllCodesForStudent(@PathVariable("studentUsername") String studentUsername) {
+	    	List<Code> codesToReturn = new ArrayList<>();
+	    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+	    	List<Student> students = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
+	        Student student = students.get(0);
+	        codesToReturn = student.getCodes();
+	    	 return ResponseEntity.ok().body(codesToReturn);
 	    }
 	    
 	    @GetMapping(value="/Code/{id}")
@@ -111,6 +130,7 @@ public class CodeController {
 		newCode.setSubmissionTime(submissionTime);
 		newCode.setAssignmentId(givenAssignmentId);
 		newCode.setUserName(userName);
+		newCode.setSubmissionAttempts(1);
 		// Docker stuff
 		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath, codePath));
 		Code addedCode = codeRepository.save(newCode);
@@ -172,7 +192,7 @@ public class CodeController {
     	return codeRepository.findById(id)
                 .map(codeData -> {
                 	codeData.setAssignmentId(code.getAssignmentId());
-                	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
+                	codeData.setSubmissionAttempts(code.getSubmissionAttempts()+1);
                 	codeData.setCodePath(code.getCodePath());
                 	codeData.setGrade(code.getGrade());
                 	codeData.setLanguage(code.getLanguage());
