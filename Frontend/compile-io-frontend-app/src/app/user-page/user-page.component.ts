@@ -48,6 +48,14 @@ export class UserPageComponent implements OnInit {
         next: professor => {
             if (professor.userName === this.username) {
               addProf = false;
+              if(professor.name === null || professor.name === undefined) {
+                professor.name = this.name;
+                this.professorService.updateProfessor(professor).subscribe({
+                  next: x => { console.log(x) },
+                  error: err => { console.log("UPDATING STUDENT ERROR: " + err) },
+                  complete: () => { console.log("Updating Student Complete");}
+                });
+              }
               this.getUserInfo;
           }
         },
