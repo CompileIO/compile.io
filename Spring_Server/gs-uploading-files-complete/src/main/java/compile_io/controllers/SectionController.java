@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Section;
+import compile_io.mongo.models.Student;
+import compile_io.mongo.models.Assignment;
 import compile_io.mongo.models.Course;
 import compile_io.mongo.models.Professor;
 import compile_io.mongo.repositories.SectionRepository;
+import compile_io.mongo.repositories.StudentRepository;
+import compile_io.mongo.repositories.AssignmentRepository;
 import compile_io.mongo.repositories.CourseRepository;
 import compile_io.mongo.repositories.ProfessorRepository;
 
@@ -32,6 +37,10 @@ public class SectionController {
     SectionRepository sectionRepository;
 	@Autowired
     CourseRepository courseRepository;
+	@Autowired
+    AssignmentRepository assignmentRepository;
+	@Autowired
+    StudentRepository studentRepository;
 			
 	@GetMapping("/Sections")
 	public ResponseEntity<List<Section>> getSections() {
@@ -94,9 +103,13 @@ public class SectionController {
                     	Course courseToDeleteASection = courseToDeleteASectionFind.get();
                     	courseToDeleteASection.deleteSection(sectionToUpdate);
                     	courseToAddASection.addSection(updatedsection);
+                    	this.courseRepository.save(courseToDeleteASection);
+                    	this.courseRepository.save(courseToAddASection);
                 	} else {
                 		courseToAddASection.deleteSection(sectionToUpdate);
                 		courseToAddASection.addSection(updatedsection);
+                		this.courseRepository.save(courseToAddASection);
+                		
                 	}
                     return ResponseEntity.ok().body(updatedsection);
                 }).orElse(ResponseEntity.notFound().build());							
@@ -104,10 +117,10 @@ public class SectionController {
     }
 
     @DeleteMapping(value="/Section/Delete/{id}")
-    public ResponseEntity<String> deletesection(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteSection(@PathVariable("id") String id) {
         return sectionRepository.findById(id)
                 .map(section -> {
-                    sectionRepository.deleteById(id);
+                	section.deleteSection();
                     return ResponseEntity.ok().body("Deleted a section");
                 }).orElse(ResponseEntity.notFound().build());
     }

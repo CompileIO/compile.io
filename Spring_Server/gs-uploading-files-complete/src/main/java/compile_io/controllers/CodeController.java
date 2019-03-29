@@ -190,7 +190,11 @@ public class CodeController {
     public ResponseEntity<String> deleteCode(@PathVariable("id") String id) {
         return codeRepository.findById(id)
                 .map(code -> {
-//                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                	//don't need to delete anything in Assignment
+                	List<Student> students = this.studentRepository.findByuserName(code.getUserName(),sortByCreatedAtDesc);
+                	students.get(0).deleteCode(code);
+                	this.studentRepository.save(students.get(0));
                     codeRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a code");
                 }).orElse(ResponseEntity.notFound().build());

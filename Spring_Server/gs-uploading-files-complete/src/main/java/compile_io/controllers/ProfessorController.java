@@ -15,14 +15,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import compile_io.mongo.models.Course;
 import compile_io.mongo.models.Professor;
+import compile_io.mongo.repositories.CourseRepository;
 import compile_io.mongo.repositories.ProfessorRepository;
 
 @RestController
 public class ProfessorController{
 	@Autowired 
 	public ProfessorRepository professorRepository;
+	
+	@Autowired 
+	public CourseRepository courseRepository;
 	
 	@GetMapping("/Professors")
 	public ResponseEntity<List<Professor>> getProfessors() {
@@ -75,6 +79,10 @@ public class ProfessorController{
     public ResponseEntity<String> deleteProfessor(@PathVariable("id") String id) {
         return professorRepository.findById(id)
                 .map(professor -> {
+                	for(Course course : professor.getCourses()) {
+                		course.deleteProfessorUsername(professor.getUserName());
+                		this.courseRepository.save(course);
+                	}
                     professorRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a professor");
                 }).orElse(ResponseEntity.notFound().build());

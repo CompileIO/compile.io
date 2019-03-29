@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Assignment;
+import compile_io.mongo.models.Code;
 import compile_io.mongo.models.Professor;
 import compile_io.mongo.models.Section;
 import compile_io.mongo.models.Student;
 import compile_io.mongo.repositories.StudentRepository;
+import compile_io.mongo.repositories.CodeRepository;
 import compile_io.mongo.repositories.SectionRepository;
 
 @RestController
@@ -30,6 +32,9 @@ public class StudentController{
 	
 	@Autowired 
 	public SectionRepository sectionRepository;
+	
+	@Autowired 
+	public CodeRepository codeRepository;
 	
 	@GetMapping("/Students")
 	public ResponseEntity<List<Student>> getStudents() {
@@ -117,6 +122,16 @@ public class StudentController{
     public ResponseEntity<String> deleteStudent(@PathVariable("id") String id) {
         return studentRepository.findById(id)
                 .map(student -> {
+                	for(Code code : student.getCodes()) {
+                		codeRepository.deleteById(code.getId());
+                	}
+                	
+                	for(String sectionIds : student.getSectionIds()) {
+                		Optional<Section> sectionToFind = this.sectionRepository.findById(sectionIds);
+                		Section section = sectionToFind.get();
+                		section.deleteStudentUsername(student.getUserName());
+                		this.sectionRepository.save(section);
+                	}
                 	studentRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a Student");
                 }).orElse(ResponseEntity.notFound().build());

@@ -1,5 +1,7 @@
 package compile_io.mongo.models;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.FileSystemUtils;
 
+import compile_io.mongo.repositories.AssignmentRepository;
+import compile_io.mongo.repositories.SectionRepository;
 import compile_io.mongo.repositories.StudentRepository;
 
 @Document(collection="Section") 
@@ -26,16 +31,17 @@ public class Section {
 	private List<Assignment> assignments;
 	
 	@Autowired 
-	public StudentRepository studentRepository;
+	private StudentRepository studentRepository;
+	@Autowired
+	private AssignmentRepository assignmentRepository;
+	@Autowired
+	private SectionRepository sectionRepository;
 	
 	public Section() {
     	super();
     	studentUsernames = new ArrayList<String>();
     	assignments = new ArrayList<Assignment>();
     }
-	
-	
-	
 	public String getId() {
 		return id;
 	}
@@ -150,6 +156,23 @@ public class Section {
 		return "Section [id=" + id + ", Year=" + year + ", Term=" + term + ", sectionNumber=" + sectionNumber
 				+ ", studentUsernames=" + studentUsernames + ", useCourseDescription=" + useCourseDescription
 				+ ", description=" + description + ", courseId=" + courseId + ", assignments=" + assignments + "]";
+	}
+	
+	public void deleteSection () {
+		
+		for(Assignment assignment : this.getAssignments()) {
+    		String filepath = assignment.getFilePath();
+    		Path filePath = Paths.get(filepath);
+    		FileSystemUtils.deleteRecursively(filePath.toFile());
+    		this.assignmentRepository.deleteById(assignment.getId());
+    	}
+    	for(String studentUsername : this.getStudentUsernames()) {
+    		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    		List<Student> student = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
+    		student.get(0).deleteSectionIds(id);
+    		this.studentRepository.save(student.get(0));
+    	}
+        sectionRepository.deleteById(id);
 	}
 	
 }

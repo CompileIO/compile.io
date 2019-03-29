@@ -4,12 +4,14 @@ package compile_io.mongo.models;
 
 import java.util.Date;
 import java.util.List;
+import java.io.File;
+import java.nio.file.Paths;
 import java.time.LocalTime;
-
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.FileSystemUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -35,7 +37,7 @@ public class Assignment {
     private String filepath;
     private String createdByUsername;
     private List<String> sectionIds;
-    private boolean availableToOtherSections; //changed
+    private boolean availableToOtherSections;
     
 	
 	public Assignment() {
@@ -131,6 +133,11 @@ public class Assignment {
 
 	public void setFilePath(String file) {
 		this.filepath = file;
+	}
+	
+	public void deleteFilePathFromServer() {
+		File assignmentFile = Paths.get(this.filepath).toFile();
+		FileSystemUtils.deleteRecursively(assignmentFile);
 	}
 	
 	public String getCreatedByUsername() {

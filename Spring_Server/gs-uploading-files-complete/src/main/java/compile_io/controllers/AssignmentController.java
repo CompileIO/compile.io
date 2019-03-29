@@ -190,7 +190,16 @@ public class AssignmentController {
 		return assignmentRepository.findById(id).map(assignment -> {
 			File assignmentFile = Paths.get(assignment.getFilePath()).toFile();
 			FileSystemUtils.deleteRecursively(assignmentFile);
-			assignment.getSectionIds();
+			
+			//might not have to delete assignments in sections because of DBRef
+			
+//			for(String sectionIds : assignment.getSectionIds()) {
+//				//delete assignments from section
+//				Optional<Section> sectionToFind = this.sectionRepository.findById(sectionIds);
+//				Section section = sectionToFind.get();
+//				section.get
+//			}
+			
 			assignmentRepository.deleteById(id);
 			return ResponseEntity.ok().body("Deleted a Assignment");
 			

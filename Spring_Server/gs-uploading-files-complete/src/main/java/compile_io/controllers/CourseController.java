@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import compile_io.mongo.models.Course;
 import compile_io.mongo.models.Professor;
+import compile_io.mongo.models.Section;
 import compile_io.mongo.repositories.CourseRepository;
 import compile_io.mongo.repositories.ProfessorRepository;
+import compile_io.mongo.repositories.SectionRepository;
 
 @RestController
 public class CourseController {
@@ -30,6 +32,9 @@ public class CourseController {
 	
 	@Autowired
 	ProfessorRepository professorRepository;
+	
+	@Autowired
+	SectionRepository sectionRepository;
 	
 	//As soon as we don't need this we can get rid of this api call
 	@GetMapping("/courses")
@@ -132,6 +137,20 @@ public class CourseController {
     public ResponseEntity<String> deleteCourse(@PathVariable("id") String id) {
         return courseRepository.findById(id)
                 .map(course -> {
+                	for(String professorUsername : course.getProfessors()) {
+                		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                		List<Professor> professors = this.professorRepository.findByuserName(professorUsername, sortByCreatedAtDesc);
+                		for(Course courseForProf : professors.get(0).getCourses()) {
+                			if(courseForProf.equals(course)) {
+                				professors.get(0).deleteCourse(course);
+                				this.professorRepository.save(professors.get(0));
+                			}
+                		}
+                	}
+                	for(Section section : course.getSections()) {
+                		section.deleteSection();
+                		this.sectionRepository.save(section);
+                	}
                 	courseRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a course");
                 }).orElse(ResponseEntity.notFound().build());
