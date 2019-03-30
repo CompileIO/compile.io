@@ -8,8 +8,8 @@ export class Code {
     submissionAttempts: number;
     testResponses: string [];
     codePath: string;
-    Assignment: Assignment; // supposed to be private String assignmentId;
-    userName: string ; //currently don't use this
+    assignmentId: string;
+    userName: string ; 
     submisstionTime:Time;
     grade: string;
 

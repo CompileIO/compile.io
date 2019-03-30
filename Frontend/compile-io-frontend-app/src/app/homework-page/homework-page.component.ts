@@ -18,6 +18,7 @@ export class HomeworkPageComponent implements OnInit {
   sDate: string;
   eDate: string;
   codes: Code[];
+  code: Code;
 
   constructor(private codeService: CodeService) {
     this.file = null;
@@ -53,38 +54,63 @@ export class HomeworkPageComponent implements OnInit {
 
   run() {
     this.running = true;
-    this.codeService.uploadCode(this.assignmentInfo.language, this.assignmentInfo.timeout,  this.assignmentInfo.id,this.username).subscribe({
-      next: x => {console.log("This is the result: " + x); 
-                  this.results = x.testResponses;
-                  if (this.file !== null) {
-                    this.sendFile(x);
-                  }
-                },
-      error: err => {
-        console.log("RUNNING DOCKER ERROR: " + err),
-        this.error = err
-      },
-      complete: () => {
-        console.log("Ran docker")
-        this.running = false;
-        // this.getResults();
-      }
-    });
-
-    //INSTED OF UPLOAD USE CREATE WITH A CODE
-    // this.codeService.createCode(this.codes.)
+    if(this.codes.length > 0) {
+      //change 
+      this.codeService.updateCode(this.code).subscribe({
+        next: x => {console.log("This is the result: " + x); 
+                    this.results = x.testResponses;
+                    if (this.file !== null) {
+                      this.sendFile(x);
+                    }
+                  },
+        error: err => {
+          console.log("RUNNING DOCKER ERROR: " + err),
+          this.error = err
+        },
+        complete: () => {
+          console.log("Ran docker")
+          this.running = false;
+          // this.getResults();
+        }
+      });
+    } else {
+      this.code.language = this.assignmentInfo.language;
+      this.code.runTime = this.assignmentInfo.timeout;
+      this.code.userName = this.username;
+      this.code.assignmentId = this.assignmentInfo.id;
+      this.codeService.createCode(this.code).subscribe({
+        next: x => {console.log("This is the result: " + x); 
+                    this.results = x.testResponses;
+                    if (this.file !== null) {
+                      this.sendFile(x);
+                    }
+                  },
+        error: err => {
+          console.log("RUNNING DOCKER ERROR: " + err),
+          this.error = err
+        },
+        complete: () => {
+          console.log("Ran docker")
+          this.running = false;
+          // this.getResults();
+        }
+      });
+    }
+    
   }
 
   getCodesForAssignment() {
     this.codeService.getCodesForSpecificAssignment(this.assignmentInfo.id, this.username).subscribe({
       next: x => {
         this.codes = x;
+        this.code = this.codes[0];
       },
       error: err => {
         console.log("GET CODES FOR ASSIGNMENT ERROR: " + err),
         this.error = err
       },
       complete: () => {
+        this.reachedMaxSubmissionAttempts();
       }
     });
   }
@@ -126,6 +152,20 @@ export class HomeworkPageComponent implements OnInit {
       if (today <= ed) {
         return true;
       }
+    }
+    return false;
+  }
+
+  reachedMaxSubmissionAttempts(): boolean {
+    if(this.codes.length > 0) {
+      this.code = this.codes[0];
+    }
+    else {
+      this.code = new Code;
+    }
+
+    if(this.code.submissionAttempts != null && this.code.submissionAttempts >= this.assignmentInfo.tries) {
+      return true;
     }
     return false;
   }

@@ -1,51 +1,55 @@
 <div *ngIf="onTime()">
-  <div *ngIf="results == null">
-    <div *ngIf="!running" class="container" >
-      <div class="row mt-5">
-        <div class="col">
-          <input type="file" class="custom-file-input" #fileUpload id="fileUpload" (change)="fileUploadFunction($event)">
-          <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
-          <label *ngIf="fileUpload.files.length != 0" class="custom-file-label" for="fileUpload">{{fileUpload.files[0].name}}</label>
-        </div>
-        <div class="col">
-          <button *ngIf="fileUpload.files.length == 0" type="button" disabled (click)="run()">Run!</button>
-          <button *ngIf="fileUpload.files.length != 0" type="button" (click)="run()">Run!</button>
-        </div>
-      </div>
-      <div *ngFor="let res of results" class="row">
-        <div class="col">
-          <span>
-            {{res}}
-          </span>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="running" class="container" >
-      <div class="row mt-5">
-        <div class="col">
-          <h1>Running!!! please wait!</h1>
+  <div *ngIf="reachedMaxSubmissionAttempts()">
+    <div *ngIf="results == null">
+      <div *ngIf="!running" class="container">
+        <div class="row mt-5">
+          <div class="col">
+            <input type="file" class="custom-file-input" #fileUpload id="fileUpload"
+              (change)="fileUploadFunction($event)">
+            <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
+            <label *ngIf="fileUpload.files.length != 0" class="custom-file-label"
+              for="fileUpload">{{fileUpload.files[0].name}}</label>
+          </div>
+          <div class="col">
+            <button *ngIf="fileUpload.files.length == 0" type="button" disabled (click)="run()">Run!</button>
+            <button *ngIf="fileUpload.files.length != 0" type="button" (click)="run()">Run!</button>
           </div>
         </div>
+        <div *ngFor="let res of results" class="row">
+          <div class="col">
+            <span>
+              {{res}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="running" class="container">
+        <div class="row mt-5">
+          <div class="col">
+            <h1>Running!!! please wait!</h1>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div *ngIf="results != null">
-    <div>
-      <div class="container">
-        <!-- <div class="row">
+    <div *ngIf="results != null">
+      <div>
+        <div class="container">
+          <!-- <div class="row">
           <div class="col">
             <h1>HOW MANY TESTS PASSED</h1>
           </div>
         </div> -->
-        <div class="row">
-          <div class="col">
-            <h1>{{results[0]}}</h1>
+          <div class="row">
+            <div class="col">
+              <h1>{{results[0]}}</h1>
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
-            <button class="btn btn-primary" (click)="clearResult()">RETURN</button>
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-primary" (click)="clearResult()">RETURN</button>
+            </div>
           </div>
         </div>
       </div>
@@ -53,11 +57,18 @@
   </div>
 </div>
 <div *ngIf="!onTime()">
-  <div *ngIf="!running" class="container" >
-      <div class="row mt-5">
-        <div class="col">
-          <h3>Submission time: {{sDate}} - {{eDate}}</h3>
-          </div>
-        </div>
+  <div *ngIf="!running" class="container">
+    <div class="row mt-5">
+      <div class="col">
+        <h3>Submission time: {{sDate}} - {{eDate}}</h3>
+      </div>
     </div>
+  </div>
+</div>
+<div *ngIf="!reachedMaxSubmissionAttempts()">
+    <div class="row mt-5">
+        <div class="col">
+          <h3>Reached Max Submission Attempts</h3>
+        </div>
+      </div>
 </div>
