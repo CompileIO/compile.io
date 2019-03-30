@@ -143,6 +143,28 @@ public class CodeController {
 		
 		return ResponseEntity.ok().body(addedCode);
 	}
+	
+	@PostMapping("/Code/Create")
+    public ResponseEntity<Code> createCode(@Valid @RequestBody Code code) {  
+		LocalTime submissionTime = LocalTime.now();
+		code.setSubmissionTime(submissionTime);
+		Optional<Assignment> assignmentToRun = assignmentRepository.findById(code.getAssignmentId());
+		String assignmentFilepath = assignmentToRun.get().getFilePath();
+		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
+		code.setCodePath(codePath);
+		code.setSubmissionAttempts(1);
+		code.addTestResponse(runCompiler(code.getLanguage(), code.getRunTime(), assignmentFilepath, codePath));
+    	Code addedCode = codeRepository.save(code);
+    	System.out.println("\n\n\n\n\n Code Created: " + addedCode.toString() + "\n\n\n\n\n");
+    	
+    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+		List<Student> students = this.studentRepository.findByuserName(code.getUserName(), sortByCreatedAtDesc);
+		Student student = students.get(0);
+		student.addCode(addedCode);
+		this.studentRepository.save(student);
+		
+        return ResponseEntity.ok().body(addedCode);
+    }
 
 	public String runCompiler(String language, int timeLimit, String assignmentFilepath, String codePath) {
 		List<File> studentFiles = new ArrayList<>();
@@ -175,15 +197,7 @@ public class CodeController {
 	@ExceptionHandler(StorageFileNotFoundException.class)
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return ResponseEntity.notFound().build();
-	}
-	
-	@PostMapping("/Code/Create")
-    public ResponseEntity<Code> createCode(@Valid @RequestBody Code code) {  
-    	Code addedCode = codeRepository.save(code);
-    	System.out.println("\n\n\n\n\n Code Created: " + addedCode.toString() + "\n\n\n\n\n");
-        return ResponseEntity.ok().body(addedCode);
-    } 
-    
+	}    
 
     @PutMapping(value="/Code/Update/{id}")
     public ResponseEntity<Code> updateCode(@PathVariable("id") String id,
@@ -191,14 +205,20 @@ public class CodeController {
     	System.out.println(code.toString());
     	return codeRepository.findById(id)
                 .map(codeData -> {
+                	
+                	LocalTime submissionTime = LocalTime.now();
+            		codeData.setSubmissionTime(submissionTime);
+            		Optional<Assignment> assignmentToRun = assignmentRepository.findById(code.getAssignmentId());
+            		String assignmentFilepath = assignmentToRun.get().getFilePath();
+            		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
+            		codeData.setCodePath(codePath);
+            		codeData.setSubmissionAttempts(code.getSubmissionAttempts()+1);
+            		code.addTestResponse(runCompiler(code.getLanguage(), code.getRunTime(), assignmentFilepath, codePath));
+                	//might have to delete test responses later
                 	codeData.setAssignmentId(code.getAssignmentId());
-                	codeData.setSubmissionAttempts(code.getSubmissionAttempts()+1);
-                	codeData.setCodePath(code.getCodePath());
                 	codeData.setGrade(code.getGrade());
                 	codeData.setLanguage(code.getLanguage());
                 	codeData.setRunTime(code.getRunTime());
-                	codeData.setSubmissionTime(code.getSubmissionTime());
-                	codeData.setTestResponses(code.getTestResponse());
                 	codeData.setUserName(code.getUserName());
                     Code updatedCode = codeRepository.save(codeData);
                     System.out.println("\n\n\n\n\n Code Updated: " + updatedCode.toString() + "\n\n\n\n\n");

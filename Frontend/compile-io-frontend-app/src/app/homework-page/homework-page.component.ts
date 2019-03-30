@@ -70,6 +70,9 @@ export class HomeworkPageComponent implements OnInit {
         // this.getResults();
       }
     });
+
+    //INSTED OF UPLOAD USE CREATE WITH A CODE
+    // this.codeService.createCode(this.codes.)
   }
 
   getCodesForAssignment() {
@@ -130,6 +133,7 @@ export class HomeworkPageComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getCodesForAssignment();
   }
 
 }

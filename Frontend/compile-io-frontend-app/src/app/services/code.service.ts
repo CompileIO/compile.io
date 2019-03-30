@@ -68,6 +68,21 @@ export class CodeService {
     return response;
   }
 
+  createCode(codeData: Code): Observable<Code> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
+    var response;
+    codeData.id = null;
+    response = this.http.post(this.apiUrl + '/Code/Create' , codeData, { headers: headers, withCredentials: true });
+    return response;
+  }
+
+  updateCode(codeData: Code): Observable<Code> {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'  });
+    var response;
+    response = this.http.put(this.apiUrl + '/Code/Update/' + codeData.id, codeData, { headers: headers, withCredentials: true });
+    return response;
+  }
+
   deleteCode(id: string): Observable<String>{
     var response;
     response = this.http.delete(this.apiUrl + '/Code/deleteCode' + id, {withCredentials: true });
