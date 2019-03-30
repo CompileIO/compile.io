@@ -276,7 +276,9 @@
                 </app-homework-page>
                 <app-change-homework id="changePage" *ngIf="change"
                                      [assignmentInfo]="selectedAssignment"
-                                     [courseName]="selectedCourse">
+                                     [selectedCourse]="selectedCourse"
+                                     [selectedSection]="selectedSection">
+                                     
                 </app-change-homework>
               </div>
             </div>
@@ -285,7 +287,8 @@
         <div *ngIf="selectedAssignment.id == '-1'">
           <div class="row">
             <div class="col">
-              <app-change-homework [courseName]="selectedCourse"
+              <app-change-homework [selectedCourse]="selectedCourse"
+                                   [selectedSection]="selectedSection"
                                    [userName]="username"
                                    [assignmentInfo]="selectedAssignment"></app-change-homework>
             </div>

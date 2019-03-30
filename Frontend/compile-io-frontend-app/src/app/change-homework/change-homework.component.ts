@@ -4,6 +4,8 @@ import { CourseService } from '../services/course.service';
 import { AssignmentService } from '../services/assignment.service';
 import { Assignment } from '../../models/assignment';
 import { Time } from '@angular/common';
+import { Section } from 'src/models/section';
+import { Course } from 'src/models/course';
 
 
 @Component({
@@ -13,7 +15,8 @@ import { Time } from '@angular/common';
 })
 export class ChangeHomeworkComponent implements OnInit {
   @Input() userName: string;
-  @Input() courseName: string;
+  @Input() selectedCourse: Course;
+  @Input() selectedSection: Section;
   name: string;
   timeout: string;
   language: string;
@@ -82,14 +85,18 @@ export class ChangeHomeworkComponent implements OnInit {
 
   submit() {
     this.newAssignment.createdByUsername = this.userName;
-    //console.log(this.newAssignment.startTime);
-
-    // if (this.file != null) {
-    //   this.sendFile();
-    // }
+    this.newAssignment.sectionIds = [];
+    if(this.assignmentInfo.availableToOtherSections) {
+      this.newAssignment.courseId = this.selectedCourse.id;
+      this.selectedCourse.sections.forEach( section => {
+        this.newAssignment.sectionIds.push(section.id);
+      });
+    } else {
+      this.newAssignment.courseId = null;
+      this.newAssignment.sectionIds.push(this.selectedSection.id);
+    }
 
     if (this.assignmentInfo.id == "-1") {
-      
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
           console.log(x)

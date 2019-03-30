@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CodeService } from '../services/code.service';
 import {Assignment} from '../../models/assignment';
 import {Code} from '../../models/code';
+import {Section} from '../../models/section';
 
 @Component({
   selector: 'app-homework-page',

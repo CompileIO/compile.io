@@ -37,6 +37,7 @@ public class Assignment {
     private String filepath;
     private String createdByUsername;
     private List<String> sectionIds;
+    private String courseId;
     private boolean availableToOtherSections;
     
 	
@@ -156,6 +157,14 @@ public class Assignment {
 		this.sectionIds = sectionIds;
 	}
 
+	public String getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
+	}
+
 	public boolean isAvailableToOtherSections() {
 		return availableToOtherSections;
 	}
@@ -173,7 +182,7 @@ public class Assignment {
 				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", filepath=" + filepath
 				+ ", createdByUsername=" + createdByUsername + ", sectionIds="
 				+ (sectionIds != null ? sectionIds.subList(0, Math.min(sectionIds.size(), maxLen)) : null)
-				+ ", availableToOtherSections=" + availableToOtherSections + "]";
+				+ ", courseId=" + courseId + ", availableToOtherSections=" + availableToOtherSections + "]";
 	}
 
 	

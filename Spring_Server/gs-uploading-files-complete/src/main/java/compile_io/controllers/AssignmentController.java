@@ -2,6 +2,7 @@ package compile_io.controllers;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,6 +86,7 @@ public class AssignmentController {
 	@PostMapping("/Assignment/Create")
 	public ResponseEntity<Assignment> createassignment(@Valid @RequestBody Assignment assignment) {
 		Assignment addedAssignment = null;
+		
 		for (String sectionId : assignment.getSectionIds()) {
 			String directory = createFilePathInServer(sectionId, assignment.getAssignmentName(),
 					assignment.getCreatedByUsername());
@@ -128,8 +130,19 @@ public class AssignmentController {
        		 		updatedAssignment = this.updateOneAssignment(assignmentToUpdate,sectionId).getBody();
        		 	}
     		}
+//    		Optional <Course> courseToFind = this.courseRepository.findById(assignment.getCourseId());
+//    		Course course = courseToFind.get();
+//    		List<Section> sections = course.getSections();
+//    		for(Section section : sections) {
+//       		 	for(Assignment assignmentToUpdate: section.getAssignments()) {
+//       		 		updatedAssignment = this.updateOneAssignment(assignmentToUpdate,section.getId()).getBody();
+//       		 	}
+//    		}
     	} else {
-    		updatedAssignment = this.updateOneAssignment(assignment, assignment.getSectionIds().get(0)).getBody();
+    		String sectionId = assignment.getSectionIds().get(0);
+    		assignment.setSectionIds(new ArrayList<>());
+    		assignment.getSectionIds().add(sectionId);
+    		updatedAssignment = this.updateOneAssignment(assignment, sectionId).getBody();
     	}
     	return ResponseEntity.ok().body(updatedAssignment);
 
