@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import {Assignment} from '../../models/assignment';
 import { Observable } from 'rxjs';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +26,11 @@ export class AssignmentService {
     
   }
   
-  uploadFile(file: File, assignmentFilePath: string): Observable<String> {
+  uploadFile(file: File, assignmentFilePath: string): Observable<any> {
     let body: FormData = new FormData();  
     body.append('file', file);
     body.append('filePath', assignmentFilePath);
+    console.log(assignmentFilePath);
     const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
     var response; 
     response = this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});
@@ -44,11 +46,12 @@ export class AssignmentService {
     return response;
   }
 
-  createAssignment(assignmentData: Assignment): Observable<Assignment> {
+  createAssignment(assignmentData: Assignment): Observable<Assignment[]> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
     // console.log("Inside the create Assignment Method: " + "\n" + 
     // "ID: " + assignmentData.id + "\n" +
-    // "Course Name: " + assignmentData.courseName + "\n" +
+    // "Created by user: " + assignmentData.createdByUsername + "\n" +
+    // "Sections: " + assignmentData.sectionIds[0] + "\n" +
     // "Assignment Name: " + assignmentData.assignmentName + "\n" +
     // "Timeout: " + assignmentData.timeout + "\n" +
     // "language: " + assignmentData.language + "\n" +
@@ -63,7 +66,7 @@ export class AssignmentService {
     return response;
   }
 
-  updateAssignment(assignmentData: Assignment): Observable<Assignment> {
+  updateAssignment(assignmentData: Assignment): Observable<Assignment[]> {
     const headers = new HttpHeaders({'Content-Type': 'application/json'  });
     var response;
     response = this.http.put(this.apiUrl + '/Assignment/Update/' + assignmentData.id, assignmentData, { headers: headers, withCredentials: true });

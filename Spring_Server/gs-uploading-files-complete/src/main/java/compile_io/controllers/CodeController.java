@@ -66,13 +66,16 @@ public class CodeController {
 	    public ResponseEntity<List<Code>> getAllCodesForAssignment(@PathVariable("assignmentId") String assignmentId, @PathVariable("studentUsername") String studentUsername) {
 	        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
 	        List<Student> students = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
-	        Student student = students.get(0);
 	        List<Code> codesToReturn = new ArrayList<>();
-	        for(Code code : student.getCodes()) {
-	        	if(assignmentId.equals(code.getAssignmentId())) {
-	        		codesToReturn.add(code);
-	        	}
-	        }
+	        if(!students.isEmpty()) {
+	        	Student student = students.get(0);
+	 	        for(Code code : student.getCodes()) {
+	 	        	if(assignmentId.equals(code.getAssignmentId())) {
+	 	        		codesToReturn.add(code);
+	 	        	}
+	 	        }
+	        } 
+	       
 	        
 	        return ResponseEntity.ok().body(codesToReturn);
 	    }

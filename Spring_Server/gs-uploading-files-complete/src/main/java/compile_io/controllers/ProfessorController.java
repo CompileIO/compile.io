@@ -1,5 +1,6 @@
 package compile_io.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -42,13 +43,11 @@ public class ProfessorController{
                 .orElse(ResponseEntity.notFound().build());
     }
     @GetMapping(value="/Professor/Username/{username}")
-    public ResponseEntity<Professor> getProfessorByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<List<Professor>> getProfessorByUsername(@PathVariable("username") String username) {
     	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        List<Professor> professors = professorRepository.findByuserName(username, sortByCreatedAtDesc);
-        if(professors.isEmpty()) {
-        	return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(professors.get(0));
+    	List<Professor> professors = new ArrayList<Professor>();
+        professors = professorRepository.findByuserName(username, sortByCreatedAtDesc);
+        return ResponseEntity.ok().body(professors);
     }
 	
 	@PostMapping("/Professor/Create")

@@ -43,12 +43,13 @@ export class HomeworkPageComponent implements OnInit {
     console.log("Should run upload file")
       this.codeService.uploadFile(this.file, code.codePath).subscribe({
         next: x => {
-          console.log(x)
+          console.log(x);
+          this.results = x.testResponses;
         },
         error: err => {
-          console.log("UPLOADING FILE ERROR: " + err)
+          console.log("UPLOADING FILE ERROR: " + err);
         },
-        complete: () => console.log("Uploaded file")
+        complete: () => {console.log("Uploaded file")}
       });
   }
 
@@ -59,13 +60,13 @@ export class HomeworkPageComponent implements OnInit {
       //change 
       this.codeService.updateCode(this.code).subscribe({
         next: x => {console.log("This is the result: " + x); 
-                    this.results = x.testResponses;
+                    // this.results = x.testResponses;
                     if (this.file !== null) {
                       this.sendFile(x);
                     }
                   },
         error: err => {
-          console.log("RUNNING DOCKER ERROR: " + err),
+          console.log("UPDATE CODE ERROR: " + err),
           this.error = err
         },
         complete: () => {
@@ -81,13 +82,12 @@ export class HomeworkPageComponent implements OnInit {
       this.code.assignmentId = this.assignmentInfo.id;
       this.codeService.createCode(this.code).subscribe({
         next: x => {console.log("This is the result: " + x); 
-                    this.results = x.testResponses;
                     if (this.file !== null) {
                       this.sendFile(x);
                     }
                   },
         error: err => {
-          console.log("RUNNING DOCKER ERROR: " + err),
+          console.log("ADD CODE ERROR: " + err),
           this.error = err
         },
         complete: () => {
@@ -103,6 +103,7 @@ export class HomeworkPageComponent implements OnInit {
   getCodesForAssignment() {
     this.codeService.getCodesForSpecificAssignment(this.assignmentInfo.id, this.username).subscribe({
       next: x => {
+        console.log(x);
         this.codes = x;
         this.code = this.codes[0];
       },
@@ -111,9 +112,22 @@ export class HomeworkPageComponent implements OnInit {
         this.error = err
       },
       complete: () => {
-        this.reachedMaxSubmissionAttempts();
+        this.belowMaxSubmissionAttempts();
       }
     });
+  }
+
+  belowMaxSubmissionAttempts(): boolean {
+    if((this.codes != null || this.codes != undefined) && this.codes.length > 0) {
+      this.code = this.codes[0];
+      if(this.code.submissionAttempts != null || this.code.submissionAttempts != undefined && this.code.submissionAttempts >= this.assignmentInfo.tries) {
+        return false;
+      }
+    }
+    else {
+      this.code = new Code;
+      return true;
+    }
   }
 
   clearResult() {
@@ -156,23 +170,6 @@ export class HomeworkPageComponent implements OnInit {
     }
     return false;
   }
-
-  reachedMaxSubmissionAttempts(): boolean {
-    if(this.codes.length > 0) {
-      this.code = this.codes[0];
-    }
-    else {
-      this.code = new Code;
-    }
-
-    if(this.code.submissionAttempts != null && this.code.submissionAttempts >= this.assignmentInfo.tries) {
-      return true;
-    }
-    return false;
-  }
-
-
-
   ngOnInit() {
     this.getCodesForAssignment();
   }

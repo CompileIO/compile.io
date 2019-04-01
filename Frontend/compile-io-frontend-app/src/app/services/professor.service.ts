@@ -31,7 +31,7 @@ export class ProfessorService {
     return response;
   }
 
-  getProfessorbyUsername(username: string): Observable<Professor> {
+  getProfessorbyUsername(username: string): Observable<Professor[]> {
     var response;
     response =  this.http.get(this.apiUrl + "/Professor/Username/" + username);
     return response;

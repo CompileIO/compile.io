@@ -14,21 +14,17 @@ import { Course } from 'src/models/course';
   styleUrls: ['./change-homework.component.css']
 })
 export class ChangeHomeworkComponent implements OnInit {
-  @Input() userName: string;
+  @Input() username: string;
   @Input() selectedCourse: Course;
   @Input() selectedSection: Section;
-  name: string;
-  timeout: string;
-  language: string;
   @Input() assignmentInfo: Assignment;
   givenStartDate: any;
   givenEndDate: any;
-  //Assignments: Assignment[];
+  addedAssignments: Assignment[];
   newAssignment: Assignment;
   file: File;
   
-  constructor(private courseService: CourseService, private assignmentService: AssignmentService) {
-    this.newAssignment = new Assignment();
+  constructor(private assignmentService: AssignmentService) {
   }
 
   submitForm(form: any): void {
@@ -45,46 +41,20 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   sendFile(assignment: Assignment) {
-    if (this.assignmentInfo.id == "-1") {
-      
-      this.assignmentService.uploadFile(this.file, assignment.filepath).subscribe({
+    console.log("This is the filepath sent to server: " + assignment.filePath);
+      this.assignmentService.uploadFile(this.file, assignment.filePath).subscribe({
         next: x => {
           console.log(x)
         },
-        error: err => {
-          console.log("ADDING FILE ERROR: " + err)
-        },
+        // error: err => {
+        //   console.log("ADDING FILE ERROR: " + err)
+        // },
         complete: () => console.log("Added File")
       });
-    } else {
-      if (this.newAssignment.assignmentName == undefined) {
-        this.assignmentService.uploadFile(this.file, assignment.filepath).subscribe({
-          next: x => {
-            console.log(x)
-          },
-          error: err => {
-            console.log("ADDING FILE ERROR: " + err)
-          },
-          complete: () => console.log("Added File")
-        });
-      } else {
-        this.assignmentService.uploadFile(this.file, assignment.filepath).subscribe({
-          next: x => {
-            console.log(x)
-          },
-          error: err => {
-            console.log("ADDING FILE ERROR: " + err)
-          },
-          complete: () => console.log("Added File")
-        });
-      }
-      
-    }
-    
   }
 
   submit() {
-    this.newAssignment.createdByUsername = this.userName;
+    this.newAssignment.createdByUsername = this.username;
     this.newAssignment.sectionIds = [];
     if(this.assignmentInfo.availableToOtherSections) {
       this.newAssignment.courseId = this.selectedCourse.id;
@@ -99,13 +69,17 @@ export class ChangeHomeworkComponent implements OnInit {
     if (this.assignmentInfo.id == "-1") {
       this.assignmentService.createAssignment(this.newAssignment).subscribe({
         next: x => {
-          console.log(x)
-          this.sendFile(x);
+          this.addedAssignments = x;
+          
         },
         error: err => {
           console.log("ADDING HWK ERROR: " + err)
         },
         complete: () => {
+          this.addedAssignments.forEach(assignment => {
+            console.log("filepath in the complete: "+ assignment.filePath);
+            this.sendFile(assignment);
+          });
           this.newAssignment = new Assignment()
           console.log("Added Homework Complete")
         }
@@ -115,14 +89,15 @@ export class ChangeHomeworkComponent implements OnInit {
       this.newAssignment.id = this.assignmentInfo.id;
       this.assignmentService.updateAssignment(this.newAssignment).subscribe({
         next: x => {
-          console.log(x)
-          this.sendFile(x);
+          this.addedAssignments = x;
         },
         error: err => {
           console.log("UPDATING HWK ERROR: " + err)
         },
         complete: () => {
-          
+          this.addedAssignments.forEach(  assignment => {
+            this.sendFile(assignment);
+          });
           this.newAssignment = new Assignment()
           console.log("Updated Homework Complete")
         }
@@ -137,15 +112,19 @@ export class ChangeHomeworkComponent implements OnInit {
   ngOnInit() {
     this.newAssignment = new Assignment();
     if(this.assignmentInfo.id != '-1'){
-      this.newAssignment.assignmentName = this.assignmentInfo.assignmentName;
-      this.newAssignment.endDate = this.assignmentInfo.endDate;
-      this.newAssignment.endTime = this.assignmentInfo.endTime;
-      this.newAssignment.startDate = this.assignmentInfo.startDate;
-      this.newAssignment.startTime = this.assignmentInfo.startTime;
-      this.newAssignment.size = this.assignmentInfo.size;
-      this.newAssignment.language = this.assignmentInfo.language;
-      this.newAssignment.timeout = this.assignmentInfo.timeout;
-      this.newAssignment.tries = this.assignmentInfo.tries;
+      // Why can't we just say this.newAssignment = this.assignmentInfo
+      this.newAssignment = this.assignmentInfo;
+      // this.newAssignment.assignmentName = this.assignmentInfo.assignmentName;
+      // this.newAssignment.endDate = this.assignmentInfo.endDate;
+      // this.newAssignment.endTime = this.assignmentInfo.endTime;
+      // this.newAssignment.startDate = this.assignmentInfo.startDate;
+      // this.newAssignment.startTime = this.assignmentInfo.startTime;
+      // this.newAssignment.size = this.assignmentInfo.size;
+      // this.newAssignment.language = this.assignmentInfo.language;
+      // this.newAssignment.timeout = this.assignmentInfo.timeout;
+      // this.newAssignment.tries = this.assignmentInfo.tries;
+      // this.newAssignment.createdByUsername = this.userName;
+
       this.givenStartDate = this.newAssignment.startDate.toString().substring(0, this.newAssignment.startDate.toString().indexOf("T"));
       this.givenEndDate = this.newAssignment.endDate.toString().substring(0, this.newAssignment.endDate.toString().indexOf("T"));
       console.log(this.givenStartDate);

@@ -45,23 +45,8 @@ export class UserPageComponent implements OnInit {
     var addProf = true;
     if (this.group === "PROFESSOR" || this.group === "ADMIN") {
       this.professorService.getProfessorbyUsername(this.username).subscribe({
-        next: professor => {
-            if (professor.userName === this.username) {
-              addProf = false;
-              if(professor.name === null || professor.name === undefined) {
-                professor.name = this.name;
-                this.professorService.updateProfessor(professor).subscribe({
-                  next: x => { console.log(x) },
-                  error: err => { console.log("UPDATING STUDENT ERROR: " + err) },
-                  complete: () => { console.log("Updating Student Complete");}
-                });
-              }
-              this.getUserInfo;
-          }
-        },
-        error: err => console.log("GET PROFESSOR ERROR: " + err),
-        complete: () => {
-          if (addProf) {
+        next: professors => {
+          if(professors.length == 0) {
             this.profToAdd = new Professor();
             this.profToAdd.name = this.name;
             this.profToAdd.userName = this.username;
@@ -71,7 +56,25 @@ export class UserPageComponent implements OnInit {
               error: err => { console.log("ADDING PROFESSOR ERROR: " + err) },
               complete: () => { console.log("Added Professor Complete"); this.getUserInfo(); }
             });
+          } else {
+            
+            if (professors[0].userName === this.username) {
+              addProf = false;
+              if (professors[0].name === null && professors[0].name === undefined) {
+                professors[0].name = this.name;
+                this.professorService.updateProfessor(professors[0]).subscribe({
+                  next: x => { console.log(x) },
+                  error: err => { console.log("UPDATING PROFESSOR ERROR: " + err) },
+                  complete: () => { console.log("Updating Professor Complete"); this.getUserInfo();}
+                });
+              }
+            }
+            this.getUserInfo();
           }
+          
+        },
+        error: err => console.log("GET PROFESSOR ERROR: " + err),
+        complete: () => {
         }
 
       });
@@ -83,18 +86,18 @@ export class UserPageComponent implements OnInit {
     if (this.group === "STUDENT") {
       this.studentService.getStudentbyUsername(this.username).subscribe({
         next: student => {
-            if (student.userName === this.username) {
-              addStudent = false;
-              if(student.name === null || student.name === undefined) {
-                student.name = this.name;
-                this.studentService.updateStudent(student).subscribe({
-                  next: x => { console.log(x) },
-                  error: err => { console.log("UPDATING STUDENT ERROR: " + err) },
-                  complete: () => { console.log("Updating Student Complete");}
-                });
-              }
-              this.getUserInfo;
+          if (student.userName === this.username) {
+            addStudent = false;
+            if (student.name === null || student.name === undefined) {
+              student.name = this.name;
+              this.studentService.updateStudent(student).subscribe({
+                next: x => { console.log(x) },
+                error: err => { console.log("UPDATING STUDENT ERROR: " + err) },
+                complete: () => { console.log("Updating Student Complete"); this.getUserInfo();}
+              });
             }
+            
+          }
         },
         error: err => console.log("GET STUDENT ERROR: " + err),
         complete: () => {
@@ -109,6 +112,7 @@ export class UserPageComponent implements OnInit {
               complete: () => { console.log("Added Student Complete"); this.getUserInfo(); }
             });
           }
+          this.getUserInfo();
         }
 
       });
@@ -118,15 +122,22 @@ export class UserPageComponent implements OnInit {
   getUserInfo(): void {
     if (this.group === "PROFESSOR" || this.group === "ADMIN") {
       this.professorService.getProfessorbyUsername(this.username).subscribe({
-        next: prof => { this.profInfo = prof; if (this.profInfo.courses == null) { this.profInfo.courses = [];} this.Courses = this.profInfo.courses; }
+        next: profs => { this.profInfo = profs[0];
+          if (this.profInfo.courses == null || this.profInfo.courses == undefined) { 
+            this.profInfo.courses = []; 
+          } else {
+            this.Courses = this.profInfo.courses; 
+          }
+          
+        }
       });
     } else {
       this.studentService.getStudentbyUsername(this.username).subscribe({
-        next: stud => { this.studentInfo = stud; if (this.studentInfo.sections == null) { this.studentInfo.sections = [];} this.Sections = this.studentInfo.sections; }
+        next: stud => { this.studentInfo = stud; if (this.studentInfo.sections == null) { this.studentInfo.sections = []; } this.Sections = this.studentInfo.sections; }
       });
     }
   }
-    
+
   //getCourses(): void {
   //  this.courseService.getCourses().subscribe({
   //    next: x => { this.Courses = x; console.log(x); },
@@ -216,7 +227,7 @@ export class UserPageComponent implements OnInit {
     //this.getCourses();
     this.isProfessor();
     this.isStudent();
-    this.getUserInfo();
+    // this.getUserInfo();
 
     //The above is very inefficient too many gets on database and can be consolidated getUserInfo is not necessary
   }

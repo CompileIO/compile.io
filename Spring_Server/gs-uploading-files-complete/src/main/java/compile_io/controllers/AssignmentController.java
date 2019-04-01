@@ -84,14 +84,15 @@ public class AssignmentController {
     }
 
 	@PostMapping("/Assignment/Create")
-	public ResponseEntity<Assignment> createassignment(@Valid @RequestBody Assignment assignment) {
-		Assignment addedAssignment = null;
+	public ResponseEntity<List<Assignment>> createassignment(@Valid @RequestBody Assignment assignment) {
+		List<Assignment> addedAssignments = new ArrayList<>();
 		
 		for (String sectionId : assignment.getSectionIds()) {
 			String directory = createFilePathInServer(sectionId, assignment.getAssignmentName(),
 					assignment.getCreatedByUsername());
 			assignment.setFilePath(directory);
-			addedAssignment = assignmentRepository.save(assignment);
+			Assignment addedAssignment = assignmentRepository.save(assignment);
+			addedAssignments.add(addedAssignment);
 			System.out.println("\n\n\n\n\n Assignment Created: " + addedAssignment.toString() + "\n\n\n\n\n");
 			Optional<Section> sectionToFind = this.sectionRepository.findById(sectionId);
 			Section section = sectionToFind.get();
@@ -100,7 +101,7 @@ public class AssignmentController {
 			System.out.println(
 					"\n\n\n\n\n Section Updated in Assignment Create: " + addedSection.toString() + "\n\n\n\n\n");
 		}
-		return ResponseEntity.ok().body(addedAssignment);
+		return ResponseEntity.ok().body(addedAssignments);
 	}
 
 	public String createFilePathInServer(String sectionId, String AssignmentName, String createdByUser) {
@@ -109,25 +110,35 @@ public class AssignmentController {
 		Section section = sectionToFind.get();
 		Optional<Course> courseToFind = this.courseRepository.findById(section.getCourseId());
 		Course course = courseToFind.get();
-
-		directory = "upload-dir/" + Integer.toString(section.getYear()) + "/" + Integer.toString(section.getTerm())
-				+ "/" + course.getCourseName().replaceAll(" ", "_").toLowerCase() + "/"
-				+ Integer.toString(section.getSectionNumber()) + "/" + AssignmentName.replaceAll(" ", "_").toLowerCase()
-				+ "/professor-files/" + createdByUser.replaceAll(" ", "_").toLowerCase();
+		
+		String year = Integer.toString(section.getYear());
+		String term = Integer.toString(section.getTerm());
+		String courseName = course.getCourseName().replaceAll(" ", "_").toLowerCase();
+		String sectionNumber = Integer.toString(section.getSectionNumber());
+		String assignmentName = AssignmentName.replaceAll(" ", "_").toLowerCase();
+		String user = createdByUser.replaceAll(" ", "_").toLowerCase();
+		
+		directory = "upload-dir/" + year + "/" + term
+				+ "/" + courseName + "/"
+				+ sectionNumber + "/" + assignmentName
+				+ "/professor-files/" + user;
+		
+		System.out.println("\n\n\n\n\n" + directory + "\n\n\n\n");
 
 		return directory;
 	}
 
 	@PutMapping(value="/Assignment/Update/{id}")
-    public ResponseEntity<Assignment> updateAssignment(@PathVariable("id") String id,
+    public ResponseEntity<List<Assignment>> updateAssignment(@PathVariable("id") String id,
                                            @Valid @RequestBody Assignment assignment) {
-		Assignment updatedAssignment = null;
+		List<Assignment> updatedAssignments = new ArrayList<>();
     	if(assignment.isAvailableToOtherSections()) {
     		for(String sectionId : assignment.getSectionIds()) {
     			Optional<Section> sectionToFind = this.sectionRepository.findById(sectionId);
        		 	Section section = sectionToFind.get();
        		 	for(Assignment assignmentToUpdate: section.getAssignments()) {
-       		 		updatedAssignment = this.updateOneAssignment(assignmentToUpdate,sectionId).getBody();
+       		 		Assignment updatedAssignment = this.updateOneAssignment(assignmentToUpdate,sectionId).getBody();
+       		 		updatedAssignments.add(updatedAssignment);
        		 	}
     		}
 //    		Optional <Course> courseToFind = this.courseRepository.findById(assignment.getCourseId());
@@ -142,9 +153,10 @@ public class AssignmentController {
     		String sectionId = assignment.getSectionIds().get(0);
     		assignment.setSectionIds(new ArrayList<>());
     		assignment.getSectionIds().add(sectionId);
-    		updatedAssignment = this.updateOneAssignment(assignment, sectionId).getBody();
+    		Assignment updatedAssignment = this.updateOneAssignment(assignment, sectionId).getBody();
+    		updatedAssignments.add(updatedAssignment);
     	}
-    	return ResponseEntity.ok().body(updatedAssignment);
+    	return ResponseEntity.ok().body(updatedAssignments);
 
 	}
 
@@ -162,11 +174,15 @@ public class AssignmentController {
                     assignmentData.setStartDate(assignment.getStartDate());
                     assignmentData.setStartTime(assignment.getStartTime());
                     assignmentData.setEndDate(assignment.getEndDate());
-                    assignmentData.setEndTime(assignment.getEndTime());  
+                    assignmentData.setEndTime(assignment.getEndTime()); 
+                    assignmentData.setCreatedByUsername(assignment.getCreatedByUsername());
+                    assignmentData.setSectionIds(assignment.getSectionIds());
+                    assignmentData.setCourseId(assignment.getCourseId());
+                    assignmentData.setAvailableToOtherSections(assignment.isAvailableToOtherSections());
                     String directory = createFilePathInServer(givenSectionId, assignment.getAssignmentName(),
         					assignment.getCreatedByUsername());
         			assignmentData.setFilePath(directory);
-                    assignmentData.setSectionIds(assignment.getSectionIds());
+                    
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
                     System.out.println("\n\n\n\n\n Assignment Updated: " + updatedAssignment.toString() + "\n\n\n\n\n");
                     

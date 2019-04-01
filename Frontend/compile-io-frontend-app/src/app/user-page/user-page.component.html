@@ -37,7 +37,7 @@
                     <div class="col p-2 sidebarHover w-50 btn blackText">
                       <div class="container">
                         <div class="row" *ngFor="let assgn of Assignments">
-                          <div class="col p-2 sidebarHover w-50 btn blackText" (click)="selectedAssignment(assgn)">
+                          <div class="col p-2 sidebarHover w-50 btn blackText" (click)="selectAssignment(assgn)">
                             <span>
                               {{assgn.assignmentName}}
                             </span>
@@ -85,7 +85,7 @@
             </span>
             <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
             <div *ngIf="selectedSection == sec">
-              <div class="row" *ngFor="let assgn of Assignments" (click)="selectedAssignment(assgn)">
+              <div class="row" *ngFor="let assgn of Assignments" (click)="selectAssignment(assgn)">
                 <div class="col p-2 sidebarHover w-50 btn blackText">
                   <span>
                     {{assgn.assignmentName}}
@@ -277,6 +277,7 @@
                 <app-change-homework id="changePage" *ngIf="change"
                                      [assignmentInfo]="selectedAssignment"
                                      [selectedCourse]="selectedCourse"
+                                     [username]="username"
                                      [selectedSection]="selectedSection">
                                      
                 </app-change-homework>
@@ -289,7 +290,7 @@
             <div class="col">
               <app-change-homework [selectedCourse]="selectedCourse"
                                    [selectedSection]="selectedSection"
-                                   [userName]="username"
+                                   [username]="username"
                                    [assignmentInfo]="selectedAssignment"></app-change-homework>
             </div>
           </div>

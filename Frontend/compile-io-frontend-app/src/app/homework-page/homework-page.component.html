@@ -1,5 +1,5 @@
 <div *ngIf="onTime()">
-  <div *ngIf="reachedMaxSubmissionAttempts()">
+  <div *ngIf="belowMaxSubmissionAttempts()">
     <div *ngIf="results == null">
       <div *ngIf="!running" class="container">
         <div class="row mt-5">
@@ -65,7 +65,7 @@
     </div>
   </div>
 </div>
-<div *ngIf="!reachedMaxSubmissionAttempts()">
+<div *ngIf="!belowMaxSubmissionAttempts()">
     <div class="row mt-5">
         <div class="col">
           <h3>Reached Max Submission Attempts</h3>

@@ -69,7 +69,14 @@ public class CourseController {
     			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
     			if(!profs.isEmpty()) {
     				profs.get(0).addCourse(addedCourse);
-        			this.professorRepository.save(profs.get(0));
+        			Professor prof = this.professorRepository.save(profs.get(0));
+        			System.out.println("\n\n\n\n\n professor updated in Course Creation: " + prof.toString() + "\n\n\n\n\n");
+    			} else {
+    				Professor professorToAdd = new Professor();
+    				professorToAdd.setUserName(professorUsernamesInCourse.get(i));
+    				professorToAdd.addCourse(addedCourse);
+    				Professor prof = this.professorRepository.save(professorToAdd);
+        			System.out.println("\n\n\n\n\n professor created in Course Creation: " + prof.toString() + "\n\n\n\n\n");
     			}
     	}
     	
