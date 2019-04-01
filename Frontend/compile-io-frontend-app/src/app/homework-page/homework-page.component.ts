@@ -38,9 +38,9 @@ export class HomeworkPageComponent implements OnInit {
     
   }
 
-  serveFile(){
-    // this.codeService.serveFile(this.code.)
-  }
+  // serveFile(){
+  //   // this.codeService.serveFile(this.code.)
+  // }
 
   runCode(code:Code) {
     this.running = true;
