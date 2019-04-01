@@ -1,47 +1,204 @@
 package compile_io.mongo.models;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.FileSystemUtils;
 
+import compile_io.mongo.repositories.AssignmentRepository;
+import compile_io.mongo.repositories.SectionRepository;
+import compile_io.mongo.repositories.StudentRepository;
+
+@Document(collection="Section") 
 public class Section {
 	@Id
 	private String id;
-	private int SectionNumber;
-	@DBRef
-	private Professor Instructor;
+	private int year; //2019
+	private int term; //1
+	private int sectionNumber;
+	private List<String> studentUsernames;
+	private boolean useCourseDescription;
+	private String description;
+	private String courseId;
 	@DBRef
 	private List<Assignment> assignments;
-	public Section(int sectionNumber, Professor instructor) {
-		super();
-		SectionNumber = sectionNumber;
-		Instructor = instructor;
+	
+	@Autowired 
+	private StudentRepository studentRepository;
+	@Autowired
+	private AssignmentRepository assignmentRepository;
+	@Autowired
+	private SectionRepository sectionRepository;
+	
+	public Section() {
+    	super();
+    	studentUsernames = new ArrayList<String>();
+    	assignments = new ArrayList<Assignment>();
+    }
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	public int getTerm() {
+		return term;
+	}
+	public void setTerm(int term) {
+		this.term = term;
 	}
 	public int getSectionNumber() {
-		return SectionNumber;
+		return sectionNumber;
 	}
 	public void setSectionNumber(int sectionNumber) {
-		SectionNumber = sectionNumber;
+		this.sectionNumber = sectionNumber;
 	}
-	public Professor getInstructor() {
-		return Instructor;
+	
+	public void addStudentUsername(String newStudentUsername) {
+		this.studentUsernames.add(newStudentUsername);
+		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+		List<Student> students = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
+		if(!students.isEmpty()) {
+			students.get(0).addSectionId(this.id);
+			Student updatedStudent = this.studentRepository.save(students.get(0));
+			System.out.println("\n\n\n\n\n Student Added in Section AddStudentUsername: " + updatedStudent.toString() + "\n\n\n\n\n");
+		} else {
+			Student newStudent = new Student();
+			newStudent.setUserName(newStudentUsername);
+			newStudent.addSectionId(this.id);
+			Student updatedStudent = this.studentRepository.save(newStudent);
+			System.out.println("\n\n\n\n\n Student Added in Else Section AddStudentUsername: " + updatedStudent.toString() + "\n\n\n\n\n");
+		}
 	}
-	public void setInstructor(Professor instructor) {
-		Instructor = instructor;
+	
+	public void updateStudentUserName(String newStudentUsername, String sectionToUpdateId, String sectionToDeleteId) {
+		for(int i = 0; i < this.studentUsernames.size(); i ++) {
+			String studentUsername = this.studentUsernames.get(i);
+			if(newStudentUsername.equals(studentUsername)) {
+				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+				List<Student> students = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
+				Student student = students.get(0);
+				if(!students.isEmpty()) {
+					//might have to use id's
+					student.deleteSectionId(sectionToDeleteId);
+					student.addSectionId(sectionToUpdateId);
+					Student updatedStudent = this.studentRepository.save(student);
+        			System.out.println("\n\n\n\n\n Student Updated in section updateProfessorUserName: " + updatedStudent.toString() + "\n\n\n\n\n");
+				}
+			}
+		}
+	}
+	
+	public void deleteStudentUsername (String newStudentUsername) {
+		for(int i = 0; i < this.studentUsernames.size(); i++) {
+			String studentUsername = this.studentUsernames.get(i);
+			if(newStudentUsername == studentUsername) {
+				this.studentUsernames.remove(studentUsername);
+				i--;
+				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+				List<Student> student = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
+				if(!student.isEmpty()) {
+					//might have to use id's
+					student.get(0).deleteSectionId(this.id);
+					Student updatedStudent = this.studentRepository.save(student.get(0));
+        			System.out.println("\n\n\n\n\n Student Updated removed in Section deleteStudentUserName: " + updatedStudent.toString() + "\n\n\n\n\n");
+				}
+				
+			}
+		}
+	}
+	
+	public List<String> getStudentUsernames() {
+		return studentUsernames;
+	}
+
+	public void setStudentUsernames(List<String> studentUsernames) {
+		this.studentUsernames = studentUsernames;
+	}
+
+
+
+	public boolean isUseCourseDescription() {
+		return useCourseDescription;
+	}
+	public void setUseCourseDescription(boolean useClassDescription) {
+		this.useCourseDescription = useClassDescription;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public void addAssignment(Assignment newAssignment) {
+		this.assignments.add(newAssignment);
+	}
+	
+	public void deleteAssignment (Assignment newAssignment) {
+		for(int i = 0; i < this.assignments.size(); i++) {
+			Assignment assignment = this.assignments.get(i);
+			if(newAssignment == assignment) {
+				this.assignments.remove(assignment);
+				i--;
+			}
+		}
+	}
+	
+	public List<Assignment> getAssignments() {
+		return assignments;
+	}
+	public void setAssignments(List<Assignment> assignments) {
+		this.assignments = assignments;
 	}
 	
 	
-//	public List<String> getAssignmentIds() {
-//		return assignmentIds;
-//	}
-//	public void setAssignmentIds(List<String> assignmentIds) {
-//		this.assignmentIds = assignmentIds;
-//	}
+	public String getCourseId() {
+		return courseId;
+	}
+
+
+
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "Section [SectionNumber=" + SectionNumber + ", Instructor=" + Instructor + "]";
+		return "Section [id=" + id + ", Year=" + year + ", Term=" + term + ", sectionNumber=" + sectionNumber
+				+ ", studentUsernames=" + studentUsernames + ", useCourseDescription=" + useCourseDescription
+				+ ", description=" + description + ", courseId=" + courseId + ", assignments=" + assignments + "]";
 	}
 	
+	public void deleteSection () {
+		
+		for(Assignment assignment : this.getAssignments()) {
+    		String filepath = assignment.getFilePath();
+    		Path filePath = Paths.get(filepath);
+    		FileSystemUtils.deleteRecursively(filePath.toFile());
+    		this.assignmentRepository.deleteById(assignment.getId());
+    	}
+    	for(String studentUsername : this.getStudentUsernames()) {
+    		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+    		List<Student> student = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
+    		student.get(0).deleteSectionId(id);
+    		this.studentRepository.save(student.get(0));
+    	}
+        sectionRepository.deleteById(id);
+	}
 	
 }

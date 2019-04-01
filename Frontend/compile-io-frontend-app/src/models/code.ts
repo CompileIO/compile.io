@@ -5,9 +5,15 @@ export class Code {
     id: string;
     language: string;
     runTime: number;
+    submissionAttempts: number;
     testResponses: string [];
     codePath: string;
-    Assignment: Assignment;
+    assignmentId: string;
+    userName: string ; 
     submisstionTime:Time;
     grade: string;
+
+
+    
+    
 }

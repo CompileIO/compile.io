@@ -12,11 +12,12 @@ public class PythonBuilder extends AbstractBuilder {
         super(studentFiles, professorFiles);
     }
 
-    // Still only works for a single file.
+
+	// Still only works for a single file.
     public String getDockerfileData() { 
         StringBuilder dockerfileData = new StringBuilder();
         List<File> studentFiles = super.getStudentFiles();
-        List<File> professorFiles = super.getProfessorFiles();
+        // List<File> professorFiles = super.getProfessorFiles();
 
         dockerfileData.append("FROM python:latest\n");
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");

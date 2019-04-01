@@ -1,0 +1,50 @@
+<div class="container w-100 d-block">
+  <div class="row justify-content-center mt-2">
+    <div class="col">
+      <form #form="ngForm" ngNativeValidate (ngSubmit)="submitForm(form.value)" class="w-100 p-3">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="form-group p-3">
+                <label class="float-left">Course Name</label>
+                <input type="text" class="form-control" name="nameText" #nameText placeholder="CSSE120" [(ngModel)]="newCourse.courseName" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="p-3">
+                <label class="float-left">Professors with access</label>
+                <input type="text" class="form-control" #profText name="professorUsernameText"  placeholder="username">
+                <button type="button" (click)="addProfessor(profText.value); profText.value = ''">add</button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <div class="p-3">
+                    <select multiple class="form-control" name="professorsWithAccess" #professorsWithAccess>
+                        <option *ngFor="let p of professorList">{{p}}</option>
+                    </select>
+                    <button type="button" (click)="removeProfessor(p)">remove</button>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="float-left">Description</label>
+              <textarea rows="8" cols="50" type="text" class="form-control" name="descriptionText" placeholder="Information for the students e.g. syllabus, piazza, website, etc" [(ngModel)]="newCourse.description">
+              </textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col p-3">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

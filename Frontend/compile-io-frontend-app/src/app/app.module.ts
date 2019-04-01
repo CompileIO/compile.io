@@ -11,6 +11,10 @@ import { ROUTING } from './app-routing/app-routing.module';
 
 import { AuthenticationService } from './services/authentication.service';
 import { ChangeHomeworkComponent } from './change-homework/change-homework.component';
+import { CoursePageComponent } from './course-page/course-page.component';
+import { SectionComponent } from './section/section.component';
+import { ChangeCoursePageComponent } from './change-course-page/change-course-page.component';
+import { ChangeSectionPageComponent } from './change-section-page/change-section-page.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,11 @@ import { ChangeHomeworkComponent } from './change-homework/change-homework.compo
     LoginComponent,
     UserPageComponent,  
     HomeworkPageComponent,
-    ChangeHomeworkComponent
+    ChangeHomeworkComponent,
+    CoursePageComponent,
+    SectionComponent,
+    ChangeCoursePageComponent,
+    ChangeSectionPageComponent
   ],
   imports: [
     BrowserModule,

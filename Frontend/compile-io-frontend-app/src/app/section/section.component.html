@@ -1,0 +1,8 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 *ngIf="sectionInfo.useCourseDescription">{{courseInfo.description}}</h1>
+      <h1 *ngIf="!sectionInfo.useCourseDescription">{{sectionInfo.description}}</h1>
+    </div>
+  </div>
+</div>

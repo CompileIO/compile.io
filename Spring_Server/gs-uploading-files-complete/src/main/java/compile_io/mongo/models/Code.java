@@ -8,38 +8,41 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Document
+@Document(collection="Code") 
 public class Code {
 	@Id
 	private String id;
 
 	private String language;
 	private int runTime;
+	private int submissionAttempts;//change
     private List<String> testResponses;
     private String codePath;
     private String assignmentId;
     private String userName;
-    
-    
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalTime submissionTime;
     private String grade;
     
-    public Code(String language, int runTime, String codePath, LocalTime submissionTime, String givenAssignmentId, String userName) {
+    public Code() {
     	super();
-		this.language = language;
-		this.runTime = runTime;
-		this.codePath = codePath;
-		this.submissionTime = submissionTime;
-		this.assignmentId = givenAssignmentId;
-		this.userName = userName;
-		this.testResponses = new ArrayList<String>();
+    	testResponses = new ArrayList<>();
+    	submissionAttempts = 0;
+    }
+
+	public String getId() {
+		return id;
 	}
-	public String getAssignmentName() {
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getAssignmentId() {
 		return assignmentId;
 	}
 
-	public void setAssignmentName(String assignmentName) {
+	public void setAssignmentId(String assignmentName) {
 		this.assignmentId = assignmentName;
 	}
 
@@ -55,15 +58,32 @@ public class Code {
 	public void setRunTime(int runTime) {
 		this.runTime = runTime;
 	}
-	public List<String> getTestResponse() {
-		return testResponses;
-	}
+	
 	public void addTestResponse(String testResponse) {
 		this.testResponses.add(testResponse);
 	}
+	
+	public List<String> getTestResponse() {
+		return testResponses;
+	}
+	public void setTestResponses(List<String> testResponses) {
+		this.testResponses = testResponses;
+	}
+	
+	public int getSubmissionAttempts() {
+		return submissionAttempts;
+	}
+
+	public void setSubmissionAttempts(int submissionAttempts) {
+		this.submissionAttempts = submissionAttempts;
+	}
+
+	
 	public LocalTime getSubmissionTime() {
 		return submissionTime;
 	}
+	
+	
 	public void setSubmissionTime(LocalTime submissionTime) {
 		this.submissionTime = submissionTime;
 	}
@@ -82,9 +102,6 @@ public class Code {
 		this.userName = userName;
 	}
 	
-	
-	
-	
 	public String getCodePath() {
 		return codePath;
 	}
@@ -95,7 +112,10 @@ public class Code {
 
 	@Override
 	public String toString() {
-		return "Code [language=" + language + ", runTime=" + runTime + ", testResponses=" + testResponses
+		final int maxLen = 10;
+		return "Code [id=" + id + ", language=" + language + ", runTime=" + runTime + ", submissionAttempts="
+				+ submissionAttempts + ", testResponses="
+				+ (testResponses != null ? testResponses.subList(0, Math.min(testResponses.size(), maxLen)) : null)
 				+ ", codePath=" + codePath + ", assignmentId=" + assignmentId + ", userName=" + userName
 				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
 	}

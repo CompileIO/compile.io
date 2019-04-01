@@ -56,27 +56,10 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Failed to store file " + filename, e);
         }
     }
+	
     
-    public void storeAddPath(MultipartFile file, String studentOrProfessor, String className, String assignmentName, String userName) {
-    	Path dir;
-    	if(studentOrProfessor == "student") {
-    		dir = Paths.get("upload-dir/" + 
-					className.replaceAll(" ", "_").toLowerCase() + "/" +
-					assignmentName.replaceAll(" ", "_").toLowerCase() + 
-					"/student-files/" +
-					userName.replaceAll(" ", "_").toLowerCase());
-    	}
-    	else if(studentOrProfessor == "professor") {
-    		dir = Paths.get("upload-dir/" + 
-					className.replaceAll(" ", "_").toLowerCase() + "/" +
-					assignmentName.replaceAll(" ", "_").toLowerCase() + 
-					"/professor-files/" +
-					userName.replaceAll(" ", "_").toLowerCase());
-    	}
-    	else {
-    		dir = this.rootLocation;
-    	}
-    	
+    public void storeAddPath(MultipartFile file,String filePath) {
+    	Path dir = Paths.get(filePath);  	
     	
         if (! dir.toFile().exists()){
             dir.toFile().mkdirs();
@@ -122,14 +105,9 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
-    }
-
-    @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filepath, String filename) {
         try {
-            Path file = load(filename);
+            Path file = Paths.get(filepath).resolve(filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;

@@ -3,12 +3,15 @@ package compile_io.mongo.models;
 
 
 import java.util.Date;
+import java.util.List;
+import java.io.File;
+import java.nio.file.Paths;
 import java.time.LocalTime;
-
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.FileSystemUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -32,8 +35,10 @@ public class Assignment {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
 	private LocalTime endTime;
     private String filepath;
-    private String courseName;
     private String createdByUsername;
+    private List<String> sectionIds;
+    private String courseId;
+    private boolean availableToOtherSections;
     
 	
 	public Assignment() {
@@ -48,7 +53,7 @@ public class Assignment {
 		this.id = id;
 	}
 
-	public String getassignmentName() {
+	public String getAssignmentName() {
 		return assignmentName;
 	}
 
@@ -130,13 +135,10 @@ public class Assignment {
 	public void setFilePath(String file) {
 		this.filepath = file;
 	}
-
-	public String getCourseName() {
-		return courseName;
-	}
-
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
+	
+	public void deleteFilePathFromServer() {
+		File assignmentFile = Paths.get(this.filepath).toFile();
+		FileSystemUtils.deleteRecursively(assignmentFile);
 	}
 	
 	public String getCreatedByUsername() {
@@ -147,13 +149,45 @@ public class Assignment {
 		this.createdByUsername = createdByUsername;
 	}
 
+	public List<String> getSectionIds() {
+		return sectionIds;
+	}
+
+	public void setSectionIds(List<String> sectionIds) {
+		this.sectionIds = sectionIds;
+	}
+
+	public String getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
+	}
+
+	public boolean isAvailableToOtherSections() {
+		return availableToOtherSections;
+	}
+
+	public void setAvailableToOtherSections(boolean availableToOtherSections) {
+		this.availableToOtherSections = availableToOtherSections;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Assignment [Id= " +id +", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
+		final int maxLen = 10;
+		return "Assignment [id=" + id + ", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
 				+ language + ", size=" + size + ", tries=" + tries + ", startDate=" + startDate + ", startTime="
-				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", File=" + filepath + ", courseName="
-				+ courseName + "]";
+				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", filepath=" + filepath
+				+ ", createdByUsername=" + createdByUsername + ", sectionIds="
+				+ (sectionIds != null ? sectionIds.subList(0, Math.min(sectionIds.size(), maxLen)) : null)
+				+ ", courseId=" + courseId + ", availableToOtherSections=" + availableToOtherSections + "]";
 	}
+
+	
+	
+	
 
 	
 	

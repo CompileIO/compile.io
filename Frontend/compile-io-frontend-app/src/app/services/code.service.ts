@@ -13,41 +13,67 @@ export class CodeService {
   constructor(private http: HttpClient) { }
 
 
-  getCode(codeData: Code) {
-    return this.http.get(this.apiUrl + "/Code/"  + codeData.id);
+  getCode(codeData: Code): Observable<Code>  {
+    var response; 
+    response = this.http.get(this.apiUrl + "/Code/"  + codeData.id);
+    return response;
   }
-  getCodes() {
-    return this.http.get(this.apiUrl + '/Code')
+  getCodes(): Observable<Code[]> {
+    var response;
+    response = this.http.get(this.apiUrl + '/Code');
+    return response;
     
   }
 
-  getCodesForSpecificAssignment(assignmentId: string): Observable<Code[]> { 
+  getCodesForSpecificAssignment(assignmentId: string, studentUsername: string): Observable<Code> { 
     var response;
-    response = this.http.get(this.apiUrl + '/Code/getAssignment/' + assignmentId);
+    response = this.http.get(this.apiUrl + '/Code/getAssignment/' + assignmentId +'/' + studentUsername);
     return response;
   }
 
-  uploadCode(type: string, runTime: number, givenAssignmentID: string, userName: string): Observable<any> {
-    let body: FormData = new FormData(); 
-    body.append('type', type);
-    body.append('username', userName);
-    body.append('runTime', runTime.toString());
-    body.append('assignmentID', givenAssignmentID.toString());
-    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" });
-    return this.http.post(this.apiUrl + "/Code/uploadCode", body , {headers: fileHeaders, withCredentials: true});
+  getCodesForStudent(studentUsername: string): Observable<Code[]> { 
+    var response;
+    response = this.http.get(this.apiUrl + '/Code/getStudent/' + studentUsername);
+    return response;
   }
 
-  uploadFile(file: File, className: string, assignmentName: string, userName: string): Observable<any> {
+  runCode(file: File, codeId: string): Observable<Code> {
     let body: FormData = new FormData();  
     body.append('file', file);
-    body.append('courseName', className);
-    body.append('assignmentName', assignmentName);
-    body.append('userName', userName);
-    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
-    return this.http.post(this.apiUrl + "/Code/uploadFile", body, {headers: fileHeaders, withCredentials: true});
+    body.append('codeId', codeId);
+    const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data"}); 
+    var response;
+    response = this.http.post(this.apiUrl + "/Code/runCode", body, {headers: fileHeaders, withCredentials: true});
+    return response;
   }
 
-  deleteCode(id: string){
-    return this.http.delete(this.apiUrl + '/Code/deleteCode' + id, {withCredentials: true })
+  serveFile(filename: string, filepath: string) { //: Observable<Resource>
+    let body: FormData = new FormData();
+    body.append('filepath', filepath);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
+    var response; 
+    response = this.http.post(this.apiUrl + "/Code/getFile/" + filename, body , {headers: headers, withCredentials: true});
+    return response;
+  }
+
+  createCode(codeData: Code): Observable<Code> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
+    var response;
+    codeData.id = null;
+    response = this.http.post(this.apiUrl + '/Code/Create' , codeData, { headers: headers, withCredentials: true });
+    return response;
+  }
+
+  updateCode(codeData: Code): Observable<Code> {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'  });
+    var response;
+    response = this.http.put(this.apiUrl + '/Code/Update/' + codeData.id, codeData, { headers: headers, withCredentials: true });
+    return response;
+  }
+
+  deleteCode(id: string): Observable<String>{
+    var response;
+    response = this.http.delete(this.apiUrl + '/Code/deleteCode' + id, {withCredentials: true });
+    return response;
   }
 }

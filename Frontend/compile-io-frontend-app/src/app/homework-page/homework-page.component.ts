@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CodeService } from '../services/code.service';
 import {Assignment} from '../../models/assignment';
+import {Code} from '../../models/code';
+import {Section} from '../../models/section';
 
 @Component({
   selector: 'app-homework-page',
@@ -11,11 +13,12 @@ export class HomeworkPageComponent implements OnInit {
   @Input() username: string;
   @Input() assignmentInfo: Assignment;
   file: File;
-  results: string[];
+  results: String[];
   error: string;
   running: boolean;
   sDate: string;
   eDate: string;
+  code: Code;
 
   constructor(private codeService: CodeService) {
     this.file = null;
@@ -32,35 +35,84 @@ export class HomeworkPageComponent implements OnInit {
     } else {
       alert("File is too large!");
     }
-    if (this.file !== null) {
-      console.log("Should run upload file")
-      this.codeService.uploadFile(this.file, this.assignmentInfo.courseName, this.assignmentInfo.assignmentName, this.username).subscribe({
-        next: x => {
-          console.log(x)
-        },
-        
-        error: err => {
-          console.log("UPLOADING FILE ERROR: " + err)
-        },
-        complete: () => console.log("Uploaded file")
-      });
-    }
+    
   }
 
-  run() {
+  // serveFile(){
+  //   // this.codeService.serveFile(this.code.)
+  // }
+
+  runCode(code:Code) {
     this.running = true;
-    this.codeService.uploadCode(this.assignmentInfo.language, this.assignmentInfo.timeout,  this.assignmentInfo.id,this.username).subscribe({
-      next: x => {console.log("This is the result: " + x); this.results = x},
+    console.log("Should run upload file")
+      this.codeService.runCode(this.file, code.id).subscribe({
+        next: x => {
+          console.log(x);
+          this.code = x;
+        },
+        error: err => {
+          console.log("RUNNING CODE ERROR: " + err);
+        },
+        complete: () => {
+          this.running = false;
+          console.log("Ran code against test complete");
+          this.results = this.code.testResponses;
+        }
+      });
+  }
+
+
+  run() {
+    
+    if(this.code != null && this.code != undefined) {
+      this.runCode(this.code);
+
+    } else {
+      // this.code.language = this.assignmentInfo.language;
+      this.code = new Code();
+      this.code.runTime = this.assignmentInfo.timeout;
+      this.code.userName = this.username;
+      this.code.assignmentId = this.assignmentInfo.id;
+      this.codeService.createCode(this.code).subscribe({
+        next: x => {console.log("Code added: " + x); 
+          this.code = x;
+        },
+        error: err => {
+          console.log("ADD CODE ERROR: " + err),
+          this.error = err
+        },
+        complete: () => {
+          console.log("Added Code")
+          this.runCode(this.code);
+        }
+      });
+    }
+    
+  }
+
+  getCodesForAssignment() {
+    this.codeService.getCodesForSpecificAssignment(this.assignmentInfo.id, this.username).subscribe({
+      next: x => {
+        console.log(x);
+        this.code = x;
+      },
       error: err => {
-        console.log("RUNNING DOCKER ERROR: " + err),
+        console.log("GET CODES FOR ASSIGNMENT ERROR: " + err),
         this.error = err
       },
       complete: () => {
-        console.log("Ran docker")
-        this.running = false;
-        // this.getResults();
+        this.belowMaxSubmissionAttempts();
       }
     });
+  }
+
+  belowMaxSubmissionAttempts(): boolean {
+    if(this.code != null || this.code != undefined) {
+      if(this.code.submissionAttempts >= this.assignmentInfo.tries) {
+        return false;
+      }
+    }
+      return true;
   }
 
   clearResult() {
@@ -103,23 +155,8 @@ export class HomeworkPageComponent implements OnInit {
     }
     return false;
   }
-
-  // getResults() {
-  //   this.codeService.getResults(this.assignmentInfo.id, this.username).subscribe({
-  //     next: x => {
-  //       console.log(x),
-  //       this.results = x.map(element => element.toString());
-  //       },
-  //     error: err => {
-  //       console.log("GET RESULTS ERROR: " + err),
-  //         this.error = err
-  //     },
-  //     complete: () => console.log("got results")
-  //   });
-  // }
-
-
   ngOnInit() {
+    this.getCodesForAssignment();
   }
 
 }
