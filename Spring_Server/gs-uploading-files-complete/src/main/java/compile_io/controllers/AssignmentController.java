@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.core.io.Resource;
 
 import compile_io.mongo.models.Assignment;
+import compile_io.mongo.models.Code;
 import compile_io.mongo.models.Course;
 import compile_io.mongo.models.Section;
 import compile_io.mongo.repositories.AssignmentRepository;
@@ -66,12 +67,22 @@ public class AssignmentController {
 	}
 
 	@PostMapping("/Assignmnet/uploadFile")
-	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
+	public ResponseEntity<Assignment> uploadFile(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
-		String filePath = request.getParameter("filePath");
-		storageService.storeAddPath(file, filePath);
-
-		return ResponseEntity.ok().body("Assignment uploaded " + file.getOriginalFilename());
+		String assignmentId = request.getParameter("assignmentId");
+		Optional<Assignment> assignmentToFind = this.assignmentRepository.findById(assignmentId);
+		Assignment assignment;
+		if(!assignmentToFind.isPresent()) {
+			return ResponseEntity.notFound().build();
+		} 
+		assignment = assignmentToFind.get();
+		assignment.setFileName(file.getOriginalFilename());
+//		System.out.println("\n\n\n\n\n File name: " + file.getOriginalFilename() + "\n\n\n\n");
+		String assignmentFilePath = assignment.getFilePath();
+		storageService.storeAddPath(file, assignmentFilePath);
+		Assignment updatedAssignment = this.assignmentRepository.save(assignment);
+		System.out.println("\n\n\n\n\n Assignment Updated: " + updatedAssignment.toString() + "\n\n\n\n\n");
+		return ResponseEntity.ok().body(updatedAssignment);
 	}
 	
 	@GetMapping("/Assignment/getFile/{filename:.+}")
@@ -182,7 +193,7 @@ public class AssignmentController {
                     String directory = createFilePathInServer(givenSectionId, assignment.getAssignmentName(),
         					assignment.getCreatedByUsername());
         			assignmentData.setFilePath(directory);
-                    
+//                    assignmentData.setFileName(assignment.getFileName());
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
                     System.out.println("\n\n\n\n\n Assignment Updated: " + updatedAssignment.toString() + "\n\n\n\n\n");
                     

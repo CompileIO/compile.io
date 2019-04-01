@@ -38,9 +38,19 @@ export class HomeworkPageComponent implements OnInit {
     
   }
 
-  // serveFile(){
-  //   // this.codeService.serveFile(this.code.)
-  // }
+  serveFile(){
+    this.codeService.serveFile(this.code.fileName,this.code.codePath).subscribe({
+      next: fileRecieved => {
+        this.file = fileRecieved;
+      },
+      error: err => {
+        console.log("RECIEVING FILE ERROR: " + err);
+      },
+      complete: () => {
+        console.log("Recieved File");
+      }
+    });
+  }
 
   runCode(code:Code) {
     this.running = true;
@@ -108,6 +118,7 @@ export class HomeworkPageComponent implements OnInit {
 
   belowMaxSubmissionAttempts(): boolean {
     if(this.code != null || this.code != undefined) {
+      // this.serveFile();
       if(this.code.submissionAttempts >= this.assignmentInfo.tries) {
         return false;
       }

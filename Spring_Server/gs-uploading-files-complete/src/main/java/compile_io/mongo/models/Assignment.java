@@ -35,6 +35,7 @@ public class Assignment {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
 	private LocalTime endTime;
     private String filepath;
+    private String fileName;
     private String createdByUsername;
     private List<String> sectionIds;
     private String courseId;
@@ -136,6 +137,14 @@ public class Assignment {
 		this.filepath = file;
 	}
 	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public void deleteFilePathFromServer() {
 		File assignmentFile = Paths.get(this.filepath).toFile();
 		FileSystemUtils.deleteRecursively(assignmentFile);
@@ -179,8 +188,8 @@ public class Assignment {
 		final int maxLen = 10;
 		return "Assignment [id=" + id + ", assignmentName=" + assignmentName + ", timeout=" + timeout + ", language="
 				+ language + ", size=" + size + ", tries=" + tries + ", startDate=" + startDate + ", startTime="
-				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", filepath=" + filepath
-				+ ", createdByUsername=" + createdByUsername + ", sectionIds="
+				+ startTime + ", endDate=" + endDate + ", endTime=" + endTime + ", filepath=" + filepath + ", fileName="
+				+ fileName + ", createdByUsername=" + createdByUsername + ", sectionIds="
 				+ (sectionIds != null ? sectionIds.subList(0, Math.min(sectionIds.size(), maxLen)) : null)
 				+ ", courseId=" + courseId + ", availableToOtherSections=" + availableToOtherSections + "]";
 	}

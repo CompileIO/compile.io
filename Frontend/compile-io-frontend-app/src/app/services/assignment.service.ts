@@ -26,18 +26,17 @@ export class AssignmentService {
     
   }
   
-  uploadFile(file: File, assignmentFilePath: string): Observable<any> {
+  uploadFile(file: File, assignmentId: string): Observable<Assignment> {
     let body: FormData = new FormData();  
     body.append('file', file);
-    body.append('filePath', assignmentFilePath);
-    console.log(assignmentFilePath);
+    body.append('assignmentId', assignmentId);
     const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
     var response; 
     response = this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});
     return response;
   }
 
-  serveFile(filename: string, filepath: string) { //: Observable<Resource>
+  serveFile(filename: string, filepath: string) : Observable<File> {
     let body: FormData = new FormData();
     body.append('filepath', filepath);
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
