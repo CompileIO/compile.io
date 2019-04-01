@@ -18,7 +18,6 @@ export class HomeworkPageComponent implements OnInit {
   running: boolean;
   sDate: string;
   eDate: string;
-  codes: Code[];
   code: Code;
 
   constructor(private codeService: CodeService) {
@@ -39,61 +38,52 @@ export class HomeworkPageComponent implements OnInit {
     
   }
 
-  sendFile(code:Code) {
+  serveFile(){
+    // this.codeService.serveFile(this.code.)
+  }
+
+  runCode(code:Code) {
+    this.running = true;
     console.log("Should run upload file")
-      this.codeService.uploadFile(this.file, code.codePath).subscribe({
+      this.codeService.runCode(this.file, code.id).subscribe({
         next: x => {
           console.log(x);
-          this.results = x.testResponses;
+          this.code = x;
         },
         error: err => {
-          console.log("UPLOADING FILE ERROR: " + err);
+          console.log("RUNNING CODE ERROR: " + err);
         },
-        complete: () => {console.log("Uploaded file")}
+        complete: () => {
+          this.running = false;
+          console.log("Ran code against test complete");
+          this.results = this.code.testResponses;
+        }
       });
   }
 
 
   run() {
-    this.running = true;
-    if(this.codes.length > 0) {
-      //change 
-      this.codeService.updateCode(this.code).subscribe({
-        next: x => {console.log("This is the result: " + x); 
-                    // this.results = x.testResponses;
-                    if (this.file !== null) {
-                      this.sendFile(x);
-                    }
-                  },
-        error: err => {
-          console.log("UPDATE CODE ERROR: " + err),
-          this.error = err
-        },
-        complete: () => {
-          console.log("Ran docker")
-          this.running = false;
-          // this.getResults();
-        }
-      });
+    
+    if(this.code != null && this.code != undefined) {
+      this.runCode(this.code);
+
     } else {
-      this.code.language = this.assignmentInfo.language;
+      // this.code.language = this.assignmentInfo.language;
+      this.code = new Code();
       this.code.runTime = this.assignmentInfo.timeout;
       this.code.userName = this.username;
       this.code.assignmentId = this.assignmentInfo.id;
       this.codeService.createCode(this.code).subscribe({
-        next: x => {console.log("This is the result: " + x); 
-                    if (this.file !== null) {
-                      this.sendFile(x);
-                    }
-                  },
+        next: x => {console.log("Code added: " + x); 
+          this.code = x;
+        },
         error: err => {
           console.log("ADD CODE ERROR: " + err),
           this.error = err
         },
         complete: () => {
-          console.log("Ran docker")
-          this.running = false;
-          // this.getResults();
+          console.log("Added Code")
+          this.runCode(this.code);
         }
       });
     }
@@ -104,8 +94,7 @@ export class HomeworkPageComponent implements OnInit {
     this.codeService.getCodesForSpecificAssignment(this.assignmentInfo.id, this.username).subscribe({
       next: x => {
         console.log(x);
-        this.codes = x;
-        this.code = this.codes[0];
+        this.code = x;
       },
       error: err => {
         console.log("GET CODES FOR ASSIGNMENT ERROR: " + err),
@@ -118,16 +107,12 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   belowMaxSubmissionAttempts(): boolean {
-    if((this.codes != null || this.codes != undefined) && this.codes.length > 0) {
-      this.code = this.codes[0];
-      if(this.code.submissionAttempts != null || this.code.submissionAttempts != undefined && this.code.submissionAttempts >= this.assignmentInfo.tries) {
+    if(this.code != null || this.code != undefined) {
+      if(this.code.submissionAttempts >= this.assignmentInfo.tries) {
         return false;
       }
     }
-    else {
-      this.code = new Code;
       return true;
-    }
   }
 
   clearResult() {

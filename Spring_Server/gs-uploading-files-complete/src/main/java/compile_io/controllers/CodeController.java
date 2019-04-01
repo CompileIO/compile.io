@@ -63,21 +63,22 @@ public class CodeController {
 	    }
 	    
 	    @GetMapping("/Code/getAssignment/{assignmentId}/{studentUsername}")
-	    public ResponseEntity<List<Code>> getAllCodesForAssignment(@PathVariable("assignmentId") String assignmentId, @PathVariable("studentUsername") String studentUsername) {
+	    public ResponseEntity<Code> getAllCodesForAssignment(@PathVariable("assignmentId") String assignmentId, @PathVariable("studentUsername") String studentUsername) {
 	        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
 	        List<Student> students = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
-	        List<Code> codesToReturn = new ArrayList<>();
+	        Code codeToReturn = null;
 	        if(!students.isEmpty()) {
 	        	Student student = students.get(0);
 	 	        for(Code code : student.getCodes()) {
 	 	        	if(assignmentId.equals(code.getAssignmentId())) {
-	 	        		codesToReturn.add(code);
+	 	        		codeToReturn = this.updateCode(code.getId(), code).getBody();
+	 	        		return ResponseEntity.ok().body(codeToReturn);
 	 	        	}
 	 	        }
 	        } 
 	       
 	        
-	        return ResponseEntity.ok().body(codesToReturn);
+	        return ResponseEntity.ok().body(codeToReturn);
 	    }
 	    
 	    @GetMapping("/Code/getStudent/{studentUsername}") 
@@ -97,12 +98,30 @@ public class CodeController {
 	                .orElse(ResponseEntity.notFound().build());
 	    }
 
-	@PostMapping("/Code/uploadFile")
-	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
+	@PostMapping("/Code/runCode")
+	public ResponseEntity<Code> runCode(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
-		String filePath = request.getParameter("filePath");
-		storageService.storeAddPath(file, filePath);
-		return ResponseEntity.ok().body("Code uploaded " + file.getOriginalFilename());
+		String codeId = request.getParameter("codeId");
+		Optional<Code> codeToFind = this.codeRepository.findById(codeId);
+		Code code;
+		if(!codeToFind.isPresent()) {
+			return ResponseEntity.notFound().build();
+			
+		} 
+		code = codeToFind.get();
+		int timeLimit = code.getRunTime();
+//		String language = code.getLanguage();
+		String language = "java"; //NEED TO CHANGE TO THIS ^^^^^^^ BEFORE DEPLOYING, FOR TESTING PURPOSES ONLY
+		String codeFilePath = code.getCodePath();
+		LocalTime submissionTime = LocalTime.now();
+		code.setSubmissionTime(submissionTime);
+		storageService.storeAddPath(file, codeFilePath);
+		String assignmentFilepath = codeFilePath.replaceFirst("professor-files", "student-files");
+		code.addTestResponse(this.runCompiler(language, timeLimit, assignmentFilepath, codeFilePath));
+		code.setSubmissionAttempts(code.getSubmissionAttempts()+1);
+		Code addedCode = codeRepository.save(code);
+    	System.out.println("\n\n\n\n\n Code Submitted: " + addedCode.toString() + "\n\n\n\n\n");
+		return ResponseEntity.ok().body(code);
 	}
 	
 	@GetMapping("/Code/getFile/{filename:.+}")
@@ -113,58 +132,30 @@ public class CodeController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
-
-	@PostMapping("/Code/uploadCode")
-	public ResponseEntity<Code> inputCodeforUser(MultipartHttpServletRequest request) {
-		String userName = request.getParameter("username");
-		String type = request.getParameter("type");
-		String runTime = request.getParameter("runTime");
-		String givenAssignmentId = request.getParameter("assignmentID");
-		Optional<Assignment> assignmentToRun = assignmentRepository.findById(givenAssignmentId);
-		String assignmentFilepath = assignmentToRun.get().getFilePath();
-		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
-		System.out.println("\n\n\n\n\n" + codePath + "\n\n\n\n\n");
-		int runTimeNum = Integer.parseInt(runTime);
-		LocalTime submissionTime = LocalTime.now();
-		Code newCode = new Code();
-		newCode.setLanguage(type);
-		newCode.setRunTime(runTimeNum);
-		newCode.setCodePath(codePath);
-		newCode.setSubmissionTime(submissionTime);
-		newCode.setAssignmentId(givenAssignmentId);
-		newCode.setUserName(userName);
-		newCode.setSubmissionAttempts(1);
-		// Docker stuff
-		newCode.addTestResponse(runCompiler(type, runTimeNum, assignmentFilepath, codePath));
-		Code addedCode = codeRepository.save(newCode);
-		
-		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-		List<Student> students = this.studentRepository.findByuserName(userName, sortByCreatedAtDesc);
-		Student student = students.get(0);
-		student.addCode(addedCode);
-		this.studentRepository.save(student);
-		
-		return ResponseEntity.ok().body(addedCode);
-	}
 	
 	@PostMapping("/Code/Create")
     public ResponseEntity<Code> createCode(@Valid @RequestBody Code code) {  
-		LocalTime submissionTime = LocalTime.now();
-		code.setSubmissionTime(submissionTime);
-		Optional<Assignment> assignmentToRun = assignmentRepository.findById(code.getAssignmentId());
-		String assignmentFilepath = assignmentToRun.get().getFilePath();
+		Optional<Assignment> assignmentToFind = assignmentRepository.findById(code.getAssignmentId());
+		Assignment assignment = assignmentToFind.get();
+		String assignmentFilepath = assignment.getFilePath();
 		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
 		code.setCodePath(codePath);
-		code.setSubmissionAttempts(1);
-		code.addTestResponse(runCompiler(code.getLanguage(), code.getRunTime(), assignmentFilepath, codePath));
     	Code addedCode = codeRepository.save(code);
     	System.out.println("\n\n\n\n\n Code Created: " + addedCode.toString() + "\n\n\n\n\n");
     	
     	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
 		List<Student> students = this.studentRepository.findByuserName(code.getUserName(), sortByCreatedAtDesc);
-		Student student = students.get(0);
+		Student student;
+		if(!students.isEmpty()) {
+			student = students.get(0);
+		} else {
+			student = new Student();
+			student.setUserName(code.getUserName());
+			student.setSectionIds(assignment.getSectionIds());
+		}
 		student.addCode(addedCode);
-		this.studentRepository.save(student);
+		Student addedStudent = this.studentRepository.save(student);
+		System.out.println("\n\n\n\n\n Student added or updated in CodeController: " + addedStudent.toString() + "\n\n\n\n\n");
 		
         return ResponseEntity.ok().body(addedCode);
     }
@@ -211,20 +202,29 @@ public class CodeController {
                 	
                 	LocalTime submissionTime = LocalTime.now();
             		codeData.setSubmissionTime(submissionTime);
-            		Optional<Assignment> assignmentToRun = assignmentRepository.findById(code.getAssignmentId());
-            		String assignmentFilepath = assignmentToRun.get().getFilePath();
-            		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
-            		codeData.setCodePath(codePath);
-            		codeData.setSubmissionAttempts(code.getSubmissionAttempts()+1);
-            		code.addTestResponse(runCompiler(code.getLanguage(), code.getRunTime(), assignmentFilepath, codePath));
-                	//might have to delete test responses later
-                	codeData.setAssignmentId(code.getAssignmentId());
-                	codeData.setGrade(code.getGrade());
-                	codeData.setLanguage(code.getLanguage());
-                	codeData.setRunTime(code.getRunTime());
-                	codeData.setUserName(code.getUserName());
-                    Code updatedCode = codeRepository.save(codeData);
-                    System.out.println("\n\n\n\n\n Code Updated: " + updatedCode.toString() + "\n\n\n\n\n");
+            		Optional<Assignment> assignmentToFind = assignmentRepository.findById(code.getAssignmentId());
+            		Assignment assignment = new Assignment();
+            		Code updatedCode = new Code();
+            		if(assignmentToFind.isPresent()) {
+            			assignment = assignmentToFind.get();
+            			String assignmentFilepath = assignment.getFilePath();
+                		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
+                		codeData.setCodePath(codePath);
+//                		codeData.setSubmissionAttempts(code.getSubmissionAttempts()+1);
+//                		code.addTestResponse(runCompiler(code.getLanguage(), code.getRunTime(), assignmentFilepath, codePath));
+                    	//might have to delete test responses later
+                    	codeData.setAssignmentId(assignment.getId());
+                    	codeData.setGrade(code.getGrade());
+                    	codeData.setLanguage(assignment.getLanguage());
+                    	codeData.setRunTime(assignment.getTimeout());
+//                    	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
+                    	codeData.setUserName(code.getUserName());
+                        updatedCode = codeRepository.save(codeData);
+                        System.out.println("\n\n\n\n\n Code Updated: " + updatedCode.toString() + "\n\n\n\n\n");
+            		} else {
+            			ResponseEntity.notFound().build();
+            		}
+            		
                     return ResponseEntity.ok().body(updatedCode);
                 }).orElse(ResponseEntity.notFound().build());							
      

@@ -25,7 +25,7 @@ export class CodeService {
     
   }
 
-  getCodesForSpecificAssignment(assignmentId: string, studentUsername: string): Observable<Code[]> { 
+  getCodesForSpecificAssignment(assignmentId: string, studentUsername: string): Observable<Code> { 
     var response;
     response = this.http.get(this.apiUrl + '/Code/getAssignment/' + assignmentId +'/' + studentUsername);
     return response;
@@ -37,13 +37,13 @@ export class CodeService {
     return response;
   }
 
-  uploadFile(file: File, codeFilePath: string): Observable<String> {
+  runCode(file: File, codeId: string): Observable<Code> {
     let body: FormData = new FormData();  
     body.append('file', file);
-    body.append('filePath', codeFilePath);
+    body.append('codeId', codeId);
     const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data"}); 
     var response;
-    response = this.http.post(this.apiUrl + "/Code/uploadFile", body, {headers: fileHeaders, withCredentials: true});
+    response = this.http.post(this.apiUrl + "/Code/runCode", body, {headers: fileHeaders, withCredentials: true});
     return response;
   }
 

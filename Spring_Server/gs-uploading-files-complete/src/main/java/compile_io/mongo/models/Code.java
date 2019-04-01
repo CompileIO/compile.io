@@ -27,6 +27,7 @@ public class Code {
     public Code() {
     	super();
     	testResponses = new ArrayList<>();
+    	submissionAttempts = 0;
     }
 
 	public String getId() {
@@ -111,7 +112,10 @@ public class Code {
 
 	@Override
 	public String toString() {
-		return "Code [language=" + language + ", runTime=" + runTime + ", testResponses=" + testResponses
+		final int maxLen = 10;
+		return "Code [id=" + id + ", language=" + language + ", runTime=" + runTime + ", submissionAttempts="
+				+ submissionAttempts + ", testResponses="
+				+ (testResponses != null ? testResponses.subList(0, Math.min(testResponses.size(), maxLen)) : null)
 				+ ", codePath=" + codePath + ", assignmentId=" + assignmentId + ", userName=" + userName
 				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
 	}
