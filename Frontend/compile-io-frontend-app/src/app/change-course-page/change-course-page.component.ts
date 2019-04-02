@@ -35,10 +35,17 @@ export class ChangeCoursePageComponent implements OnInit {
 
 
   submit() {
-    this.newCourse.professors = this.professorList
-    if (this.courseInfo.id == "-1") {
-      this.newCourse.professors.push(this.prof.userName);
-      console.log(this.newCourse.courseName);
+    this.newCourse.professors = this.professorList;
+    var addProf = true;
+      this.newCourse.professors.forEach ( professor => {
+        if(professor === this.prof.userName) {
+          addProf = false;
+        }
+      });
+      if(addProf) {
+        this.newCourse.professors.push(this.prof.userName);
+      }
+    if (this.courseInfo.id == "-1") {      
       this.newCourse.sections = [];
       this.newCourse.id = "-1";
 
