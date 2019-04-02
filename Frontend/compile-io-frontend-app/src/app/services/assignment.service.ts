@@ -3,7 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import {Assignment} from '../../models/assignment';
 import { Observable } from 'rxjs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+// import 'rxjs/Rx' ;
+// import {RequestOptions, Request, RequestMethod, ResponseContentType} from '@angular/http';
+// import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable({
   providedIn: 'root'
@@ -36,12 +38,12 @@ export class AssignmentService {
     return response;
   }
 
-  serveFile(filename: string, filepath: string) : Observable<File> {
+  serveFile(filename: string, filepath: string) : Observable<Blob> {
     let body: FormData = new FormData();
+    console.log(filepath);
     body.append('filepath', filepath);
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
     var response; 
-    response = this.http.post(this.apiUrl + "/Assignment/getFile/" + filename, body , {headers: headers, withCredentials: true});
+    response = this.http.post(this.apiUrl + "/Assignment/getFile/" + filename, body);
     return response;
   }
 
