@@ -15,12 +15,19 @@ export class ChangeSectionPageComponent implements OnInit {
   @Input() courseInfo: Course;
   @Input() username: string;
   newSection: Section;
+  changingStudents: boolean;
   constructor(private sectionService: SectionService,
-              private courseService: CourseService) { }
+              private courseService: CourseService) { this.changingStudents = false}
 
   submitForm(form: any) {
     console.log(this.newSection);
     this.submit();
+  }
+
+  openCloseStudentModal() {
+    console.log(this.newSection.students);
+    this.changingStudents = !this.changingStudents;
+
   }
 
   submit() {
@@ -43,6 +50,7 @@ export class ChangeSectionPageComponent implements OnInit {
         }
       });
     } else {
+     
       this.sectionService.updateSection(this.newSection).subscribe({
         next: x => {
           console.log(x)
@@ -62,6 +70,7 @@ export class ChangeSectionPageComponent implements OnInit {
   ngOnInit() {
     this.newSection = new Section();
     this.newSection.id = this.sectionInfo.id;
+    this.newSection.students = [];
     if (this.sectionInfo.id != "-1") {
       this.newSection.assignments = this.sectionInfo.assignments;
       this.newSection.description = this.sectionInfo.description;

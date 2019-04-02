@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <table>
+        <tr *ngFor="let std of sectionInfo.students">
+          <th>{{std.userName}}</th>
+          <th>{{std.name}}</th>
+        </tr>
+        <tr>
+          <th><input type="text" name="newUserName" #nun /></th>
+          <th><input type="text" name="newName" #nn /></th>
+          <th><button (click)="addNewStudent(nun.value, nn.value)">Add</button></th>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-primary" (click)="displaySectionStuff()"> CONSOLELONG</button>
+    </div>
+  </div>
+
+</div>
