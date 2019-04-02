@@ -6,6 +6,7 @@ import { Assignment } from '../../models/assignment';
 import { Time } from '@angular/common';
 import { Section } from 'src/models/section';
 import { Course } from 'src/models/course';
+import {saveAs as importedSaveAs} from "file-saver";
 
 
 @Component({
@@ -55,18 +56,11 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   serveFile(){
-    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe({
-      next: fileRecieved => {
-        this.file = fileRecieved;
-      },
-      error: err => {
-        console.log("RECIEVING FILE ERROR: " + err);
-      },
-      complete: () => {
-        console.log("Recieved File");
-      }
-    });
+    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe(blob => {
+      importedSaveAs(blob, this.assignmentInfo.fileName);
   }
+)
+}
 
   submit() {
     this.newAssignment.createdByUsername = this.username;

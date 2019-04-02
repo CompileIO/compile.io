@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,10 +86,9 @@ public class AssignmentController {
 		return ResponseEntity.ok().body(updatedAssignment);
 	}
 	
-	@GetMapping("/Assignment/getFile/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename, MultipartHttpServletRequest request) {
-		String filepath = request.getParameter("filepath");
+	@PostMapping("/Assignment/getFile/{filename:.+}")
+	@ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename,  @RequestParam(value = "filepath") String filepath) {
         Resource file = storageService.loadAsResource(filepath, filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
