@@ -72,8 +72,8 @@ public class SectionController {
     	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
     	for(int i = 0; i < studentUsernamesInSection.size(); i++) {
     			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
-    			Student student = students.get(0);
     			if(!students.isEmpty()) {
+            Student student = students.get(0);
     				student.addSectionId(sectionAdded.getId());
         			this.studentRepository.save(student);
     			} 
@@ -118,16 +118,15 @@ public class SectionController {
                 	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
                 	for(int i = 0; i < studentUsernamesInSection.size(); i++) {
             			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
-            			Student student = students.get(0);
                 		if (section.getStudentUsernames().contains(studentUsernamesInSection.get(i))) {
                 			//update this Student
                 			if(!students.isEmpty()) {	
-                    			updatedsection.updateStudentUserName(student.getUserName(), updatedsection.getId(), sectionToUpdate.getId());
+                    			updatedsection.updateStudentUserName(students.get(0).getUserName(), updatedsection.getId(), sectionToUpdate.getId());
                 			}
                 		} else {
                 			//remove Section Id from this student
                 			if(!students.isEmpty()) {
-                    			updatedsection.deleteStudentUsername(student.getUserName());
+                    			updatedsection.deleteStudentUsername(students.get(0).getUserName());
                 			}
                 		}
                 	}
@@ -135,10 +134,9 @@ public class SectionController {
                 	for(int i = 0; i < studentUsernamesInNewSection.size(); i++) {
                 		if (!studentUsernamesInSection.contains(studentUsernamesInNewSection.get(i))) {
                 			//add this course in this prof
-                			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
-                			Student student = students.get(0);
+                			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInNewSection.get(i), sortByCreatedAtDesc);
                 			if(!students.isEmpty()) {
-                				updatedsection.addStudentUsername(student.getUserName());
+                				updatedsection.addStudentUsername(students.get(0).getUserName());
                 			}
                 		}
                 	}
