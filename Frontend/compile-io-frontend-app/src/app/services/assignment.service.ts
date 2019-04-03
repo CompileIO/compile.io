@@ -38,7 +38,7 @@ export class AssignmentService {
     return response;
   }
 
-  serveFile(filename: string, filepath: string) : Observable<Blob> {
+  serveFile(filename: string, filepath: string) : Observable<File> {
     let body: FormData = new FormData();
     console.log(filepath);
     body.append('filepath', filepath);
