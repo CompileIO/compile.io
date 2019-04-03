@@ -10,20 +10,15 @@ import { Student } from '../../models/student';
 export class StudentControllerModalComponent implements OnInit {
 
   @Input() sectionInfo: Section;
-  studentsToDelete: Student[];
-  newStudent: Student;
+  studentUsernamesToDelete: String[];
   constructor() { }
 
   displaySectionStuff() {
     console.log(this.sectionInfo);
   }
-  addNewStudent(temp1: string, temp2: string) {
-    this.newStudent = new Student();
-    this.newStudent.userName = temp1;
-    this.newStudent.name = temp2;
-    console.log(this.sectionInfo);
-    this.sectionInfo.students.push(this.newStudent);
-    console.log(this.newStudent);
+  addNewStudent(username: string) {
+    this.sectionInfo.studentUsernames.push(username);
+    console.log(username);
   }
 
   ngOnInit() {

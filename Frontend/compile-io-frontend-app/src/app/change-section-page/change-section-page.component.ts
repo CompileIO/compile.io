@@ -25,7 +25,7 @@ export class ChangeSectionPageComponent implements OnInit {
   }
 
   openCloseStudentModal() {
-    console.log(this.newSection.students);
+    console.log(this.newSection.studentUsernames);
     this.changingStudents = !this.changingStudents;
 
   }
@@ -70,13 +70,13 @@ export class ChangeSectionPageComponent implements OnInit {
   ngOnInit() {
     this.newSection = new Section();
     this.newSection.id = this.sectionInfo.id;
-    this.newSection.students = [];
+    this.newSection.studentUsernames = [];
     if (this.sectionInfo.id != "-1") {
       this.newSection.assignments = this.sectionInfo.assignments;
       this.newSection.description = this.sectionInfo.description;
       this.newSection.id = this.sectionInfo.id;
       this.newSection.sectionNumber = this.sectionInfo.sectionNumber;
-      this.newSection.students = this.sectionInfo.students;
+      this.newSection.studentUsernames = this.sectionInfo.studentUsernames;
       this.newSection.term = this.sectionInfo.term;
       this.newSection.useCourseDescription = this.sectionInfo.useCourseDescription;
       this.newSection.year = this.sectionInfo.year;
