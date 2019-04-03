@@ -57,12 +57,21 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   serveFile(){
-    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe(blob => {
+    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe({next: blob => {
       // importedSaveAs(blob, this.assignmentInfo.fileName);
-      this.file = this.blobToFile(blob,this.assignmentInfo.fileName);
+      this.file = this.blobToFile(blob, this.assignmentInfo.fileName);
       // FileSaver.saveAs(blob, this.assignmentInfo.fileName);
-      
+  },
+  error: err => {
+    // console.log(err);
+    // console.log(this.file);
+    // console.log(this.file.name);
+  },
+  complete : () => { 
+      // console.log(this.file);
+      // console.log(this.file.name);
   }
+}
 )
 }
 
