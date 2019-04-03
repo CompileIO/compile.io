@@ -53,7 +53,7 @@ public class StudentController{
     @GetMapping(value="/Student/Username/{username}")
     public ResponseEntity<Student> getProfessorByUsername(@PathVariable("username") String username) {
     	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-        List<Student> students = studentRepository.findByuserName(username, sortByCreatedAtDesc);
+        List<Student> students = studentRepository.findByUserName(username, sortByCreatedAtDesc);
         if(students.isEmpty()) {
         	return ResponseEntity.notFound().build();
         }

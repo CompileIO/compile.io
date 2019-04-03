@@ -8,7 +8,7 @@ import { Section } from 'src/models/section';
 import { Course } from 'src/models/course';
 import {saveAs as importedSaveAs} from "file-saver";
 
-var FileSaver = require('file-saver');
+// var FileSaver = require('file-saver');
   
 @Component({
   selector: 'app-change-homework',

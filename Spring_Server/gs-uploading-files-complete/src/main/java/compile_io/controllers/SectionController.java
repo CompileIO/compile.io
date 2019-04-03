@@ -69,17 +69,54 @@ public class SectionController {
     	this.courseRepository.save(course);
     	
     	List<String> studentUsernamesInSection = section.getStudentUsernames();
-    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
     	for(int i = 0; i < studentUsernamesInSection.size(); i++) {
-    			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
-    			if(!students.isEmpty()) {
-            Student student = students.get(0);
-    				student.addSectionId(sectionAdded.getId());
-        			this.studentRepository.save(student);
-    			} 
+//    		sectionAdded.addStudentUsername(studentUsernamesInSection.get(i));
+    		this.addStudent(studentUsernamesInSection.get(i), sectionAdded.getId());
     	}
         return ResponseEntity.ok().body(sectionAdded);
     } 
+	
+	public void addStudent(String newStudentUsername, String sectionId) {
+		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+		List<Student> students = this.studentRepository.findByUserName(newStudentUsername, sortByCreatedAtDesc);
+		if(!students.isEmpty()) {
+			students.get(0).addSectionId(sectionId);
+			Student updatedStudent = this.studentRepository.save(students.get(0));
+			System.out.println("\n\n\n\n\n Student Added in SectionController AddStudentUsername: " + updatedStudent.toString() + "\n\n\n\n\n");
+		} else {
+			Student newStudent = new Student();
+			newStudent.setUserName(newStudentUsername);
+			newStudent.addSectionId(sectionId);
+			Student updatedStudent = this.studentRepository.save(newStudent);
+			System.out.println("\n\n\n\n\n Student Added in Else SectionController AddStudentUsername: " + updatedStudent.toString() + "\n\n\n\n\n");
+		}
+	}
+	
+	public void updateStudentUserName(String newStudentUsername, String sectionToUpdateId, String sectionToDeleteId) {
+				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+				System.out.println("\n\n\n\n\n\n" + newStudentUsername);
+				List<Student> students = this.studentRepository.findByUserName(newStudentUsername, sortByCreatedAtDesc);
+				if(!students.isEmpty()) {
+					Student student = students.get(0);
+					//might have to use id's
+					student.deleteSectionId(sectionToDeleteId);
+					student.addSectionId(sectionToUpdateId);
+					Student updatedStudent = this.studentRepository.save(student);
+        			System.out.println("\n\n\n\n\n Student Updated in section updateProfessorUserName: " + updatedStudent.toString() + "\n\n\n\n\n");
+				}
+	}
+	
+	public void deleteStudentUsername (String newStudentUsername, String sectionId) {
+				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+				List<Student> student = this.studentRepository.findByUserName(newStudentUsername, sortByCreatedAtDesc);
+				if(!student.isEmpty()) {
+					//might have to use id's
+					student.get(0).deleteSectionId(sectionId);
+					Student updatedStudent = this.studentRepository.save(student.get(0));
+        			System.out.println("\n\n\n\n\n Student Updated removed in Section deleteStudentUserName: " + updatedStudent.toString() + "\n\n\n\n\n");
+				}
+				
+		}
     
 
     @PutMapping(value="/Section/Update/{id}")
@@ -93,11 +130,37 @@ public class SectionController {
                 	sectionData.setAssignments(section.getAssignments());
                 	sectionData.setDescription(section.getDescription());
                 	sectionData.setSectionNumber(section.getSectionNumber());
-                	sectionData.setStudentUsernames(section.getStudentUsernames()); // might need to deal with this in a better way
                 	sectionData.setTerm(section.getTerm());
                 	sectionData.setYear(section.getYear());
                 	sectionData.setUseCourseDescription(section.isUseCourseDescription());
                 	sectionData.setCourseId(section.getCourseId());
+                	
+                	List<String> oldStudentUsernamesInSection = sectionToUpdate.getStudentUsernames();
+                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
+                	for(int i = 0; i < oldStudentUsernamesInSection.size(); i++) {
+            			List<Student> students = this.studentRepository.findByUserName(oldStudentUsernamesInSection.get(i), sortByCreatedAtDesc);
+            			if(!students.isEmpty()) {
+            				if (section.getStudentUsernames().contains(oldStudentUsernamesInSection.get(i))) {
+                    			//update this Student
+                        		this.updateStudentUserName(students.get(0).getUserName(), section.getId(), sectionToUpdate.getId());
+                    		} else {
+                    			//remove Section Id from this student
+                    			sectionToUpdate.deleteStudentUsername(students.get(0).getUserName());
+                        			this.deleteStudentUsername(students.get(0).getUserName(), section.getId());
+                    		}
+            			}
+                		
+                	}
+                	List<String> studentUsernamesInNewSection = section.getStudentUsernames(); //infinite loop here
+                	for(int i = 0; i < studentUsernamesInNewSection.size(); i++) {
+                		if (!oldStudentUsernamesInSection.contains(studentUsernamesInNewSection.get(i))) {
+                			sectionToUpdate.addStudentUsername(studentUsernamesInNewSection.get(i));
+                			this.addStudent(studentUsernamesInNewSection.get(i), section.getId());
+                		}
+                	}
+                	
+                	sectionData.setStudentUsernames(sectionToUpdate.getStudentUsernames());// might need to deal with this in a better way
+                	
                     Section updatedsection = sectionRepository.save(sectionData);
                     System.out.println("\n\n\n\n\n section Updated: " + updatedsection.toString() + "\n\n\n\n\n");
                     //updating courses
@@ -113,36 +176,7 @@ public class SectionController {
                     	System.out.println("\n\n\nCourse Updated in Section Controller If deleted: " + courseDelete.toString());
                     	System.out.println("\n\n\nCourse Updated in Section Controller If Added: " + courseAdd.toString());
                 	}
-                	
-                	List<String> studentUsernamesInSection = sectionToUpdate.getStudentUsernames();
-                	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-                	for(int i = 0; i < studentUsernamesInSection.size(); i++) {
-            			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInSection.get(i), sortByCreatedAtDesc);
-                		if (section.getStudentUsernames().contains(studentUsernamesInSection.get(i))) {
-                			//update this Student
-                			if(!students.isEmpty()) {	
-                    			updatedsection.updateStudentUserName(students.get(0).getUserName(), updatedsection.getId(), sectionToUpdate.getId());
-                			}
-                		} else {
-                			//remove Section Id from this student
-                			if(!students.isEmpty()) {
-                    			updatedsection.deleteStudentUsername(students.get(0).getUserName());
-                			}
-                		}
-                	}
-                	List<String> studentUsernamesInNewSection = section.getStudentUsernames();
-                	for(int i = 0; i < studentUsernamesInNewSection.size(); i++) {
-                		if (!studentUsernamesInSection.contains(studentUsernamesInNewSection.get(i))) {
-                			//add this course in this prof
-                			List<Student> students = this.studentRepository.findByuserName(studentUsernamesInNewSection.get(i), sortByCreatedAtDesc);
-                			if(!students.isEmpty()) {
-                				updatedsection.addStudentUsername(students.get(0).getUserName());
-                			}
-                		}
-                	}
-                	
-                	Section updatedSection = this.sectionRepository.save(updatedsection);
-                    return ResponseEntity.ok().body(updatedSection);
+                    return ResponseEntity.ok().body(updatedsection);
                 }).orElse(ResponseEntity.notFound().build());							
      
     }
