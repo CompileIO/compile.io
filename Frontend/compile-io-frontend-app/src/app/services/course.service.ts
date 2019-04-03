@@ -12,12 +12,6 @@ export class CourseService {
   private apiUrl = environment.BackendapiUrl;
   constructor(private http: HttpClient) { }
 
-  
-  // getCourses(): Observable<any> {
-  //   const empHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //   return this.http.get(this.apiUrl + "/courses", { headers: empHeaders, withCredentials: true });
-  // }
-
   getCourses(): Observable<Course[]>{
     var response;
     response = this.http.get(this.apiUrl + '/Courses');

@@ -36,13 +36,6 @@ public class CourseController {
 	@Autowired
 	SectionRepository sectionRepository;
 	
-	//As soon as we don't need this we can get rid of this api call
-	@GetMapping("/courses")
-	public String[] getClasses() {
-		String[] temp = { "CSSE120", "CSSE220", "CSSE230", "CSSE241" };
-		return temp;
-	}
-	
 	@GetMapping("/Courses")
 	public ResponseEntity<List<Course>> getCourses() {
 		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");

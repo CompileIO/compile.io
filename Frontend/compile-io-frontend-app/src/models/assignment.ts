@@ -12,6 +12,7 @@ export class Assignment {
     endDate: Date;
     endTime: Time;
     filePath: string;
+    fileName: string;
     createdByUsername: string;
     sectionIds: string[];
     courseId: string;

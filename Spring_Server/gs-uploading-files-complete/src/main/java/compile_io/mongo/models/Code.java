@@ -23,8 +23,21 @@ public class Code {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalTime submissionTime;
     private String grade;
+    private String fileName;
     
-    public Code() {
+    public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public List<String> getTestResponses() {
+		return testResponses;
+	}
+
+	public Code() {
     	super();
     	testResponses = new ArrayList<>();
     	submissionAttempts = 0;
@@ -117,7 +130,7 @@ public class Code {
 				+ submissionAttempts + ", testResponses="
 				+ (testResponses != null ? testResponses.subList(0, Math.min(testResponses.size(), maxLen)) : null)
 				+ ", codePath=" + codePath + ", assignmentId=" + assignmentId + ", userName=" + userName
-				+ ", submissionTime=" + submissionTime + ", grade=" + grade + "]";
+				+ ", submissionTime=" + submissionTime + ", grade=" + grade + ", fileName=" + fileName + "]";
 	}
 
 

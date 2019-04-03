@@ -6,6 +6,7 @@ import { Assignment } from '../../models/assignment';
 import { Time } from '@angular/common';
 import { Section } from 'src/models/section';
 import { Course } from 'src/models/course';
+import {saveAs as importedSaveAs} from "file-saver";
 
 
 @Component({
@@ -41,17 +42,25 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   sendFile(assignment: Assignment) {
+    this.newAssignment = new Assignment()
     console.log("This is the filepath sent to server: " + assignment.filePath);
-      this.assignmentService.uploadFile(this.file, assignment.filePath).subscribe({
+      this.assignmentService.uploadFile(this.file, assignment.id).subscribe({
         next: x => {
-          console.log(x)
+          this.assignmentInfo = x;
         },
-        // error: err => {
-        //   console.log("ADDING FILE ERROR: " + err)
-        // },
-        complete: () => console.log("Added File")
+        error: err => {
+          console.log("UPLOADING FILE ERROR: " + err)
+        },
+        complete: () => console.log("Uploaded File")
       });
   }
+
+  serveFile(){
+    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe(blob => {
+      importedSaveAs(blob, this.assignmentInfo.fileName);
+  }
+)
+}
 
   submit() {
     this.newAssignment.createdByUsername = this.username;
@@ -77,10 +86,9 @@ export class ChangeHomeworkComponent implements OnInit {
         },
         complete: () => {
           this.addedAssignments.forEach(assignment => {
-            console.log("filepath in the complete: "+ assignment.filePath);
             this.sendFile(assignment);
           });
-          this.newAssignment = new Assignment()
+          
           console.log("Added Homework Complete")
         }
       });
@@ -98,7 +106,7 @@ export class ChangeHomeworkComponent implements OnInit {
           this.addedAssignments.forEach(  assignment => {
             this.sendFile(assignment);
           });
-          this.newAssignment = new Assignment()
+          
           console.log("Updated Homework Complete")
         }
         
@@ -129,6 +137,7 @@ export class ChangeHomeworkComponent implements OnInit {
       this.givenStartDate = this.newAssignment.startDate.toString().substring(0, this.newAssignment.startDate.toString().indexOf("T"));
       this.givenEndDate = this.newAssignment.endDate.toString().substring(0, this.newAssignment.endDate.toString().indexOf("T"));
       console.log(this.givenStartDate);
+      this.serveFile();
     }
   }
 

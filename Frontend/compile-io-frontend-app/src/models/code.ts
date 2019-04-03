@@ -8,6 +8,7 @@ export class Code {
     submissionAttempts: number;
     testResponses: string [];
     codePath: string;
+    fileName: string;
     assignmentId: string;
     userName: string ; 
     submisstionTime:Time;

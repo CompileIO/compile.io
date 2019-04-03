@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.core.io.Resource;
 
 import compile_io.mongo.models.Assignment;
+import compile_io.mongo.models.Code;
 import compile_io.mongo.models.Course;
 import compile_io.mongo.models.Section;
 import compile_io.mongo.repositories.AssignmentRepository;
@@ -66,18 +68,27 @@ public class AssignmentController {
 	}
 
 	@PostMapping("/Assignmnet/uploadFile")
-	public ResponseEntity<String> uploadFile(MultipartHttpServletRequest request) {
+	public ResponseEntity<Assignment> uploadFile(MultipartHttpServletRequest request) {
 		MultipartFile file = request.getFile("file");
-		String filePath = request.getParameter("filePath");
-		storageService.storeAddPath(file, filePath);
-
-		return ResponseEntity.ok().body("Assignment uploaded " + file.getOriginalFilename());
+		String assignmentId = request.getParameter("assignmentId");
+		Optional<Assignment> assignmentToFind = this.assignmentRepository.findById(assignmentId);
+		Assignment assignment;
+		if(!assignmentToFind.isPresent()) {
+			return ResponseEntity.notFound().build();
+		} 
+		assignment = assignmentToFind.get();
+		assignment.setFileName(file.getOriginalFilename());
+//		System.out.println("\n\n\n\n\n File name: " + file.getOriginalFilename() + "\n\n\n\n");
+		String assignmentFilePath = assignment.getFilePath();
+		storageService.storeAddPath(file, assignmentFilePath);
+		Assignment updatedAssignment = this.assignmentRepository.save(assignment);
+		System.out.println("\n\n\n\n\n Assignment Updated: " + updatedAssignment.toString() + "\n\n\n\n\n");
+		return ResponseEntity.ok().body(updatedAssignment);
 	}
 	
-	@GetMapping("/Assignment/getFile/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename, MultipartHttpServletRequest request) {
-		String filepath = request.getParameter("filepath");
+	@PostMapping("/Assignment/getFile/{filename:.+}")
+	@ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename,  @RequestParam(value = "filepath") String filepath) {
         Resource file = storageService.loadAsResource(filepath, filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
@@ -182,7 +193,7 @@ public class AssignmentController {
                     String directory = createFilePathInServer(givenSectionId, assignment.getAssignmentName(),
         					assignment.getCreatedByUsername());
         			assignmentData.setFilePath(directory);
-                    
+//                    assignmentData.setFileName(assignment.getFileName());
                     Assignment updatedAssignment = assignmentRepository.save(assignmentData);
                     System.out.println("\n\n\n\n\n Assignment Updated: " + updatedAssignment.toString() + "\n\n\n\n\n");
                     
