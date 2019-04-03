@@ -47,7 +47,7 @@ export class CodeService {
     return response;
   }
 
-  serveFile(filename: string, filepath: string) { //: Observable<Resource>
+  serveFile(filename: string, filepath: string) : Observable<File> {
     let body: FormData = new FormData();
     body.append('filepath', filepath);
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });

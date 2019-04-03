@@ -109,6 +109,7 @@ public class CodeController {
 			
 		} 
 		code = codeToFind.get();
+		code.setFileName(file.getOriginalFilename());
 		int timeLimit = code.getRunTime();
 //		String language = code.getLanguage();
 		String language = "java"; //NEED TO CHANGE TO THIS ^^^^^^^ BEFORE DEPLOYING, FOR TESTING PURPOSES ONLY
@@ -219,6 +220,7 @@ public class CodeController {
                     	codeData.setRunTime(assignment.getTimeout());
 //                    	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
                     	codeData.setUserName(code.getUserName());
+//                    	codeData.setFileName(code.getFileName());
                         updatedCode = codeRepository.save(codeData);
                         System.out.println("\n\n\n\n\n Code Updated: " + updatedCode.toString() + "\n\n\n\n\n");
             		} else {
