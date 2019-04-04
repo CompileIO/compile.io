@@ -26,7 +26,7 @@
                     <select multiple class="form-control" name="professorsWithAccess" #professorsWithAccess>
                         <option *ngFor="let p of professorList">{{p}}</option>
                     </select>
-                    <button type="button" (click)="removeProfessor(p)">remove</button>
+                    <button type="button" (click)="removeProfessor(professorsWithAccess.value)">remove</button>
                 </div>
             </div>
           </div>

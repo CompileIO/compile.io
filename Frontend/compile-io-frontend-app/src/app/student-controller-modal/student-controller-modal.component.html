@@ -1,0 +1,21 @@
+<div class="container w-100 d-block">
+  <!--<div class="row">
+    <div class="col">
+
+    </div>
+  </div>-->
+  <div class="row justify-content-center mt-2">
+    <div class="col">
+      <table class="justify-content-center mt-2 ">
+        <tr *ngFor="let std of sectionInfo.studentUsernames">
+          <th>{{std}}</th>
+          <th><button class="btn btn-primary" (click)="removeStudent(std)">Delete</button></th>
+        </tr>
+        <tr>
+          <th><input type="text" name="newUserName" #nun /></th>
+          <th><button (click)="addNewStudent(nun.value)">Add</button></th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

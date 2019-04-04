@@ -65,7 +65,7 @@ public class CodeController {
 	    @GetMapping("/Code/getAssignment/{assignmentId}/{studentUsername}")
 	    public ResponseEntity<Code> getAllCodesForAssignment(@PathVariable("assignmentId") String assignmentId, @PathVariable("studentUsername") String studentUsername) {
 	        Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-	        List<Student> students = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
+	        List<Student> students = this.studentRepository.findByUserName(studentUsername, sortByCreatedAtDesc);
 	        Code codeToReturn = null;
 	        if(!students.isEmpty()) {
 	        	Student student = students.get(0);
@@ -85,7 +85,7 @@ public class CodeController {
 	    ResponseEntity<List<Code>> getAllCodesForStudent(@PathVariable("studentUsername") String studentUsername) {
 	    	List<Code> codesToReturn = new ArrayList<>();
 	    	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-	    	List<Student> students = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
+	    	List<Student> students = this.studentRepository.findByUserName(studentUsername, sortByCreatedAtDesc);
 	        Student student = students.get(0);
 	        codesToReturn = student.getCodes();
 	    	 return ResponseEntity.ok().body(codesToReturn);
@@ -145,7 +145,7 @@ public class CodeController {
     	System.out.println("\n\n\n\n\n Code Created: " + addedCode.toString() + "\n\n\n\n\n");
     	
     	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-		List<Student> students = this.studentRepository.findByuserName(code.getUserName(), sortByCreatedAtDesc);
+		List<Student> students = this.studentRepository.findByUserName(code.getUserName(), sortByCreatedAtDesc);
 		Student student;
 		if(!students.isEmpty()) {
 			student = students.get(0);
@@ -238,7 +238,7 @@ public class CodeController {
                 .map(code -> {
                 	Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
                 	//don't need to delete anything in Assignment
-                	List<Student> students = this.studentRepository.findByuserName(code.getUserName(),sortByCreatedAtDesc);
+                	List<Student> students = this.studentRepository.findByUserName(code.getUserName(),sortByCreatedAtDesc);
                 	students.get(0).deleteCode(code);
                 	this.studentRepository.save(students.get(0));
                 	
