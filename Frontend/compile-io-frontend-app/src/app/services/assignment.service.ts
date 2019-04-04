@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import {Assignment} from '../../models/assignment';
 import { Observable } from 'rxjs';
@@ -34,16 +34,19 @@ export class AssignmentService {
     body.append('assignmentId', assignmentId);
     const fileHeaders = new HttpHeaders({'enctype': "multipart/form-data" }); 
     var response; 
-    response = this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true});
+    response = this.http.post(this.apiUrl + "/Assignmnet/uploadFile", body , {headers: fileHeaders, withCredentials: true, responseType: 'text' });
     return response;
   }
 
-  serveFile(filename: string, filepath: string) : Observable<File> {
+  serveFile(filename: string, filepath: string) : Observable<any> {
     let body: FormData = new FormData();
-    console.log(filepath);
+    console.log("This is the filepath" + filepath);
     body.append('filepath', filepath);
     var response; 
-    response = this.http.post(this.apiUrl + "/Assignment/getFile/" + filename, body);
+    response = this.http.post(this.apiUrl + "/Assignment/getFile/" + filename, body, {
+      // headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text' 
+   });
     return response;
   }
 
