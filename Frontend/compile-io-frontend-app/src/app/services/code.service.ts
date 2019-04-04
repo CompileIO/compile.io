@@ -47,12 +47,14 @@ export class CodeService {
     return response;
   }
 
-  serveFile(filename: string, filepath: string) : Observable<File> {
+  serveFile(filename: string, filepath: string) : Observable<any> {
     let body: FormData = new FormData();
+    // console.log("This is the filepath" + filepath);
     body.append('filepath', filepath);
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json'  });
     var response; 
-    response = this.http.post(this.apiUrl + "/Code/getFile/" + filename, body , {headers: headers, withCredentials: true});
+    response = this.http.post(this.apiUrl + "/Code/getFile/" + filename, body, {
+      responseType: 'text' 
+   });
     return response;
   }
 

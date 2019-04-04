@@ -6,13 +6,16 @@
           <div class="col">
             <input type="file" class="custom-file-input" #fileUpload id="fileUpload"
               (change)="fileUploadFunction($event)">
-            <label *ngIf="fileUpload.files.length == 0" class="custom-file-label" for="fileUpload">Select File</label>
-            <label *ngIf="fileUpload.files.length != 0" class="custom-file-label"
-              for="fileUpload">{{fileUpload.files[0].name}}</label>
+            <label *ngIf="file == undefined" class="custom-file-label" for="fileUpload">Select File</label>
+            <label *ngIf="file != undefined" class="custom-file-label"
+              for="fileUpload">{{file.name}}</label>
           </div>
           <div class="col">
             <button *ngIf="fileUpload.files.length == 0" type="button" disabled (click)="run()">Run!</button>
             <button *ngIf="fileUpload.files.length != 0" type="button" (click)="run()">Run!</button>
+            <div class="col">
+                <button type="button" class="btn btn-primary" (click)="downloadFileButtonPress()">Download</button>
+              </div>
           </div>
         </div>
         <div *ngFor="let res of results" class="row">

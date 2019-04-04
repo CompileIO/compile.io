@@ -3,6 +3,9 @@ import { CodeService } from '../services/code.service';
 import {Assignment} from '../../models/assignment';
 import {Code} from '../../models/code';
 import {Section} from '../../models/section';
+import { saveAs as importedSaveAs } from 'file-saver';
+
+declare var require: any
 
 @Component({
   selector: 'app-homework-page',
@@ -19,13 +22,15 @@ export class HomeworkPageComponent implements OnInit {
   sDate: string;
   eDate: string;
   code: Code;
+  FileSaver: any = require('file-saver');
 
   constructor(private codeService: CodeService) {
     this.file = null;
     this.error = '';
     this.results = null;
     this.running = false;
-    // this.getResults();
+    
+    
   }
 
   fileUploadFunction(event: any) {
@@ -39,19 +44,29 @@ export class HomeworkPageComponent implements OnInit {
   }
 
   serveFile(){
-    this.codeService.serveFile(this.code.fileName,this.code.codePath).subscribe({
-      next: fileRecieved => {
-        this.file = fileRecieved;
-      },
-      error: err => {
-        console.log("RECIEVING FILE ERROR: " + err);
-      },
-      complete: () => {
-        console.log("Recieved File");
-      }
+    this.codeService.serveFile(this.code.fileName, this.code.codePath).subscribe(response => {
+      const blobDownloaded = new Blob([response], { type: 'text/csv; charset=utf-8' });
+      this.file = this.blobToFile(blobDownloaded, this.code.fileName);
     });
   }
   
+
+  downloadFileButtonPress() {
+    this.downloadFileToComputer(this.file, this.file.name);
+  }
+
+  downloadFileToComputer(file: File, fileName: String) {
+    this.FileSaver.saveAs(file, fileName);
+  }
+
+  blobToFile = (theBlob: Blob, fileName:string): File => {
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+    //Cast to a File() type
+    return <File>theBlob;
+  }
 
   runCode(code:Code) {
     this.running = true;
@@ -113,6 +128,9 @@ export class HomeworkPageComponent implements OnInit {
       },
       complete: () => {
         this.belowMaxSubmissionAttempts();
+        if(this.code != null || this.code != undefined) {
+          this.serveFile();
+        }
       }
     });
   }
@@ -168,7 +186,13 @@ export class HomeworkPageComponent implements OnInit {
     return false;
   }
   ngOnInit() {
-    this.getCodesForAssignment();
+    var i = 1;
+    if(i === 1) {
+      console.log("Getting codes");
+      this.getCodesForAssignment();
+      i++;
+    }
+    
   }
 
 }
