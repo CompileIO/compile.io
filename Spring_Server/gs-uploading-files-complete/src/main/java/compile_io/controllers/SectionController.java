@@ -140,13 +140,11 @@ public class SectionController {
                 	for(int i = 0; i < oldStudentUsernamesInSection.size(); i++) {
             			List<Student> students = this.studentRepository.findByUserName(oldStudentUsernamesInSection.get(i), sortByCreatedAtDesc);
             			if(!students.isEmpty()) {
-            				if (section.getStudentUsernames().contains(oldStudentUsernamesInSection.get(i))) {
-                    			//update this Student
-                        		this.updateStudentUserName(students.get(0).getUserName(), section.getId(), sectionToUpdate.getId());
-                    		} else {
-                    			//remove Section Id from this student
-                    			sectionToUpdate.deleteStudentUsername(students.get(0).getUserName());
-                        			this.deleteStudentUsername(students.get(0).getUserName(), section.getId());
+            				if (!section.getStudentUsernames().contains(oldStudentUsernamesInSection.get(i))) {
+            					//remove Section Id from this student
+//                    			sectionToUpdate.deleteStudentUsername(students.get(0).getUserName());
+                        		this.deleteStudentUsername(students.get(0).getUserName(), section.getId());
+                    			
                     		}
             			}
                 		
@@ -154,12 +152,11 @@ public class SectionController {
                 	List<String> studentUsernamesInNewSection = section.getStudentUsernames(); //infinite loop here
                 	for(int i = 0; i < studentUsernamesInNewSection.size(); i++) {
                 		if (!oldStudentUsernamesInSection.contains(studentUsernamesInNewSection.get(i))) {
-                			sectionToUpdate.addStudentUsername(studentUsernamesInNewSection.get(i));
                 			this.addStudent(studentUsernamesInNewSection.get(i), section.getId());
                 		}
                 	}
                 	
-                	sectionData.setStudentUsernames(sectionToUpdate.getStudentUsernames());// might need to deal with this in a better way
+                	sectionData.setStudentUsernames(section.getStudentUsernames());// might need to deal with this in a better way
                 	
                     Section updatedsection = sectionRepository.save(sectionData);
                     System.out.println("\n\n\n\n\n section Updated: " + updatedsection.toString() + "\n\n\n\n\n");
