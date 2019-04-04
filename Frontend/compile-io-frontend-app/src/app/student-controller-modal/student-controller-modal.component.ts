@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Section } from '../../models/section';
 import { Student } from '../../models/student';
+import { StudentService } from '../services/student.service';
 
 @Component({
   selector: 'app-student-controller-modal',
@@ -10,15 +11,17 @@ import { Student } from '../../models/student';
 export class StudentControllerModalComponent implements OnInit {
 
   @Input() sectionInfo: Section;
+  studentInfo: Student[];
   studentUsernamesToDelete: String[];
-  constructor() { }
+  constructor(private studentService: StudentService) { }
 
-  displaySectionStuff() {
-    console.log(this.sectionInfo);
-  }
   addNewStudent(username: string) {
     this.sectionInfo.studentUsernames.push(username);
     console.log(username);
+  }
+
+  removeStudent(username: string) {
+    this.sectionInfo.studentUsernames.splice(this.sectionInfo.studentUsernames.indexOf(username), 1);
   }
 
   ngOnInit() {
