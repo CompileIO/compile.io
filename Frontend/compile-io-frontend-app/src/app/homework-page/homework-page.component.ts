@@ -29,7 +29,8 @@ export class HomeworkPageComponent implements OnInit {
     this.error = '';
     this.results = null;
     this.running = false;
-    // this.getResults();
+    this.getCodesForAssignment();
+    
   }
 
   fileUploadFunction(event: any) {
@@ -46,8 +47,6 @@ export class HomeworkPageComponent implements OnInit {
     this.codeService.serveFile(this.code.fileName, this.code.codePath).subscribe(response => {
       const blobDownloaded = new Blob([response], { type: 'text/csv; charset=utf-8' });
       this.file = this.blobToFile(blobDownloaded, this.assignmentInfo.fileName);
-      //this.blob = blobDownloaded;
-      // FileSaver.saveAs(blob, this.assignmentInfo.fileName);   //this will automatically download the file
     });
   }
 
@@ -183,7 +182,7 @@ export class HomeworkPageComponent implements OnInit {
     return false;
   }
   ngOnInit() {
-    this.getCodesForAssignment();
+    
   }
 
 }

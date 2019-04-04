@@ -13,6 +13,9 @@
           <div class="col">
             <button *ngIf="fileUpload.files.length == 0" type="button" disabled (click)="run()">Run!</button>
             <button *ngIf="fileUpload.files.length != 0" type="button" (click)="run()">Run!</button>
+            <div class="col">
+                <button type="button" class="btn btn-primary" (click)="downloadFileButtonPress()">Download</button>
+              </div>
           </div>
         </div>
         <div *ngFor="let res of results" class="row">
