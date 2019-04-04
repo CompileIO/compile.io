@@ -74,6 +74,7 @@ export class ChangeHomeworkComponent implements OnInit {
   downloadFileToComputer(file: File, fileName: String) {
     this.FileSaver.saveAs(file, fileName);
   }
+  
 
   blobToFile = (theBlob: Blob, fileName:string): File => {
     var b: any = theBlob;
