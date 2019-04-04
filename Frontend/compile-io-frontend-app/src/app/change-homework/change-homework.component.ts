@@ -6,9 +6,9 @@ import { Assignment } from '../../models/assignment';
 import { Time } from '@angular/common';
 import { Section } from 'src/models/section';
 import { Course } from 'src/models/course';
-import {saveAs as importedSaveAs} from "file-saver";
+import { saveAs as importedSaveAs } from 'file-saver';
 
-var FileSaver = require('file-saver');
+declare var require: any
   
 @Component({
   selector: 'app-change-homework',
@@ -25,6 +25,8 @@ export class ChangeHomeworkComponent implements OnInit {
   addedAssignments: Assignment[];
   newAssignment: Assignment;
   file: File;
+  blob: Blob;
+  FileSaver: any = require('file-saver');
  
   constructor(private assignmentService: AssignmentService) {
   }
@@ -57,26 +59,30 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   serveFile(){
-    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe( response => {
-      const blob = new Blob([response.body], {type: 'text/csv; charset=utf-8'});
-      this.file = this.blobToFile(blob, this.assignmentInfo.fileName);
+    this.assignmentService.serveFile(this.assignmentInfo.fileName, this.assignmentInfo.filePath).subscribe(response => {
+      const blobDownloaded = new Blob([response], { type: 'text/csv; charset=utf-8' });
+      this.file = this.blobToFile(blobDownloaded, this.assignmentInfo.fileName);
+      //this.blob = blobDownloaded;
       // FileSaver.saveAs(blob, this.assignmentInfo.fileName);   //this will automatically download the file
-}
-)
-}
+    });
+  }
 
-downloadFileToComputer(fileToDownload: File, fileName: String) {
-  FileSaver.saveAs(fileToDownload, this.assignmentInfo.fileName);
-}
+  downloadFileButtonPress() {
+    this.downloadFileToComputer(this.file, this.file.name);
+  }
 
-blobToFile = (theBlob: Blob, fileName:string): File => {
-  var b: any = theBlob;
-  //A Blob() is almost a File() - it's just missing the two properties below which we will add
-  b.lastModifiedDate = new Date();
-  b.name = fileName;
-  //Cast to a File() type
-  return <File>theBlob;
-}
+  downloadFileToComputer(file: File, fileName: String) {
+    this.FileSaver.saveAs(file, fileName);
+  }
+
+  blobToFile = (theBlob: Blob, fileName:string): File => {
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+    //Cast to a File() type
+    return <File>theBlob;
+  }
 
   submit() {
     this.newAssignment.createdByUsername = this.username;
