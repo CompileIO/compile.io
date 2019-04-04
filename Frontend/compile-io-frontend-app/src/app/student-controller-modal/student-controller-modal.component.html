@@ -9,7 +9,7 @@
       <table class="justify-content-center mt-2 ">
         <tr *ngFor="let std of sectionInfo.studentUsernames">
           <th>{{std}}</th>
-          <th><button class="btn btn-primary" (click)="removeStudent(nun.value)">Delete</button></th>
+          <th><button class="btn btn-primary" (click)="removeStudent(std)">Delete</button></th>
         </tr>
         <tr>
           <th><input type="text" name="newUserName" #nun /></th>

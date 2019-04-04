@@ -24,11 +24,15 @@ export class ChangeCoursePageComponent implements OnInit {
   }
 
   addProfessor(profUsername: string) {
-    this.professorList.push(profUsername);
+    if (profUsername != "") {
+      this.professorList.push(profUsername);
+    }
   }
 
   removeProfessor(profUsername: string) {
-    this.professorList.splice(this.professorList.indexOf(profUsername), 1);
+    if (profUsername != "") {
+      this.professorList.splice(this.professorList.indexOf(profUsername), 1);
+    }
   }
 
 
