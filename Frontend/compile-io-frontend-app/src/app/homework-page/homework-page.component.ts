@@ -51,6 +51,7 @@ export class HomeworkPageComponent implements OnInit {
       }
     });
   }
+  
 
   runCode(code:Code) {
     this.running = true;

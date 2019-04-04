@@ -8,7 +8,8 @@ import { Section } from 'src/models/section';
 import { Course } from 'src/models/course';
 import {saveAs as importedSaveAs} from "file-saver";
 
-
+// var FileSaver = require('file-saver');
+  
 @Component({
   selector: 'app-change-homework',
   templateUrl: './change-homework.component.html',
@@ -24,7 +25,7 @@ export class ChangeHomeworkComponent implements OnInit {
   addedAssignments: Assignment[];
   newAssignment: Assignment;
   file: File;
-  
+ 
   constructor(private assignmentService: AssignmentService) {
   }
 
@@ -56,10 +57,31 @@ export class ChangeHomeworkComponent implements OnInit {
   }
 
   serveFile(){
-    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe(blob => {
-      importedSaveAs(blob, this.assignmentInfo.fileName);
+    this.assignmentService.serveFile(this.assignmentInfo.fileName,this.assignmentInfo.filePath).subscribe({next: blob => {
+      // importedSaveAs(blob, this.assignmentInfo.fileName);
+      this.file = this.blobToFile(blob, this.assignmentInfo.fileName);
+      // FileSaver.saveAs(blob, this.assignmentInfo.fileName);
+  },
+  error: err => {
+    // console.log(err);
+    // console.log(this.file);
+    // console.log(this.file.name);
+  },
+  complete : () => { 
+      // console.log(this.file);
+      // console.log(this.file.name);
   }
+}
 )
+}
+
+blobToFile = (theBlob: Blob, fileName:string): File => {
+  var b: any = theBlob;
+  //A Blob() is almost a File() - it's just missing the two properties below which we will add
+  b.lastModifiedDate = new Date();
+  b.name = fileName;
+  //Cast to a File() type
+  return <File>theBlob;
 }
 
   submit() {

@@ -69,37 +69,6 @@ public class Section {
 	
 	public void addStudentUsername(String newStudentUsername) {
 		this.studentUsernames.add(newStudentUsername);
-		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-		List<Student> students = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
-		if(!students.isEmpty()) {
-			students.get(0).addSectionId(this.id);
-			Student updatedStudent = this.studentRepository.save(students.get(0));
-			System.out.println("\n\n\n\n\n Student Added in Section AddStudentUsername: " + updatedStudent.toString() + "\n\n\n\n\n");
-		} else {
-			Student newStudent = new Student();
-			newStudent.setUserName(newStudentUsername);
-			newStudent.addSectionId(this.id);
-			Student updatedStudent = this.studentRepository.save(newStudent);
-			System.out.println("\n\n\n\n\n Student Added in Else Section AddStudentUsername: " + updatedStudent.toString() + "\n\n\n\n\n");
-		}
-	}
-	
-	public void updateStudentUserName(String newStudentUsername, String sectionToUpdateId, String sectionToDeleteId) {
-		for(int i = 0; i < this.studentUsernames.size(); i ++) {
-			String studentUsername = this.studentUsernames.get(i);
-			if(newStudentUsername.equals(studentUsername)) {
-				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-				List<Student> students = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
-				Student student = students.get(0);
-				if(!students.isEmpty()) {
-					//might have to use id's
-					student.deleteSectionId(sectionToDeleteId);
-					student.addSectionId(sectionToUpdateId);
-					Student updatedStudent = this.studentRepository.save(student);
-        			System.out.println("\n\n\n\n\n Student Updated in section updateProfessorUserName: " + updatedStudent.toString() + "\n\n\n\n\n");
-				}
-			}
-		}
 	}
 	
 	public void deleteStudentUsername (String newStudentUsername) {
@@ -107,16 +76,7 @@ public class Section {
 			String studentUsername = this.studentUsernames.get(i);
 			if(newStudentUsername == studentUsername) {
 				this.studentUsernames.remove(studentUsername);
-				i--;
-				Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-				List<Student> student = this.studentRepository.findByuserName(newStudentUsername, sortByCreatedAtDesc);
-				if(!student.isEmpty()) {
-					//might have to use id's
-					student.get(0).deleteSectionId(this.id);
-					Student updatedStudent = this.studentRepository.save(student.get(0));
-        			System.out.println("\n\n\n\n\n Student Updated removed in Section deleteStudentUserName: " + updatedStudent.toString() + "\n\n\n\n\n");
-				}
-				
+				i--;				
 			}
 		}
 	}
@@ -194,7 +154,7 @@ public class Section {
     	}
     	for(String studentUsername : this.getStudentUsernames()) {
     		Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
-    		List<Student> student = this.studentRepository.findByuserName(studentUsername, sortByCreatedAtDesc);
+    		List<Student> student = this.studentRepository.findByUserName(studentUsername, sortByCreatedAtDesc);
     		student.get(0).deleteSectionId(id);
     		this.studentRepository.save(student.get(0));
     	}

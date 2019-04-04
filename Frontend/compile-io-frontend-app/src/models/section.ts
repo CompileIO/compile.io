@@ -5,7 +5,7 @@ export class Section {
 	year: number;
 	term: number;
 	sectionNumber: number;
-	students: Student[];
+	studentUsernames: string[];
 	useCourseDescription: boolean;
 	description: string ;
 	assignments: Assignment[];
