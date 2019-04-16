@@ -28,7 +28,7 @@ export class UserPageComponent implements OnInit {
   selectedSection: Section = null;
   change: boolean = false;
   Assignments: Assignment[] = [];
-  Sections: Section[] = [];
+  SectionIds: string[] = [];
   profToAdd: Professor;
   studentToAdd: Student;
   profInfo: Professor;
@@ -134,7 +134,7 @@ export class UserPageComponent implements OnInit {
     } else {
       this.studentService.getStudentbyUsername(this.username).subscribe({
         //HERE JOSH
-        next: stud => { this.studentInfo = stud; if (this.studentInfo.sections == null) { this.studentInfo.sections = []; } this.Sections = this.studentInfo.sections; }
+        next: stud => { this.studentInfo = stud; if (this.studentInfo.sectionIds == null) { this.studentInfo.sectionIds = []; } this.SectionIds = this.studentInfo.sectionIds; }
       });
       console.log("this ran nerd");
     }
@@ -153,10 +153,12 @@ export class UserPageComponent implements OnInit {
     this.selectedSection = null;
     if (this.selectedCourse == givenCourse) {
       this.selectedCourse = null;
-      this.Sections = [];
+      this.SectionIds = [];
     } else {
       this.selectedCourse = givenCourse;
-      this.Sections = givenCourse.sections;
+      givenCourse.sections.forEach( section => {
+        this.SectionIds.push(section.id);
+      });
     }
     console.log(givenCourse);
   }
