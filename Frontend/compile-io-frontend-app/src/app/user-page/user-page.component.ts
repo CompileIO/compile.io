@@ -133,8 +133,10 @@ export class UserPageComponent implements OnInit {
       });
     } else {
       this.studentService.getStudentbyUsername(this.username).subscribe({
+        //HERE JOSH
         next: stud => { this.studentInfo = stud; if (this.studentInfo.sections == null) { this.studentInfo.sections = []; } this.Sections = this.studentInfo.sections; }
       });
+      console.log("this ran nerd");
     }
   }
 
