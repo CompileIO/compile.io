@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
-import { AssignmentService } from '../services/assignment.service';
+import { SectionService } from '../services/section.service';
 import { CourseService } from '../services/course.service';
 import { ProfessorService } from '../services/professor.service';
 import { StudentService } from '../services/student.service';
@@ -28,7 +28,7 @@ export class UserPageComponent implements OnInit {
   selectedSection: Section = null;
   change: boolean = false;
   Assignments: Assignment[] = [];
-  SectionIds: string[] = [];
+  Sections: Section[] = [];
   profToAdd: Professor;
   studentToAdd: Student;
   profInfo: Professor;
@@ -36,7 +36,7 @@ export class UserPageComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
     private courseService: CourseService,
-    private assignmentService: AssignmentService,
+    private sectionService: SectionService,
     private professorService: ProfessorService,
     private studentService: StudentService) {
   }
@@ -134,9 +134,12 @@ export class UserPageComponent implements OnInit {
     } else {
       this.studentService.getStudentbyUsername(this.username).subscribe({
         //HERE JOSH
-        next: stud => { this.studentInfo = stud; if (this.studentInfo.sectionIds == null) { this.studentInfo.sectionIds = []; } this.SectionIds = this.studentInfo.sectionIds; }
+        next: stud => { this.studentInfo = stud; if (this.studentInfo.sectionIds == null) { this.studentInfo.sectionIds = []; }this.studentInfo.sectionIds.forEach(sectionId => {
+          this.sectionService.getSection(sectionId).subscribe({
+            next: section => {this.Sections.push(section)}
+          })
+        }) }
       });
-      console.log("this ran nerd");
     }
   }
 
@@ -153,12 +156,10 @@ export class UserPageComponent implements OnInit {
     this.selectedSection = null;
     if (this.selectedCourse == givenCourse) {
       this.selectedCourse = null;
-      this.SectionIds = [];
+      this.Sections = [];
     } else {
       this.selectedCourse = givenCourse;
-      givenCourse.sections.forEach( section => {
-        this.SectionIds.push(section.id);
-      });
+      this.Sections = givenCourse.sections;
     }
     console.log(givenCourse);
   }
@@ -184,6 +185,7 @@ export class UserPageComponent implements OnInit {
     } else {
       this.selectedAssignment = assignment;
     }
+    console.log(this.selectedAssignment);
   }
 
   newAssignment() {
@@ -206,11 +208,17 @@ export class UserPageComponent implements OnInit {
     this.selectedAssignment = null;
     if (this.selectedSection == section) {
       this.selectedSection = null;
+      this.selectedAssignment = null;
       this.Assignments = [];
     } else {
+      this.selectedAssignment = null;
       this.selectedSection = section;
+      this.courseService.getCourse(section.courseId).subscribe({
+        next: course => this.selectedCourse = course
+      });
       this.Assignments = section.assignments;
     }
+    
   }
 
   changeChange(bool: boolean) {

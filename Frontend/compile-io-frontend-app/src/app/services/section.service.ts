@@ -18,17 +18,10 @@ export class SectionService {
     return response;
   }
 
-  getSection(sectionData: Section): Observable<Section> {
-    console.log("Get Course: " + sectionData.sectionNumber);
+  getSection(sectionId: string): Observable<Section> {
+    console.log("Get Course: " + sectionId);
     var response;
-    response = this.http.get(this.apiUrl + "/Section/"  + sectionData.id);
-    return response;
-  }
-
-  getSectionForGivenClass(sectionData: Section): Observable<Section> {
-    console.log("Get Course: " + sectionData.sectionNumber);
-    var response;
-    response = this.http.get(this.apiUrl + "/Section/"  + sectionData.id);
+    response = this.http.get(this.apiUrl + "/Section/"  + sectionId);
     return response;
   }
   

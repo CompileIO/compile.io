@@ -18,10 +18,10 @@ export class CourseService {
     return response;
   }
 
-  getCourse(courseData: Course): Observable<Course> {
-    console.log("Get Course: " + courseData.courseName);
+  getCourse(courseId: string): Observable<Course> {
+    console.log("Get Course: " + courseId);
     var response; 
-    response = this.http.get(this.apiUrl + "/Course/"  + courseData.id);
+    response = this.http.get(this.apiUrl + "/Course/"  + courseId);
     return response;
   }
   

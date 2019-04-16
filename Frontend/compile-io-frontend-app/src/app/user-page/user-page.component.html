@@ -78,12 +78,14 @@
     <!-- NavBar for Students-->
     <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark" *ngIf="group == 'STUDENT'">
       <div class="container noselect mt-5">
-        <div class="row" *ngFor="let sec of Sections" (click)="selectSection(sec)">
-          <div class="col p-2 sidebarHover w-50 btn blackText">
-            <span>
-                {{sec.term}}{{sec.year}}{{sec.sectionNumber}}
-            </span>
-            <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+        <div class="row" *ngFor="let sec of Sections">
+          <div class="col p-2 w-50">
+            <div class="w-100 sidebarHover btn blackText" (click)="selectSection(sec)">
+                <span>
+                    {{sec.term}}{{sec.year}}{{sec.sectionNumber}}
+                </span>
+                <img *ngIf="selectedSection == sec" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
+            </div>
             <div *ngIf="selectedSection == sec">
               <div class="row" *ngFor="let assgn of Assignments" (click)="selectAssignment(assgn)">
                 <div class="col p-2 sidebarHover w-50 btn blackText">
@@ -100,7 +102,7 @@
     </nav>
 
     <!-- welcome page -->
-    <div *ngIf="selectedAssignment == null && selectedCourse == null" class="col">
+    <div *ngIf="selectedAssignment == null && selectedCourse == null && selectedSection == null" class="col">
       <div class="container mt-5 shadow h-100">
         <div class="row">
           <div class="col">
