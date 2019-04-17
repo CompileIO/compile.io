@@ -25,6 +25,10 @@ export class GradesPageComponent implements OnInit {
     });
   }
 
+  unselectCode() {
+    this.selectedCode = null;
+  }
+
   ngOnInit() {
     this.selectedCode = null;
   }

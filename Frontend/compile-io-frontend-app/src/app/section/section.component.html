@@ -7,6 +7,11 @@
   </div>
   <div class="row">
     <div class="col">
+      <button class="btn btn-primary" (click)="gradesBoolean()">Grades</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="grades">
+    <div class="col">
       <app-grades-page [studentInfo]="studentInfo"
                        [sectionInfo]="sectionInfo">
       </app-grades-page>

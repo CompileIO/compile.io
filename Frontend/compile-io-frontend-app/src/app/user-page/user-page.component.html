@@ -12,7 +12,7 @@
   <div class="row">
 
     <!-- NavBar for Profs-->
-    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow  navbar-dark" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
+    <nav class="sidebar vh-100 w-25 mw-100 blackText gray col-2 shadow navbar-dark" *ngIf="group == 'PROFESSOR' || group == 'ADMIN'">
       <div class="container noselect mt-5">
         <div *ngFor="let co of Courses" class="row">
           <div class="w-100">
@@ -95,15 +95,6 @@
                   <img *ngIf="selectedAssignment == assgn" src="./assets/open-iconic/svg/caret-left.svg" alt="left" class="smicon" />
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col p-2 w-50">
-            <div class="w-100 sidebarHover btn blackText" (click)="checkGrades()">
-              <span>
-                Grades
-              </span>
             </div>
           </div>
         </div>

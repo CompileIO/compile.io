@@ -14,10 +14,16 @@ export class SectionComponent implements OnInit {
   @Input() sectionInfo: Section;
   @Input() courseInfo: Course;
   @Input() studentInfo: Student;
+  grades: boolean;
 
   constructor() { }
-  
+
+  gradesBoolean() {
+    this.grades = !this.grades;
+  }
+
   ngOnInit() {
+    this.grades = false;
   }
 
 }

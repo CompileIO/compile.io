@@ -1,22 +1,30 @@
 <div>
   <div *ngIf="selectedCode == null" class="container">
-    <div class="row" *ngFor="let assign of sectionInfo.assignments" (click)="selectCode(assign)">
+    <div class="row rowHover noselect" *ngFor="let assign of sectionInfo.assignments" (click)="selectCode(assign)">
       <div class="col">
-        <span>
+        <h3>
           {{assign.assignmentName}}
-        </span>
+        </h3>
       </div>
-      <div *ngFor="let cd of studentInfo.codes">
-        <div *ngIf="cd.assignmentId == assign.id" class="col">
-          <span>
-            {{cd.grade}}
-          </span>
+      <div class="col">
+        <h3> - </h3>
+      </div>
+      <div class="col">
+        <div *ngFor="let cd of studentInfo.codes">
+          <div *ngIf="cd.assignmentId == assign.id">
+            <h3>
+              {{cd.grade}}
+            </h3>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="selectedCode == null" class="container">
-
+  <div *ngIf="selectedCode != null" class="container">
+    <h1>
+      Put more code information here. 
+    </h1>
+    <button class="btn btn-primary" (click)="unselectCode()">Back</button>
   </div>
 </div>
 
