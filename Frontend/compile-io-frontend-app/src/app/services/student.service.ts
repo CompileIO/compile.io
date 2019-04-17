@@ -25,7 +25,6 @@ export class StudentService {
   }
 
   getStudentbyUsername(username: string): Observable<Student> {
-    //HERE JOSH
     var response;
     response =  this.http.get(this.apiUrl + "/Student/Username/" + username);
     return response;

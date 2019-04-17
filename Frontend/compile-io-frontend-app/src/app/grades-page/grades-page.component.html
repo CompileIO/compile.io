@@ -1,0 +1,23 @@
+<div>
+  <div *ngIf="selectedCode == null" class="container">
+    <div class="row" *ngFor="let assign of sectionInfo.assignments" (click)="selectCode(assign)">
+      <div class="col">
+        <span>
+          {{assign.assignmentName}}
+        </span>
+      </div>
+      <div *ngFor="let cd of studentInfo.codes">
+        <div *ngIf="cd.assignmentId == assign.id" class="col">
+          <span>
+            {{cd.grade}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedCode == null" class="container">
+
+  </div>
+</div>
+
+

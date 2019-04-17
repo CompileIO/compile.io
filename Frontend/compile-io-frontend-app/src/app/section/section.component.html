@@ -5,4 +5,11 @@
       <h1 *ngIf="!sectionInfo.useCourseDescription">{{sectionInfo.description}}</h1>
     </div>
   </div>
+  <div class="row">
+    <div class="col">
+      <app-grades-page [studentInfo]="studentInfo"
+                       [sectionInfo]="sectionInfo">
+      </app-grades-page>
+    </div>
+  </div>
 </div>

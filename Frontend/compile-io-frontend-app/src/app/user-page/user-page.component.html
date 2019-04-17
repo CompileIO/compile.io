@@ -98,6 +98,15 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col p-2 w-50">
+            <div class="w-100 sidebarHover btn blackText" (click)="checkGrades()">
+              <span>
+                Grades
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -212,7 +221,8 @@
               <div class="tab-content show active">
                 <app-section *ngIf="!this.change"
                                  [sectionInfo]="selectedSection"
-                                 [courseInfo]="selectedCourse">
+                                 [courseInfo]="selectedCourse"
+                                 [studentInfo]="studentInfo">
                 </app-section>
                 <app-change-section-page *ngIf="this.change"
                                         [username]="username"

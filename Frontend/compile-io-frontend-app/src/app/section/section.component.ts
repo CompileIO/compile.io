@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Section } from '../../models/section';
 import { Course } from '../../models/course';
+import { Student } from '../../models/student';
 
 
 @Component({
@@ -12,6 +13,7 @@ export class SectionComponent implements OnInit {
 
   @Input() sectionInfo: Section;
   @Input() courseInfo: Course;
+  @Input() studentInfo: Student;
 
   constructor() { }
   
