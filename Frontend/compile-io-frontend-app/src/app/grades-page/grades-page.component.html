@@ -21,9 +21,42 @@
     </div>
   </div>
   <div *ngIf="selectedCode != null" class="container">
-    <h1>
-      Put more code information here. 
-    </h1>
+    <div class="row">
+      <div class="col">
+        <h1>
+          {{selectedCode.assignmentName}}
+        </h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span>User: {{selectedCode.userName}}</span>
+      </div>
+      <div class="col">
+        <span>Grade: {{selectedCode.grade}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span>Filename: {{selectedCode.fileName}}</span>
+      </div>
+      <div class="col">
+        <span>Number of submissions: {{selectedCode.submissionAttempts}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span>Submission time: {{selectedCode.submisstionTime}}</span>
+      </div>
+      <div class="col">
+        <span>Runtime: {{selectedCode.runTime}}</span>
+      </div>
+    </div>
+    <div class="row" *ngFor="let testResponse of selectedCode.testResponses">
+      <div class="col">
+        <span>{{testResponse}}</span>
+      </div>
+    </div>
     <button class="btn btn-primary" (click)="unselectCode()">Back</button>
   </div>
 </div>
