@@ -5,10 +5,10 @@
     </div>
   </div>-->
   <div class="row justify-content-center mt-2">
-    <div class="col">
+    <div *ngIf="this.selectedStudent == null" class="col">
       <table class="justify-content-center mt-2 ">
         <tr *ngFor="let std of sectionInfo.studentUsernames">
-          <th>{{std}}</th>
+          <th (click)="selectStudent(std)">{{std}}</th>
           <th><button class="btn btn-primary" (click)="removeStudent(std)">Delete</button></th>
         </tr>
         <tr>
@@ -16,6 +16,22 @@
           <th><button (click)="addNewStudent(nun.value)">Add</button></th>
         </tr>
       </table>
+    </div>
+    <div *ngIf="this.selectedStudent != null" class="col">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h1>{{this.selectedStudent.userName}}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <app-grades-page [studentInfo]="selectedStudent"
+                             [sectionInfo]="sectionInfo">
+            </app-grades-page>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
