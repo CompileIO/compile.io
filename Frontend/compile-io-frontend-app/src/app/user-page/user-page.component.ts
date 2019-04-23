@@ -212,12 +212,13 @@ export class UserPageComponent implements OnInit {
     } else {
       this.selectedAssignment = null;
       this.selectedSection = section;
-      this.courseService.getCourse(section.courseId).subscribe({
-        next: course => this.selectedCourse = course
-      });
+      if (this.selectedCourse == null) {
+        this.courseService.getCourse(section.courseId).subscribe({
+          next: course => this.selectedCourse = course
+        });
+      }
       this.Assignments = section.assignments;
     }
-    
   }
 
   changeChange(bool: boolean) {
