@@ -14,7 +14,7 @@ public class Main {
         // File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/student-files/Simple.java");
         // File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/professor-files/SimpleTest.java");
 
-        File studentDir = Paths.get("mock-upload-dir/student-files").toFile();
+        File studentDir = Paths.get("C:/Users/Administrator/Downloads").toFile();
         List<File> studentFiles = new ArrayList<>();
         for (File file: studentDir.listFiles()) {
             if(file.getName().equals("Simple.java")) {
@@ -23,7 +23,7 @@ public class Main {
             } 
         }
 
-        File profDir = Paths.get("mock-upload-dir/professor-files").toFile();
+        File profDir = Paths.get("C:/Users/Administrator/Downloads").toFile();
         List<File> professorFiles = new ArrayList<>();
         for (File file: profDir.listFiles()) {
             if(file.getName().equals("SimpleTest.java")) {
