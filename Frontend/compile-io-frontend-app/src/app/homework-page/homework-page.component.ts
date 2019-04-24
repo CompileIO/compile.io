@@ -83,7 +83,11 @@ export class HomeworkPageComponent implements OnInit {
           this.running = false;
           console.log("Ran code against test complete");
           this.results = this.parseString(this.code.testResponses);
-
+          this.codeService.updateCode(this.code).subscribe({
+            next: x => {
+              this.code = x;
+            }
+          })
         }
       });
   }
@@ -130,6 +134,8 @@ export class HomeworkPageComponent implements OnInit {
       this.code.unitResponses[index].push(tempString);
       i = result[index].indexOf(" > ", last);
     }
+
+    
 
     return finalString;
   }

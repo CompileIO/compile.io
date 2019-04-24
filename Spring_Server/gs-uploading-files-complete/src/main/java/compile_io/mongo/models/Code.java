@@ -2,6 +2,7 @@ package compile_io.mongo.models;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -17,6 +18,7 @@ public class Code {
 	private int runTime;
 	private int submissionAttempts;//change
     private List<String> testResponses;
+    private String[][] unitResponses;
     private String codePath;
     private String assignmentId;
     private String userName;
@@ -72,6 +74,14 @@ public class Code {
 		this.runTime = runTime;
 	}
 	
+	public String[][] getUnitResponses() {
+		return unitResponses;
+	}
+
+	public void setUnitResponses(String[][] unitResponses) {
+		this.unitResponses = unitResponses;
+	}
+
 	public void addTestResponse(String testResponse) {
 		this.testResponses.add(testResponse);
 	}
@@ -125,12 +135,11 @@ public class Code {
 
 	@Override
 	public String toString() {
-		final int maxLen = 10;
 		return "Code [id=" + id + ", language=" + language + ", runTime=" + runTime + ", submissionAttempts="
-				+ submissionAttempts + ", testResponses="
-				+ (testResponses != null ? testResponses.subList(0, Math.min(testResponses.size(), maxLen)) : null)
-				+ ", codePath=" + codePath + ", assignmentId=" + assignmentId + ", userName=" + userName
-				+ ", submissionTime=" + submissionTime + ", grade=" + grade + ", fileName=" + fileName + "]";
+				+ submissionAttempts + ", testResponses=" + testResponses + ", unitResponses="
+				+ Arrays.toString(unitResponses) + ", codePath=" + codePath + ", assignmentId=" + assignmentId
+				+ ", userName=" + userName + ", submissionTime=" + submissionTime + ", grade=" + grade + ", fileName="
+				+ fileName + "]";
 	}
 
 
