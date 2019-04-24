@@ -1,4 +1,4 @@
-package compile_io.storage;
+package compile_io.controllers;
 
 
 import org.junit.Test;
@@ -10,7 +10,7 @@ import compile_io.Application;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { Application.class })
-public class FileUploadControllerTest {
+public class ProfessorControllerTest {
 
   @Test
   public void testTest() {
