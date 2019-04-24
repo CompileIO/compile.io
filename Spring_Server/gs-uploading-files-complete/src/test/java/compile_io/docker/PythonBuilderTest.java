@@ -21,6 +21,7 @@ public class PythonBuilderTest {
   private File mockProfessorFile;
   private List<File> studentFiles;
   private List<File> professorFiles;
+  private String codePath = new String();
   private boolean isInitialized = false;
 
   private void initialize() {
@@ -40,7 +41,7 @@ public class PythonBuilderTest {
     initialize();
     when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
     when(mockStudentFile.getParent()).thenReturn("/Test");
-    AbstractBuilder tc1 = new PythonBuilder(studentFiles, professorFiles);
+    AbstractBuilder tc1 = new PythonBuilder(studentFiles, professorFiles, codePath);
     assertEquals("/Test", tc1.getWorkingDirectory());
   }
 
@@ -53,7 +54,7 @@ public class PythonBuilderTest {
     studentFiles = new ArrayList<>();
     studentFiles.add(testFileNull);
     isInitialized = false;
-    AbstractBuilder tc2 = new PythonBuilder(studentFiles, professorFiles);
+    AbstractBuilder tc2 = new PythonBuilder(studentFiles, professorFiles, codePath);
     assertEquals("/", tc2.getWorkingDirectory());
 
   }
@@ -66,7 +67,7 @@ public class PythonBuilderTest {
     List<File> professorFiles = new ArrayList<>();
     studentFiles.add(studentFile);
     professorFiles.add(professorFile);
-    AbstractBuilder compiler = new PythonBuilder(studentFiles, professorFiles);
+    AbstractBuilder compiler = new PythonBuilder(studentFiles, professorFiles, codePath);
 
     StringBuilder dockerfileData = new StringBuilder();
     dockerfileData.append("FROM python:latest\n");

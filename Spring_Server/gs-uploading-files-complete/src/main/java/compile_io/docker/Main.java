@@ -34,7 +34,9 @@ public class Main {
         }
 
         try {
-            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles);
+//        	String codePath = "C:/Users/Administrator/Google Drive/College/RHIT/Senior Year/1_Senior_Project/compile.io/Spring_Server/gs-uploading-files-complete/upload-dir/2019/4/csse120/3/homework_1/student-files/palamujg";
+        	String codePath = "/2019/4/csse120/3/homework_1/student-files/palamujg";
+            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles, codePath);
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();

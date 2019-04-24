@@ -178,7 +178,7 @@ public class CodeController {
 		}
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
-			AbstractBuilder builder = builderFactory.getBuilder(language, studentFiles, ProfessorFiles);
+			AbstractBuilder builder = builderFactory.getBuilder(language, studentFiles, ProfessorFiles, codePath);
 			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
 			builder.createDockerfile(builder.getDockerfileData());
 			builder.buildContainer();
