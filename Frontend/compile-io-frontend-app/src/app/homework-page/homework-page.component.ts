@@ -16,7 +16,7 @@ export class HomeworkPageComponent implements OnInit {
   @Input() username: string;
   @Input() assignmentInfo: Assignment;
   file: File;
-  results: String[];
+  results: String;
   error: string;
   running: boolean;
   sDate: string;
@@ -82,11 +82,40 @@ export class HomeworkPageComponent implements OnInit {
         complete: () => {
           this.running = false;
           console.log("Ran code against test complete");
-          this.results = this.code.testResponses;
+          this.results = this.parseString(this.code.testResponses);
         }
       });
   }
 
+  parseString(result: String[]): String {
+    let finalString: string;
+    let start = result[0].lastIndexOf("Results:");
+    let last = result[0].length;
+    finalString = result[0].substring(start, last);
+
+    //Find number of tests
+    start = finalString.indexOf("(");
+    last = finalString.indexOf(" tests");
+    let tempString: string;
+    tempString = finalString.substring(start, last);
+    let numTests: Number = Number.parseInt(tempString);
+
+    //Find number of successes
+    start = finalString.indexOf("tests, ");
+    last = finalString.indexOf(" successes");
+    tempString = finalString.substring(start, last);
+    let numSuccesses: Number = Number.parseInt(tempString);
+
+    //Set grade
+    this.code.grade = numTests.toString() + "/" + numSuccesses.toString();
+
+    //get the string that should be displayed. 
+    start = result[0].indexOf("---");
+    last = result[0].lastIndexOf("-");
+    finalString = result[0].substring(start, last);
+
+    return finalString;
+  }
 
   run() {
     
