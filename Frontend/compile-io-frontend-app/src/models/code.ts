@@ -6,15 +6,12 @@ export class Code {
     language: string;
     runTime: number;
     submissionAttempts: number;
+    unitResponses: string[][];
     testResponses: string [];
     codePath: string;
     fileName: string;
     assignmentId: string;
-    userName: string ; 
+    userName: string; 
     submisstionTime:Time;
     grade: string;
-
-
-    
-    
 }

@@ -83,36 +83,53 @@ export class HomeworkPageComponent implements OnInit {
           this.running = false;
           console.log("Ran code against test complete");
           this.results = this.parseString(this.code.testResponses);
+
         }
       });
   }
 
-  parseString(result: String[]): String {
+  parseString(result: String[]): string {
     let finalString: string;
-    let start = result[0].lastIndexOf("Results:");
-    let last = result[0].length;
-    finalString = result[0].substring(start, last);
+    let index = this.code.submissionAttempts;
+
+    //get the string that should be displayed. 
+    let start = result[index].indexOf("---");
+    let last = result[index].lastIndexOf("-");
+    finalString = result[index].slice(start, last);
+    this.code.testResponses[index] = finalString;
 
     //Find number of tests
-    start = finalString.indexOf("(");
+    start = finalString.indexOf("(") + 1;
     last = finalString.indexOf(" tests");
     let tempString: string;
-    tempString = finalString.substring(start, last);
+    tempString = finalString.slice(start, last);
     let numTests: Number = Number.parseInt(tempString);
 
     //Find number of successes
-    start = finalString.indexOf("tests, ");
+    start = finalString.indexOf("tests, ") + 7;
     last = finalString.indexOf(" successes");
-    tempString = finalString.substring(start, last);
+    tempString = finalString.slice(start, last);
     let numSuccesses: Number = Number.parseInt(tempString);
 
     //Set grade
     this.code.grade = numTests.toString() + "/" + numSuccesses.toString();
 
-    //get the string that should be displayed. 
-    start = result[0].indexOf("---");
-    last = result[0].lastIndexOf("-");
-    finalString = result[0].substring(start, last);
+    //Find all test results
+    last = result[index].indexOf(" > ");
+    start = result[index].lastIndexOf("\n", last);
+    last = result[index].indexOf("\n", start+1);
+    tempString = result[0].slice(start, last);
+    this.code.unitResponses[index] = [];
+    this.code.unitResponses[index].push(tempString);
+
+    let i = result[index].indexOf(" > ", last);
+    while (i != -1) {
+      start = result[index].lastIndexOf("\n", i);
+      last = result[index].indexOf("\n", start + 1);
+      tempString = result[index].slice(start, last);
+      this.code.unitResponses[index].push(tempString);
+      i = result[index].indexOf(" > ", last);
+    }
 
     return finalString;
   }
