@@ -220,6 +220,7 @@ public class CodeController {
                     	codeData.setRunTime(assignment.getTimeout());
 //                    	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
                     	codeData.setUserName(code.getUserName());
+                    	codeData.setUnitResponses(code.getUnitResponses());
 //                    	codeData.setFileName(code.getFileName());
                         updatedCode = codeRepository.save(codeData);
                         System.out.println("\n\n\n\n\n Code Updated: " + updatedCode.toString() + "\n\n\n\n\n");
