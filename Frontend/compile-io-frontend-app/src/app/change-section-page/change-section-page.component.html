@@ -3,7 +3,7 @@
     <div class="col">
       <div *ngIf="this.changingStudents">
         <app-student-controller-modal [sectionInfo]="this.newSection"></app-student-controller-modal>
-        <button type="button" class="btn btn-primary" (click)="openCloseStudentModal()">BACK</button>
+        <button type="button" class="btn btn-primary" (click)="openCloseStudentModal()">Return</button>
       </div>
       <div *ngIf="!changingStudents">
         <form #form="ngForm" ngNativeValidate (ngSubmit)="submitForm(form.value)" class="w-100 p-3">

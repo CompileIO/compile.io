@@ -1,23 +1,25 @@
-<div class="container w-100 d-block">
+<div class="container">
   <!--<div class="row">
     <div class="col">
 
     </div>
   </div>-->
-  <div class="row justify-content-center mt-2">
-    <div *ngIf="this.selectedStudent == null" class="col">
-      <table class="justify-content-center mt-2 ">
-        <tr *ngFor="let std of sectionInfo.studentUsernames">
-          <th (click)="selectStudent(std)">{{std}}</th>
+  <div *ngIf="this.selectedStudent == null" class="row">
+    <div class="col">
+      <table class="w-100">
+        <tr class="border" *ngFor="let std of sectionInfo.studentUsernames">
+          <th class="middleHover" (click)="selectStudent(std)">{{std}}</th>
           <th><button class="btn btn-primary" (click)="removeStudent(std)">Delete</button></th>
         </tr>
-        <tr>
+        <tr class="border">
           <th><input type="text" name="newUserName" #nun /></th>
           <th><button (click)="addNewStudent(nun.value)">Add</button></th>
         </tr>
       </table>
     </div>
-    <div *ngIf="this.selectedStudent != null" class="col">
+  </div>
+  <div *ngIf="this.selectedStudent != null" class="row">
+    <div class="col">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -29,6 +31,11 @@
             <app-grades-page [studentInfo]="selectedStudent"
                              [sectionInfo]="sectionInfo">
             </app-grades-page>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button (click)="unselectStudent()">Back</button>
           </div>
         </div>
       </div>

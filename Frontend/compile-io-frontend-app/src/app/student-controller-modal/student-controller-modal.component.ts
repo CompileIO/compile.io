@@ -27,7 +27,7 @@ export class StudentControllerModalComponent implements OnInit {
 
   selectStudent(student: string) {
     this.studentService.getStudentbyUsername(student).subscribe({
-      next: stud => this.selectedStudent = stud;
+      next: stud => this.selectedStudent = stud
     });
   }
 
