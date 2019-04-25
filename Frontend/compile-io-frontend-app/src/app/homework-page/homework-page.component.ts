@@ -4,6 +4,7 @@ import {Assignment} from '../../models/assignment';
 import {Code} from '../../models/code';
 import {Section} from '../../models/section';
 import { saveAs as importedSaveAs } from 'file-saver';
+import { forEach } from '@angular/router/src/utils/collection';
 
 declare var require: any
 
@@ -117,7 +118,11 @@ export class HomeworkPageComponent implements OnInit {
     //Find all test results
     last = result[index].indexOf(" > ");
     start = result[index].lastIndexOf("\n", last);
-    last = result[index].indexOf("\n", start+1);
+    last = result[index].indexOf(" > ", last + 3);
+    if (last == -1) {
+      last = result[index].indexOf("-", start);
+    }
+    last = result[index].lastIndexOf("\n", last);
     tempString = result[0].slice(start, last);
     this.code.unitResponses[index] = [];
     this.code.unitResponses[index].push(tempString);
@@ -125,7 +130,11 @@ export class HomeworkPageComponent implements OnInit {
     let i = result[index].indexOf(" > ", last);
     while (i != -1) {
       start = result[index].lastIndexOf("\n", i);
-      last = result[index].indexOf("\n", start + 1);
+      last = result[index].indexOf(" > ", i + 3);
+      if (last == -1) {
+        last = result[index].indexOf("-", start);
+      }
+      last = result[index].lastIndexOf("\n", last);
       tempString = result[index].slice(start, last);
       this.code.unitResponses[index].push(tempString);
       i = result[index].indexOf(" > ", last);
