@@ -118,7 +118,7 @@ public class CodeController {
 		LocalTime submissionTime = LocalTime.now();
 		code.setSubmissionTime(submissionTime);
 		storageService.storeAddPath(file, codeFilePath);
-		String assignmentFilepath = codeFilePath.replaceFirst("professor-files", "student-files");
+		String assignmentFilepath = codeFilePath.replaceFirst("student-files", "professor-files");
 		code.addTestResponse(this.runCompiler(language, timeLimit, assignmentFilepath, codeFilePath));
 		code.setSubmissionAttempts(code.getSubmissionAttempts()+1);
 		Code addedCode = codeRepository.save(code);
@@ -161,23 +161,25 @@ public class CodeController {
         return ResponseEntity.ok().body(addedCode);
     }
 
-	public String runCompiler(String language, int timeLimit, String assignmentFilepath, String codePath) {
+	public String runCompiler(String language, int timeLimit, String assignmentFilepath, String CodePath) {
 		List<File> studentFiles = new ArrayList<>();
 		List<File> ProfessorFiles = new ArrayList<>();
-		File studentDirLocation = Paths.get(codePath).toFile();
+		File studentDirLocation = Paths.get(CodePath).toFile();
 		File professorDirLocation = Paths.get(assignmentFilepath).toFile();
 		for (File file : studentDirLocation.listFiles()) {
-			System.out.println(studentDirLocation);
+			System.out.println("Student Files Location: " + studentDirLocation);
 			studentFiles.add(file);
 			System.out.println(file.getName());
 		}
 		for (File file : professorDirLocation.listFiles()) {
-			System.out.println(professorDirLocation.toString());
+			System.out.println("Professor Files Location: " + professorDirLocation.toString());
 			ProfessorFiles.add(file);
 			System.out.println(file.getName());
 		}
 		try {
 			BuilderFactory builderFactory = new BuilderFactory();
+			String codePath = CodePath.replace("upload-dir", "");
+			System.out.println("This is the code path given: " + codePath);
 			AbstractBuilder builder = builderFactory.getBuilder(language, studentFiles, ProfessorFiles, codePath);
 			IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
 			builder.createDockerfile(builder.getDockerfileData());
