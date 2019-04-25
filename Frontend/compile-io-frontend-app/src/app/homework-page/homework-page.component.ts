@@ -76,6 +76,13 @@ export class HomeworkPageComponent implements OnInit {
         next: x => {
           console.log(x);
           this.code = x;
+          if (this.code.testResponses == null) {
+            this.code.testResponses = [];
+          }
+          if (this.code.unitResponses == null) {
+            this.code.unitResponses = [];
+          }
+          
         },
         error: err => {
           console.log("RUNNING CODE ERROR: " + err);
@@ -95,7 +102,7 @@ export class HomeworkPageComponent implements OnInit {
 
   parseString(result: String[]): string {
     let finalString: string;
-    let index = this.code.submissionAttempts;
+    let index = this.code.submissionAttempts - 1;
 
     //get the string that should be displayed. 
     let start = result[index].indexOf("---");
