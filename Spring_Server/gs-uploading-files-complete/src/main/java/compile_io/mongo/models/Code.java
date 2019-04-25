@@ -18,7 +18,7 @@ public class Code {
 	private int runTime;
 	private int submissionAttempts;//change
     private List<String> testResponses;
-    private String[][] unitResponses;
+    private List<List<String>> unitResponses;
     private String codePath;
     private String assignmentId;
     private String userName;
@@ -43,6 +43,7 @@ public class Code {
     	super();
     	testResponses = new ArrayList<>();
     	submissionAttempts = 0;
+    	unitResponses = new ArrayList<>();
     }
 
 	public String getId() {
@@ -74,11 +75,11 @@ public class Code {
 		this.runTime = runTime;
 	}
 	
-	public String[][] getUnitResponses() {
+	public List<List<String>> getUnitResponses() {
 		return unitResponses;
 	}
 
-	public void setUnitResponses(String[][] unitResponses) {
+	public void setUnitResponses(List<List<String>> unitResponses) {
 		this.unitResponses = unitResponses;
 	}
 
@@ -136,10 +137,9 @@ public class Code {
 	@Override
 	public String toString() {
 		return "Code [id=" + id + ", language=" + language + ", runTime=" + runTime + ", submissionAttempts="
-				+ submissionAttempts + ", testResponses=" + testResponses + ", unitResponses="
-				+ Arrays.toString(unitResponses) + ", codePath=" + codePath + ", assignmentId=" + assignmentId
-				+ ", userName=" + userName + ", submissionTime=" + submissionTime + ", grade=" + grade + ", fileName="
-				+ fileName + "]";
+				+ submissionAttempts + ", testResponses=" + testResponses + ", unitResponses=" + unitResponses
+				+ ", codePath=" + codePath + ", assignmentId=" + assignmentId + ", userName=" + userName
+				+ ", submissionTime=" + submissionTime + ", grade=" + grade + ", fileName=" + fileName + "]";
 	}
 
 

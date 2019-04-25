@@ -93,10 +93,15 @@ export class HomeworkPageComponent implements OnInit {
       });
   }
 
-  parseString(result: String[]): string {
+  parseString(result: string[]): string {
     let finalString: string;
-    let index = this.code.submissionAttempts;
-
+    let index = this.code.submissionAttempts-1;
+    // console.log("this is the index: "+index);
+    // console.log("This is the lenght: " + this.code.testResponses.length);
+    // for(var y = 0; y < this.code.testResponses.length; y++) {
+    //   console.log("Code Number: "+y);
+    //   console.log("This is the responses: "+ this.code.testResponses[y]);
+    // }
     //get the string that should be displayed. 
     let start = result[index].indexOf("---");
     let last = result[index].lastIndexOf("-");
