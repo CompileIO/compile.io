@@ -21,6 +21,7 @@ public class AbstractBuilderTest {
     private File mockProfessorFile = mock(File.class);
     private List<File> studentFiles = new ArrayList<>();
     private List<File> professorFiles = new ArrayList<>();
+    private String codePath = new String();
     private boolean isInitialized = false;
 
 
@@ -37,7 +38,7 @@ public class AbstractBuilderTest {
         initialize();
         when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
         when(mockStudentFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles, codePath);
         assertEquals("C:\\Test", testCompiler.getWorkingDirectory());
     }
 
@@ -46,7 +47,7 @@ public class AbstractBuilderTest {
         initialize();
         when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
         when(mockStudentFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles, codePath);
         assertEquals("C:\\Test", testCompiler.getWorkingDirectory());
         testCompiler.setWorkingDirectory("C:\\NewTest");
         assertEquals("C:\\NewTest", testCompiler.getWorkingDirectory());
@@ -57,7 +58,7 @@ public class AbstractBuilderTest {
         initialize();
         when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
         when(mockStudentFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles, codePath);
         assertTrue(testCompiler.getExecuter() instanceof CommandExecuter);
     }
 
@@ -66,7 +67,7 @@ public class AbstractBuilderTest {
         initialize();
         when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
         when(mockStudentFile.getParent()).thenReturn("C:\\Test");
-        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles);
+        AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles, codePath);
         assertTrue(testCompiler.getExecuter() instanceof CommandExecuter);
         testCompiler.setExecuter(null);
         assertEquals(null, testCompiler.getExecuter());

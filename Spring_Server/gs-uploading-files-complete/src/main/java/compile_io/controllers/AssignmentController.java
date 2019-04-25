@@ -129,7 +129,7 @@ public class AssignmentController {
 		String assignmentName = AssignmentName.replaceAll(" ", "_").toLowerCase();
 		String user = createdByUser.replaceAll(" ", "_").toLowerCase();
 		
-		directory = "upload-dir/" + year + "/" + term
+		directory = "/" + year + "/" + term
 				+ "/" + courseName + "/"
 				+ sectionNumber + "/" + assignmentName
 				+ "/professor-files/" + user;
