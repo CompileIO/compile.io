@@ -13,27 +13,30 @@ public class Main {
         BuilderFactory builderFactory = new BuilderFactory();
         // File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/student-files/Simple.java");
         // File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/professor-files/SimpleTest.java");
-
-        File studentDir = Paths.get("mock-upload-dir/student-files").toFile();
+        String home = System.getProperty("user.home");
+        System.out.println(home);
+        File studentDir = Paths.get(home+"/Downloads").toFile();
         List<File> studentFiles = new ArrayList<>();
         for (File file: studentDir.listFiles()) {
             if(file.getName().equals("Simple.java")) {
-                System.out.println(file.getName());
+                System.out.println("Adding student File " +file.getName());
                 studentFiles.add(file);
             } 
         }
 
-        File profDir = Paths.get("mock-upload-dir/professor-files").toFile();
+        File profDir = Paths.get(home+"/Downloads").toFile();
         List<File> professorFiles = new ArrayList<>();
         for (File file: profDir.listFiles()) {
             if(file.getName().equals("SimpleTest.java")) {
-                System.out.println(file.getName());
+                System.out.println("Adding Professor File " + file.getName());
                 professorFiles.add(file);
             } 
         }
 
         try {
-            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles);
+//        	String codePath = "C:/Users/Administrator/Google Drive/College/RHIT/Senior Year/1_Senior_Project/compile.io/Spring_Server/gs-uploading-files-complete/upload-dir/2019/4/csse120/3/homework_1/student-files/palamujg";
+        	String codePath = "/2019/4/csse120/3/homework_1/student-files/palamujg";
+            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles, codePath);
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();
