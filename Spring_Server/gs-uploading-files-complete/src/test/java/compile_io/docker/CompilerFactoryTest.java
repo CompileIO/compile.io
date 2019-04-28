@@ -24,6 +24,7 @@ public class CompilerFactoryTest {
   private File mockProfessorFile = mock(File.class);
   private List<File> studentFiles = new ArrayList<>();
   private List<File> professorFiles = new ArrayList<>();
+  private String codePath = new String();
   private boolean isInitialized = false;
 
 
@@ -39,7 +40,7 @@ public class CompilerFactoryTest {
   public void testGetBuilderJava() {
     initialize();
     try {
-      assertTrue(builderFactory.getBuilder("java", studentFiles, professorFiles) instanceof JavaBuilder);
+      assertTrue(builderFactory.getBuilder("java", studentFiles, professorFiles, codePath) instanceof JavaBuilder);
     } catch (Exception e) {
       fail("Builder Factory returned the wrong Builder type");
     }
@@ -49,7 +50,7 @@ public class CompilerFactoryTest {
   public void testGetBuilderPython() {
     initialize();
     try {
-      assertTrue(builderFactory.getBuilder("python", studentFiles, professorFiles) instanceof PythonBuilder);
+      assertTrue(builderFactory.getBuilder("python", studentFiles, professorFiles, codePath) instanceof PythonBuilder);
     } catch (Exception e) {
       fail("Builder Factory returned the wrong Builder type");
     }
@@ -59,7 +60,7 @@ public class CompilerFactoryTest {
   public void testGetCompilerException() {
     initialize();
     try {
-      builderFactory.getBuilder("unsupported/invalid language", studentFiles, professorFiles);
+      builderFactory.getBuilder("unsupported/invalid language", studentFiles, professorFiles, codePath);
     } catch (Exception e) {
       assertTrue(e instanceof UnsupportedBuilderException);
     }
