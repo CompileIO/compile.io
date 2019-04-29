@@ -4,6 +4,7 @@ import {Assignment} from '../../models/assignment';
 import {Code} from '../../models/code';
 import {Section} from '../../models/section';
 import { saveAs as importedSaveAs } from 'file-saver';
+import { forEach } from '@angular/router/src/utils/collection';
 
 declare var require: any
 
@@ -16,7 +17,7 @@ export class HomeworkPageComponent implements OnInit {
   @Input() username: string;
   @Input() assignmentInfo: Assignment;
   file: File;
-  results: String[];
+  results: String;
   error: string;
   running: boolean;
   sDate: string;
@@ -75,6 +76,13 @@ export class HomeworkPageComponent implements OnInit {
         next: x => {
           console.log(x);
           this.code = x;
+          if (this.code.testResponses == null) {
+            this.code.testResponses = [];
+          }
+          if (this.code.unitResponses == null) {
+            this.code.unitResponses = [];
+          }
+          
         },
         error: err => {
           console.log("RUNNING CODE ERROR: " + err);
@@ -82,11 +90,71 @@ export class HomeworkPageComponent implements OnInit {
         complete: () => {
           this.running = false;
           console.log("Ran code against test complete");
-          this.results = this.code.testResponses;
+          this.results = this.parseString(this.code.testResponses);
+          this.codeService.updateCode(this.code).subscribe({
+            next: x => {
+              this.code = x;
+            }
+          })
         }
       });
   }
 
+  parseString(result: String[]): string {
+    let finalString: string;
+    let index = this.code.submissionAttempts - 1;
+
+    //get the string that should be displayed. 
+    let start = result[index].indexOf("---");
+    let last = result[index].lastIndexOf("-");
+    finalString = result[index].slice(start, last);
+    this.code.testResponses[index] = finalString;
+
+    //Find number of tests
+    start = finalString.indexOf("(") + 1;
+    last = finalString.indexOf(" tests");
+    let tempString: string;
+    tempString = finalString.slice(start, last);
+    let numTests: Number = Number.parseInt(tempString);
+
+    //Find number of successes
+    start = finalString.indexOf("tests, ") + 7;
+    last = finalString.indexOf(" successes");
+    tempString = finalString.slice(start, last);
+    let numSuccesses: Number = Number.parseInt(tempString);
+
+    //Set grade
+    this.code.grade = numTests.toString() + "/" + numSuccesses.toString();
+
+    //Find all test results
+    last = result[index].indexOf(" > ");
+    start = result[index].lastIndexOf("\n", last);
+    last = result[index].indexOf(" > ", last + 3);
+    if (last == -1) {
+      last = result[index].indexOf("-", start);
+    }
+    last = result[index].lastIndexOf("\n", last);
+    tempString = result[0].slice(start, last);
+    this.code.unitResponses[index] = [];
+    this.code.unitResponses[index].push(tempString);
+
+    let i = result[index].indexOf(" > ", last);
+    while (i != -1) {
+      start = result[index].lastIndexOf("\n", i);
+      last = result[index].indexOf(" > ", i + 3);
+      if (last == -1) {
+        last = result[index].indexOf("-", start);
+      }
+      last = result[index].lastIndexOf("\n", last);
+      tempString = result[index].slice(start, last);
+      this.code.unitResponses[index].push(tempString);
+      i = result[index].indexOf(" > ", last);
+    }
+
+    
+
+    return finalString;
+  }
 
   run() {
     

@@ -12,14 +12,16 @@ public abstract class AbstractBuilder {
     private String workingDirectory;
     private List<File> studentFiles;
     private List<File> professorFiles;
+    private String codePath;
     private ICommandExecuter executer;
     private int numStudentFiles;
     private int numProfessorFiles;
 
-    public AbstractBuilder(List<File> studentFiles, List<File> professorFiles) {
+    public AbstractBuilder(List<File> studentFiles, List<File> professorFiles, String codePath) {
         File workDir = Paths.get("upload-dir/").toFile();
         this.studentFiles = studentFiles;
         this.professorFiles = professorFiles;
+        this.codePath = codePath;
         this.numStudentFiles = this.studentFiles.size();
         this.numProfessorFiles = this.professorFiles.size();
         this.executer = new CommandExecuter();
@@ -113,6 +115,10 @@ public abstract class AbstractBuilder {
 
     public int getNumProfessorFiles() {
         return this.numProfessorFiles;
+    }
+    
+    public String getCodePath() {
+    	return this.codePath;
     }
 
 }

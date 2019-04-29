@@ -20,6 +20,7 @@ public class JavaBuilderTest {
   private File mockProfessorFile;
   private List<File> studentFiles;
   private List<File> professorFiles;
+  private String codePath = new String();
   private boolean isInitialized = false;
 
   private void initialize() {
@@ -39,7 +40,7 @@ public class JavaBuilderTest {
     initialize();
     when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
     when(mockStudentFile.getParent()).thenReturn("C:\\Test");
-    AbstractBuilder tc1 = new JavaBuilder(studentFiles, professorFiles);
+    AbstractBuilder tc1 = new JavaBuilder(studentFiles, professorFiles, codePath);
     assertEquals("C:\\Test", tc1.getWorkingDirectory());
   }
 
@@ -53,7 +54,7 @@ public class JavaBuilderTest {
     studentFiles = new ArrayList<>();
     studentFiles.add(testFileNull);
 
-    AbstractBuilder tc2 = new JavaBuilder(studentFiles, professorFiles);
+    AbstractBuilder tc2 = new JavaBuilder(studentFiles, professorFiles, codePath);
     assertEquals("/", tc2.getWorkingDirectory());
   }
 
@@ -65,7 +66,7 @@ public class JavaBuilderTest {
     List<File> professorFiles = new ArrayList<>();
     studentFiles.add(studentFile);
     professorFiles.add(professorFile);
-    AbstractBuilder compiler = new JavaBuilder(studentFiles, professorFiles);
+    AbstractBuilder compiler = new JavaBuilder(studentFiles, professorFiles, codePath);
 
     StringBuilder dockerfileData = new StringBuilder();
     dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
@@ -74,9 +75,9 @@ public class JavaBuilderTest {
     dockerfileData.append("RUN mkdir -p src/main/java\n");
     dockerfileData.append("RUN mkdir -p src/test/java\n");
     dockerfileData.append("COPY build.gradle build.gradle\n");
-    dockerfileData.append("COPY TestyMcTestface.java TestyMcTestface.java\n");
+    dockerfileData.append("COPY " + codePath + "TestyMcTestface.java TestyMcTestface.java\n");
     dockerfileData.append("RUN mv TestyMcTestface.java src/main/java/\n");
-    dockerfileData.append("COPY TestyMcTestfaceTest.java TestyMcTestfaceTest.java\n");
+    dockerfileData.append("COPY " + codePath + "TestyMcTestfaceTest.java TestyMcTestfaceTest.java\n");
     dockerfileData.append("RUN mv TestyMcTestfaceTest.java src/test/java/\n");
     dockerfileData.append("CMD export GRADLE_USER_HOME=\"\\Test\" && gradle test\n");
 
