@@ -95,7 +95,7 @@ export class HomeworkPageComponent implements OnInit {
             next: x => {
               this.code = x;
             }
-          })
+          });
         }
       });
   }
@@ -108,7 +108,7 @@ export class HomeworkPageComponent implements OnInit {
     let start = result[index].indexOf("---");
     let last = result[index].lastIndexOf("-");
     finalString = result[index].slice(start, last);
-    this.code.testResponses[index] = finalString;
+    
 
     //Find number of tests
     start = finalString.indexOf("(") + 1;
@@ -151,7 +151,7 @@ export class HomeworkPageComponent implements OnInit {
       i = result[index].indexOf(" > ", last);
     }
 
-    
+    this.code.testResponses[index] = finalString;
 
     return finalString;
   }

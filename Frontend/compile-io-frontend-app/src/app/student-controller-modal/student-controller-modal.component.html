@@ -16,10 +16,12 @@
           <th><input type="text" name="newUserName" #nun /></th>
           <th><button (click)="addNewStudent(nun.value)">Add</button></th>
         </tr>
-        <tr>
-          <th><button class="btn btn-primary" (click)="exportGrades()">Export</button></th>
-        </tr>
       </table>
+    </div>
+  </div>
+  <div *ngIf="this.selectedStudent == null" class="row">
+    <div class="col">
+      <button class="btn btn-primary" (click)="exportGrades()">Export Grades</button>
     </div>
   </div>
   <div *ngIf="this.selectedStudent != null" class="row">

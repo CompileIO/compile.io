@@ -54,7 +54,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <span>{{selectedCode.testResponses[selectedCode.submissionAttempts-1]}}</span>
+        <span><pre>{{selectedCode.testResponses[selectedCode.submissionAttempts-1]}}</pre></span>
       </div>
     </div>
     <div class="row" *ngFor="let testResponse of selectedCode.unitResponses[selectedCode.submissionAttempts-1]">
