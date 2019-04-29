@@ -35,6 +35,10 @@ export class StudentControllerModalComponent implements OnInit {
     this.selectedStudent = null;
   }
 
+exportGrades() {
+  console.log("please write this josh");
+}
+
   ngOnInit() {
   }
 

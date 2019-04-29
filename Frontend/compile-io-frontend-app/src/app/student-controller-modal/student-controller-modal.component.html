@@ -8,12 +8,16 @@
     <div class="col">
       <table class="w-100">
         <tr class="border" *ngFor="let std of sectionInfo.studentUsernames">
-          <th class="middleHover" (click)="selectStudent(std)">{{std}}</th>
+          <th>{{std}}</th>
+          <th><button class="btn btn-primary" (click)="selectStudent(std)">Grades</button></th>
           <th><button class="btn btn-primary" (click)="removeStudent(std)">Delete</button></th>
         </tr>
         <tr class="border">
           <th><input type="text" name="newUserName" #nun /></th>
           <th><button (click)="addNewStudent(nun.value)">Add</button></th>
+        </tr>
+        <tr>
+          <th><button class="btn btn-primary" (click)="exportGrades()">Export</button></th>
         </tr>
       </table>
     </div>
