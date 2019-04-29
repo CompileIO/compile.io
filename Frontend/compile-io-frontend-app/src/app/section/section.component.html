@@ -5,12 +5,12 @@
       <h4 *ngIf="!sectionInfo.useCourseDescription"><pre>{{sectionInfo.description}}</pre></h4>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="studentInfo != null">
     <div class="col">
       <button class="btn btn-primary" (click)="gradesBoolean()">Grades</button>
     </div>
   </div>
-  <div class="row" *ngIf="grades && studentInfo != null">
+  <div class="row" *ngIf="grades">
     <div class="col">
       <app-grades-page [studentInfo]="studentInfo"
                        [sectionInfo]="sectionInfo">

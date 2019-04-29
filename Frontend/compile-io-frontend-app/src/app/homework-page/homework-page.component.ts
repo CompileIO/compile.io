@@ -134,9 +134,11 @@ export class HomeworkPageComponent implements OnInit {
       last = result[index].indexOf("-", start);
     }
     last = result[index].lastIndexOf("\n", last);
-    tempString = result[0].slice(start, last);
+    tempString = result[index].slice(start, last);
     this.code.unitResponses[index] = [];
     this.code.unitResponses[index].push(tempString);
+    console.log(tempString);
+    console.log(this.code.unitResponses[index]);
 
     let i = result[index].indexOf(" > ", last);
     while (i != -1) {
@@ -148,6 +150,8 @@ export class HomeworkPageComponent implements OnInit {
       last = result[index].lastIndexOf("\n", last);
       tempString = result[index].slice(start, last);
       this.code.unitResponses[index].push(tempString);
+      console.log(tempString);
+    console.log(this.code.unitResponses[index]);
       i = result[index].indexOf(" > ", last);
     }
 

@@ -222,6 +222,7 @@ public class CodeController {
                     	codeData.setRunTime(assignment.getTimeout());
 //                    	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
                     	codeData.setUserName(code.getUserName());
+                    	codeData.setTestResponses(code.getTestResponse());
                     	codeData.setUnitResponses(code.getUnitResponses());
 //                    	codeData.setFileName(code.getFileName());
                         updatedCode = codeRepository.save(codeData);
