@@ -52,7 +52,12 @@
         <span>Runtime: {{selectedCode.runTime}}</span>
       </div>
     </div>
-    <div class="row" *ngFor="let testResponse of selectedCode.testResponses">
+    <div class="row">
+      <div class="col">
+        <span>{{selectedCode.testResponses[selectedCode.submissionAttempts-1]}}</span>
+      </div>
+    </div>
+    <div class="row" *ngFor="let testResponse of selectedCode.unitResponses[selectedCode.submissionAttempts-1]">
       <div class="col">
         <span>{{testResponse}}</span>
       </div>
