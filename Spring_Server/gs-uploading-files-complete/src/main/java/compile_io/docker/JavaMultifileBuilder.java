@@ -35,5 +35,5 @@ public class JavaMultifileBuilder extends AbstractBuilder {
         dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && cd " + studentFiles.get(0).getName() + " && gradle test\n");
 
         return dockerfileData.toString();
-    }
+    } 
 }
