@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
-import { AssignmentService } from '../services/assignment.service';
+import { SectionService } from '../services/section.service';
 import { CourseService } from '../services/course.service';
 import { ProfessorService } from '../services/professor.service';
 import { StudentService } from '../services/student.service';
@@ -36,7 +36,7 @@ export class UserPageComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
     private courseService: CourseService,
-    private assignmentService: AssignmentService,
+    private sectionService: SectionService,
     private professorService: ProfessorService,
     private studentService: StudentService) {
   }
@@ -133,7 +133,11 @@ export class UserPageComponent implements OnInit {
       });
     } else {
       this.studentService.getStudentbyUsername(this.username).subscribe({
-        next: stud => { this.studentInfo = stud; if (this.studentInfo.sections == null) { this.studentInfo.sections = []; } this.Sections = this.studentInfo.sections; }
+        next: stud => { this.studentInfo = stud; if (this.studentInfo.sectionIds == null) { this.studentInfo.sectionIds = []; }this.studentInfo.sectionIds.forEach(sectionId => {
+          this.sectionService.getSection(sectionId).subscribe({
+            next: section => {this.Sections.push(section)}
+          })
+        }) }
       });
     }
   }
@@ -180,6 +184,7 @@ export class UserPageComponent implements OnInit {
     } else {
       this.selectedAssignment = assignment;
     }
+    console.log(this.selectedAssignment);
   }
 
   newAssignment() {
@@ -202,9 +207,16 @@ export class UserPageComponent implements OnInit {
     this.selectedAssignment = null;
     if (this.selectedSection == section) {
       this.selectedSection = null;
+      this.selectedAssignment = null;
       this.Assignments = [];
     } else {
+      this.selectedAssignment = null;
       this.selectedSection = section;
+      if (this.selectedCourse == null) {
+        this.courseService.getCourse(section.courseId).subscribe({
+          next: course => this.selectedCourse = course
+        });
+      }
       this.Assignments = section.assignments;
     }
   }

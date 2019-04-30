@@ -5,7 +5,7 @@ export class Student {
     id: string;
     name: string;
     userName: string;
-    sections: Section[];
+    sectionIds: string[];
     codes: Code[] ;
 
 }

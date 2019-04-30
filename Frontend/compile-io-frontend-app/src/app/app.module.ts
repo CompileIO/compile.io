@@ -16,6 +16,7 @@ import { SectionComponent } from './section/section.component';
 import { ChangeCoursePageComponent } from './change-course-page/change-course-page.component';
 import { ChangeSectionPageComponent } from './change-section-page/change-section-page.component';
 import { StudentControllerModalComponent } from './student-controller-modal/student-controller-modal.component';
+import { GradesPageComponent } from './grades-page/grades-page.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { StudentControllerModalComponent } from './student-controller-modal/stud
     SectionComponent,
     ChangeCoursePageComponent,
     ChangeSectionPageComponent,
-    StudentControllerModalComponent
+    StudentControllerModalComponent,
+    GradesPageComponent
   ],
   imports: [
     BrowserModule,

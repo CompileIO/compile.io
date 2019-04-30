@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class PythonBuilder extends AbstractBuilder {
 
-    public PythonBuilder(List<File> studentFiles, List<File> professorFiles) {
-        super(studentFiles, professorFiles);
+    public PythonBuilder(List<File> studentFiles, List<File> professorFiles, String codePath) {
+        super(studentFiles, professorFiles, codePath);
     }
 
 

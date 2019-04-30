@@ -37,6 +37,7 @@ export class ChangeHomeworkComponent implements OnInit {
     this.newAssignment.endDate = form.endDate;
     console.log(this.newAssignment);
     this.submit();
+    window.location.reload();
   }
 
   fileUploadFunction(event: any) {

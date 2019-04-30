@@ -1,8 +1,20 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h1 *ngIf="sectionInfo.useCourseDescription">{{courseInfo.description}}</h1>
-      <h1 *ngIf="!sectionInfo.useCourseDescription">{{sectionInfo.description}}</h1>
+      <h4 *ngIf="sectionInfo.useCourseDescription"><pre>{{courseInfo.description}}</pre></h4>
+      <h4 *ngIf="!sectionInfo.useCourseDescription"><pre>{{sectionInfo.description}}</pre></h4>
+    </div>
+  </div>
+  <div class="row" *ngIf="studentInfo != null">
+    <div class="col">
+      <button class="btn btn-primary" (click)="gradesBoolean()">Grades</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="grades">
+    <div class="col">
+      <app-grades-page [studentInfo]="studentInfo"
+                       [sectionInfo]="sectionInfo">
+      </app-grades-page>
     </div>
   </div>
 </div>

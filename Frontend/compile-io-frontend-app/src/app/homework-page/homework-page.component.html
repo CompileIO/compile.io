@@ -45,7 +45,8 @@
         </div> -->
           <div class="row">
             <div class="col">
-              <h1>{{results[0]}}</h1>
+              <h4><pre>{{results}}</pre></h4>
+              <h4 *ngFor="let unit of code.unitResponses[code.submissionAttempts-1]"><pre>{{unit}}</pre></h4>
             </div>
           </div>
 

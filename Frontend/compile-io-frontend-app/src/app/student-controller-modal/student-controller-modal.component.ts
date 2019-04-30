@@ -13,6 +13,7 @@ export class StudentControllerModalComponent implements OnInit {
   @Input() sectionInfo: Section;
   studentInfo: Student[];
   studentUsernamesToDelete: String[];
+  selectedStudent: Student = null;
   constructor(private studentService: StudentService) { }
 
   addNewStudent(username: string) {
@@ -23,6 +24,20 @@ export class StudentControllerModalComponent implements OnInit {
   removeStudent(username: string) {
     this.sectionInfo.studentUsernames.splice(this.sectionInfo.studentUsernames.indexOf(username), 1);
   }
+
+  selectStudent(student: string) {
+    this.studentService.getStudentbyUsername(student).subscribe({
+      next: stud => this.selectedStudent = stud
+    });
+  }
+
+  unselectStudent() {
+    this.selectedStudent = null;
+  }
+
+exportGrades() {
+  console.log("please write this josh");
+}
 
   ngOnInit() {
   }
