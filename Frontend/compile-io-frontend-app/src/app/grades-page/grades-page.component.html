@@ -10,12 +10,11 @@
         <h3> - </h3>
       </div>
       <div class="col">
-        <div *ngFor="let cd of studentInfo.codes">
-          <div *ngIf="cd.assignmentId == assign.id">
-            <h3>
-              {{cd.grade}}
-            </h3>
-          </div>
+        <div *ngIf="returnCode(assign) != null">
+          <h3>{{returnCode(assign).grade}}</h3>
+        </div>
+        <div *ngIf="returnCode(assign) == null">
+          <h3>No Grade</h3>
         </div>
       </div>
     </div>
@@ -44,14 +43,14 @@
         <span>Number of submissions: {{selectedCode.submissionAttempts}}</span>
       </div>
     </div>
-    <div class="row">
+    <!--<div class="row">
       <div class="col">
         <span>Submission time: {{selectedCode.submisstionTime}}</span>
       </div>
       <div class="col">
         <span>Runtime: {{selectedCode.runTime}}</span>
       </div>
-    </div>
+    </div>-->
     <div class="row">
       <div class="col">
         <span><pre>{{selectedCode.testResponses[selectedCode.submissionAttempts-1]}}</pre></span>

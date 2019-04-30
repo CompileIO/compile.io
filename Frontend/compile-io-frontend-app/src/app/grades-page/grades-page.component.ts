@@ -29,6 +29,15 @@ export class GradesPageComponent implements OnInit {
     this.selectedCode = null;
   }
 
+  returnCode(assign: Assignment): Code {
+    this.studentInfo.codes.forEach(cd => {
+      if (cd.assignmentId = assign.id) {
+        return cd;
+      }
+    });
+    return null;
+  }
+
   ngOnInit() {
     this.selectedCode = null;
   }
