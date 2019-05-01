@@ -14,7 +14,7 @@
         </tr>
         <tr class="border">
           <th><input type="text" name="newUserName" #nun /></th>
-          <th><button (click)="addNewStudent(nun.value)">Add</button></th>
+          <th><button class="btn btn-primary" (click)="addNewStudent(nun.value)">Add</button></th>
         </tr>
       </table>
     </div>
@@ -41,7 +41,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <button (click)="unselectStudent()">Back</button>
+            <button class="btn btn-primary" (click)="unselectStudent()">Return to Students</button>
           </div>
         </div>
       </div>
