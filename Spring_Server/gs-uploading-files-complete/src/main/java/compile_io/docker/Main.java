@@ -1,6 +1,8 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.util.*;
+import java.nio.file.Paths;
 
 /**
  * Used to run the backend independent of the server; eliminates the need to have website up and running
@@ -8,13 +10,41 @@ import java.io.*;
  */
 public class Main {
     public static void main(String[] args){
-        CompilerFactory compilerFactory = new CompilerFactory();
-        // File file = new File("/SCHOOL/DockerTest/RevEngDrunnable.jar");
-        // AbstractCompiler compiler = compilerFactory.getCompiler("java", file);
-        File file = new File("/SCHOOL/DockerTest/PythonStuff/Main.py");
-        AbstractCompiler compiler = compilerFactory.getCompiler("python", file);
-        compiler.createDockerfile(compiler.getDockerfileData());
-        compiler.buildContainer();
-        compiler.run(60);
+        BuilderFactory builderFactory = new BuilderFactory();
+        // File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/student-files/Simple.java");
+        // File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/professor-files/SimpleTest.java");
+        String home = System.getProperty("user.home");
+        System.out.println(home);
+        File studentDir = Paths.get(home+"/Downloads").toFile();
+        List<File> studentFiles = new ArrayList<>();
+        for (File file: studentDir.listFiles()) {
+            if(file.getName().equals("Simple.java")) {
+                System.out.println("Adding student File " +file.getName());
+                studentFiles.add(file);
+            } 
+        }
+
+        File profDir = Paths.get(home+"/Downloads").toFile();
+        List<File> professorFiles = new ArrayList<>();
+        for (File file: profDir.listFiles()) {
+            if(file.getName().equals("SimpleTest.java")) {
+                System.out.println("Adding Professor File " + file.getName());
+                professorFiles.add(file);
+            } 
+        }
+
+        try {
+//        	String codePath = "C:/Users/Administrator/Google Drive/College/RHIT/Senior Year/1_Senior_Project/compile.io/Spring_Server/gs-uploading-files-complete/upload-dir/2019/4/csse120/3/homework_1/student-files/palamujg";
+        	String codePath = "/2019/4/csse120/3/homework_1/student-files/palamujg";
+            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles, codePath);
+            IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
+            builder.createDockerfile(builder.getDockerfileData());
+            builder.buildContainer();
+            String result = runner.run(60000);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

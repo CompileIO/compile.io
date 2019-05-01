@@ -1,43 +1,78 @@
-<div>
-  <table>
-    <tr>
-      <td>
-        <h2>
-          Submission:
-        </h2>
-      </td>
-      <td>
-        <input type="file" accept=".jar" (change)="fileUpload($event)" placeholder="Upload file..." />
-      </td>
-      <td>
-        <div *ngIf="uploading">
-          <span>
-            Uploading ...
-          </span>
+<div *ngIf="onTime()">
+  <div *ngIf="belowMaxSubmissionAttempts()">
+    <div *ngIf="results == null">
+      <div *ngIf="!running" class="container">
+        <div class="row mt-5">
+          <div class="col">
+            <input type="file" class="custom-file-input" #fileUpload id="fileUpload"
+              (change)="fileUploadFunction($event)">
+            <label *ngIf="file == undefined" class="custom-file-label" for="fileUpload">Select File</label>
+            <label *ngIf="file != undefined" class="custom-file-label"
+              for="fileUpload">{{file.name}}</label>
+          </div>
+          <div class="col">
+            <button *ngIf="fileUpload.files.length == 0" type="button" disabled (click)="run()">Run!</button>
+            <button *ngIf="fileUpload.files.length != 0" type="button" (click)="run()">Run!</button>
+            <div class="col">
+                <button type="button" class="btn btn-primary" (click)="downloadFileButtonPress()">Download</button>
+              </div>
+          </div>
         </div>
-      </td>
-      <td>
-        <div *ngIf="fileReady">
-          <button type="button" (click)="run()">Run!</button>
+        <div *ngFor="let res of results" class="row">
+          <div class="col">
+            <span>
+              {{res}}
+            </span>
+          </div>
         </div>
-      </td>
-      <td>
-        <div *ngIf="error !== ''">
-          <span>
-            {{error.message}}
-          </span>
+      </div>
+      <div *ngIf="running" class="container">
+        <div class="row mt-5">
+          <div class="col">
+            <h4>Running! Please wait ...</h4>
+          </div>
         </div>
-      </td>
-    </tr>
-  </table>
-  <button type="button" (click)="getResults()">REFRESH RESULTS</button>
-  <div *ngFor="let res of results">
-    <span>
-      {{res}}
-    </span>
+      </div>
+    </div>
+
+    <div *ngIf="results != null">
+      <div>
+        <div class="container">
+          <!-- <div class="row">
+          <div class="col">
+            <h1>HOW MANY TESTS PASSED</h1>
+          </div>
+        </div> -->
+          <div class="row">
+            <div class="col">
+              <h4><pre>{{results}}</pre></h4>
+              <h4 *ngFor="let unit of code.unitResponses[code.submissionAttempts-1]"><pre>{{unit}}</pre></h4>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-primary" (click)="clearResult()">RETURN</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-
-
-
+<div *ngIf="!onTime()">
+  <div *ngIf="!running" class="container">
+    <div class="row mt-5">
+      <div class="col">
+        <h3>Submission time: {{sDate}} - {{eDate}}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!belowMaxSubmissionAttempts()">
+    <div class="row mt-5">
+        <div class="col">
+          <h3>Reached Max Submission Attempts</h3>
+        </div>
+      </div>
+</div>

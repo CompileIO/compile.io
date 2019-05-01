@@ -1,0 +1,50 @@
+<div class="container">
+  <!--<div class="row">
+    <div class="col">
+
+    </div>
+  </div>-->
+  <div *ngIf="this.selectedStudent == null" class="row">
+    <div class="col">
+      <table class="w-100">
+        <tr class="border" *ngFor="let std of sectionInfo.studentUsernames">
+          <th>{{std}}</th>
+          <th><button class="btn btn-primary" (click)="selectStudent(std)">Grades</button></th>
+          <th><button class="btn btn-primary" (click)="removeStudent(std)">Delete</button></th>
+        </tr>
+        <tr class="border">
+          <th><input type="text" name="newUserName" #nun /></th>
+          <th><button class="btn btn-primary" (click)="addNewStudent(nun.value)">Add</button></th>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="this.selectedStudent == null" class="row">
+    <div class="col">
+      <button class="btn btn-primary" (click)="exportGrades()">Export Grades</button>
+    </div>
+  </div>
+  <div *ngIf="this.selectedStudent != null" class="row">
+    <div class="col">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h1>{{this.selectedStudent.userName}}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <app-grades-page [studentInfo]="selectedStudent"
+                             [sectionInfo]="sectionInfo">
+            </app-grades-page>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="btn btn-primary" (click)="unselectStudent()">Return to Students</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
