@@ -75,7 +75,6 @@ export class StudentControllerModalComponent implements OnInit {
             console.log("This is data: " + JSON.stringify(data));
             var options = { 
               fieldSeparator: ',',
-              showLabels: true, 
               showTitle: true,
               title: this.sectionInfo.year + "_" + this.sectionInfo.sectionNumber + "_" + this.sectionInfo.term + "_" + 'Grade_Report',
               headers: ["Student Name", "Student Username", "Assignment Name", "Grade"]
