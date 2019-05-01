@@ -12,9 +12,10 @@ public class BuilderFactory {
             return new JavaBuilder(studentFiles, professorFiles, codePath);
         } else if (type.equals("python")) {
             return new PythonBuilder(studentFiles, professorFiles, codePath);
-        } else {
-            throw new UnsupportedBuilderException();
+        } else if (type.equals("java-multifile")) {
+            return new JavaMultifileBuilder(studentFiles, professorFiles, codePath);
         }
+        throw new UnsupportedBuilderException();
     }
 
 }

@@ -72,6 +72,7 @@ public abstract class AbstractBuilder {
             System.out.println("Dockerfile successfully written: " + file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         } finally {
             try {
                 if (fos != null) {
