@@ -32,8 +32,9 @@ public class Main {
         // }
 
         try {
-            String codePath = "C:\\SCHOOL\\Senior Design\\compile.io\\Spring_Server\\gs-uploading-files-complete\\upload-dir\\2019\\1\\csse499\\2\\hw1test\\student-files\\rileyma";
-            AbstractBuilder builder = builderFactory.getBuilder("java-multifile", studentFiles, professorFiles, codePath);
+//            String codePath = "C:\\SCHOOL\\Senior Design\\compile.io\\Spring_Server\\gs-uploading-files-complete\\upload-dir\\2019\\1\\csse499\\2\\hw1test\\student-files\\rileyma";
+            String codePath = "/2020/1/csse120/1/homework_1/student-files/palamujg";
+        	AbstractBuilder builder = builderFactory.getBuilder("java-multifile", studentFiles, professorFiles, codePath);
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();
