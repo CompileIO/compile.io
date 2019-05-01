@@ -17,7 +17,8 @@ export class AssignmentService {
 
   getAssignment(assignmentData: Assignment): Observable<Assignment> {
     var response;
-    console.log("Get assignment: " + assignmentData.assignmentName);
+    // console.log("Get assignment: " + assignmentData.assignmentName);
+    
     response = this.http.get(this.apiUrl + "/Assignment/"  + assignmentData.id)
     return response;
   }

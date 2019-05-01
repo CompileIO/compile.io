@@ -1,7 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Section } from '../../models/section';
 import { Student } from '../../models/student';
+import { Code } from '../../models/code';
 import { StudentService } from '../services/student.service';
+import { AssignmentService } from '../services/assignment.service';
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
+import { Assignment } from 'src/models/assignment';
+// import {CSV} from 'angular5-csv'
 
 @Component({
   selector: 'app-student-controller-modal',
@@ -14,7 +19,8 @@ export class StudentControllerModalComponent implements OnInit {
   studentInfo: Student[];
   studentUsernamesToDelete: String[];
   selectedStudent: Student = null;
-  constructor(private studentService: StudentService) { }
+  gradesData: any[];
+  constructor(private studentService: StudentService, private assignmentService: AssignmentService) { }
 
   addNewStudent(username: string) {
     this.sectionInfo.studentUsernames.push(username);
@@ -35,9 +41,50 @@ export class StudentControllerModalComponent implements OnInit {
     this.selectedStudent = null;
   }
 
-exportGrades() {
-  console.log("please write this josh");
-}
+  exportGrades() {
+    let data = [];
+    var requests = 0;
+    for (let i = 0; i < this.sectionInfo.studentUsernames.length; i++) {
+      let studentIn = new Student;
+      requests++;
+      this.studentService.getStudentbyUsername(this.sectionInfo.studentUsernames[i]).subscribe({
+        next: student => studentIn = student,
+        complete: () => {
+          requests--;
+          for (let j = 0; j < this.sectionInfo.assignments.length; j++) {
+              let json;
+              if (studentIn.codes[j] != null && studentIn.codes[j].assignmentId == this.sectionInfo.assignments[j].id) {
+                json = {
+                  studentName: studentIn.name,
+                  studentUserName: studentIn.userName,
+                  assignmentName: this.sectionInfo.assignments[j].assignmentName,
+                  Grade: "=" + studentIn.codes[j].grade + "%"
+                }
+              }
+              else if(studentIn.codes[j] == null){
+                json = {
+                  studentName: studentIn.name,
+                  studentUserName: studentIn.userName,
+                  assignmentName: this.sectionInfo.assignments[j].assignmentName,
+                  Grade: "Not Attempted"
+                }
+              }
+              data.push(json);
+          }
+          if(requests == 0){
+            console.log("This is data: " + JSON.stringify(data));
+            var options = { 
+              fieldSeparator: ',',
+              showTitle: true,
+              title: this.sectionInfo.year + "_" + this.sectionInfo.sectionNumber + "_" + this.sectionInfo.term + "_" + 'Grade_Report',
+              headers: ["Student Name", "Student Username", "Assignment Name", "Grade"]
+            };
+            new Angular5Csv(data, this.sectionInfo.year + "_" + this.sectionInfo.sectionNumber + "_" + this.sectionInfo.term + "_" + 'Grade_Report', options);
+          }
+        }
+      });
+    }
+  }
 
   ngOnInit() {
   }
