@@ -154,6 +154,7 @@ export class HomeworkPageComponent implements OnInit {
     console.log(this.code.unitResponses[index]);
       i = result[index].indexOf(" > ", last);
     }
+    
 
     this.code.testResponses[index] = finalString;
 
