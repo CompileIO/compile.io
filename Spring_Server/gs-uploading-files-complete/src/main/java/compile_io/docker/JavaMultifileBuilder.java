@@ -1,6 +1,7 @@
 package compile_io.docker;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -26,7 +27,10 @@ public class JavaMultifileBuilder extends AbstractBuilder {
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("CMD unzip " + studentFiles.get(0) + "\n");
-        dockerfileData.append("COPY " + super.getCodePath() + "/" + studentFileName + " " + studentFileName +  "\n");
+        File workDir = Paths.get(studentFileName + "/").toFile();
+        String workingDirectory = workDir.getPath();
+        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
+        dockerfileData.append("COPY " + super.getCodePath() + "/" + studentFileName + "/src/main/java" + " " + studentFileName +  "\n");
         dockerfileData.append("COPY build.gradle /" + studentFileName + "/build.gradle\n");
         // for (int i = 0; i < super.getNumProfessorFiles(); i++) {
         // 	String professorFilePath = super.getCodePath().replaceFirst("student-files", "professor-files");
