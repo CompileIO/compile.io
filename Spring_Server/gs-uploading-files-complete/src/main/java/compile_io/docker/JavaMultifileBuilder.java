@@ -71,9 +71,9 @@ public class JavaMultifileBuilder extends AbstractBuilder {
         dockerfileData.append("COPY " +  super.getCodePath() + "/" + studentFileName + " " + studentFileName +"\n");
         dockerfileData.append("RUN unzip "  + studentFileName+ "\n");
         dockerfileData.append("RUN rm " +  studentFileName + "\n");
-//        dockerfileData.append("COPY " + super.getCodePath() + "/" + studentFileName + " " + studentFileName +  "\n");
-        dockerfileData.append("COPY build.gradle /" + studentFileName + "/build.gradle\n");
-        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && ls");
+//        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/build.gradle"  + "\n");
+//        dockerfileData.append("COPY build.gradle " + studentFileNameNoZip + "/build.gradle\n");
+        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && cd " + studentFileNameNoZip + " && gradle test");
 
         return dockerfileData.toString();
     } 
