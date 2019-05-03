@@ -22,58 +22,28 @@ public class JavaMultifileBuilder extends AbstractBuilder {
 
         if (studentFiles.size() != 1) {
             throw new InvalidFileException("Expected single file (a zipped project), but received " + studentFiles.size() + " files.");
-        }
-//        String studentFileName = studentFiles.get(0).getName().replace(".zip", "");
-////        File studentworkDir = Paths.get(studentFiles.get(0).getParent()).toFile();
-////        String studentworkingDirectory = studentFiles.get(0).getAbsolutePath();
-////        String newStudentWD = studentworkingDirectory.replace(".zip", "");
-////        System.out.println("Student working directory path: " + studentworkingDirectory);
-//
-//        dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
-//        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
-//        dockerfileData.append("EXPOSE 8000\n");
-////        dockerfileData.append("COPY build.gradle /" + studentFileName + "/build.gradle\n");
-//        dockerfileData.append("COPY build.gradle build.gradle\n");
-//        dockerfileData.append("WORKDIR " + super.getCodePath() + "\n");
-//        dockerfileData.append("COPY " +  studentFileName + " " + studentFileName +"\n");
-//        dockerfileData.append("RUN unzip "  + studentFiles.get(0).getName());
-//        dockerfileData.append("RUN rm " +  studentFiles.get(0).getName());
-////        dockerfileData.append("CMD unzip " + studentFiles.get(0) + "\n");
-//        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\\" + studentFileName  + "\n");
-////        dockerfileData.append("COPY " + super.getCodePath() + "\\" + studentFileName + " " + studentFileName +  "\n");
-////        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
-//        
-////        dockerfileData.append("WORKDIR " + studentworkDir + "\n");
-//        // for (int i = 0; i < super.getNumProfessorFiles(); i++) {
-//        // 	String professorFilePath = super.getCodePath().replaceFirst("student-files", "professor-files");
-//        //     dockerfileData.append("COPY " + professorFilePath + "/" + professorFiles.get(i).getName() + " " + professorFiles.get(i).getName() +  "\n");
-//        // }
-//        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && ls\n");
-//
-//        return dockerfileData.toString();
-        
+        }        
         
         String studentFileName = studentFiles.get(0).getName();//.replace(".zip", "");
         String studentFileNameNoZip = studentFiles.get(0).getName().replace(".zip", "");
-        
-//        dockerfileData.append("FROM ... as stage1" + "\n");
-//        # No need to clean up here, these layers will be discarded
-//        ADD /files/apache-stratos.zip /opt/apache-stratos.zip
-//        RUN unzip -q apache-stratos.zip
-//            && mv apache-stratos-* apache-stratos
-//
-//        FROM ...
-//        COPY --from=stage1 apache-stratos/ apache-stratos/
         dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
         dockerfileData.append("USER root\n");
+//        dockerfileData.append("COPY build.gradle build.gradle \n");
         dockerfileData.append("COPY " +  super.getCodePath() + "/" + studentFileName + " " + studentFileName +"\n");
         dockerfileData.append("RUN unzip "  + studentFileName+ "\n");
         dockerfileData.append("RUN rm " +  studentFileName + "\n");
-//        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/build.gradle"  + "\n");
-//        dockerfileData.append("COPY build.gradle " + studentFileNameNoZip + "/build.gradle\n");
-        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && cd " + studentFileNameNoZip + " && gradle test");
+        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/build.gradle"  + "\n");
+        dockerfileData.append("RUN rm -r " +  studentFileNameNoZip + "/gradle"  + "\n");
+        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/gradlew"  + "\n");
+        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/gradlew.bat"  + "\n");
+//        dockerfileData.append("RUN mv build.gradle /"  + studentFileNameNoZip + " \n");
+        
+        dockerfileData.append("COPY build.gradle " + studentFileNameNoZip + "/build.gradle \n");
+        
+//        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "/" + studentFileNameNoZip + "\n");
+        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && cd " + studentFileNameNoZip + " && ls && gradle test");
 
         return dockerfileData.toString();
     } 

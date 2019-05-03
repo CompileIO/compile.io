@@ -38,7 +38,7 @@ public class Main {
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();
-            String result = runner.run(600);
+            String result = runner.run(6000);
             System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
