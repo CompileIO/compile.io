@@ -55,9 +55,19 @@ public class JavaMultifileBuilder extends AbstractBuilder {
         
         String studentFileName = studentFiles.get(0).getName();//.replace(".zip", "");
         String studentFileNameNoZip = studentFiles.get(0).getName().replace(".zip", "");
+        
+//        dockerfileData.append("FROM ... as stage1" + "\n");
+//        # No need to clean up here, these layers will be discarded
+//        ADD /files/apache-stratos.zip /opt/apache-stratos.zip
+//        RUN unzip -q apache-stratos.zip
+//            && mv apache-stratos-* apache-stratos
+//
+//        FROM ...
+//        COPY --from=stage1 apache-stratos/ apache-stratos/
         dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
         dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "\n");
         dockerfileData.append("EXPOSE 8000\n");
+        dockerfileData.append("USER root\n");
         dockerfileData.append("COPY " +  super.getCodePath() + "/" + studentFileName + " " + studentFileName +"\n");
         dockerfileData.append("RUN unzip "  + studentFileName+ "\n");
         dockerfileData.append("RUN rm " +  studentFileName + "\n");
