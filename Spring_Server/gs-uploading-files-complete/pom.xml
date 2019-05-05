@@ -40,14 +40,10 @@
   			<version>1.3.3</version>
 		</dependency>
     </dependencies>
-    
-    
 
     <properties>
         <java.version>1.8</java.version>
-        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		</bean>
-		<property name="maxUploadSize" value="100000000"/>
+    		<maxUploadSize>100000000</maxUploadSize>
     </properties>
 
     <build>
