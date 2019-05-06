@@ -34,16 +34,18 @@ public class JavaMultifileBuilder extends AbstractBuilder {
         dockerfileData.append("COPY " +  super.getCodePath() + "/" + studentFileName + " " + studentFileName +"\n");
         dockerfileData.append("RUN unzip "  + studentFileName+ "\n");
         dockerfileData.append("RUN rm " +  studentFileName + "\n");
+        
         dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/build.gradle"  + "\n");
-        dockerfileData.append("RUN rm -r " +  studentFileNameNoZip + "/gradle"  + "\n");
-        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/gradlew"  + "\n");
-        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/gradlew.bat"  + "\n");
-//        dockerfileData.append("RUN mv build.gradle /"  + studentFileNameNoZip + " \n");
+//        dockerfileData.append("RUN rm -r " +  studentFileNameNoZip + "/gradle"  + "\n");
+//        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/gradlew"  + "\n");
+//        dockerfileData.append("RUN rm " +  studentFileNameNoZip + "/gradlew.bat"  + "\n");
+        
+//        dockerfileData.append("RUN mv build.gradle /"  + studentFileNameNoZip + " \n");//
         
         dockerfileData.append("COPY build.gradle " + studentFileNameNoZip + "/build.gradle \n");
         
-//        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "/" + studentFileNameNoZip + "\n");
-        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && cd " + studentFileNameNoZip + " && ls && gradle test");
+//        dockerfileData.append("WORKDIR " + super.getWorkingDirectory() + "/" + studentFileNameNoZip + "\n");//
+        dockerfileData.append("CMD export GRADLE_USER_HOME=\"" + super.getWorkingDirectory() + "\" && cd " + studentFileNameNoZip + " && vi build.gradle");
 
         return dockerfileData.toString();
     } 
