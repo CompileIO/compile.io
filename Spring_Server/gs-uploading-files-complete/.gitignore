@@ -10,8 +10,10 @@
 
 # IDEs and editors
 /.idea
+.iml
 .project
 .classpath
+.springBeans
 .c9/
 *.launch
 .settings/
@@ -23,6 +25,7 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.editorconfig
 
 # misc
 /.sass-cache
@@ -33,6 +36,8 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+
+/target
 
 # System Files
 .DS_Store
