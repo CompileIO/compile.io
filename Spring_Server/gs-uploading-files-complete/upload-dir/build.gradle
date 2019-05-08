@@ -1,5 +1,5 @@
 apply plugin: 'java'
- 
+
 repositories {
     mavenCentral()
 }
@@ -15,6 +15,8 @@ dependencies {
             'org.junit.jupiter:junit-jupiter-engine:5.1.0',
             'org.junit.vintage:junit-vintage-engine:5.1.0'
     )
+    testCompile 'junit:junit:4.+', 'org.easymock:easymock:3.4'
+    // testCompile group: 'org.easymock', name: 'easymock', version: '4.0.2'
 }
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -55,3 +57,85 @@ tasks.withType(Test) {
         }
     }
 }
+
+// apply plugin: 'java'
+// apply plugin: 'jacoco'
+// apply plugin: 'eclipse'
+
+// sourceCompatibility = 1.8
+// version = '1.0'
+
+// group = "edu.rosehulman.rosebuild"
+
+// repositories {
+//     mavenCentral()
+//  }
+
+// jacoco {
+//     toolVersion = "0.7.5.+"
+// }
+
+// jacocoTestReport {
+//     group = "Reporting"
+//     description = "Generate Jacoco coverage reports after running tests."
+//     additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+    
+//     reports {
+//         xml.enabled true
+//         csv.enabled false
+//         html.enabled true
+//     }
+// }
+
+// dependencies {
+//     testCompile 'junit:junit:4.+', 'org.easymock:easymock:3.4'
+// }
+
+// test {
+//     jacoco {
+//         append = false
+//     }
+// }
+
+// test.finalizedBy(jacocoTestReport)
+
+// task codeCoverageInfo (dependsOn: jacocoTestReport) {
+//     ext.srcFile = file("${reportsDir}/jacoco/test/jacocoTestReport.xml")
+//     doLast {
+//         println "Transforming source file."
+        
+//         def parser = new XmlParser()
+//         parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false); 
+//         parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); 
+//         parser.setFeature("http://xml.org/sax/features/namespaces", false)
+                 
+//         def reportNode = parser.parse(srcFile)
+//         reportNode.children().each {
+//             if(it.name() == 'counter') {
+//                 String type = it.@type
+//                 float missed = it.@missed as float
+//                 float covered = it.@covered as float
+//                 float percentage = covered / (missed + covered) * 100
+//                 println "Code Coverage[$type]: $percentage%"
+//             }           
+//         }
+//     }
+// }
+// jacocoTestReport.finalizedBy(codeCoverageInfo)
+
+
+// jar {
+//     manifest {
+//         attributes 'Implementation-Title': 'Rose Hulman Build System Library',
+//                    'Implementation-Version': '${version}'
+//     }
+// }
+
+// uploadArchives {
+//     repositories {
+//        flatDir {
+//            dirs 'repos'
+//        }
+//     }
+// }
+
