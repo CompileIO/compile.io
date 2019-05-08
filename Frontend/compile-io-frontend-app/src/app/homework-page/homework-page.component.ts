@@ -157,7 +157,6 @@ export class HomeworkPageComponent implements OnInit {
     if (i == -1) {
       this.code.testResponses[index] = finalString;
     }
-    
 
     return finalString;
   }
