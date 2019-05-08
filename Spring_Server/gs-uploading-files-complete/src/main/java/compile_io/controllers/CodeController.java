@@ -213,21 +213,20 @@ public class CodeController {
             			String assignmentFilepath = assignment.getFilePath();
                 		String codePath = assignmentFilepath.replaceFirst("professor-files", "student-files");
                 		codeData.setCodePath(codePath);
-//                		codeData.setSubmissionAttempts(code.getSubmissionAttempts()+1);
-//                		code.addTestResponse(runCompiler(code.getLanguage(), code.getRunTime(), assignmentFilepath, codePath));
-                    	//might have to delete test responses later
                     	codeData.setAssignmentId(assignment.getId());
                     	codeData.setGrade(code.getGrade());
                     	codeData.setLanguage(assignment.getLanguage());
                     	codeData.setRunTime(assignment.getTimeout());
-//                    	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
+                    	codeData.setSubmissionAttempts(code.getSubmissionAttempts());
                     	codeData.setUserName(code.getUserName());
+                    	codeData.setTestResponses(code.getTestResponse());
                     	codeData.setUnitResponses(code.getUnitResponses());
 //                    	codeData.setFileName(code.getFileName());
                         updatedCode = codeRepository.save(codeData);
                         System.out.println("\n\n\n\n\n Code Updated: " + updatedCode.toString() + "\n\n\n\n\n");
             		} else {
             			ResponseEntity.notFound().build();
+            			
             		}
             		
                     return ResponseEntity.ok().body(updatedCode);

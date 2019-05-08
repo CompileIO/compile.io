@@ -25,7 +25,6 @@ export class ChangeSectionPageComponent implements OnInit {
   }
 
   openCloseStudentModal() {
-    console.log(this.newSection.studentUsernames);
     this.changingStudents = !this.changingStudents;
 
   }

@@ -11,36 +11,34 @@ import java.nio.file.Paths;
 public class Main {
     public static void main(String[] args){
         BuilderFactory builderFactory = new BuilderFactory();
-        // File file3 = new File("/SCHOOL/DockerTest/mock-upload-dir/student-files/Simple.java");
-        // File file4 = new File("/SCHOOL/DockerTest/mock-upload-dir/professor-files/SimpleTest.java");
         String home = System.getProperty("user.home");
         System.out.println(home);
         File studentDir = Paths.get(home+"/Downloads").toFile();
         List<File> studentFiles = new ArrayList<>();
         for (File file: studentDir.listFiles()) {
-            if(file.getName().equals("Simple.java")) {
+            if(file.getName().equals("centipede.zip")) {
                 System.out.println("Adding student File " +file.getName());
                 studentFiles.add(file);
             } 
         }
 
-        File profDir = Paths.get(home+"/Downloads").toFile();
+        // File profDir = Paths.get(home+"/Downloads").toFile();
         List<File> professorFiles = new ArrayList<>();
-        for (File file: profDir.listFiles()) {
-            if(file.getName().equals("SimpleTest.java")) {
-                System.out.println("Adding Professor File " + file.getName());
-                professorFiles.add(file);
-            } 
-        }
+        // for (File file: profDir.listFiles()) {
+        //     if(file.getName().equals("SimpleTest.java")) {
+        //         System.out.println("Adding Professor File " + file.getName());
+        //         professorFiles.add(file);
+        //     } 
+        // }
 
         try {
-//        	String codePath = "C:/Users/Administrator/Google Drive/College/RHIT/Senior Year/1_Senior_Project/compile.io/Spring_Server/gs-uploading-files-complete/upload-dir/2019/4/csse120/3/homework_1/student-files/palamujg";
-        	String codePath = "/2019/4/csse120/3/homework_1/student-files/palamujg";
-            AbstractBuilder builder = builderFactory.getBuilder("java", studentFiles, professorFiles, codePath);
+//            String codePath = "C:\\SCHOOL\\Senior Design\\compile.io\\Spring_Server\\gs-uploading-files-complete\\upload-dir\\2019\\1\\csse499\\2\\hw1test\\student-files\\rileyma";
+            String codePath = "/2020/1/csse120/1/homework_1/student-files/palamujg";
+        	AbstractBuilder builder = builderFactory.getBuilder("java-multifile", studentFiles, professorFiles, codePath);
             IDockerRunner runner = new DockerRunner(builder, new CommandExecuter());
             builder.createDockerfile(builder.getDockerfileData());
             builder.buildContainer();
-            String result = runner.run(60000);
+            String result = runner.run(6000);
             System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,7 +8,7 @@ import compile_io.mongo.models.Student;
 
 public interface StudentRepository extends MongoRepository<Student, String>{
 	List<Student> findByName(String name, Sort sort);
-	List<Student> findByUserName(String userName, Sort sort);
+	List<Student> findByUserName(String studentUsername, Sort sortByCreatedAtDesc);
 	
 	
 	

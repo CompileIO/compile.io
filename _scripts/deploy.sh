@@ -1,6 +1,6 @@
 #!/bin/bash
-set -x
-if [ $TRAVIS_BRANCH == 'master' ] ; then
+# set -x
+# if [ $TRAVIS_BRANCH == 'master' ] ; then
     # echo "Initializing a new git repo in _site, and pushing it to our server"
     # mkdir _site
     # cd _site
@@ -14,19 +14,19 @@ if [ $TRAVIS_BRANCH == 'master' ] ; then
     ########From Conner: Want to scp instructions.sh to the compile.io server, and then run the commands because right now everything is running
     ####on the travis runner, not the server
     
-    echo "Making sure the repo has everything it needs"
-    git add .
-    git commit -m "Deploy"
-    git push --force deploy master
+    # echo "Making sure the repo has everything it needs"
+    # git add .
+    # git commit -m "Deploy"
+    # git push --force deploy master
     
-    echo "Starting Backend"
-    cd Spring_Server/gs-uploading-files-complete
-    ./gradlew bootRun -D spring.profiles.active=prod
-    echo "Starting Frontend"
-    cd ../../Frontend/compile-io-frontend-app
-    ng build --prod
-    ng serve --prod --host 0.0.0.0
-    echo "The site should be up and running at compile-io.csse.rose-hulman.edu"
+    # echo "Starting Backend"
+    # cd Spring_Server/gs-uploading-files-complete
+    # ./gradlew bootRun -D spring.profiles.active=prod
+    # echo "Starting Frontend"
+    # cd ../../Frontend/compile-io-frontend-app
+    # ng build --prod
+    # ng serve --prod --host 0.0.0.0
+    # echo "The site should be up and running at compile-io.csse.rose-hulman.edu"
 
 #     Run Spring
 # (in compile.io folder)
@@ -45,6 +45,6 @@ if [ $TRAVIS_BRANCH == 'master' ] ; then
 # sudo forever start node_modules/@angular/cli/bin/ng serve --proxy-config proxy.conf.json --host 0.0.0.0
 # sudo forever start /usr/bin/java -jar build/libs/gs-spring-boot-0.1.0.jar
 
-else
-    echo "Not deploying, since this branch isn't master."
-fi
+# else
+    # echo "Not deploying, since this branch isn't master."
+# fi

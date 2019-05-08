@@ -76,6 +76,13 @@ export class HomeworkPageComponent implements OnInit {
         next: x => {
           console.log(x);
           this.code = x;
+          if (this.code.testResponses == null) {
+            this.code.testResponses = [];
+          }
+          if (this.code.unitResponses == null) {
+            this.code.unitResponses = [];
+          }
+          
         },
         error: err => {
           console.log("RUNNING CODE ERROR: " + err);
@@ -92,26 +99,19 @@ export class HomeworkPageComponent implements OnInit {
               console.log("updated the code");
               console.log(this.code);
             }
-          })
+          });
         }
       });
   }
 
   parseString(result: string[]): string {
     let finalString: string;
-    let index = this.code.submissionAttempts-1;
-    console.log(result[index]);
-    // console.log("this is the index: "+index);
-    // console.log("This is the lenght: " + this.code.testResponses.length);
-    // for(var y = 0; y < this.code.testResponses.length; y++) {
-    //   console.log("Code Number: "+y);
-    //   console.log("This is the responses: "+ this.code.testResponses[y]);
-    // }
+    let index = this.code.submissionAttempts - 1;
+
     //get the string that should be displayed. 
     let start = result[index].indexOf("---");
     let last = result[index].lastIndexOf("-");
     finalString = result[index].slice(start, last);
-    console.log(result[index]);
     
 
     //Find number of tests
@@ -135,15 +135,10 @@ export class HomeworkPageComponent implements OnInit {
     }
     last = result[index].lastIndexOf("\n", last);
     tempString = result[index].slice(start, last);
-    if (index == 0) {
-      this.code.unitResponses = [];
-    }
-    if (this.code.unitResponses.length <= index) {
-      this.code.unitResponses.push([]);
-    }
     this.code.unitResponses[index] = [];
     this.code.unitResponses[index].push(tempString);
-    finalString = finalString + "\n" + tempString;
+    console.log(tempString);
+    console.log(this.code.unitResponses[index]);
 
     let i = result[index].indexOf(" > ", last + 4);
     while (i != -1) {
@@ -155,11 +150,13 @@ export class HomeworkPageComponent implements OnInit {
       last = result[index].lastIndexOf("\n", last);
       tempString = result[index].slice(start, last);
       this.code.unitResponses[index].push(tempString);
-      finalString = finalString + "\n" + tempString;
+      console.log(tempString);
+    console.log(this.code.unitResponses[index]);
       i = result[index].indexOf(" > ", last);
     }
-
-    this.code.testResponses[index] = finalString;
+    if (i == -1) {
+      this.code.testResponses[index] = finalString;
+    }
 
     return finalString;
   }
