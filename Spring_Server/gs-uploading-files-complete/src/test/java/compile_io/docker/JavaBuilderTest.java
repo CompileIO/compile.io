@@ -41,7 +41,7 @@ public class JavaBuilderTest {
     when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
     when(mockStudentFile.getParent()).thenReturn("C:\\Test");
     AbstractBuilder tc1 = new JavaBuilder(studentFiles, professorFiles, codePath);
-    assertEquals("C:\\Test", tc1.getWorkingDirectory());
+    assertEquals("upload-dir", tc1.getWorkingDirectory());
   }
 
   @Test
