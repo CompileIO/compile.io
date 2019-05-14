@@ -25,7 +25,7 @@ public class AbstractBuilderTest {
     private boolean isInitialized = false;
 
 
-    private void initialize() {
+    public void initialize() {
         if (!isInitialized) {
             this.studentFiles.add(mockStudentFile);
             this.professorFiles.add(mockProfessorFile);
@@ -39,7 +39,7 @@ public class AbstractBuilderTest {
         when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
         when(mockStudentFile.getParent()).thenReturn("C:\\Test");
         AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles, codePath);
-        assertEquals("C:\\Test", testCompiler.getWorkingDirectory());
+        assertEquals("upload-dir", testCompiler.getWorkingDirectory());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class AbstractBuilderTest {
         when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
         when(mockStudentFile.getParent()).thenReturn("C:\\Test");
         AbstractBuilder testCompiler = new JavaBuilder(studentFiles, professorFiles, codePath);
-        assertEquals("C:\\Test", testCompiler.getWorkingDirectory());
+        assertEquals("upload-dir", testCompiler.getWorkingDirectory());
         testCompiler.setWorkingDirectory("C:\\NewTest");
         assertEquals("C:\\NewTest", testCompiler.getWorkingDirectory());
     }
