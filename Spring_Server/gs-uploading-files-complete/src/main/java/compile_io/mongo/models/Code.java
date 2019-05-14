@@ -27,6 +27,13 @@ public class Code {
     private String grade;
     private String fileName;
     
+    public Code() {
+    	super();
+    	testResponses = new ArrayList<>();
+    	submissionAttempts = 0;
+    	unitResponses = new ArrayList<>();
+    }
+    
     public String getFileName() {
 		return fileName;
 	}
@@ -39,12 +46,7 @@ public class Code {
 		return testResponses;
 	}
 
-	public Code() {
-    	super();
-    	testResponses = new ArrayList<>();
-    	submissionAttempts = 0;
-    	unitResponses = new ArrayList<>();
-    }
+	
 
 	public String getId() {
 		return id;

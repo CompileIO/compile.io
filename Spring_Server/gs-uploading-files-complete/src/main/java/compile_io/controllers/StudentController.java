@@ -87,7 +87,7 @@ public class StudentController{
                 	studentData.setName(student.getName());
                 	studentData.setCodes(student.getCodes());
                 	studentData.setSectionIds(student.getSectionIds());
-                	student.setUserName(student.getUserName());
+                	studentData.setUserName(student.getUserName());
                 	Student updatedStudent = studentRepository.save(studentData);
                     System.out.println("\n\n\n\n\n Student Updated: " + updatedStudent.toString() + "\n\n\n\n\n");
                     for(String sectionId : studentToUpdate.getSectionIds()) {

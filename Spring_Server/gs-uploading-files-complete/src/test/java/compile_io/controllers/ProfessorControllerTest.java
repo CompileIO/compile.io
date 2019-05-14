@@ -45,8 +45,6 @@ public class ProfessorControllerTest {
 	public void createProfessorAPI() throws Exception {
 
 		Professor newProfessor = new Professor("1", "TestProfessorUserName");
-		List<String> professorList = new ArrayList<String>();
-		professorList.add(newProfessor.getUserName());
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/Professor/Create").content(asJsonString(newProfessor))
 				.contentType(MediaType.parseMediaType("application/json;charset=UTF-8"))
