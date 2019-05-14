@@ -25,7 +25,7 @@ public class AbstractBuilderTest {
     private boolean isInitialized = false;
 
 
-    public void initialize() {
+    private void initialize() {
         if (!isInitialized) {
             this.studentFiles.add(mockStudentFile);
             this.professorFiles.add(mockProfessorFile);
