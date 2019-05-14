@@ -99,7 +99,7 @@ public class CourseController {
 
                 		if (course.getProfessors().contains(professorUsernamesInCourse.get(i))) {
                 			if(!profs.isEmpty()) {	
-                				updatedcourse.updateProfessorUserName(profs.get(0).getUserName(),updatedcourse,courseToUpdate);
+//                				updatedcourse.updateProfessorUserName(profs.get(0).getUserName(),updatedcourse,courseToUpdate);
                 			}
                 		} else {
                 			if(!profs.isEmpty()) {
@@ -111,9 +111,9 @@ public class CourseController {
                 	for(int i = 0; i < professorUsernamesInNewCourse.size(); i++) {
                 		if (!professorUsernamesInCourse.contains(professorUsernamesInNewCourse.get(i))) {
                 			//add this course in this prof
-                			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInCourse.get(i), sortByCreatedAtDesc);
+                			List<Professor> profs = this.professorRepository.findByuserName(professorUsernamesInNewCourse.get(i), sortByCreatedAtDesc);
                 			if(!profs.isEmpty()) {
-                				updatedcourse.addProfessorUsername(profs.get(0).getUserName());
+                				updatedcourse.addProfessorUsername(professorUsernamesInNewCourse.get(i));
                 			}
                 		}
                 	}

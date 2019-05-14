@@ -63,7 +63,7 @@ public class Course {
 			Professor updatedProf = this.professorRepository.save(prof.get(0));
 			System.out.println("\n\n\n\n\n Professor Added in Course AddProfessorUserName: " + updatedProf.toString() + "\n\n\n\n\n");
 		}
-		else {
+		else{
 			Professor newProfessor = new Professor();
 			newProfessor.setUserName(newProfessorUsername);
 			newProfessor.addCourse(this);
