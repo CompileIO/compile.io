@@ -138,7 +138,7 @@ public class CourseController {
                 		}
                 	}
                 	for(Section section : course.getSections()) {
-                		section.deleteSection();
+                		section.deleteSection(section.getId());
                 		this.sectionRepository.save(section);
                 	}
                 	courseRepository.deleteById(id);

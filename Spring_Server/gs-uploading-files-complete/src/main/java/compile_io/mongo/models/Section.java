@@ -154,7 +154,7 @@ public class Section {
 				+ ", description=" + description + ", courseId=" + courseId + ", assignments=" + assignments + "]";
 	}
 	
-	public void deleteSection () {
+	public void deleteSection (String id) {
 		
 		for(Assignment assignment : this.getAssignments()) {
     		String filepath = assignment.getFilePath();
@@ -168,7 +168,7 @@ public class Section {
     		student.get(0).deleteSectionId(id);
     		this.studentRepository.save(student.get(0));
     	}
-        sectionRepository.deleteById(id);
+//        sectionRepository.deleteById(id);
 	}
 	
 }
