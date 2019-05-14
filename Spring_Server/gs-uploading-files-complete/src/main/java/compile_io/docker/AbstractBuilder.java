@@ -27,7 +27,7 @@ public abstract class AbstractBuilder {
         this.executer = new CommandExecuter();
         this.workingDirectory = workDir.getPath();
         if (this.workingDirectory == null) {
-            this.workingDirectory = "/";
+            this.workingDirectory = "upload-dir/";
         }
         System.out.println("Files received. Target directory: " + this.workingDirectory);
     }
