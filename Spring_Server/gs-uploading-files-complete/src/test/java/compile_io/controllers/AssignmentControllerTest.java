@@ -42,30 +42,19 @@ public class AssignmentControllerTest {
     @Autowired
     private MockMvc mockMvc;
     
-    private String AssignmentId;
-    
-//    @Test
-//    public void getAllAssignmentsAPI() throws Exception
-//    {
-//    	mockMvc.perform( MockMvcRequestBuilders
-//          .get("/Assignment")
-//          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-//          .andDo(print())
-//          .andExpect(MockMvcResultMatchers.status().isOk())
-//          .andExpect(MockMvcResultMatchers.jsonPath("$.*").exists())
-//          .andExpect(MockMvcResultMatchers.jsonPath("$.*.id").isNotEmpty());
-//    }
-     
     @Test
-    public void getAssignmentByIdAPI() throws Exception
+    public void getAllAssignmentsAPI() throws Exception
     {
-//    	mockMvc.perform( MockMvcRequestBuilders
-//          .get("/Assignment/{id}", AssignmentId)
-//          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-//          .andDo(print())
-//          .andExpect(MockMvcResultMatchers.status().isOk())
-//          .andExpect(MockMvcResultMatchers.jsonPath("$.*.id").value(AssignmentId));
+    	mockMvc.perform( MockMvcRequestBuilders
+          .get("/Assignment")
+          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+          .andDo(print())
+          .andExpect(MockMvcResultMatchers.status().isOk())
+          .andExpect(MockMvcResultMatchers.jsonPath("$.*").exists())
+          .andExpect(MockMvcResultMatchers.jsonPath("$.*.id").isNotEmpty());
     }
+     
+    
     
     @Test
     public void createAssignmentAPI() throws Exception
@@ -134,6 +123,14 @@ public class AssignmentControllerTest {
           .andExpect(status().isOk())
           .andDo(print())
           .andExpect(MockMvcResultMatchers.jsonPath("$.*.id").exists());
+    	
+    	//Test the Get assignment by ID function
+    	mockMvc.perform( MockMvcRequestBuilders
+    	          .get("/Assignment/{id}", 1)
+    	          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+    	          .andDo(print())
+    	          .andExpect(MockMvcResultMatchers.status().isOk())
+    	          .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"));
     }
      
     public static String asJsonString(final Object obj) {
@@ -143,6 +140,7 @@ public class AssignmentControllerTest {
             throw new RuntimeException(e);
         }
     }
+    
     
     @Test
     public void deleteAssignmentAPI() throws Exception
