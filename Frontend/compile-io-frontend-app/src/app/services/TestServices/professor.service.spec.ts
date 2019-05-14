@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Professor } from 'src/models/professor';
 import { environment } from '../../../environments/environment';
 
-fdescribe('ProfessorService', () => {
+describe('ProfessorService', () => {
     let service:  ProfessorService;
     let http: HttpClient;
     let httpMock: HttpTestingController;
@@ -37,5 +37,27 @@ fdescribe('ProfessorService', () => {
       req.flush(dummyProfessors);
     });
 
-    // it('should get create a professor',)
+    it('should create a professor', () => {
+      let dummyProfessor:Professor = {id:'1', courses: null, name: 'default', userName: 'defaultUsername'};
+
+      service.createProfessor(dummyProfessor).subscribe(professor => {
+        expect(professor).toEqual(dummyProfessor);
+      });
+
+      let req = httpMock.expectOne(environment.BackendapiUrl + '/Professor/Create')
+      expect(req.request.method).toBe("POST");
+      req.flush(dummyProfessor);
+    });
+
+    it('should update a professor', () => {
+      let dummyProfessor:Professor = {id:'1', courses: null, name: 'default', userName: 'defaultUsername'};
+
+      service.updateProfessor(dummyProfessor).subscribe(professor => {
+        expect(professor).toEqual(dummyProfessor);
+      });
+
+      let req = httpMock.expectOne(environment.BackendapiUrl + '/Professor/Update/'+ dummyProfessor.id)
+      expect(req.request.method).toBe("PUT");
+      req.flush(dummyProfessor);
+    });
   });
