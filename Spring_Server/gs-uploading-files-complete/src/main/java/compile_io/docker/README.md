@@ -9,7 +9,7 @@
 - Dockerfile construction for Java multifile
 - Able to retrieve multifile builder from factory class
 ### Known Issues
-- Docker container runs for too long, ~1 hour
+- Docker build process, container execution, and container teardown runs too long, ~1 hour
 - Docker container construction needs to be optimized. Perhaps look into building an image everytime the code is run; Make it so image construction happens once, and then containers are made from that image for a student submisison
 #### *Please look at the* [commit logs](https://github.com/CompileIO/compile.io/commits/152-multifile-submission) *as well as the* [issue itself](https://github.com/CompileIO/compile.io/issues/152) *for more information*
 ## To Run This Code
