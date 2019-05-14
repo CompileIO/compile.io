@@ -69,6 +69,39 @@ public class ProfessorControllerTest {
 	}
 	
 	@Test
+	public void updateProfessorAPI() throws Exception {
+		
+		Professor newProfessorCreate = new Professor("1", "TestProfessorUserName");
+
+		mockMvc.perform(MockMvcRequestBuilders.post("/Professor/Create").content(asJsonString(newProfessorCreate))
+				.contentType(MediaType.parseMediaType("application/json;charset=UTF-8"))
+				.accept(MediaType.parseMediaType("application/json;charset=UTF-8"))).andExpect(status().isOk())
+				.andDo(print()).andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+
+		Professor newProfessor = new Professor("1", "UpdatedTestProfessorUserName");
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/Professor/Update/{id}", "1").content(asJsonString(newProfessor))
+				.contentType(MediaType.parseMediaType("application/json;charset=UTF-8"))
+				.accept(MediaType.parseMediaType("application/json;charset=UTF-8"))).andExpect(status().isOk())
+				.andDo(print()).andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+		//Test the Get Professor by ID function
+    	mockMvc.perform( MockMvcRequestBuilders
+    	          .get("/Professor/{id}", 1)
+    	          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+    	          .andDo(print())
+    	          .andExpect(MockMvcResultMatchers.status().isOk())
+    	          .andExpect(MockMvcResultMatchers.jsonPath("$.userName").value("UpdatedTestProfessorUserName"));
+    	mockMvc.perform( MockMvcRequestBuilders
+  	          .get("/Professor/Username/{username}", "UpdatedTestProfessorUserName")
+  	          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+  	          .andDo(print())
+  	          .andExpect(MockMvcResultMatchers.status().isOk())
+  	          .andExpect(MockMvcResultMatchers.jsonPath("$.*.userName").value("UpdatedTestProfessorUserName"));
+    	this.deleteProfessorAPI();
+
+	}
+	
+	@Test
     public void getAllProfessorsAPI() throws Exception
     {
     	mockMvc.perform( MockMvcRequestBuilders

@@ -141,6 +141,33 @@ public class AssignmentControllerTest {
         }
     }
     
+    @Test
+    public void updateAssignmentAPI() throws Exception {
+    	this.createAssignmentAPI();
+    	List<String> sectionIdList = new ArrayList<String>();
+    	sectionIdList.add("1");
+    	Assignment newAssignment = new Assignment("1", "UpdatedAssignmentName", "filepath", sectionIdList, "userName");
+    	mockMvc.perform( MockMvcRequestBuilders
+    	          .put("/Assignment/Update/{id}",1)
+    	          .content(asJsonString(newAssignment))
+    	          .contentType(MediaType.parseMediaType("application/json;charset=UTF-8"))
+    	          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+    	          .andExpect(status().isOk())
+    	          .andDo(print())
+    	          .andExpect(MockMvcResultMatchers.jsonPath("$.*.id").exists())
+    			  .andExpect(MockMvcResultMatchers.jsonPath("$.*.assignmentName").value("UpdatedAssignmentName"));
+    	    	
+    	    	//Test the Get assignment by ID function
+    	    	mockMvc.perform( MockMvcRequestBuilders
+    	    	          .get("/Assignment/{id}", 1)
+    	    	          .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+    	    	          .andDo(print())
+    	    	          .andExpect(MockMvcResultMatchers.status().isOk())
+    	    	          .andExpect(MockMvcResultMatchers.jsonPath("$.assignmentName").value("UpdatedAssignmentName"));
+    	    	this.deleteAssignmentAPI();
+    	
+    }
+    
     
     @Test
     public void deleteAssignmentAPI() throws Exception
