@@ -30,6 +30,13 @@ public class Course {
 		this.sections = new ArrayList<Section>();
 	}
 	
+	public Course(String id, List<Section> sections, List<String> professorUsernames, String courseName) {
+		this.id = id;
+		this.sections = sections;
+		this.professorUsernames = professorUsernames;
+		this.courseName = courseName;
+	}
+	
 	public String getId() {
 		return id;
 	}

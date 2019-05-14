@@ -24,6 +24,13 @@ public class Student {
     	this.sectionIds = new ArrayList<String>();
     }
     
+    public Student(String id, ArrayList<Code> codes, ArrayList<String> sectionIds, String userName) {
+    	this.id = id;
+    	this.codes = codes;
+    	this.sectionIds = sectionIds;
+    	this.userName = userName;
+    }
+    
     public String getId() {
 		return id;
 	}

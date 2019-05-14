@@ -42,6 +42,16 @@ public class Section {
     	studentUsernames = new ArrayList<String>();
     	assignments = new ArrayList<Assignment>();
     }
+	
+	public Section(String id, String courseId, List<Assignment> assignments, List<String> studentUsernames, int sectionNumber, int year, int term) {
+		this.id = id;
+		this.courseId = courseId;
+		this.assignments = assignments;
+		this.studentUsernames = studentUsernames;
+		this.sectionNumber = sectionNumber;
+		this.year = year;
+		this.term = term;
+	}
 	public String getId() {
 		return id;
 	}
