@@ -42,7 +42,7 @@ public class PythonBuilderTest {
     when(mockStudentFile.getName()).thenReturn("TestyMcTestface");
     when(mockStudentFile.getParent()).thenReturn("/Test");
     AbstractBuilder tc1 = new PythonBuilder(studentFiles, professorFiles, codePath);
-    assertEquals("/Test", tc1.getWorkingDirectory());
+    assertEquals("upload-dir", tc1.getWorkingDirectory());
   }
 
   @Test
@@ -55,7 +55,7 @@ public class PythonBuilderTest {
     studentFiles.add(testFileNull);
     isInitialized = false;
     AbstractBuilder tc2 = new PythonBuilder(studentFiles, professorFiles, codePath);
-    assertEquals("/", tc2.getWorkingDirectory());
+    assertEquals("upload-dir", tc2.getWorkingDirectory());
 
   }
 
@@ -71,7 +71,7 @@ public class PythonBuilderTest {
 
     StringBuilder dockerfileData = new StringBuilder();
     dockerfileData.append("FROM python:latest\n");
-    dockerfileData.append("WORKDIR \\Test\n");
+    dockerfileData.append("WORKDIR upload-dir\n");
     dockerfileData.append("ADD TestyMcTestface.py TestyMcTestface.py\n");
     dockerfileData.append("EXPOSE 8000\n");
     dockerfileData.append("CMD python TestyMcTestface.py\n");
