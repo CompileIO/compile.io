@@ -25,7 +25,7 @@ From Compile.io (top level directory)
 
 Finally open a web browser to `http://localhost:4200/`
 
-Installation Guides
+### Installation Guides
 
 NPM
 * `https://www.npmjs.com/get-npm`
