@@ -183,7 +183,8 @@ public void deleteStudentUsername (String newStudentUsername, String sectionId) 
         return sectionRepository.findById(id)
                 .map(section -> {
                  //put the delete in the section class itself
-                    section.deleteSection();
+                    section.deleteSection(id);
+                    sectionRepository.deleteById(id);
                     return ResponseEntity.ok().body("Deleted a section");
                 }).orElse(ResponseEntity.notFound().build());
     }

@@ -21,6 +21,11 @@ public class Professor {
     	courses = new ArrayList<Course>();
     }
     
+    public Professor(String id, String userName) {
+    	this.id = id;
+    	this.userName = userName;
+    }
+    
     public String getId() {
 		return id;
 	}

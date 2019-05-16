@@ -5,8 +5,8 @@ import { CodeService } from '../code.service';
 describe('CodeService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: CodeService = TestBed.get(CodeService);
-    expect(service).toBeTruthy();
-  });
+  // it('should be created', () => {
+  //   const service: CodeService = TestBed.get(CodeService);
+  //   expect(service).toBeTruthy();
+  // });
 });

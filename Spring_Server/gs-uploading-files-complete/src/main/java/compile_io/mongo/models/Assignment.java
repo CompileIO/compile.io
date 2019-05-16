@@ -46,6 +46,15 @@ public class Assignment {
 		super();
 	}
 
+	public Assignment(String id, String assignmentName, String filepath, List<String> sectionIdList, String createdByUser) {
+		super();
+		this.id = id;
+		this.assignmentName = assignmentName;
+		this.filepath = filepath;
+		this.sectionIds = sectionIdList;
+		this.createdByUsername = createdByUser;
+	}
+
 	public String getId() {
 		return id;
 	}

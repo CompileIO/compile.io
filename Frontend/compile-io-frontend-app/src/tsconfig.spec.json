@@ -10,7 +10,8 @@
   "files": [
     "test.ts",
     "polyfills.ts",
-    "src/app/models/*"
+    "app/services/TestServices/professor.service.spec.ts",
+    "app/app.component.spec.ts"
   ],
   "include": [
     "**/*.spec.ts",

@@ -94,13 +94,17 @@ export class HomeworkPageComponent implements OnInit {
           this.codeService.updateCode(this.code).subscribe({
             next: x => {
               this.code = x;
+            },
+            complete: () => {
+              console.log("updated the code");
+              console.log(this.code);
             }
           });
         }
       });
   }
 
-  parseString(result: String[]): string {
+  parseString(result: string[]): string {
     let finalString: string;
     let index = this.code.submissionAttempts - 1;
 
@@ -113,23 +117,19 @@ export class HomeworkPageComponent implements OnInit {
     //Find number of tests
     start = finalString.indexOf("(") + 1;
     last = finalString.indexOf(" tests");
-    let tempString: string;
-    tempString = finalString.slice(start, last);
+    let tempString: string = finalString.slice(start, last);
     let numTests: Number = Number.parseInt(tempString);
-
     //Find number of successes
     start = finalString.indexOf("tests, ") + 7;
     last = finalString.indexOf(" successes");
     tempString = finalString.slice(start, last);
     let numSuccesses: Number = Number.parseInt(tempString);
-
     //Set grade
-    this.code.grade = numTests.toString() + "/" + numSuccesses.toString();
-
+    this.code.grade = numSuccesses.toString() + "/" + numTests.toString();
     //Find all test results
     last = result[index].indexOf(" > ");
     start = result[index].lastIndexOf("\n", last);
-    last = result[index].indexOf(" > ", last + 3);
+    last = result[index].indexOf(" > ", last + 4);
     if (last == -1) {
       last = result[index].indexOf("-", start);
     }
@@ -140,7 +140,7 @@ export class HomeworkPageComponent implements OnInit {
     console.log(tempString);
     console.log(this.code.unitResponses[index]);
 
-    let i = result[index].indexOf(" > ", last);
+    let i = result[index].indexOf(" > ", last + 4);
     while (i != -1) {
       start = result[index].lastIndexOf("\n", i);
       last = result[index].indexOf(" > ", i + 3);
@@ -154,9 +154,9 @@ export class HomeworkPageComponent implements OnInit {
     console.log(this.code.unitResponses[index]);
       i = result[index].indexOf(" > ", last);
     }
-    
-
-    this.code.testResponses[index] = finalString;
+    if (i == -1) {
+      this.code.testResponses[index] = finalString;
+    }
 
     return finalString;
   }

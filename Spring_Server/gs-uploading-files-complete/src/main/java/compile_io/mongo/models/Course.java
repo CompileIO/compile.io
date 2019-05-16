@@ -30,6 +30,13 @@ public class Course {
 		this.sections = new ArrayList<Section>();
 	}
 	
+	public Course(String id, List<Section> sections, List<String> professorUsernames, String courseName) {
+		this.id = id;
+		this.sections = sections;
+		this.professorUsernames = professorUsernames;
+		this.courseName = courseName;
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -56,7 +63,7 @@ public class Course {
 			Professor updatedProf = this.professorRepository.save(prof.get(0));
 			System.out.println("\n\n\n\n\n Professor Added in Course AddProfessorUserName: " + updatedProf.toString() + "\n\n\n\n\n");
 		}
-		else {
+		else{
 			Professor newProfessor = new Professor();
 			newProfessor.setUserName(newProfessorUsername);
 			newProfessor.addCourse(this);
