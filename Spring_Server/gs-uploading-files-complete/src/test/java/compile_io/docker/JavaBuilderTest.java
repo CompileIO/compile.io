@@ -74,6 +74,7 @@ public class JavaBuilderTest {
     dockerfileData.append("FROM gradle:4.3-jdk-alpine\n");
     dockerfileData.append("WORKDIR upload-dir\n");
     dockerfileData.append("EXPOSE 8000\n");
+    dockerfileData.append("USER root\n");
     dockerfileData.append("RUN mkdir -p src/main/java\n");
     dockerfileData.append("RUN mkdir -p src/test/java\n");
     dockerfileData.append("COPY build.gradle build.gradle\n");
