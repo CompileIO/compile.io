@@ -1,32 +1,50 @@
-To run code locally there will be a couple files you will have to change from Release 1
+To run code locally there are several programs that must be installed
+* NPM
+* Angular cli
+* Docker
+* Mongo
+* Gradle
+* NPM Dependencies
+Installation guides for these programs are below
 
-From Compile.io (top level directory)
-* go into the directory Spring_Server/gs-uploading-files-complete/src/main/java/compile_io
-* inside this directory go into the file FileUploadController.java
-* change the private static final String frontendVm variable to "http://localhost:4200"
+Once everything is installed, follow these instructions in order to run the project locally
 
-Also from Compile.io (top level directory)
-* go into the Frontend/index/src/app/upload/
-* inside this directory go into the upload.service.ts file
-* change the private apiUrl variable to 'http://localhost:8080';
+Start Mongo
+* Open a command prompt and use the command `mongo`
+  * If this doesn't work, you may need to open a seperate command prompt and type the command `mongod` then reattempt the previous step
 
+Start the backend from Compile.io (top level directory)
+* Go into the directory `Spring_Server/gs-uploading-files-complete/`
+* Open a bash terminal and run the command `./gradlew bootRun -D spring.profiles.active=dev`
 
-Then to actually run the application
-* open up a bash terminal in the directory Frontend/index 
-* run the command npm start
-* (this runs the frontend code)
+Start the frontend from Compile.io (top level directory)
+* go into the directory `Frontend/compile-io-frontend-app/`
+* Open a bash terminal and run the command `npm start`
 
-* open up another bash terminal in the directory Spring_Server/gs-uploading-files-complete
-* run the commands in order:
-./gradlew build        (compiles the server code)
-java -jar build/libs/gs-spring-boot-0.1.0.jar     (runs the server)
+Finally open a web browser to `http://localhost:4200/`
 
-Have those terminals open, and go to http://localhost:4200 to run everything locally 
+### Installation Guides
 
-To run back-end tests locally:
-* Navigate to the `compile.io` directory
-* Navigate to `Spring_Server/gs-uploading-files-complete` within the `compile.io` directory
-* Run `./gradlew test`
-This will start the gradle building process, which runs the back-end tests.
-If the build was successful, then the tests have passed. 
-If the build fails, the offending test case will be displayed, along with the corresponding stack trace of the error/failure.
+[NPM](https://www.npmjs.com/get-npm)
+* Follow the website's instructions in order to download and install
+
+[Angular CLI](https://github.com/angular/angular-cli/blob/master/packages/angular/cli/README.md#installation)
+* Open a bash console and use the command `npm install -g @angular/cli`
+
+[Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
+* Follow the website's instructions in order to download and install
+
+[Mongo](https://www.mongodb.com/download-center/community)
+* Follow the website's instructions in order to download and install
+
+[Gradle](https://gradle.org/install)
+* Follow the website's instructions in order to download and install or use a package manager
+
+NPM Dependencies
+* The dependencies are all kept track of in the package.json file
+* Navigate to the directory `compile.io/Frontend/compile-io-frontend-app`
+* Open a bash console and use the command `npm install`
+
+Common Issues
+* If ng serve results in an error talking about missing a module or not finding something, reinstall NPM Dependencies
+* If the website is up, but no information is displayed, the backend is likely not running
